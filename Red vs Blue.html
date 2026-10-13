@@ -1,0 +1,929 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Red vs Blue</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Chakra+Petch:wght@400;600;700&family=Share+Tech+Mono&display=swap">
+<style>
+/* Layout: HUD game table. Board column (attack chain) beside the play column; single grey world like the printed cards. */
+:root{
+  --ground:#A3A3A3; --paper:#B9B9B9; --ink:#111111; --ink2:#2a2a2a; --mute:#4a4a4a;
+  --red:#E6492D; --blue:#2C9AD6; --white:#FFFFFF; --soft:#D6D6D6; --ok:#2f8f4e;
+  --btn-bg:#123A63; --btn-bg2:#1A4F85; --btn-fg:#FFA13D; --btn-on-bg:#FF8A12; --btn-on-fg:#0B2B4C;
+  --f-disp:'Orbitron','Arial Black',sans-serif; --f-body:'Chakra Petch','Segoe UI',system-ui,sans-serif; --f-mono:'Share Tech Mono',ui-monospace,Menlo,monospace;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html,body{min-height:100%}
+body{background:var(--ground);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.4;margin:0}
+button{font:inherit;color:var(--ink);cursor:pointer}
+button:focus-visible,input:focus-visible,summary:focus-visible,.hc:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.mono{font-family:var(--f-mono);letter-spacing:.14em}
+.disp{font-family:var(--f-disp);font-weight:900}
+.wrap{max-width:1280px;margin:0 auto;padding-inline:16px;padding-block:12px 40px}
+.cut{clip-path:polygon(12px 0,100% 0,100% calc(100% - 12px),calc(100% - 12px) 100%,0 100%,0 12px)}
+.frame{background:var(--ink);padding:2px}
+.frame>.fi{background:var(--paper);padding:12px 14px;height:100%;clip-path:polygon(11px 0,100% 0,100% calc(100% - 11px),calc(100% - 11px) 100%,0 100%,0 11px)}
+.panel{background:var(--ink);color:var(--soft);padding:14px 16px}
+.panel h3{color:var(--white)}
+.lbl{font-family:var(--f-mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase}
+h1,h2,h3{margin:0;text-wrap:balance}
+h2{font-family:var(--f-disp);font-weight:900;font-size:20px;letter-spacing:.04em;text-transform:uppercase}
+h3{font-size:16px;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+.r{color:var(--red)}.b{color:var(--blue)}
+.tag{display:inline-block;font-family:var(--f-mono);font-size:11px;letter-spacing:.16em;padding:2px 7px;background:var(--ink);color:var(--white);white-space:nowrap}
+.tag.tr{background:var(--red);color:var(--ink)}.tag.tb{background:var(--blue);color:var(--ink)}.tag.tg{background:var(--ground);color:var(--ink);border:1.5px solid var(--ink)}
+.btn{border:0;background:var(--btn-bg);color:var(--btn-fg);padding:10px 16px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;font-size:13px;-webkit-text-fill-color:var(--btn-fg);opacity:1;clip-path:polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%,0 8px)}
+.btn:hover{background:var(--btn-bg2)}
+.btn.red{box-shadow:inset 6px 0 0 var(--red)}.btn.blue{box-shadow:inset 6px 0 0 var(--blue)}
+.btn.ghost{box-shadow:inset 0 0 0 2px var(--btn-fg)}
+.btn:active,.btn[aria-pressed=true],.seg button[aria-pressed=true],.seg button:active{background:var(--btn-on-bg);color:var(--btn-on-fg);-webkit-text-fill-color:var(--btn-on-fg)}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.top .btn.abort,.btn.abort{background:var(--btn-on-bg);color:var(--btn-on-fg);-webkit-text-fill-color:var(--btn-on-fg)}
+.top .btn.abort:hover,.btn.abort:hover{background:#FFA040}
+.top .btn.abort:active,.btn.abort:active,.top .btn.abort[aria-expanded=true]{background:var(--btn-bg);color:var(--btn-fg);-webkit-text-fill-color:var(--btn-fg)}
+.abortbar{background:var(--btn-bg);color:var(--white);display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:12px 16px;border-bottom:4px solid var(--btn-on-bg)}
+.btn.hostred{background:var(--btn-on-bg);color:var(--btn-on-fg);-webkit-text-fill-color:var(--btn-on-fg);box-shadow:inset 6px 0 0 var(--red)}
+.btn.hostred:hover{background:#FFA040}
+.btn.hostred:active{background:var(--btn-bg);color:var(--btn-fg);-webkit-text-fill-color:var(--btn-fg)}
+.btn[aria-pressed=true][disabled],.seg button[aria-pressed=true][disabled]{opacity:1}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.stack{display:flex;flex-direction:column;gap:12px}
+/* top bar */
+.top{background:var(--ink);color:var(--white);display:flex;align-items:center;gap:14px;padding:10px 16px;flex-wrap:wrap}
+.logo{font-family:var(--f-disp);font-weight:900;font-size:20px;letter-spacing:.04em}
+.logo small{font-size:11px;vertical-align:middle;margin:0 4px;color:var(--soft)}
+.top .sp{flex:1}
+.top .btn{clip-path:none;padding:6px 10px;font-size:11px}
+.pill{font-family:var(--f-mono);font-size:12px;letter-spacing:.14em;padding:3px 8px;border:1.5px solid var(--soft)}
+.accent{height:6px;display:flex}.accent i{flex:1}.accent i:nth-child(1){background:var(--red)}.accent i:nth-child(2){background:var(--blue)}
+/* menu */
+.hero{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:24px;align-items:center;margin-top:18px}
+.hero .big{font-family:var(--f-disp);font-weight:900;font-size:clamp(56px,10vw,112px);line-height:.9}
+.hero .big span.vs{font-size:.32em;vertical-align:middle;color:var(--ink)}
+.choices{display:grid;gap:12px}
+.choice{display:block;text-align:left;width:100%;border:0;padding:2px;background:var(--ink);color:var(--ink)}
+.choice .fi{padding:14px 16px;background:var(--paper);color:var(--ink);clip-path:polygon(11px 0,100% 0,100% calc(100% - 11px),calc(100% - 11px) 100%,0 100%,0 11px)}
+.choice b{display:block;font-size:17px;text-transform:uppercase;letter-spacing:.04em}
+.choice .hint{color:inherit}
+button.choice{background:var(--btn-bg)}
+button.choice .fi{background:var(--btn-bg);color:var(--btn-fg);-webkit-text-fill-color:var(--btn-fg)}
+button.choice:hover .fi{background:var(--btn-bg2)}
+button.choice:active .fi{background:var(--btn-on-bg);color:var(--btn-on-fg);-webkit-text-fill-color:var(--btn-on-fg)}
+.choice[disabled]{opacity:.5;cursor:not-allowed}
+.cats{display:flex;gap:6px;flex-wrap:wrap;margin-top:16px}
+.cats>div{flex:1 1 110px;background:var(--ink);color:var(--white);padding:10px;display:flex;flex-direction:column;gap:6px}
+.cats svg{width:26px;height:26px}
+input[type=text]{font-family:var(--f-mono);font-size:18px;letter-spacing:.2em;text-transform:uppercase;padding:9px 10px;border:2px solid var(--ink);background:var(--white);color:var(--ink);width:100%;min-width:0}
+/* setup */
+.setup{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:16px;margin-top:16px}
+.seg{display:flex;gap:6px}
+.seg button{flex:1;border:0;background:var(--btn-bg);color:var(--btn-fg);-webkit-text-fill-color:var(--btn-fg);padding:10px 0;font-family:var(--f-disp);font-weight:900}
+.seg button:hover{background:var(--btn-bg2)}
+.seg button[disabled]{opacity:.45;cursor:not-allowed}
+
+.rolechk{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px dashed var(--mute)}
+.rolechk input{margin-top:4px;width:18px;height:18px;accent-color:var(--ink)}
+.rolechk small{display:block;color:var(--ink2)}
+/* game grid */
+.game{display:grid;grid-template-columns:minmax(0,340px) minmax(0,1fr);gap:16px;margin-top:14px;align-items:start}
+@media (max-width:900px){.game{grid-template-columns:minmax(0,1fr)}.game>.stack:last-child{order:-1}.hero{grid-template-columns:minmax(0,1fr)}}
+/* board */
+.board{background:var(--ink);padding:2px}
+.board .fi{background:var(--ground);padding:10px}
+.zone{display:grid;grid-template-columns:minmax(0,1fr) 52px 64px;gap:8px;align-items:center;margin-bottom:8px}
+.zplate{background:var(--ink);color:var(--white);padding:8px 10px;display:flex;gap:8px;align-items:center;min-width:0}
+.zplate svg{width:22px;height:22px;flex:none}
+.zplate .zn{font-size:13px;font-weight:700;text-transform:uppercase;line-height:1.15}
+.zplate .ze{font-family:var(--f-mono);font-size:10px;letter-spacing:.12em;color:var(--red);text-transform:uppercase}
+.zone.cur .zplate{box-shadow:0 0 0 3px var(--red)}
+.pawnslot{width:52px;height:52px;border-radius:50%;border:2px dotted var(--ink);display:flex;align-items:center;justify-content:center}
+.pawn{width:44px;height:44px;border-radius:50%;background:var(--ink);border:3px dashed var(--red);color:var(--red);font-family:var(--f-disp);font-weight:900;font-size:11px;display:flex;align-items:center;justify-content:center;animation:pop .35s ease-out}
+@keyframes pop{from{transform:scale(.4)}to{transform:scale(1)}}
+.det{height:52px;border:2px dashed var(--blue);background:rgba(44,154,214,.18);display:flex;align-items:center;justify-content:center;font-family:var(--f-disp);font-weight:900;font-size:22px;color:var(--white)}
+.det.on{background:var(--blue);border-style:solid;color:var(--ink)}
+.ctrlrow{grid-column:1/-1;display:flex;gap:4px;flex-wrap:wrap;margin-top:-4px}
+.ctrlrow span{font-family:var(--f-mono);font-size:10px;letter-spacing:.08em;background:var(--blue);color:var(--ink);padding:1px 6px}
+.track{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:4px;margin-top:6px}
+.track div{border:2px solid var(--ink);text-align:center;font-family:var(--f-disp);font-weight:900;font-size:13px;padding:5px 0}
+.track div.done{background:rgba(17,17,17,.18)}
+.track div.now{background:var(--ink);color:var(--white)}
+.track div.last{color:var(--blue)}
+.track div.last.now{color:var(--blue)}
+/* phase */
+.phase{display:flex;gap:12px;align-items:center;background:var(--ink);color:var(--white);padding:12px 14px;flex-wrap:wrap}
+.phase .who{font-family:var(--f-disp);font-weight:900;font-size:18px}
+.phase .steps{display:flex;gap:3px;margin-left:auto}
+.phase .steps span{font-family:var(--f-mono);font-size:10px;padding:2px 5px;border:1px solid var(--mute);color:var(--mute)}
+.phase .steps span.on{border-color:var(--white);color:var(--ink);background:var(--white)}
+.hint{font-size:14px;color:var(--ink2)}
+/* cards */
+.hand{display:flex;gap:10px;flex-wrap:wrap}
+.hc{color:var(--ink);position:relative;width:148px;min-height:206px;background:var(--ink);padding:2px;border:0;text-align:left;clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px);transition:transform .15s}
+.hc .ci{background:var(--ground);height:100%;min-height:202px;padding:8px 9px;display:flex;flex-direction:column;gap:6px;clip-path:polygon(9px 0,100% 0,100% calc(100% - 9px),calc(100% - 9px) 100%,0 100%,0 9px)}
+.hc .bar{height:4px;margin:-8px -9px 2px;}
+.hc.sr .bar{background:var(--red)}.hc.sb .bar{background:var(--blue)}
+.hc .top2{display:flex;gap:6px;align-items:center}
+.hc .str{font-family:var(--f-disp);font-weight:900;font-size:34px;line-height:1}
+.hc .cat{background:var(--ink);color:var(--white);display:flex;align-items:center;gap:5px;padding:4px 6px;flex:1;min-width:0}
+.hc .cat svg{width:16px;height:16px;flex:none}
+.hc .cat span{font-family:var(--f-mono);font-size:10px;letter-spacing:.06em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hc .tt{background:var(--ink);color:var(--white);font-weight:700;font-size:12.5px;line-height:1.15;text-transform:uppercase;padding:6px 7px;flex:1}
+.hc .en{display:block;font-family:var(--f-mono);font-size:9px;letter-spacing:.04em;text-transform:none;font-weight:400;margin-top:4px}
+.hc.sr .en{color:var(--red)}.hc.sb .en{color:var(--blue)}
+.hc .tags{display:flex;gap:4px;min-height:18px}
+.hc.playable{cursor:pointer}
+.hc.dim{opacity:.55}
+.hc.sel{transform:translateY(-8px)}
+.hc.sel{background:var(--red)}.hc.sb.sel{background:var(--blue)}
+.hc.sel .ci{box-shadow:inset 0 0 0 3px var(--ink)}
+.back{width:148px;height:206px;background:var(--ink);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px;color:var(--white);clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px)}
+.back .disp{font-size:22px}
+.back.sr{box-shadow:inset 0 0 0 6px var(--red)}.back.sb{box-shadow:inset 0 0 0 6px var(--blue)}
+.back.small{width:46px;height:64px}.back.small .disp{font-size:9px}
+.detail{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
+@media (max-width:600px){.detail{grid-template-columns:minmax(0,1fr)}.hc{width:calc(50% - 5px)}.back{width:calc(50% - 5px)}}
+.case{border:2px solid var(--ink);padding:8px 10px;font-size:13px}
+/* clash */
+.clash{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:12px;align-items:center}
+.clash .side{display:flex;flex-direction:column;align-items:center;gap:8px;min-width:0}
+.clash .sum{font-family:var(--f-disp);font-weight:900;font-size:28px}
+.clash .vs{font-family:var(--f-disp);font-weight:900;font-size:22px}
+.result{font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:8px 12px;text-align:center}
+.result.rw{background:var(--red);color:var(--ink)}.result.bw{background:var(--blue);color:var(--ink)}.result.tw{background:var(--ink);color:var(--white)}
+/* crypto */
+.kcard{background:var(--ink);color:var(--white);display:grid;grid-template-columns:auto minmax(0,1fr);gap:14px;padding:14px;clip-path:polygon(14px 0,100% 0,100% calc(100% - 14px),calc(100% - 14px) 100%,0 100%,0 14px)}
+.kcard.nom{grid-template-columns:minmax(0,1fr)}
+.morse{display:flex;flex-direction:column;align-items:center;gap:6px;padding:4px 10px;border-right:2px dashed var(--ground)}
+.morse i{display:block;width:12px;background:var(--white)}
+.morse i.dot{height:12px;border-radius:50%}.morse i.dash{height:34px;border-radius:3px}
+.morse hr{width:30px;border:0;border-top:2px dashed var(--ground);margin:6px 0}
+.frag{border:2px solid var(--ground);padding:8px 10px;margin-top:10px;background-image:radial-gradient(rgba(163,163,163,.22) 1.2px,transparent 1.6px);background-size:14px 14px}
+.frag .cx{font-family:var(--f-mono);font-size:clamp(17px,3vw,26px);letter-spacing:.22em;text-align:center;padding:6px 0;overflow-wrap:anywhere}
+.duelgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:12px}
+.timer{height:10px;background:var(--ink);position:relative;overflow:hidden}
+.timer i{position:absolute;inset:0 auto 0 0;background:var(--red);transition:width .5s linear}
+.ans label{display:block;font-family:var(--f-mono);font-size:11px;letter-spacing:.18em;margin:8px 0 3px}
+details.ref{margin-top:4px}
+details.ref summary{cursor:pointer;font-weight:700;text-transform:uppercase;font-size:13px;letter-spacing:.06em}
+.reftbl{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:12px;margin-top:8px;font-size:13px}
+.pb{border-collapse:collapse}.pb td,.pb th{border:1.5px solid var(--ink);width:30px;height:28px;text-align:center;font-family:var(--f-disp);font-size:12px}
+.pb th{background:var(--ink);color:var(--white)}
+.mrow{display:flex;gap:8px;align-items:center;font-family:var(--f-mono)}
+.mrow i{display:inline-block;height:6px;background:var(--ink);margin-right:3px;border-radius:3px}
+/* log */
+.log{list-style:none;margin:0;padding:0;font-size:13px;max-height:260px;overflow:auto}
+.log li{padding:5px 0;border-bottom:1px dashed var(--mute)}
+.log li.rd{font-family:var(--f-mono);letter-spacing:.16em;color:var(--white);border-bottom-color:var(--soft)}
+.toast{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--white);padding:10px 16px;border-left:6px solid var(--red);max-width:min(92vw,520px);z-index:9;font-size:14px}
+.end{background:var(--ink);color:var(--white);padding:22px;text-align:center}
+.end .disp{font-size:clamp(34px,7vw,64px)}
+.oppbox{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.code{font-family:var(--f-disp);font-weight:900;font-size:34px;letter-spacing:.2em;background:var(--white);padding:4px 12px;display:inline-block;user-select:all}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+<div id="app"></div>
+<script>
+const DATA = {"cards": [{"s": "r", "c": 1, "p": 1, "hu": "Aktív szkennelés", "en": "Active Scanning: Scanning IP Blocks", "id": "T1595.001", "d": "Automatikusan végigpásztázza az internetet nyitott portokért.", "ct": "Mirai botnet, 2016", "cx": "Véletlen IP-címeken kereste a Telnettel elérhető IoT-eszközöket.", "se": false, "t": false}, {"s": "r", "c": 1, "p": 2, "hu": "Hamis közösségi profil", "en": "Establish Accounts: Social Media Accounts", "id": "T1585.001", "d": "Kitalált személyként kapcsolatot épít a célszemélyekkel.", "ct": "Robin Sage, 2010", "cx": "Egy kitalált elemzőnő profiljához katonai és biztonsági szakemberek százai kapcsolódtak.", "se": true, "t": false}, {"s": "r", "c": 1, "p": 3, "hu": "Telefonos adathalászat információért", "en": "Phishing for Information: Spearphishing Voice", "id": "T1598.004", "d": "IT-támogatásnak adja ki magát, és belépési adatokat csal ki.", "ct": "Twitter, 2020", "cx": "VPN-hibára hivatkozó hívásokkal szerezték meg alkalmazottak hozzáférését.", "se": true, "t": false}, {"s": "r", "c": 1, "p": 4, "hu": "Közösségi média felderítés", "en": "Search Open Websites: Social Media", "id": "T1593.001", "d": "Szakmai oldalakon válogatja ki a célszemélyeket.", "ct": "Operation Dream Job, Lazarus, 2020", "cx": "LinkedIn-en kiválasztott védelmi ipari dolgozók hamis állásajánlatot kaptak.", "se": true, "t": false}, {"s": "r", "c": 1, "p": 5, "hu": "Egyedi kártevő fejlesztése", "en": "Develop Capabilities: Malware", "id": "T1587.001", "d": "A célpont környezetére szabott, észlelhetetlen eszközt készít.", "ct": "SolarWinds / SUNBURST, APT29, 2020", "cx": "A támadók az Orion build-folyamatához illeszkedő kártevőt írtak.", "se": false, "t": false}, {"s": "r", "c": 2, "p": 1, "hu": "Fertőzött USB-meghajtó", "en": "Replication Through Removable Media", "id": "T1091", "d": "Cserélhető adathordozón juttatja be a kártevőt.", "ct": "Agent.btz, 2008", "cx": "Egy fertőzött pendrive-ról terjedt el az amerikai hadsereg hálózatain.", "se": false, "t": false}, {"s": "r", "c": 2, "p": 2, "hu": "Célzott adathalász link", "en": "Phishing: Spearphishing Link", "id": "T1566.002", "d": "Hamis bejelentkező oldalra csalja a célszemélyt, és elkéri a jelszavát.", "ct": "Podesta e-mail, 2016", "cx": "Egy hamis Google jelszócsere-üzenettel szerezték meg az amerikai elnökválasztási kampány vezetőjének fiókját.", "se": true, "t": false}, {"s": "r", "c": 2, "p": 3, "hu": "Publikus alkalmazás kihasználása", "en": "Exploit Public-Facing Application", "id": "T1190", "d": "Ismert, de foltozatlan sérülékenységet támad.", "ct": "Equifax, 2017", "cx": "Foltozatlan Apache Struts (CVE-2017-5638), kb. 147 millió ember adata.", "se": false, "t": false}, {"s": "r", "c": 2, "p": 4, "hu": "Célzott adathalász csatolmány", "en": "Spearphishing Attachment", "id": "T1566.001", "d": "0-day exploitot rejtő dokumentumot küld.", "ct": "RSA SecurID, 2011", "cx": "„2011 Recruitment plan” Excel fájl Flash 0-day exploittal.", "se": true, "t": false}, {"s": "r", "c": 2, "p": 5, "hu": "Szoftveres ellátási lánc kompromittálása", "en": "Compromise Software Supply Chain", "id": "T1195.002", "d": "Egy megbízható szoftver frissítésébe rejti a kártevőt.", "ct": "3CX, Lazarus, 2023", "cx": "Egy korábban fertőzött szoftver (X_Trader) révén kompromittálták a 3CX telepítőjét.", "se": false, "t": false}, {"s": "r", "c": 3, "p": 1, "hu": "Automatikus indítás a rendszerleíró adatbázisból", "en": "Registry Run Keys", "id": "T1547.001", "d": "A kártevő minden bejelentkezéskor újraindul.", "ct": "Emotet, 2014–2021", "cx": "A letöltött kártevőt a felhasználó Run kulcsába írta.", "se": false, "t": false}, {"s": "r", "c": 3, "p": 2, "hu": "Ütemezett feladat", "en": "Scheduled Task", "id": "T1053.005", "d": "Időzített feladattal futtatja a kártevőt.", "ct": "Shamoon / Saudi Aramco, 2012", "cx": "Ütemezett feladattal indította a törlő kártevőt.", "se": false, "t": false}, {"s": "r", "c": 3, "p": 3, "hu": "Webshell", "en": "Server Software Component: Web Shell", "id": "T1505.003", "d": "Webszerveren hagy hátsó ajtót.", "ct": "HAFNIUM / ProxyLogon, 2021", "cx": "China Chopper webshellek több tízezer Exchange szerveren.", "se": false, "t": false}, {"s": "r", "c": 3, "p": 4, "hu": "Hitelesítés módosítása", "en": "Modify Authentication Process: Domain Controller Authentication", "id": "T1556.001", "d": "Mesterjelszót épít a tartományvezérlőbe.", "ct": "Skeleton Key, 2015", "cx": "A Dell SecureWorks egy nagyvállalat tartományvezérlőjén talált hátsó ajtós jelszót.", "se": false, "t": false}, {"s": "r", "c": 3, "p": 5, "hu": "Jogosultság-emelés exploittal", "en": "Exploitation for Privilege Escalation", "id": "T1068", "d": "0-day sérülékenységgel rendszergazdai jogot szerez.", "ct": "Stuxnet, 2010", "cx": "MS10-073 és egy Task Scheduler 0-day révén emelt jogot.", "se": false, "t": false}, {"s": "r", "c": 4, "p": 1, "hu": "Fájlokban hagyott jelszavak", "en": "Unsecured Credentials: Credentials In Files", "id": "T1552.001", "d": "Szkriptekben, megosztásokon keres jelszavakat.", "ct": "Uber, 2022", "cx": "Egy hálózati megosztáson talált PowerShell-szkriptben bekódolt admin jelszó.", "se": false, "t": false}, {"s": "r", "c": 4, "p": 2, "hu": "Jelszószórás", "en": "Brute Force: Password Spraying", "id": "T1110.003", "d": "Kevés gyakori jelszót próbál sok fiókon.", "ct": "Midnight Blizzard / Microsoft, 2024", "cx": "Egy MFA nélküli régi tesztfiókot törtek fel, onnan vezetői postaládákig jutottak.", "se": false, "t": false}, {"s": "r", "c": 4, "p": 3, "hu": "Távoli szolgáltatás kihasználása", "en": "Exploitation of Remote Services", "id": "T1210", "d": "Hálózati sérülékenységen terjed gépről gépre.", "ct": "WannaCry, 2017", "cx": "Az SMBv1 EternalBlue exploittal terjedt több mint 150 országban.", "se": false, "t": false}, {"s": "r", "c": 4, "p": 4, "hu": "LSASS memória kinyerése", "en": "OS Credential Dumping: LSASS Memory", "id": "T1003.001", "d": "A memóriából olvassa ki a bejelentkezett felhasználók jelszavait.", "ct": "NotPetya, 2017", "cx": "Módosított Mimikatz gyűjtötte a jelszavakat az oldalirányú terjedéshez.", "se": false, "t": false}, {"s": "r", "c": 4, "p": 5, "hu": "Távoli szolgáltatások", "en": "Remote Services", "id": "T1021", "d": "Ellopott fiókokkal és táveléréssel jut el az ipari rendszerekig.", "ct": "Ukrán áramhálózat, 2015", "cx": "VPN-en és távoli adminisztrációval érték el a SCADA rendszereket, kb. 225 ezer fogyasztó maradt áram nélkül.", "se": false, "t": false}, {"s": "r", "c": 5, "p": 1, "hu": "Túlterheléses támadás", "en": "Network Denial of Service", "id": "T1498", "d": "Forgalommal árasztja el a szolgáltatásokat.", "ct": "Észtország, 2007", "cx": "Hetekig tartó DDoS a kormányzati, banki és média oldalak ellen.", "se": false, "t": false}, {"s": "r", "c": 5, "p": 2, "hu": "Kiszivárogtatás más protokollon", "en": "Exfiltration Over Alternative Protocol", "id": "T1048", "d": "Az ellopott adatot FTP-n juttatja ki.", "ct": "Target, 2013", "cx": "A pénztárakról gyűjtött kártyaadatokat FTP-n vitték külső szerverekre.", "se": false, "t": false}, {"s": "r", "c": 5, "p": 3, "hu": "Felhőtárhely adatainak gyűjtése", "en": "Data from Cloud Storage", "id": "T1530", "d": "Rosszul beállított jogosultságokkal tölti le a felhőben tárolt adatot.", "ct": "Capital One, 2019", "cx": "Egy tűzfal-hibán keresztül szerzett jogokkal kb. 106 millió ember adatát töltötték le.", "se": false, "t": false}, {"s": "r", "c": 5, "p": 4, "hu": "Adattitkosítás károkozásra", "en": "Data Encrypted for Impact", "id": "T1486", "d": "Zsarolóvírussal titkosítja a rendszereket.", "ct": "Colonial Pipeline, DarkSide, 2021", "cx": "Az USA keleti partján napokra leállt az üzemanyagvezeték.", "se": false, "t": false}, {"s": "r", "c": 5, "p": 5, "hu": "Jogosulatlan ipari parancs", "en": "Unauthorized Command Message", "id": "ICS T0855", "d": "Közvetlenül az ipari protokollon kapcsol le berendezéseket.", "ct": "Industroyer / CrashOverride, 2016", "cx": "Az IEC 104 protokollon keresztül áramszünetet okoztak Kijevben.", "se": false, "t": false}, {"s": "b", "c": 1, "p": 1, "hu": "Nyilvános adatok minimalizálása", "en": "Public information hygiene", "id": "Szervezeti kontroll", "d": "Szabályozza, mit oszthatnak meg az alkalmazottak.", "ct": "Strava hőtérkép, 2018", "cx": "Futóalkalmazás adataiból rajzolódtak ki katonai bázisok.", "se": false, "t": false}, {"s": "b", "c": 1, "p": 2, "hu": "Fenyegetésfelderítés", "en": "Threat Intelligence", "id": "Szervezeti kontroll", "d": "Nyilvánosságra hozza a támadó infrastruktúráját.", "ct": "Mandiant APT1 jelentés, 2013", "cx": "Leleplezte a kínai 61398-as egység eszközeit és domainjeit.", "se": false, "t": false}, {"s": "b", "c": 1, "p": 3, "hu": "Csali környezet", "en": "Decoy Environment", "id": "D3FEND", "d": "Hamis rendszerrel tartja szóval és azonosítja a támadót.", "ct": "The Cuckoo’s Egg, 1986", "cx": "Clifford Stoll hamis „SDINET” fájlokkal kereste meg a behatolót.", "se": false, "t": true}, {"s": "b", "c": 1, "p": 4, "hu": "Eszközleltár és támadási felület kezelése", "en": "Asset Inventory", "id": "D3FEND", "d": "Minden kívülről elérhető eszközt számon tart és véd.", "ct": "JPMorgan Chase, 2014", "cx": "Egy kétfaktoros hitelesítésre nem frissített szerveren jutottak be.", "se": false, "t": true}, {"s": "b", "c": 1, "p": 5, "hu": "Támadó infrastruktúra lekapcsolása", "en": "Takedown", "id": "Szervezeti kontroll", "d": "Bírósági úton elveszi a támadó domainjeit.", "ct": "Microsoft vs. APT28, 2018", "cx": "Bírósági végzéssel lefoglalták az adathalászathoz előkészített domaineket.", "se": false, "t": false}, {"s": "b", "c": 2, "p": 1, "hu": "Cserélhető adathordozók tiltása", "en": "Removable media control", "id": "Szervezeti kontroll", "d": "Letiltja az ismeretlen USB-eszközöket.", "ct": "Buckshot Yankee, 2008", "cx": "Az amerikai védelmi minisztérium az Agent.btz után betiltotta a pendrive-okat.", "se": false, "t": false}, {"s": "b", "c": 2, "p": 2, "hu": "Bejelentési kultúra", "en": "Insider threat reporting", "id": "Szervezeti kontroll", "d": "A dolgozó jelenti a gyanús megkeresést.", "ct": "Tesla, 2020", "cx": "Egy dolgozó jelentette, hogy 1 millió dollárt ajánlottak neki kártevő telepítéséért; az FBI elfogta a támadót.", "se": false, "t": false}, {"s": "b", "c": 2, "p": 3, "hu": "Internetről érkező makrók tiltása", "en": "Executable allowlisting", "id": "D3FEND", "d": "Nem enged lefutni külső forrásból származó makrót.", "ct": "Microsoft Office, 2022", "cx": "Az alapértelmezett makrótiltás után a makrós támadások száma jelentősen visszaesett.", "se": false, "t": true}, {"s": "b", "c": 2, "p": 4, "hu": "Hardverkulcsos MFA", "en": "Multi-factor Authentication", "id": "D3FEND", "d": "Minden fiókhoz fizikai biztonsági kulcsot kér, amelyet egy hamis oldal nem tud elkérni.", "ct": "Google, 2017–2018", "cx": "A FIDO biztonsági kulcsok bevezetése után egyetlen munkatárs fiókját sem vették át adathalászattal.", "se": false, "t": true}, {"s": "b", "c": 2, "p": 5, "hu": "Virtuális foltozás webalkalmazás-tűzfallal", "en": "WAF virtual patching", "id": "D3FEND", "d": "A javítás előtt szűri ki a sérülékenység kihasználását.", "ct": "Cloudflare / Log4Shell, 2021", "cx": "Órákon belül WAF-szabályok védték az ügyfeleket a Log4j támadások ellen.", "se": false, "t": false}, {"s": "b", "c": 3, "p": 1, "hu": "Soron kívüli frissítés", "en": "Software Update", "id": "D3FEND", "d": "Kritikus javítást azonnal telepít.", "ct": "PrintNightmare, 2021", "cx": "A Microsoft soron kívüli javítást adott ki a nyomtatássor-kezelő hibájára.", "se": false, "t": false}, {"s": "b", "c": 3, "p": 2, "hu": "Kártevő eltávolítása", "en": "Malware removal", "id": "D3FEND", "d": "Megszünteti a kártevő indítási pontjait.", "ct": "Emotet, 2021", "cx": "A rendőrség által kiküldött frissítés 2021. április 25-én eltávolította a kártevőt a fertőzött gépekről.", "se": false, "t": false}, {"s": "b", "c": 3, "p": 3, "hu": "Kiemelt fiókok kezelése", "en": "Privileged Access Management", "id": "Szervezeti kontroll", "d": "Admin jelszavak csak széfből, naplózva érhetők el.", "ct": "Uber, 2022", "cx": "Egy megosztáson talált szkriptben bekódolt admin jelszó nyitotta meg a PAM rendszert.", "se": false, "t": true}, {"s": "b", "c": 3, "p": 4, "hu": "Viselkedéselemzés", "en": "User Behavior Analysis", "id": "D3FEND", "d": "Szokatlan fióktevékenységre riaszt.", "ct": "FireEye / SolarWinds, 2020", "cx": "Egy gyanús MFA-eszköz regisztráció riasztása vezetett a SUNBURST felfedezéséhez.", "se": false, "t": true}, {"s": "b", "c": 3, "p": 5, "hu": "Koordinált webshell-eltávolítás", "en": "Coordinated eviction", "id": "Szervezeti kontroll", "d": "Egyszerre szünteti meg a támadó hátsó ajtóit.", "ct": "FBI, 2021", "cx": "Bírósági engedéllyel távolról törölte a HAFNIUM webshelleit amerikai Exchange szerverekről.", "se": false, "t": false}, {"s": "b", "c": 4, "p": 1, "hu": "Elfeledett fiókok felszámolása", "en": "Account Locking", "id": "D3FEND", "d": "Kikapcsolja vagy MFA-val védi a régi, használaton kívüli fiókokat.", "ct": "Midnight Blizzard / Microsoft, 2024", "cx": "A feltört tesztfiókon nem volt MFA.", "se": false, "t": false}, {"s": "b", "c": 4, "p": 2, "hu": "DNS-elterelés", "en": "DNS Sinkholing", "id": "D3FEND", "d": "A kártevő domainjét a védő irányítja át.", "ct": "WannaCry kill switch, 2017", "cx": "Marcus Hutchins regisztrálta a kártevő által ellenőrzött domaint, ezzel leállította a terjedést.", "se": false, "t": false}, {"s": "b", "c": 4, "p": 3, "hu": "Hálózati szegmentálás", "en": "Network Isolation", "id": "D3FEND", "d": "Elválasztja egymástól a hálózati zónákat, így egy betört gépről nem érhető el minden.", "ct": "Target, 2013", "cx": "Egy légtechnikai beszállító hozzáférésével a támadók eljutottak a pénztárrendszerekig, mert a hálózat nem volt szétválasztva.", "se": false, "t": true}, {"s": "b", "c": 4, "p": 4, "hu": "Rétegzett adminisztrációs modell", "en": "Admin tiering", "id": "Szervezeti kontroll", "d": "Az admin fiókok csak a saját szintjükon használhatók.", "ct": "Sony Pictures, 2014", "cx": "Ellopott rendszergazdai fiókokkal járták be és törölték a hálózatot.", "se": false, "t": true}, {"s": "b", "c": 4, "p": 5, "hu": "Zéró bizalom", "en": "Zero Trust Architecture", "id": "D3FEND", "d": "Minden hozzáférést eszköz és felhasználó alapján ellenőriz, nincs megbízható belső hálózat.", "ct": "Google BeyondCorp, 2011-től", "cx": "Az Operation Aurora (2009) után a Google megszüntette a belső hálózat kiváltságait.", "se": false, "t": false}, {"s": "b", "c": 5, "p": 1, "hu": "Operátori felügyelet", "en": "Operator monitoring", "id": "Szervezeti kontroll", "d": "Az üzemeltető észreveszi és visszafordítja a gyanús változást.", "ct": "Oldsmar vízmű, 2021", "cx": "Az operátor látta, hogy a támadó megemeli a lúgadagolást, és azonnal visszaállította.", "se": false, "t": false}, {"s": "b", "c": 5, "p": 2, "hu": "Kimenő forgalom vizsgálata", "en": "Outbound Traffic Filtering", "id": "D3FEND", "d": "Figyeli és blokkolja a szokatlan kimenő adatforgalmat.", "ct": "Equifax, 2017", "cx": "Egy lejárt tanúsítvány miatt a forgalomvizsgáló eszköz nem látta a kiszivárgást.", "se": false, "t": false}, {"s": "b", "c": 5, "p": 3, "hu": "Offline mentés", "en": "Backup and restore", "id": "Szervezeti kontroll", "d": "A hálózattól elválasztott mentésből állítja vissza a rendszert.", "ct": "Maersk / NotPetya, 2017", "cx": "Egy áramszünet miatt offline maradt ghanai tartományvezérlőből állították helyre a hálózatot.", "se": false, "t": true}, {"s": "b", "c": 5, "p": 4, "hu": "Incidenskezelési terv", "en": "Incident response plan", "id": "Szervezeti kontroll", "d": "Gyakorolt terv szerint áll át kézi üzemre és állít helyre.", "ct": "Norsk Hydro / LockerGoga, 2019", "cx": "Kézi üzemre álltak, mentésből állítottak vissza, nem fizettek vérdíjat.", "se": false, "t": true}, {"s": "b", "c": 5, "p": 5, "hu": "DDoS-szűrés", "en": "DDoS scrubbing", "id": "Szervezeti kontroll", "d": "A támadó forgalmat egy szűrőszolgáltatásra tereli.", "ct": "GitHub, 2018", "cx": "Az 1,35 Tbps-os memcached támadást percek alatt elhárították forgalomtereltetéssel.", "se": false, "t": false}], "roles": [{"s": "r", "n": 1, "k": "lead", "hu": "Operációvezető", "en": "Red Team Lead", "ab": "Egy körben két támadást indít. A második már az új szakaszban jön, ha az első sikeres volt.", "tm": "2. fázis", "u": "once", "rw": "A red team műveletet tervezi és hangolja össze: ő dönt arról, mikor és milyen sorrendben jönnek a lépések."}, {"s": "r", "n": 2, "k": "recon", "hu": "Felderítő", "en": "Reconnaissance / OSINT", "ab": "Megnéz egy véletlen lapot a Blue kezéből.", "tm": "2. fázis előtt", "u": "twice", "rw": "Nyílt forrásokból (OSINT) és szkenneléssel térképezi fel a célpontot, mielőtt a támadás elindul."}, {"s": "r", "n": 3, "k": "exploit", "hu": "Exploit fejlesztő", "en": "Exploit Developer", "ab": "+1 erősség a Kezdeti hozzáférés kategóriában.", "tm": "", "u": "always", "rw": "Sérülékenységeket elemez, és működő kihasználó kódot ír hozzájuk."}, {"s": "r", "n": 4, "k": "social", "hu": "Social engineer", "en": "Social Engineer", "ab": "+1 erősség az SE jelű lapokon.", "tm": "", "u": "always", "rw": "Az embereket téveszti meg: adathalász üzenetet ír, vagy telefonon kiadja magát valakinek."}, {"s": "r", "n": 5, "k": "crypto", "hu": "Kriptográfus", "en": "Cryptanalyst", "ab": "A Red képviselője a kriptopárbajban.", "tm": "döntetlennél", "u": "duel", "rw": "Titkosítást tör, jelszó-hasheket fejt vissza, rejtett adatcsatornákat épít."}, {"s": "b", "n": 1, "k": "ciso", "hu": "CISO", "en": "Chief Information Security Officer", "ab": "Egy körben két tartós kontrollt helyez le.", "tm": "6. fázis", "u": "once", "rw": "A szervezet információbiztonsági vezetője: ő dönt a stratégiáról, a költségvetésről és a kontrollokról."}, {"s": "b", "n": 2, "k": "soc", "hu": "SOC elemző", "en": "SOC Analyst", "ab": "Ha a Blue legalább 3-mal nyer, +1 Észlelés jelzőt kap.", "tm": "", "u": "always", "rw": "A biztonsági műveleti központban riasztásokat vizsgál és naplókat elemez, éjjel-nappal."}, {"s": "b", "n": 3, "k": "ir", "hu": "Incidenskezelő", "en": "Incident Responder", "ab": "A Red bábut egy mezővel visszalépteti.", "tm": "5. fázis után", "u": "once", "rw": "Incidenskor elszigeteli a támadót, helyreállítja a rendszereket és dokumentálja az eseményt."}, {"s": "b", "n": 4, "k": "admin", "hu": "Rendszergazda", "en": "System Administrator", "ab": "+1 erősség a Megvetés kategóriában.", "tm": "", "u": "always", "rw": "Üzemelteti és frissíti a rendszereket, kezeli a jogosultságokat és a mentéseket."}, {"s": "b", "n": 5, "k": "crypto", "hu": "Kriptográfus", "en": "Cryptographer", "ab": "A Blue képviselője a kriptopárbajban.", "tm": "döntetlennél", "u": "duel", "rw": "Titkosítási megoldásokat választ és ellenőriz, kulcsokat kezel, és a protokollok hibáit keresi."}], "crypto": [{"l": 1, "v": 1, "code": "K·I·01", "m": "07", "f": [{"i": "B", "x": "QLSZGV", "h": 1655629789, "n": 6}]}, {"l": 2, "v": 1, "code": "K·II·01", "m": "11", "f": [{"i": "B", "x": "EFKQLW", "h": 1922462791, "n": 6}, {"i": "C", "x": "CTHKYTQ", "h": 2410328618, "n": 7}]}, {"l": 3, "v": 1, "code": "K·III·01", "m": "05", "f": [{"i": "B", "x": "PZQHX", "h": 2315782105, "n": 5}, {"i": "C", "x": "RERMG", "h": 69456920, "n": 5}, {"i": "D", "x": "VSOIUITRR", "h": 257860260, "n": 9}]}, {"l": 4, "v": 1, "code": "K·IV·01", "m": "19", "f": [{"i": "B", "x": "KHNMXK", "h": 4048891076, "n": 6}, {"i": "C", "x": "OKQJEQ", "h": 1907596257, "n": 6}, {"i": "D", "x": "TDAAAMS", "h": 1807899516, "n": 7}, {"i": "E", "x": "44 34 25 15 33", "h": 2015818898, "n": 5}]}, {"l": 5, "v": 1, "code": "K·V·01", "m": "", "f": [{"i": "V", "x": "11 55 / 15 31 43 34 / 51 15 14 15 31 32 24 / 51 34 33 11 31 / 11 55 / 15 32 12 15 42", "h": 2177026855, "n": 25}]}, {"l": 1, "v": 2, "code": "K·I·02", "m": "03", "f": [{"i": "B", "x": "VCHUYHU", "h": 2546746216, "n": 7}]}, {"l": 2, "v": 2, "code": "K·II·02", "m": "14", "f": [{"i": "B", "x": "VOQYSF", "h": 2203421759, "n": 6}, {"i": "C", "x": "MHOJN", "h": 267186065, "n": 5}]}, {"l": 3, "v": 2, "code": "K·III·02", "m": "09", "f": [{"i": "B", "x": "YAXGH", "h": 2374902203, "n": 5}, {"i": "C", "x": "MDPNZQPN", "h": 1850813718, "n": 8}, {"i": "D", "x": "BTSEAOAHL", "h": 1395968746, "n": 9}]}, {"l": 4, "v": 2, "code": "K·IV·02", "m": "22", "f": [{"i": "B", "x": "GWLQ", "h": 3726534898, "n": 4}, {"i": "C", "x": "EMZZKCBQBR", "h": 1658409596, "n": 10}, {"i": "D", "x": "KTOEEVS", "h": 1821316218, "n": 7}, {"i": "E", "x": "23 11 43 23", "h": 3424181009, "n": 4}]}, {"l": 5, "v": 2, "code": "K·V·02", "m": "", "f": [{"i": "V", "x": "33 15 / 25 11 44 44 24 33 44 43 / 22 54 11 33 45 43 / 31 24 33 25 42 15", "h": 2904543936, "n": 22}]}, {"l": 1, "v": 3, "code": "K·I·03", "m": "16", "f": [{"i": "B", "x": "JYJAEI", "h": 1947012201, "n": 6}]}, {"l": 2, "v": 3, "code": "K·II·03", "m": "04", "f": [{"i": "B", "x": "JMSO", "h": 2521061874, "n": 4}, {"i": "C", "x": "VAKAJAL", "h": 3271757291, "n": 7}]}, {"l": 3, "v": 3, "code": "K·III·03", "m": "21", "f": [{"i": "B", "x": "HJYPG", "h": 1620965898, "n": 5}, {"i": "C", "x": "OEZMHKI", "h": 3244251199, "n": 7}, {"i": "D", "x": "FEIYLSGE", "h": 233703185, "n": 8}]}, {"l": 4, "v": 3, "code": "K·IV·03", "m": "08", "f": [{"i": "B", "x": "SMZVMT", "h": 1642768344, "n": 6}, {"i": "C", "x": "ILJTLS", "h": 413078609, "n": 6}, {"i": "D", "x": "SASZVRAIG", "h": 2046330069, "n": 9}, {"i": "E", "x": "43 11 31 44", "h": 3210861249, "n": 4}]}, {"l": 5, "v": 3, "code": "K·V·03", "m": "", "f": [{"i": "V", "x": "11 / 32 15 33 44 15 43 / 11 55 / 45 44 34 31 43 34 / 32 15 33 15 14 15 25", "h": 383618512, "n": 22}]}, {"l": 1, "v": 4, "code": "K·I·04", "m": "12", "f": [{"i": "B", "x": "PAYMUZ", "h": 1725874865, "n": 6}]}, {"l": 2, "v": 4, "code": "K·II·04", "m": "25", "f": [{"i": "B", "x": "BRZSNQMZ", "h": 2397484778, "n": 8}, {"i": "C", "x": "OPOHOIY", "h": 4229356335, "n": 7}]}, {"l": 3, "v": 4, "code": "K·III·04", "m": "06", "f": [{"i": "B", "x": "GJSOT", "h": 3323613940, "n": 5}, {"i": "C", "x": "GOCOSUJT", "h": 2367604307, "n": 8}, {"i": "D", "x": "KRIETRBE", "h": 849545757, "n": 8}]}, {"l": 4, "v": 4, "code": "K·IV·04", "m": "18", "f": [{"i": "B", "x": "CGFRGD", "h": 104786640, "n": 6}, {"i": "C", "x": "FKQSLUJ", "h": 2939014493, "n": 7}, {"i": "D", "x": "ALSDTOAAP", "h": 111811228, "n": 9}, {"i": "E", "x": "13 23 24 35", "h": 2475409999, "n": 4}]}, {"l": 5, "v": 4, "code": "K·V·04", "m": "", "f": [{"i": "V", "x": "21 42 24 43 43 24 44 43 / 32 24 15 31 34 44 44 / 44 11 32 11 14 33 11 25", "h": 1088037607, "n": 23}]}, {"l": 1, "v": 5, "code": "K·I·05", "m": "10", "f": [{"i": "B", "x": "UVSOXC", "h": 2105283919, "n": 6}]}, {"l": 2, "v": 5, "code": "K·II·05", "m": "23", "f": [{"i": "B", "x": "CLOOXP", "h": 3724068322, "n": 6}, {"i": "C", "x": "FZLKLQETL", "h": 2233160373, "n": 9}]}, {"l": 3, "v": 5, "code": "K·III·05", "m": "02", "f": [{"i": "B", "x": "UBWTQ", "h": 3174597888, "n": 5}, {"i": "C", "x": "DIUDROIN", "h": 3733157742, "n": 8}, {"i": "D", "x": "TEEHLSRE", "h": 1146963773, "n": 8}]}, {"l": 4, "v": 5, "code": "K·IV·05", "m": "15", "f": [{"i": "B", "x": "EPIRW", "h": 3498819145, "n": 5}, {"i": "C", "x": "NQMSMIMJJ", "h": 3485454515, "n": 9}, {"i": "D", "x": "ENELEOZSLR", "h": 2773705060, "n": 10}, {"i": "E", "x": "13 11 13 23 15", "h": 2395401349, "n": 5}]}, {"l": 5, "v": 5, "code": "K·V·05", "m": "", "f": [{"i": "V", "x": "11 / 12 24 55 11 31 34 32 / 33 15 32 / 51 15 14 15 31 15 32", "h": 3845034188, "n": 18}]}, {"l": 1, "v": 6, "code": "K·I·06", "m": "20", "f": [{"i": "B", "x": "ASIEYL", "h": 1790347564, "n": 6}]}, {"l": 2, "v": 6, "code": "K·II·06", "m": "13", "f": [{"i": "B", "x": "YRZRM", "h": 2549873806, "n": 5}, {"i": "C", "x": "LZLSELYFR", "h": 205650190, "n": 9}]}, {"l": 3, "v": 6, "code": "K·III·06", "m": "24", "f": [{"i": "B", "x": "YJGYQ", "h": 3432854583, "n": 5}, {"i": "C", "x": "QBMSRZBQ", "h": 3559968384, "n": 8}, {"i": "D", "x": "HASOZAAZD", "h": 2736613782, "n": 9}]}, {"l": 4, "v": 6, "code": "K·IV·06", "m": "17", "f": [{"i": "B", "x": "TJFDRX", "h": 3897649771, "n": 6}, {"i": "C", "x": "GQERRETAR", "h": 2287504107, "n": 9}, {"i": "D", "x": "VZLISALISAT", "h": 3915436575, "n": 11}, {"i": "E", "x": "43 11 33 14 12 34 53", "h": 2777526468, "n": 7}]}, {"l": 5, "v": 6, "code": "K·V·06", "m": "", "f": [{"i": "V", "x": "32 24 33 14 15 33 / 33 11 35 31 34 / 33 54 34 32 34 44 / 23 11 22 54", "h": 3040764673, "n": 21}]}, {"l": 1, "v": 7, "code": "K·I·07", "m": "03", "f": [{"i": "B", "x": "VSDP", "h": 603107848, "n": 4}]}, {"l": 2, "v": 7, "code": "K·II·07", "m": "09", "f": [{"i": "B", "x": "ONUQX", "h": 2853811837, "n": 5}, {"i": "C", "x": "SOEOZCOTN", "h": 2725673556, "n": 9}]}, {"l": 3, "v": 7, "code": "K·III·07", "m": "14", "f": [{"i": "B", "x": "DCFH", "h": 620752934, "n": 4}, {"i": "C", "x": "RQPLTP", "h": 1427081241, "n": 6}, {"i": "D", "x": "MILEFGEGY", "h": 1802113456, "n": 9}]}, {"l": 4, "v": 7, "code": "K·IV·07", "m": "21", "f": [{"i": "B", "x": "NCZGG", "h": 3156751777, "n": 5}, {"i": "C", "x": "DFTAJARFTAR", "h": 23211782, "n": 11}, {"i": "D", "x": "ROIDA", "h": 1248808730, "n": 5}, {"i": "E", "x": "35 11 54 31 34 11 14", "h": 2301344517, "n": 7}]}, {"l": 5, "v": 7, "code": "K·V·07", "m": "", "f": [{"i": "V", "x": "11 / 25 45 31 13 43 34 44 / 43 34 23 11 / 33 15 / 34 43 55 14 / 32 15 22", "h": 3248033500, "n": 21}]}, {"l": 1, "v": 8, "code": "K·I·08", "m": "06", "f": [{"i": "B", "x": "SKSUXOG", "h": 1777193517, "n": 7}]}, {"l": 2, "v": 8, "code": "K·II·08", "m": "11", "f": [{"i": "B", "x": "DFET", "h": 1145056814, "n": 4}, {"i": "C", "x": "QSKRPEQVSKY", "h": 193373677, "n": 11}]}, {"l": 3, "v": 8, "code": "K·III·08", "m": "19", "f": [{"i": "B", "x": "MKHCTB", "h": 1453486449, "n": 6}, {"i": "C", "x": "FLJLGTQ", "h": 2075886510, "n": 7}, {"i": "D", "x": "KTIEEVL", "h": 2902042749, "n": 7}]}, {"l": 4, "v": 8, "code": "K·IV·08", "m": "24", "f": [{"i": "B", "x": "AQYJG", "h": 2851834437, "n": 5}, {"i": "C", "x": "KUMHCKIMIT", "h": 2551136112, "n": 10}, {"i": "D", "x": "CAUSMGZROSO", "h": 2793139194, "n": 11}, {"i": "E", "x": "15 53 35 31 34 24 44", "h": 2822163980, "n": 7}]}, {"l": 5, "v": 8, "code": "K·V·08", "m": "", "f": [{"i": "V", "x": "55 15 42 34 / 12 24 55 11 31 34 32 / 32 24 33 14 15 33 / 43 55 24 33 44 15 33", "h": 1508542299, "n": 24}]}]};
+// Red vs Blue rules engine: pure-ish state machine (Date.now only for duel start)
+const ALPH = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+const enc = i => ALPH[i], dec = ch => ALPH.indexOf(ch);
+const ROLE_KEYS = { r: ['lead', 'recon', 'exploit', 'social', 'crypto'], b: ['ciso', 'soc', 'ir', 'admin', 'crypto'] };
+const DUEL_MS = 120000;
+const other = s => (s === 'r' ? 'b' : 'r');
+const cardOf = ch => DATA.cards[dec(ch)];
+const clone = o => JSON.parse(JSON.stringify(o));
+
+function rnd(st) { // mulberry32 on st.sd
+  let t = (st.sd = (st.sd + 0x6D2B79F5) >>> 0);
+  t = Math.imul(t ^ (t >>> 15), t | 1);
+  t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+  return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+}
+function shuffle(st, s) {
+  const a = s.split('');
+  for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(rnd(st) * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+  return a.join('');
+}
+function has(st, side, key) { return !!st.cfg[side].ro[ROLE_KEYS[side].indexOf(key)]; }
+function log(st, e) { st.lg.push(e); if (st.lg.length > 14) st.lg.shift(); }
+
+function newGame(seed) {
+  return {
+    v: 1, ph: 'setup', sq: 0, sd: seed >>> 0,
+    cfg: { r: { n: 3, ro: [1, 1, 1, 1, 1], ok: 0 }, b: { n: 3, ro: [1, 1, 1, 1, 1], ok: 0 }, alt: 0 },
+    rd: 0, z: 1, det: 0, dk: { r: '', b: '' }, h: { r: '', b: '' }, ds: { r: '', b: '' },
+    ct: ['', '', '', '', ''], u: { lead: 0, recon: 0, ciso: 0, ir: 0 }, ov: 0, rp: 0, pkr: 0, pk: '',
+    pl: { r: '', b: '' }, cl: null, du: null, cr: ['', '', '', '', ''], fc: 0, hist: '', w: '', wr: '', lg: []
+  };
+}
+
+function cfgError(st, side, c) {
+  const k = c.ro.reduce((a, b) => a + (b ? 1 : 0), 0);
+  if (c.n === 2 && k !== 3) return 'A 2 fős csapat pontosan 3 szerepkört választ.';
+  if (c.n >= 3 && k !== 5) return 'Legalább 3 fő esetén mind az 5 szerepkör játékban van.';
+  if (st.cfg.alt && side === 'b' && c.n === 2 && c.ro[1] && c.ro[2]) return 'Alternatív mód: a 2 fős Blue nem választhatja egyszerre a SOC elemzőt és az Incidenskezelőt.';
+  return '';
+}
+
+function draw(st, side, n) {
+  for (let i = 0; i < n; i++) {
+    if (!st.dk[side].length) {
+      if (!st.ds[side].length) return;
+      st.dk[side] = shuffle(st, st.ds[side]); st.ds[side] = '';
+      log(st, ['shuf', side]);
+    }
+    st.h[side] += st.dk[side][0]; st.dk[side] = st.dk[side].slice(1);
+  }
+}
+function refill(st, side) { draw(st, side, Math.max(0, 5 - st.h[side].length)); }
+const hasCat = (st, side, z) => st.h[side].split('').some(ch => cardOf(ch).c === z);
+
+function startGame(st) {
+  let r = '', b = '';
+  for (let i = 0; i < 25; i++) { r += enc(i); b += enc(25 + i); }
+  st.dk.r = shuffle(st, r); st.dk.b = shuffle(st, b);
+  for (let l = 1; l <= 5; l++) {
+    let s = ''; DATA.crypto.forEach((c, i) => { if (c.l === l) s += enc(i); });
+    st.cr[l - 1] = shuffle(st, s);
+  }
+  st.rd = 0; st.z = 1; log(st, ['start']);
+  beginRound(st);
+}
+function beginRound(st) {
+  st.rd++; st.ov = 0; st.fc = 0; st.rp = 0; st.pkr = 0; st.pk = ''; st.pl = { r: '', b: '' }; st.du = null;
+  refill(st, 'r'); refill(st, 'b');
+  st.ph = 'atk'; log(st, ['rd', st.rd]);
+}
+
+function ctrlBonus(st, z) { return st.ct[z - 1].length; }
+function totals(st) {
+  const rc = cardOf(st.pl.r), z = st.z;
+  const rb = (has(st, 'r', 'exploit') && z === 2 ? 1 : 0) + (has(st, 'r', 'social') && rc.se ? 1 : 0);
+  if (st.pl.b === '-') return { rt: rc.p + rb, rb, bt: 0, bb: 0 };
+  const bc = cardOf(st.pl.b);
+  const bb = (has(st, 'b', 'admin') && z === 3 ? 1 : 0) + ctrlBonus(st, z);
+  return { rt: rc.p + rb, rb, bt: bc.p + bb, bb };
+}
+function discardClash(st) {
+  st.ds.r += st.pl.r; st.hist += st.pl.r;
+  if (st.pl.b && st.pl.b !== '-') { st.ds.b += st.pl.b; st.hist += st.pl.b; }
+  st.pl = { r: '', b: '' };
+}
+function finish(st, w, why) { st.w = w; st.wr = why; st.ph = 'end'; log(st, ['end', w, why]); }
+
+function resolve(st) {
+  const t = totals(st);
+  st.cl = { r: st.pl.r, b: st.pl.b, z: st.z, rt: t.rt, bt: t.bt, rb: t.rb, bb: t.bb, w: '' };
+  log(st, ['clash', st.pl.r, st.pl.b, t.rt, t.bt]);
+  if (st.pl.b === '-' || t.rt > t.bt) return redWins(st);
+  if (t.bt > t.rt) return blueWins(st, t.bt - t.rt);
+  // tie -> crypto duel
+  const lv = Math.min(5, Math.max(1, t.rt));
+  if (!st.cr[lv - 1].length) { let s = ''; DATA.crypto.forEach((c, i) => { if (c.l === lv) s += enc(i); }); st.cr[lv - 1] = shuffle(st, s); }
+  const c = st.cr[lv - 1][0]; st.cr[lv - 1] = st.cr[lv - 1].slice(1);
+  st.du = { c, lv, t0: Date.now(), out: '', hp: '' };
+  st.cl.w = 'd'; st.ph = 'duel'; log(st, ['duel', lv]);
+}
+function redWins(st) {
+  st.cl.w = st.cl.w === 'd' ? 'dr' : 'r';
+  discardClash(st);
+  if (st.z === 5) return finish(st, 'r', 'r5');
+  st.z++; log(st, ['rw', st.z]);
+  after(st);
+}
+function blueWins(st, diff) {
+  st.cl.w = st.cl.w === 'd' ? 'db' : 'b';
+  discardClash(st);
+  st.det++; let soc = 0;
+  if (has(st, 'b', 'soc') && diff >= 3) { st.det++; soc = 1; }
+  st.det = Math.min(5, st.det);
+  log(st, ['bw', st.det, soc]);
+  if (st.det >= 5) return finish(st, 'b', 'b5');
+  after(st);
+}
+function duelFail(st) {
+  st.cl.w = 'dt'; discardClash(st); log(st, ['dto']); after(st);
+}
+function after(st) {
+  st.du = null;
+  if (st.ov === 1) { st.ov = 2; st.rp = 0; st.ph = 'atk'; log(st, ['ov2', st.z]); return; }
+  st.ph = 'fort';
+}
+
+const norm = x => x.toUpperCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/J/g, 'I').replace(/[^A-Z]/g, '');
+function fnv(x) { let h = 2166136261; for (let i = 0; i < x.length; i++) { h ^= x.charCodeAt(i); h = Math.imul(h, 16777619) >>> 0; } return h >>> 0; }
+function checkAnswer(c, ans) { return c.f.every((f, i) => fnv(norm(ans[i] || '')) === f.h); }
+
+// returns error string, or '' after mutating st
+function apply(st, side, a) {
+  if (st.ph === 'end') return 'A játék véget ért.';
+  if (a.t === 'abort') { finish(st, '', 'abort:' + side); return ''; }
+  if (st.ph === 'setup') {
+    if (a.t === 'cfg') {
+      const c = { n: Math.max(2, Math.min(5, a.n | 0)), ro: a.ro.map(x => (x ? 1 : 0)), ok: 0 };
+      if (c.n >= 3) c.ro = [1, 1, 1, 1, 1];
+      else if (c.ro.reduce((x, y) => x + y, 0) === 5) c.ro = [1, 1, 1, 0, 0];
+      st.cfg[side] = c; return '';
+    }
+    if (a.t === 'alt') { st.cfg.alt = a.v ? 1 : 0; st.cfg.r.ok = st.cfg.b.ok = 0; return ''; }
+    if (a.t === 'ready') {
+      const e = cfgError(st, side, st.cfg[side]); if (e) return e;
+      st.cfg[side].ok = 1;
+      if (st.cfg.r.ok && st.cfg.b.ok) startGame(st);
+      return '';
+    }
+    return 'Most a beállítás jön.';
+  }
+  if (st.ph === 'atk') {
+    if (side !== 'r') return 'Most a Red támad.';
+    if (st.pl.r) return 'Már kijátszottál lapot.';
+    if (a.t === 'peek') {
+      if (!has(st, 'r', 'recon') || st.u.recon >= 2 || st.pkr) return 'A Felderítő most nem használható.';
+      if (!st.h.b.length) return 'A Blue keze üres.';
+      st.pk = st.h.b[Math.floor(rnd(st) * st.h.b.length)]; st.u.recon++; st.pkr = 1; log(st, ['peek']); return '';
+    }
+    if (a.t === 'ov') {
+      if (!has(st, 'r', 'lead') || st.u.lead || st.ov) return 'Az Operációvezető most nem használható.';
+      st.u.lead = 1; st.ov = 1; log(st, ['ov']); return '';
+    }
+    if (a.t === 'play') {
+      if (!st.h.r.includes(a.c)) return 'Ez a lap nincs a kezedben.';
+      if (cardOf(a.c).c !== st.z) return 'Csak a bábu szakaszának kategóriájából támadhatsz.';
+      st.h.r = st.h.r.replace(a.c, ''); st.pl.r = a.c; st.ph = 'def'; log(st, ['atk', st.z]); return '';
+    }
+    if (a.t === 'replan') {
+      if (hasCat(st, 'r', st.z)) return 'Van megfelelő lapod, újratervezni nem kell.';
+      if (st.rp) return 'Ebben a támadásban már újraterveztél.';
+      const cs = (a.cs || []).filter((c, i, arr) => st.h.r.includes(c) && arr.indexOf(c) === i).slice(0, 3);
+      cs.forEach(c => { st.h.r = st.h.r.replace(c, ''); st.ds.r += c; });
+      draw(st, 'r', cs.length); st.rp = 1; log(st, ['rp', cs.length]);
+      if (!hasCat(st, 'r', st.z)) { log(st, ['noatk']); st.ov = st.ov ? 2 : 0; after(st); }
+      return '';
+    }
+    if (a.t === 'skip') {
+      if (hasCat(st, 'r', st.z)) return 'Van megfelelő lapod.';
+      log(st, ['noatk']); st.ov = st.ov ? 2 : 0; after(st); return '';
+    }
+    return 'Ismeretlen lépés.';
+  }
+  if (st.ph === 'def') {
+    if (side !== 'b') return 'Most a Blue védekezik.';
+    if (a.t === 'def') {
+      if (!st.h.b.includes(a.c)) return 'Ez a lap nincs a kezedben.';
+      if (cardOf(a.c).c !== st.z) return 'Csak azonos kategóriájú lappal védekezhetsz.';
+      st.h.b = st.h.b.replace(a.c, ''); st.pl.b = a.c; resolve(st); return '';
+    }
+    if (a.t === 'pass') { st.pl.b = '-'; resolve(st); return ''; }
+    return 'Ismeretlen lépés.';
+  }
+  if (st.ph === 'duel') {
+    const d = st.du, c = DATA.crypto[dec(d.c)];
+    if (a.t === 'help') { if (!d.hp.includes(side)) d.hp += side; return ''; }
+    if (a.t === 'timeout') { if (Date.now() < d.t0 + DUEL_MS - 1500) return 'Még fut az idő.'; duelFail(st); return ''; }
+    if (a.t === 'ans') {
+      if (d.out.includes(side)) return 'Hibás válasz után már nem fejthetsz.';
+      if (checkAnswer(c, a.a || [])) { log(st, ['dwin', side]); return side === 'r' ? redWins(st) : blueWins(st, 0), ''; }
+      d.out += side; log(st, ['dwrong', side]);
+      if (d.out.length >= 2) duelFail(st);
+      return '';
+    }
+    return 'Most kriptopárbaj zajlik.';
+  }
+  if (st.ph === 'fort') {
+    if (side !== 'b') return 'Most a Blue erősít.';
+    if (a.t === 'ctrl') {
+      const card = st.h.b.includes(a.c) ? cardOf(a.c) : null;
+      if (!card || !card.t) return 'Csak „Tartós” jelű lap rakható le kontrollként.';
+      if (st.ct[card.c - 1].length >= 2) return 'Ebben a kategóriában már 2 kontroll van kint.';
+      if (st.fc >= 1) {
+        if (!has(st, 'b', 'ciso') || st.u.ciso || st.fc >= 2) return 'Ebben a körben már raktál le kontrollt.';
+        st.u.ciso = 1;
+      }
+      st.h.b = st.h.b.replace(a.c, ''); st.ct[card.c - 1] += a.c; st.fc++; log(st, ['ctrl', a.c]); return '';
+    }
+    if (a.t === 'ir') {
+      if (!has(st, 'b', 'ir') || st.u.ir || st.z <= 1) return 'Az Incidenskezelő most nem használható.';
+      st.u.ir = 1; st.z--; log(st, ['ir', st.z]); return '';
+    }
+    if (a.t === 'end') {
+      if (st.rd >= 10) return finish(st, 'b', 'b10'), '';
+      beginRound(st); return '';
+    }
+    return 'Ismeretlen lépés.';
+  }
+  return 'Ismeretlen állapot.';
+}
+function act(st, side, a) {
+  const n = clone(st); const err = apply(n, side, a);
+  if (err) return { st, err };
+  n.sq++; return { st: n, err: '' };
+}
+
+// ---------- UI ----------
+const ZN = [null, ['FELDERÍTÉS', 'Reconnaissance'], ['KEZDETI HOZZÁFÉRÉS', 'Initial Access'], ['MEGVETÉS', 'Persistence'], ['OLDALIRÁNYÚ MOZGÁS', 'Lateral Movement'], ['CÉL', 'Crown Jewels']];
+const ICON = {
+  1: '<circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/>',
+  2: '<circle cx="8" cy="12" r="4"/><path d="M12 12h9M18 12v3M21 12v2"/>',
+  3: '<circle cx="12" cy="5" r="2"/><path d="M12 7v13M5 13a7 7 0 0 0 14 0M8 10h8"/>',
+  4: '<circle cx="5" cy="12" r="2.5"/><circle cx="19" cy="6" r="2.5"/><circle cx="19" cy="18" r="2.5"/><path d="M7.3 11l9.4-4M7.3 13l9.4 4"/>',
+  5: '<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/>'
+};
+const icon = n => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true">${ICON[n]}</svg>`;
+const ROMAN = ['', 'I', 'II', 'III', 'IV', 'V'];
+const LEVELHU = ['', 'KÖNNYŰ', 'KÖZEPES', 'NEHÉZ', 'EXTRÉM', 'SOK SIKERT'];
+const SIDE = { r: 'Red', b: 'Blue' };
+const MORSE_D = ['-----', '.----', '..---', '...--', '....-', '.....', '-....', '--...', '---..', '----.'];
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const roleOf = (side, i) => DATA.roles.find(r => r.s === side && r.n === i + 1);
+
+let MODE = null;            // 'local' | 'host' | 'guest'
+let ST = null;              // engine state
+let MY = null;              // my side in online play
+let SCREEN = 'menu';
+let SEL = { r: [], b: [] };
+let SHOW = { r: false, b: false };
+let DRAFT = { r: [], b: [] };
+let TOAST = '', toastT = 0, ABORTASK = false;
+let ROOM = null, GROOM = null, CODE = '', GID = Math.random().toString(36).slice(2, 10), ACTN = 0;
+let lastHostSt = null, SEAT = '', LASTN = {}, PEERS = [], HOSTOFF = 0, PENDING = false, lastPh = '';
+
+const store = {
+  get(k) { try { return JSON.parse(localStorage.getItem(k) || 'null'); } catch (e) { return null; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { } },
+  del(k) { try { localStorage.removeItem(k); } catch (e) { } }
+};
+
+function toast(m) { TOAST = m; clearTimeout(toastT); toastT = setTimeout(() => { TOAST = ''; render(); }, 3800); render(); }
+
+// ---------- actions ----------
+function dispatch(side, a) {
+  if (MODE === 'guest') {
+    if (!GROOM) return toast('Nincs kapcsolat a játékkal.');
+    ACTN++; PENDING = true;
+    GROOM.set({ ro: 'guest', gid: GID, act: { n: ACTN, a } });
+    render(); return;
+  }
+  const r = act(ST, side, a);
+  if (r.err) return toast(r.err);
+  ST = r.st; afterChange(); persist(); publishHost(); render();
+}
+function afterChange() {
+  ['r', 'b'].forEach(s => { SEL[s] = SEL[s].filter(ch => ST.h[s].includes(ch)); });
+  if (ST.ph !== lastPh) { SEL = { r: [], b: [] }; if (MODE === 'local') SHOW = { r: false, b: false }; if (ST.ph !== 'duel') DRAFT = { r: [], b: [] }; lastPh = ST.ph; }
+}
+function persist() {
+  if (MODE === 'local') store.set('rvb-local', ST);
+  if (MODE === 'host') store.set('rvb-host', { code: CODE, my: MY, st: ST, seat: SEAT });
+}
+
+// ---------- online ----------
+// Two transports with the same shape: db (shared documents, preferred: survives reloads, late joiners see state) and room (live presence).
+let NETKIND = null, DBNS = null, ROOMNS = null, NETREADY = false;
+async function getRoom() {
+  const use = n => (window.claude && window.claude.use ? window.claude.use(n).catch(() => null) : Promise.resolve(null));
+  try { [DBNS, ROOMNS] = await Promise.all([use('db'), use('room')]); } catch (e) { }
+  NETKIND = DBNS ? 'db' : ROOMNS ? 'room' : null; ROOM = NETKIND; NETREADY = true;
+  render();
+}
+async function openChannel(code, role) {
+  if (NETKIND === 'room') {
+    const g = await ROOMNS.join('rvb-' + code);
+    return {
+      set: p => g.presence(p).catch(() => { }),
+      watch: cb => g.onPeers(ch => cb(ch.peers.filter(p => !p.sameTab && p.presence).map(p => ({ presence: p.presence })))),
+      close: () => g.leave().catch(() => { })
+    };
+  }
+  const mine = DBNS.doc('rvb/' + code + '-' + role), theirs = DBNS.doc('rvb/' + code + '-' + (role === 'host' ? 'guest' : 'host'));
+  let cur = {}, pending = null, busy = false, unsub = null, dead = false;
+  async function flush() {
+    if (busy) return; busy = true;
+    while (pending && !dead) {
+      const d = pending; pending = null;
+      try { await mine.set(d); } catch (e) {
+        if (e && e.code === 'invalid_argument') toast('Nincs írási jogod ehhez a játékhoz. Kérd meg a tulajdonost, hogy adjon Közreműködő (Contributor) hozzáférést.');
+        else { try { await new Promise(r => setTimeout(r, 400 + Math.random() * 600)); await mine.set(d); } catch (e2) { toast('Nem sikerült menteni a lépést.'); } }
+      }
+    }
+    busy = false;
+  }
+  return {
+    set: p => { cur = { ...cur, ...p }; Object.keys(p).forEach(k => { if (p[k] === null) delete cur[k]; }); pending = JSON.parse(JSON.stringify(cur)); flush(); },
+    watch: cb => { unsub = theirs.onSnapshot(s => cb(s.exists ? [{ presence: s.data() }] : []), () => toast('Megszakadt a kapcsolat a játékkal.')); },
+    close: () => { dead = true; if (unsub) unsub(); }
+  };
+}
+function publishHost() {
+  if (MODE !== 'host' || !GROOM) return;
+  GROOM.set({ ro: 'host', sd: MY, st: ST, now: Date.now(), seat: SEAT });
+}
+async function hostGame(side, resume) {
+  if (!NETKIND) return toast('Az online mód ebben a nézetben nem érhető el.');
+  MODE = 'host'; MY = side;
+  if (resume) { CODE = resume.code; ST = resume.st; SEAT = resume.seat || ''; MY = resume.my; }
+  else { CODE = Math.random().toString(36).slice(2, 7).replace(/[^a-z0-9]/g, 'x').padEnd(5, 'x'); ST = newGame((Math.random() * 4294967296) >>> 0); SEAT = ''; }
+  lastPh = ST.ph; SCREEN = 'game'; render();
+  try {
+    GROOM = await openChannel(CODE, 'host');
+    GROOM.watch(list => { PEERS = list; hostPeers(); render(); });
+    publishHost(); persist();
+  } catch (e) { toast('Nem sikerült megnyitni a játékot.'); }
+}
+function hostPeers() {
+  const guests = PEERS.filter(p => p.presence.ro === 'guest' && p.presence.gid);
+  const seated = guests.find(p => p.presence.gid === SEAT);
+  if (!seated && guests.length && (NETKIND === 'db' || !SEAT)) { SEAT = guests[0].presence.gid; publishHost(); persist(); }
+  else if (!seated && guests.length) { SEAT = guests[0].presence.gid; publishHost(); persist(); }
+  guests.forEach(p => {
+    const pr = p.presence, A = pr.act;
+    if (!A || pr.gid !== SEAT) return;
+    if ((LASTN[pr.gid] || 0) >= A.n) return;
+    LASTN[pr.gid] = A.n;
+    const r = act(ST, other(MY), A.a);
+    if (r.err) { GROOM.set({ ro: 'host', sd: MY, st: ST, now: Date.now(), seat: SEAT, rej: { gid: pr.gid, n: A.n, err: r.err } }); return; }
+    ST = r.st; afterChange(); persist(); publishHost();
+  });
+}
+async function joinGame(code) {
+  code = (code || '').toLowerCase().trim();
+  if (!/^[a-z0-9]{5}$/.test(code)) return toast('A játékkód 5 karakter.');
+  if (!NETKIND) return toast('Az online mód ebben a nézetben nem érhető el.');
+  MODE = 'guest'; CODE = code; SCREEN = 'game'; ST = null; render();
+  try {
+    GROOM = await openChannel(code, 'guest');
+    GROOM.set({ ro: 'guest', gid: GID, act: null, t: Date.now() });
+    let lastRej = 0;
+    GROOM.watch(list => {
+      PEERS = list;
+      const h = PEERS.find(p => p.presence.ro === 'host');
+      if (h && h.presence.st) {
+        const pr = h.presence;
+        if (pr.st !== lastHostSt && (!ST || JSON.stringify(pr.st) !== JSON.stringify(ST))) { ST = clone(pr.st); PENDING = false; afterChange(); }
+        lastHostSt = pr.st;
+        MY = other(pr.sd); HOSTOFF = (pr.now || Date.now()) - Date.now();
+        if (pr.rej && pr.rej.gid === GID && pr.rej.n > lastRej && pr.rej.n === ACTN) { lastRej = pr.rej.n; PENDING = false; toast(pr.rej.err); }
+        if (pr.seat && pr.seat !== GID && ST) MY = null; // spectator
+      }
+      render();
+    });
+  } catch (e) { toast('Nem sikerült csatlakozni.'); }
+}
+function leave() {
+  if (GROOM) { GROOM.close(); GROOM = null; }
+  MODE = null; ST = null; SCREEN = 'menu'; PEERS = []; render();
+}
+
+// ---------- view helpers ----------
+function canAct(side) { return MODE === 'local' || (MY === side && !PENDING); }
+function viewSides() { return MODE === 'local' ? ['r', 'b'] : (MY ? [MY] : []); }
+function activeSide() { return { atk: 'r', def: 'b', fort: 'b' }[ST.ph] || ''; }
+
+function cardHTML(ch, opts = {}) {
+  const c = cardOf(ch), s = c.s;
+  const cls = ['hc', 's' + s, opts.sel ? 'sel' : '', opts.play ? 'playable' : '', opts.dim ? 'dim' : ''].join(' ');
+  const inner = `<div class="ci"><div class="bar"></div>
+   <div class="top2"><div class="str">${c.p}</div><div class="cat">${icon(c.c)}<span>0${c.c}</span></div></div>
+   <div class="tt">${esc(c.hu)}<span class="en">${esc(c.en)}</span></div>
+   <div class="tags">${c.se ? '<span class="tag tg">SE</span>' : ''}${c.t ? '<span class="tag tb">TARTÓS</span>' : ''}<span class="mono" style="font-size:10px;margin-left:auto">${s.toUpperCase()}·${c.c}·${c.p}</span></div></div>`;
+  if (opts.btn) return `<button class="${cls}" data-card="${ch}" data-side="${s}" aria-pressed="${opts.sel ? 'true' : 'false'}" aria-label="${esc(c.hu)}, erősség ${c.p}">${inner}</button>`;
+  return `<div class="${cls}">${inner}</div>`;
+}
+const backHTML = (s, small) => `<div class="back s${s} ${small ? 'small' : ''}"><span class="disp ${s}">${s === 'r' ? 'RED' : 'BLUE'}</span>${small ? '' : '<span class="lbl">LEFORDÍTVA</span>'}</div>`;
+
+function boardHTML() {
+  let z = '';
+  for (let i = 1; i <= 5; i++) {
+    const ctrls = ST.ct[i - 1].split('').filter(Boolean);
+    z += `<div class="zone ${ST.z === i ? 'cur' : ''}">
+      <div class="zplate">${icon(i)}<div style="min-width:0"><div class="ze">0${i} · ${ZN[i][1]}</div><div class="zn">${ZN[i][0]}</div></div></div>
+      <div class="pawnslot">${ST.z === i && ST.ph !== 'setup' ? '<div class="pawn" aria-label="Red bábu">RED</div>' : ''}</div>
+      <div class="det ${ST.det >= i ? 'on' : ''}" aria-label="${i}. Észlelés mező${ST.det >= i ? ', foglalt' : ''}">0${i}</div>
+      ${ctrls.length ? `<div class="ctrlrow">${ctrls.map(c => `<span title="${esc(cardOf(c).hu)}">KONTROLL +1 · ${esc(cardOf(c).hu)}</span>`).join('')}</div>` : ''}
+    </div>`;
+  }
+  let t = '';
+  for (let i = 1; i <= 10; i++) t += `<div class="${i < ST.rd ? 'done' : ''} ${i === ST.rd ? 'now' : ''} ${i === 10 ? 'last' : ''}">${i}</div>`;
+  return `<div class="board cut"><div class="fi cut">
+    <div class="row" style="justify-content:space-between;margin-bottom:8px"><span class="lbl">Támadási lánc</span><span class="lbl b">Észlelés ${ST.det}/5</span></div>
+    ${z}<div class="lbl" style="margin-top:10px">Kör · 10. vége = Blue nyer</div><div class="track">${t}</div></div></div>`;
+}
+
+const PHASES = [['atk', 'Támadás'], ['def', 'Védekezés'], ['duel', 'Párbaj'], ['fort', 'Megerősítés']];
+function phaseHTML() {
+  const map = {
+    setup: ['BEÁLLÍTÁS', 'Mindkét csapat beállítja a létszámát és a szerepköreit.'],
+    atk: [`<span class="r">RED</span> TÁMAD`, `A Red lefordítva kijátszik egy lapot a ${ZN[ST.z][0]} kategóriából.${ST.ov === 2 ? ' Ez az Operációvezető második támadása.' : ''}`],
+    def: [`<span class="b">BLUE</span> VÉDEKEZIK`, `A Blue azonos kategóriájú lappal védekezik, vagy passzol.`],
+    duel: [`KRIPTOPÁRBAJ`, `Döntetlen. A két Kriptográfus egyszerre fejt, aki előbb helyesen beküldi, nyer.`],
+    fort: [`<span class="b">BLUE</span> MEGERŐSÍT`, `A Blue lerakhat egy „Tartós” lapot kontrollként, majd lezárja a kört.`],
+    end: ['JÁTÉK VÉGE', '']
+  };
+  const m = map[ST.ph];
+  return `<div class="phase cut"><div><div class="lbl" style="color:var(--soft)">${ST.rd ? ST.rd + '. kör / 10' : 'Előkészítés'}</div><div class="who">${m[0]}</div></div>
+   <div class="steps" aria-hidden="true">${['Húzás', ...PHASES.map(p => p[1]), 'Takarítás'].map((n, i) => `<span class="${(PHASES[i - 1] || [])[0] === ST.ph ? 'on' : ''}">${n.toUpperCase()}</span>`).join('')}</div>
+   <div style="flex-basis:100%;font-size:14px;color:var(--soft)">${m[1]}</div></div>`;
+}
+
+function clashHTML() {
+  if (ST.ph === 'def' || (ST.ph === 'atk' && ST.pl.r)) {
+    return `<div class="frame cut"><div class="fi"><div class="lbl">Ütközés · ${ZN[ST.z][0]}</div>
+      <div class="clash" style="margin-top:8px"><div class="side">${backHTML('r')}<span class="lbl">Red lap</span></div><div class="vs">VS</div>
+      <div class="side">${ST.pl.b ? backHTML('b') : '<div class="back" style="background:transparent;box-shadow:inset 0 0 0 2px var(--ink);color:var(--ink)"><span class="lbl">Blue döntése…</span></div>'}<span class="lbl">Blue lap</span></div></div></div></div>`;
+  }
+  const c = ST.cl; if (!c) return '';
+  const rc = cardOf(c.r);
+  const res = { r: ['rw', 'A támadás sikeres'], b: ['bw', 'A védekezés sikeres'], d: ['tw', 'Döntetlen: kriptopárbaj'], dr: ['rw', 'Párbaj: a Red nyert'], db: ['bw', 'Párbaj: a Blue nyert'], dt: ['tw', 'Lejárt az idő: a támadás sikertelen'] }[c.w];
+  return `<div class="frame cut"><div class="fi"><div class="lbl">Legutóbbi ütközés · ${ZN[c.z][0]}</div>
+   <div class="clash" style="margin-top:8px">
+    <div class="side">${cardHTML(c.r)}<div class="sum r">${rc.p}${c.rb ? ' + ' + c.rb : ''} = ${c.rt}</div></div>
+    <div class="vs">VS</div>
+    <div class="side">${c.b === '-' ? '<div class="back" style="background:transparent;box-shadow:inset 0 0 0 2px var(--ink);color:var(--ink)"><span class="disp" style="font-size:18px">PASSZ</span></div><div class="sum b">0</div>' : cardHTML(c.b) + `<div class="sum b">${cardOf(c.b).p}${c.bb ? ' + ' + c.bb : ''} = ${c.bt}</div>`}</div>
+   </div>${res ? `<div class="result ${res[0]}" style="margin-top:10px">${res[1]}</div>` : ''}
+   <div class="detail" style="margin-top:10px">${caseHTML(c.r)}${c.b !== '-' ? caseHTML(c.b) : ''}</div></div></div>`;
+}
+function caseHTML(ch) {
+  const c = cardOf(ch);
+  return `<div class="case"><span class="tag ${c.s === 'r' ? 'tr' : 'tb'}">VALÓS ESET</span> <b>${esc(c.ct)}</b><br>${esc(c.cx)}<div class="mono" style="font-size:11px;margin-top:4px">${esc(c.id)}</div></div>`;
+}
+
+function handPanel(side) {
+  const mine = viewSides().includes(side);
+  const h = ST.h[side].split('').filter(Boolean);
+  if (!mine) return `<div class="frame cut"><div class="fi"><div class="row" style="justify-content:space-between"><h3>${side === 'r' ? '<span class="r">Red</span>' : '<span class="b">Blue</span>'} kéz</h3><span class="lbl">${h.length} lap</span></div><div class="oppbox" style="margin-top:8px">${h.map(() => backHTML(side, true)).join('')}</div></div></div>`;
+  const hidden = MODE === 'local' && !SHOW[side];
+  const ph = ST.ph, z = ST.z;
+  const myTurn = activeSide() === side;
+  let body;
+  if (hidden) {
+    body = `<div class="row" style="margin-top:8px">${h.map(() => backHTML(side, true)).join('')}</div>
+     <p class="hint">${myTurn ? `A ${SIDE[side]} csapat következik. A másik csapat ne nézzen ide.` : 'A lapok rejtve vannak.'}</p>
+     <button class="btn ${side === 'r' ? 'red' : 'blue'}" data-a="show" data-side="${side}">${SIDE[side]} kéz megmutatása</button>`;
+  } else {
+    const noMatch = !h.some(ch => cardOf(ch).c === z);
+    const multi = side === 'r' && ph === 'atk' && noMatch && !ST.rp;
+    body = `<div class="hand" style="margin-top:10px">${h.map(ch => {
+      const c = cardOf(ch);
+      const play = (ph === 'atk' && side === 'r' && (c.c === z || multi)) || (ph === 'def' && side === 'b' && c.c === z) || (ph === 'fort' && side === 'b' && c.t && ST.ct[c.c - 1].length < 2);
+      return cardHTML(ch, { btn: true, sel: SEL[side].includes(ch), play: play && myTurn, dim: myTurn && !play });
+    }).join('') || '<p class="hint">Nincs lap a kézben.</p>'}</div>`;
+    const s1 = SEL[side][0];
+    if (s1) { const c = cardOf(s1); body += `<div class="detail" style="margin-top:10px"><div class="case" style="background:var(--white)"><b>${esc(c.hu)}</b><br>${esc(c.d)}</div>${caseHTML(s1)}</div>`; }
+    if (side === 'r' && ST.pk && ST.pkr) body += `<div class="panel cut" style="margin-top:10px"><span class="lbl r">Felderítő · a Blue kezében van:</span><div style="margin-top:6px">${cardHTML(ST.pk)}</div></div>`;
+    if (MODE === 'local') body += `<div style="margin-top:10px"><button class="btn ghost" data-a="hide" data-side="${side}">Kéz elrejtése</button></div>`;
+  }
+  return `<div class="frame cut"><div class="fi"><div class="row" style="justify-content:space-between"><h3>${side === 'r' ? '<span class="r">Red</span>' : '<span class="b">Blue</span>'} kéz</h3>
+    <span class="lbl">Pakli ${ST.dk[side].length} · Dobó ${ST.ds[side].length}</span></div>${body}${actionsHTML(side, hidden)}</div></div>`;
+}
+
+function roleBtn(side, key, label, enabled, a, on) {
+  if (!has(ST, side, key)) return '';
+  return `<button class="btn ghost" data-act='${JSON.stringify(a)}' data-side="${side}" aria-pressed="${on ? 'true' : 'false'}" ${enabled ? '' : 'disabled'}>${label}</button>`;
+}
+function actionsHTML(side, hidden) {
+  if (activeSide() !== side || hidden) return '';
+  if (!canAct(side)) return `<p class="hint" style="margin-top:10px">${PENDING ? 'Lépés elküldve, várakozás…' : ''}</p>`;
+  const z = ST.z, h = ST.h[side], sel = SEL[side];
+  const s1 = sel[0] ? cardOf(sel[0]) : null;
+  let out = '';
+  if (ST.ph === 'atk') {
+    if (ST.pl.r) return '';
+    const noMatch = !h.split('').some(ch => cardOf(ch).c === z);
+    out += `<button class="btn red" data-act='${JSON.stringify({ t: 'play', c: sel[0] || '' })}' data-side="r" ${s1 && s1.c === z && !noMatch ? '' : 'disabled'}>Támadok lefordítva</button>`;
+    if (noMatch && !ST.rp) out += `<button class="btn" data-act='${JSON.stringify({ t: 'replan', cs: sel.slice(0, 3) })}' data-side="r">Újratervezés: ${sel.length ? sel.length + ' lap cseréje' : 'csere nélkül'}</button><button class="btn ghost" data-act='{"t":"skip"}' data-side="r">Nem támadok</button>`;
+    out += roleBtn('r', 'recon', `Felderítő: belenézek (${2 - ST.u.recon} maradt)`, ST.u.recon < 2 && !ST.pkr, { t: 'peek' });
+    out += roleBtn('r', 'lead', ST.ov ? 'Operációvezető: aktív' : 'Operációvezető: dupla támadás', !ST.u.lead && !ST.ov, { t: 'ov' }, !!ST.ov);
+    const tip = noMatch ? (ST.rp ? '' : `Nincs ${ZN[z][0]} lapod. Jelölj ki legfeljebb 3 lapot, és cseréld le őket.`) : 'Válaszd ki a lapot, amellyel támadsz. Blöffölhetsz gyenge lappal is.';
+    return `<div class="stack" style="margin-top:12px"><p class="hint" style="margin:0">${tip}</p><div class="row">${out}</div></div>`;
+  }
+  if (ST.ph === 'def') {
+    const match = h.split('').some(ch => cardOf(ch).c === z);
+    out = `<button class="btn blue" data-act='${JSON.stringify({ t: 'def', c: sel[0] || '' })}' data-side="b" ${s1 && s1.c === z ? '' : 'disabled'}>Védekezem lefordítva</button><button class="btn ghost" data-act='{"t":"pass"}' data-side="b">Passz</button>`;
+    const bonus = ST.ct[z - 1].length + (has(ST, 'b', 'admin') && z === 3 ? 1 : 0);
+    return `<div class="stack" style="margin-top:12px"><p class="hint" style="margin:0">${match ? 'Válassz egy ' + ZN[z][0] + ' lapot.' : 'Nincs megfelelő lapod, passzolnod kell.'}${bonus ? ` Bónuszod ebben a kategóriában: +${bonus}.` : ''}</p><div class="row">${out}</div></div>`;
+  }
+  if (ST.ph === 'fort') {
+    const canSecond = has(ST, 'b', 'ciso') && !ST.u.ciso && ST.fc === 1;
+    const canCtrl = ST.fc === 0 || canSecond;
+    out = `<button class="btn blue" data-act='${JSON.stringify({ t: 'ctrl', c: sel[0] || '' })}' data-side="b" ${canCtrl && s1 && s1.t ? '' : 'disabled'}>${ST.fc === 1 ? 'CISO: második kontroll' : 'Kontroll lerakása'}</button>`;
+    out += roleBtn('b', 'ir', 'Incidenskezelő: bábu vissza', !ST.u.ir && ST.z > 1, { t: 'ir' });
+    out += `<button class="btn" data-act='{"t":"end"}' data-side="b">${ST.rd >= 10 ? 'Utolsó kör lezárása' : 'Kör vége'}</button>`;
+    return `<div class="stack" style="margin-top:12px"><p class="hint" style="margin:0">Jelölj ki egy „Tartós” lapot, ha kontrollt raksz le. Kategóriánként legfeljebb 2 lehet kint.</p><div class="row">${out}</div></div>`;
+  }
+  return '';
+}
+
+function morseHTML(num) {
+  return num.split('').map((d, i) => (i ? '<hr>' : '') + MORSE_D[+d].split('').map(s => `<i class="${s === '.' ? 'dot' : 'dash'}"></i>`).join('')).join('');
+}
+function kcardHTML(c) {
+  const lv = c.l;
+  const frags = c.f.map(f => `<div class="frag"><span class="tag tg" style="border:0">${lv === 5 ? 'FELADAT' : f.i + ' TÖREDÉK'}</span><div class="cx" style="${lv === 5 ? 'white-space:pre-line' : ''}">${esc(lv === 5 ? f.x.split(' / ').join('\n') : f.x)}</div></div>`).join('');
+  return `<div class="kcard ${c.m ? '' : 'nom'}">${c.m ? `<div class="morse" aria-label="A töredék: morzejel"><span class="tag" style="background:var(--ground);color:var(--ink)">A</span>${morseHTML(c.m)}</div>` : ''}
+   <div style="min-width:0"><div class="row" style="justify-content:space-between"><div><div class="lbl" style="color:var(--soft)">TIE-BREAK // PÁRBAJ</div><div class="disp" style="font-size:22px">KRIPTOPÁRBAJ</div></div><div class="disp" style="font-size:36px">${ROMAN[lv]}</div></div>
+   <div class="lbl" style="margin-top:4px;color:var(--soft)">NEHÉZSÉG: ${LEVELHU[lv]} // ${c.f.length} FELADAT // ${esc(c.code)}</div>${frags}
+   <p style="font-size:13px;color:var(--soft);margin:10px 0 0">${lv === 5 ? 'Polybius-rács: minden számpár egy betű (sor, oszlop). A sorok a szavak.' : 'Sorban: az A morzeszám a B eltolása, a B szava a C kulcsa. A D és az E önálló.'}</p></div></div>`;
+}
+function refHTML() {
+  const PB = 'ABCDEFGHIKLMNOPQRSTUVWXYZ';
+  let t = '<table class="pb"><tr><th></th>' + [1, 2, 3, 4, 5].map(i => `<th>${i}</th>`).join('') + '</tr>';
+  for (let r = 0; r < 5; r++) t += `<tr><th>${r + 1}</th>` + [0, 1, 2, 3, 4].map(c => `<td>${PB[r * 5 + c] === 'I' ? 'I/J' : PB[r * 5 + c]}</td>`).join('') + '</tr>';
+  t += '</table>';
+  const m = MORSE_D.map((s, d) => `<div class="mrow"><b style="width:14px">${d}</b>${s.split('').map(x => `<i style="width:${x === '.' ? 6 : 18}px"></i>`).join('')}</div>`).join('');
+  return `<details class="ref"><summary>Segédlet: morze, Polybius, ábécé</summary><div class="reftbl">
+   <div><div class="lbl">A · Morze számjegyek</div>${m}</div>
+   <div><div class="lbl">E / V · Polybius-rács</div>${t}<p style="margin:6px 0 0">Példa: 25 = 2. sor, 5. oszlop = K.</p></div>
+   <div><div class="lbl">B · Caesar / C · Kulcsszavas</div><p style="margin:4px 0">Caesar: minden titkos betűt tolj vissza az A szám szerint az ábécében.</p><p style="margin:4px 0">Kulcsszavas: írd le a kulcsszó betűit ismétlés nélkül, utána a maradék ábécét. Ez kerül a normál ábécé alá; a titkos betűt alul keresd, a megfejtés fölötte van.</p><p style="margin:4px 0">Sövény (D): 3 sorba cikcakkban írták, majd soronként összeolvasták.</p><div class="mono" style="font-size:12px;overflow-x:auto">ABCDEFGHIJKLMNOPQRSTUVWXYZ</div></div>
+  </div></details>`;
+}
+function duelHTML() {
+  const d = ST.du, c = DATA.crypto[dec(d.c)];
+  const sides = MODE === 'local' ? ['r', 'b'] : (MY ? [MY] : []);
+  const panels = sides.map(s => {
+    const out = d.out.includes(s);
+    const fields = c.f.map((f, i) => `<label for="ans-${s}-${i}">${c.l === 5 ? 'MEGFEJTÉS (A TELJES MONDAT)' : f.i + ' TÖREDÉK SZAVA'}</label><input type="text" id="ans-${s}-${i}" data-draft="${s}" data-i="${i}" autocomplete="off" spellcheck="false" value="${esc(DRAFT[s][i] || '')}" ${out || !canAct(s) ? 'disabled' : ''}>`).join('');
+    return `<div class="frame cut"><div class="fi ans"><div class="row" style="justify-content:space-between"><h3><span class="${s}">${SIDE[s]}</span> Kriptográfus</h3>${d.hp.includes(s) ? '<span class="tag">SEGÍTSÉGET KÉRT</span>' : ''}${out ? '<span class="tag tr">KIESETT</span>' : ''}</div>
+      ${fields}<div class="row" style="margin-top:10px"><button class="btn ${s === 'r' ? 'red' : 'blue'}" data-ans="${s}" ${out || !canAct(s) ? 'disabled' : ''}>Beküldöm</button>
+      <button class="btn ghost" data-act='{"t":"help"}' data-side="${s}" ${d.hp.includes(s) || out || !canAct(s) ? 'disabled' : ''}>Segítséget kérek</button></div></div></div>`;
+  }).join('');
+  return `<div class="stack"><div class="frame cut"><div class="fi"><div class="row" style="justify-content:space-between"><span class="lbl">Idő · 2 perc</span><span class="disp" id="tleft" style="font-size:20px">--</span></div><div class="timer" style="margin-top:6px"><i id="tbar" style="width:100%"></i></div></div></div>
+    ${kcardHTML(c)}${refHTML()}<div class="duelgrid">${panels}</div>
+    <p class="hint">Mindkét Kriptográfus egyszer kérhet segítséget a csapatától. Hibás válasz után az a Kriptográfus kiesik. Ha senki sem fejti meg időben, a támadás sikertelen, de a Blue nem kap Észlelés jelzőt.</p></div>`;
+}
+
+const LOGTXT = {
+  start: () => 'A játék elkezdődött. A Red kezd.',
+  rd: n => `${n}. KÖR`,
+  shuf: s => `A ${SIDE[s]} pakli elfogyott, a dobópaklit megkevertétek.`,
+  peek: () => 'Red Felderítő belenézett a Blue kezébe.',
+  ov: () => 'Red Operációvezető: ebben a körben két támadás jön.',
+  ov2: z => `Második támadás: ${ZN[z][0]}.`,
+  rp: k => `A Red újratervezett, ${k} lapot cserélt.`,
+  noatk: () => 'A Red ebben a körben nem tudott támadni.',
+  atk: z => `A Red lefordítva támad: ${ZN[z][0]}.`,
+  clash: (r, b, rt, bt) => `Felfedés: ${cardOf(r).hu} (${rt}) vs ${b === '-' ? 'passz' : cardOf(b).hu + ' (' + bt + ')'}.`,
+  rw: z => `Sikeres támadás, a bábu ide lép: ${ZN[z][0]}.`,
+  bw: (d, soc) => `Sikeres védekezés: ${d}. Észlelés jelző${soc ? ' (SOC elemző: +1)' : ''}.`,
+  duel: lv => `Döntetlen: ${ROMAN[lv]}. szintű kriptopárbaj.`,
+  dwin: s => `A ${SIDE[s]} Kriptográfusa fejtette meg előbb.`,
+  dwrong: s => `A ${SIDE[s]} Kriptográfusa hibás választ adott, kiesett.`,
+  dto: () => 'Senki sem fejtette meg: a támadás sikertelen, nincs Észlelés jelző.',
+  ctrl: c => `Tartós kontroll: ${cardOf(c).hu} (+1, ${ZN[cardOf(c).c][0]}).`,
+  ir: z => `Incidenskezelő: a bábu visszalép ide: ${ZN[z][0]}.`,
+  end: (w, why) => w ? `${SIDE[w]} győzelem.` : `A játékot megszakították (${SIDE[why.split(':')[1]] || ''}).`
+};
+function logHTML() {
+  return `<div class="panel cut"><div class="lbl" style="margin-bottom:6px">Napló</div><ul class="log">${ST.lg.slice().reverse().map(e => `<li class="${e[0] === 'rd' ? 'rd' : ''}">${esc((LOGTXT[e[0]] || (() => ''))(...e.slice(1)))}</li>`).join('')}</ul></div>`;
+}
+function rolesHTML() {
+  const s = ['r', 'b'].map(side => {
+    const rs = ROLE_KEYS[side].map((k, i) => ({ k, i, on: ST.cfg[side].ro[i] })).filter(x => x.on);
+    return `<div><div class="lbl ${side}" style="margin-bottom:4px">${SIDE[side]} szerepkörök</div>${rs.map(x => {
+      const r = roleOf(side, x.i);
+      const used = { lead: ST.u.lead, recon: ST.u.recon >= 2, ciso: ST.u.ciso, ir: ST.u.ir }[x.k];
+      return `<div style="font-size:13px;margin-bottom:4px;${used ? 'opacity:.5' : ''}"><b>${esc(r.hu)}</b>${used ? ' <span class="tag">FELHASZNÁLVA</span>' : ''}<br><span style="color:var(--soft)">${esc(r.ab)}</span></div>`;
+    }).join('')}</div>`;
+  }).join('');
+  return `<details class="panel cut"><summary class="lbl" style="cursor:pointer">Szerepkörök és képességek</summary><div class="reftbl" style="margin-top:8px">${s}</div></details>`;
+}
+
+function setupHTML() {
+  const panel = side => {
+    const c = ST.cfg[side], mine = MODE === 'local' || MY === side;
+    const err = cfgError(ST, side, c);
+    const roles = ROLE_KEYS[side].map((k, i) => {
+      const r = roleOf(side, i);
+      return `<label class="rolechk"><input type="checkbox" data-role="${side}" data-i="${i}" ${c.ro[i] ? 'checked' : ''} ${!mine || c.n >= 3 || c.ok ? 'disabled' : ''}><span><b>${esc(r.hu)}</b> <span class="tag tg">${esc(r.tm || { always: 'MINDIG', duel: 'PÁRBAJKOR' }[r.u] || '')}</span><small>${esc(r.ab)}</small></span></label>`;
+    }).join('');
+    return `<div class="frame cut"><div class="fi"><h2 class="${side}">${SIDE[side]}</h2><p class="hint" style="margin:4px 0 10px">${side === 'r' ? 'Támadók: végig akarnak jutni az öt szakaszon.' : 'Védők: 5 Észlelés jelzőt gyűjtenek, vagy kitartanak a 10. kör végéig.'}</p>
+      <div class="lbl" style="margin-bottom:6px">Létszám</div><div class="seg">${[2, 3, 4, 5].map(n => `<button data-n="${n}" data-side="${side}" aria-pressed="${c.n === n}" ${!mine || c.ok ? 'disabled' : ''}>${n}</button>`).join('')}</div>
+      <p class="hint">${c.n === 2 ? 'Két fő esetén pontosan 3 szerepkört választotok.' : 'Mind az 5 szerepkör játékban van; ha kevesebben vagytok ötnél, valaki több szerepet visz.'}</p>
+      <div>${roles}</div>${err && mine ? `<p class="hint r" style="font-weight:700">${esc(err)}</p>` : ''}
+      <div class="row" style="margin-top:12px">${c.ok ? '<span class="tag tb">KÉSZ</span>' : mine ? `<button class="btn ${side === 'r' ? 'red' : 'blue'}" data-act='{"t":"ready"}' data-side="${side}" ${err ? 'disabled' : ''}>Kész vagyunk</button>` : '<span class="lbl">Az ellenfél még beállít…</span>'}</div></div></div>`;
+  };
+  const opp = MODE === 'host' ? (PEERS.some(p => p.presence && p.presence.gid === SEAT) ? '<span class="tag tb">ELLENFÉL CSATLAKOZOTT</span>' : '<span class="tag tr">VÁRAKOZÁS AZ ELLENFÉLRE</span>') : '';
+  return `${MODE === 'host' ? `<div class="panel cut" style="margin-top:14px"><div class="row" style="justify-content:space-between"><div><div class="lbl">Játékkód · küldd el az ellenfélnek</div><div class="code" style="color:var(--ink);margin-top:6px">${CODE.toUpperCase()}</div></div>${opp}</div><p style="margin:10px 0 0;font-size:14px">Az ellenfél ugyanezt az oldalt nyitja meg, a „Csatlakozás kóddal” gombra kattint, és beírja a kódot. Te a ${SIDE[MY]} csapat vagy.</p></div>` : ''}
+   <div class="setup">${panel('r')}${panel('b')}</div>
+   <label class="rolechk" style="margin-top:12px"><input type="checkbox" data-alt="1" ${ST.cfg.alt ? 'checked' : ''} ${MODE === 'guest' ? 'disabled' : ''}><span><b>Alternatív mód: kiegyensúlyozott kis csapatok</b><small>A 2 fős Blue csapat nem választhatja egyszerre a SOC elemzőt és az Incidenskezelőt.</small></span></label>`;
+}
+
+function endHTML() {
+  if (!ST.w) {
+    const hist = ST.hist.split('').filter(Boolean);
+    return `<div class="end cut"><div class="lbl">Megszakítva · ${ST.rd}. kör</div><div class="disp" style="color:var(--btn-on-bg)">ABORT</div><p>A játékot a ${SIDE[ST.wr.split(':')[1]] || ''} csapat megszakította. Nincs győztes.</p>
+   <div class="row" style="justify-content:center"><button class="btn" data-a="again">Új játék</button><button class="btn ghost" data-a="menu">Vissza a menübe</button></div></div>${hist.length ? `<div class="frame cut"><div class="fi"><h2>Eddig kijátszott lapok</h2><div class="detail" style="margin-top:8px">${hist.map(caseHTML).join('')}</div></div></div>` : ''}`;
+  }
+  const why = { r5: 'A Red sikeresen támadott a CÉL szakaszon.', b5: 'A Blue összegyűjtötte az 5. Észlelés jelzőt.', b10: 'A Blue kitartott a 10. kör végéig.' }[ST.wr];
+  const hist = ST.hist.split('').filter(Boolean);
+  return `<div class="end cut"><div class="lbl">Játék vége · ${ST.rd}. kör</div><div class="disp ${ST.w}">${SIDE[ST.w].toUpperCase()} NYERT</div><p>${why}</p>
+   <div class="row" style="justify-content:center"><button class="btn ${ST.w === 'r' ? 'red' : 'blue'}" data-a="again">Új játék</button></div></div>
+   <div class="frame cut"><div class="fi"><h2>Kiértékelés</h2><p class="hint">Menjetek végig a kijátszott lapok valós esetein. Mindkét csapat nevezze meg azt a lépést, amely szerintük eldöntötte a játékot, és hogy a valós esetben mi akadhatott volna meg.</p>
+   <div class="detail">${hist.map(caseHTML).join('')}</div></div></div>`;
+}
+
+function menuHTML() {
+  const loc = store.get('rvb-local'), host = store.get('rvb-host');
+  const online = !!ROOM;
+  return `<div class="hero"><div><div class="lbl">Kiberbiztonsági stratégiai kártyajáték</div>
+    <div class="big"><span class="r">RED</span> <span class="vs">VS</span><br><span class="b">BLUE</span></div>
+    <p style="font-size:17px;max-width:56ch">A Red végig akar jutni egy kitalált cég hálózatán a támadási lánc öt szakaszán, a Blue pedig észlelni és megállítani akarja, mielőtt célba ér. Minden lap egy valós támadás vagy védekezés, egy megtörtént esettel.</p>
+    <div class="cats">${[1, 2, 3, 4, 5].map(i => `<div>${icon(i)}<span class="lbl" style="font-size:10px">0${i}</span><b style="font-size:12px">${ZN[i][0]}</b></div>`).join('')}</div></div>
+   <div class="choices">
+    <button class="choice cut" data-a="local"><div class="fi cut"><span class="lbl">Egy eszközön</span><b>Helyi játék</b><span class="hint">Egy képernyő, két csapat. A kezeket a soron lévő csapat fedi fel.</span></div></button>
+    ${loc && loc.ph !== 'end' ? `<button class="choice cut" data-a="resume"><div class="fi cut"><span class="lbl">Mentett helyi játék</span><b>Folytatás · ${loc.rd ? loc.rd + '. kör' : 'beállítás'}</b></div></button>` : ''}
+    <div class="choice cut" style="cursor:default"><div class="fi cut"><span class="lbl">Két eszközön</span><b>Online játék indítása</b><span class="hint">Kapsz egy kódot, az ellenfél azzal csatlakozik.</span>
+      <div class="row" style="margin-top:8px"><button class="btn red hostred" data-a="host" data-side="r" ${online ? '' : 'disabled'}>Red leszek</button><button class="btn blue" data-a="host" data-side="b" ${online ? '' : 'disabled'}>Blue leszek</button>${host && host.st && host.st.ph !== 'end' && online ? `<button class="btn ghost" data-a="rehost">Folytatás · ${esc(host.code.toUpperCase())}</button>` : ''}</div></div></div>
+    <div class="choice cut" style="cursor:default"><div class="fi cut"><span class="lbl">Két eszközön</span><b>Csatlakozás kóddal</b>
+      <div class="row" style="margin-top:8px;flex-wrap:nowrap"><input type="text" id="joincode" maxlength="5" placeholder="KÓD" aria-label="Játékkód" ${online ? '' : 'disabled'}><button class="btn" data-a="join" ${online ? '' : 'disabled'}>Belépés</button></div></div></div>
+    <p class="hint">${!NETREADY ? 'Online kapcsolat ellenőrzése…' : online ? `Online kapcsolat: ${NETKIND === 'db' ? 'közös játékadatbázis' : 'élő szoba'}. A két eszköz ugyanezt a linket nyitja meg.` : 'Az online módhoz a játékot a Claude felületén, bejelentkezve kell megnyitni, és legalább Közreműködő (Contributor) hozzáférés kell hozzá. A helyi játék mindenhol működik.'}</p>
+   </div></div>
+   <div class="frame cut" style="margin-top:20px"><div class="fi"><h2>Egy kör röviden</h2>
+   <ol style="margin:8px 0 0;padding-left:20px;columns:2 260px;column-gap:28px">
+    <li><b>Húzás:</b> mindkét csapat 5 lapra egészít ki.</li><li><b>Támadás:</b> a Red lefordítva kijátszik egy lapot a bábu szakaszának kategóriájából.</li>
+    <li><b>Védekezés:</b> a Blue azonos kategóriájú lappal védekezik, vagy passzol.</li><li><b>Felfedés és eredmény:</b> erősség + szerepkör-bónusz + tartós kontrollok. A nagyobb nyer, döntetlennél kriptopárbaj.</li>
+    <li><b>Megerősítés:</b> a Blue lerakhat egy „Tartós” lapot kontrollként.</li><li><b>Takarítás:</b> a körjelző lép. A 10. kör végén a Blue nyer.</li></ol></div></div>`;
+}
+
+function gameHTML() {
+  if (!ST) return `<div class="panel cut" style="margin-top:16px"><div class="lbl">Csatlakozás</div><h2 style="color:var(--white);margin-top:6px">Várakozás a házigazdára · ${esc(CODE.toUpperCase())}</h2><p>Ha sokáig nem történik semmi, ellenőrizd a kódot.</p></div>`;
+  if (ST.ph === 'setup') return `${phaseHTML()}${setupHTML()}`;
+  const mid = ST.ph === 'end' ? endHTML() : ST.ph === 'duel' ? duelHTML() : clashHTML();
+  const hands = ['r', 'b'].map(handPanel).join('');
+  const spect = MODE === 'guest' && !MY ? '<p class="hint">Nézőként követed a játékot.</p>' : '';
+  return `<div class="game"><div class="stack">${boardHTML()}${rolesHTML()}${logHTML()}</div>
+    <div class="stack" style="min-width:0">${phaseHTML()}${spect}${mid}${ST.ph !== 'end' ? hands : ''}</div></div>`;
+}
+
+function render() {
+  const a = document.activeElement, fid = a && a.id, pos = a && a.selectionStart;
+  const mode = { local: 'HELYI JÁTÉK', host: 'ONLINE · ' + (MY ? SIDE[MY].toUpperCase() : ''), guest: 'ONLINE · ' + (MY ? SIDE[MY].toUpperCase() : 'NÉZŐ') }[MODE] || '';
+  document.getElementById('app').innerHTML = `<div class="accent"><i></i><i></i></div>
+   <header class="top"><span class="logo"><span class="r">RED</span><small>VS</small><span class="b">BLUE</span></span>${mode ? `<span class="pill">${mode}</span>` : ''}${MODE !== 'local' && CODE && SCREEN === 'game' ? `<span class="pill">KÓD ${esc(CODE.toUpperCase())}</span>` : ''}<span class="sp"></span>
+    ${SCREEN === 'game' && ST && ST.ph !== 'end' && (MODE === 'local' || MY) ? '<button class="btn abort" data-a="abortask" aria-expanded="' + ABORTASK + '">Abort</button>' : ''}${SCREEN === 'game' ? '<button class="btn" data-a="menu">Kilépés a menübe</button>' : ''}</header>
+   ${ABORTASK && SCREEN === 'game' && ST && ST.ph !== 'end' ? '<div class="abortbar" role="alertdialog" aria-label="Játék megszakítása"><b>Biztosan megszakítod a játékot? Nem lesz győztes, és a játszma nem folytatható.</b><div class="row"><button class="btn abort" data-a="abortyes">Igen, megszakítom</button><button class="btn" data-a="abortno">Mégse</button></div></div>' : ''}
+   <main class="wrap">${SCREEN === 'menu' ? menuHTML() : gameHTML()}</main>${TOAST ? `<div class="toast" role="status">${esc(TOAST)}</div>` : ''}`;
+  if (fid) { const el = document.getElementById(fid); if (el && !el.disabled) { el.focus(); try { if (pos != null) el.setSelectionRange(pos, pos); } catch (e) { } } }
+  tick();
+}
+
+function tick() {
+  if (!ST || ST.ph !== 'duel' || !ST.du) return;
+  const now = Date.now() + (MODE === 'guest' ? HOSTOFF : 0);
+  const left = Math.max(0, ST.du.t0 + DUEL_MS - now);
+  const t = document.getElementById('tleft'), b = document.getElementById('tbar');
+  if (t) t.textContent = `${Math.floor(left / 60000)}:${String(Math.floor(left / 1000) % 60).padStart(2, '0')}`;
+  if (b) b.style.width = (left / DUEL_MS * 100) + '%';
+  if (left <= 0 && MODE !== 'guest') { const r = act(ST, 'r', { t: 'timeout' }); if (!r.err) { ST = r.st; afterChange(); persist(); publishHost(); render(); } }
+}
+setInterval(tick, 500);
+
+document.addEventListener('click', e => {
+  const t = e.target.closest('button,[data-a]'); if (!t || t.disabled) return;
+  const side = t.dataset.side;
+  if (t.dataset.card) {
+    const ch = t.dataset.card, s = cardOf(ch).s;
+    if (!viewSides().includes(s)) return;
+    const multi = ST.ph === 'atk' && s === 'r' && !hasCat(ST, 'r', ST.z) && !ST.rp;
+    const cur = SEL[s];
+    if (multi) SEL[s] = cur.includes(ch) ? cur.filter(x => x !== ch) : (cur.length < 3 ? [...cur, ch] : cur);
+    else SEL[s] = cur[0] === ch ? [] : [ch];
+    return render();
+  }
+  if (t.dataset.n) { dispatch(side, { t: 'cfg', n: +t.dataset.n, ro: ST.cfg[side].ro }); return; }
+  if (t.dataset.act) { dispatch(side, JSON.parse(t.dataset.act)); return; }
+  if (t.dataset.ans) { const s = t.dataset.ans; dispatch(s, { t: 'ans', a: DATA.crypto[dec(ST.du.c)].f.map((f, i) => DRAFT[s][i] || '') }); return; }
+  switch (t.dataset.a) {
+    case 'local': MODE = 'local'; ST = newGame((Math.random() * 4294967296) >>> 0); lastPh = 'setup'; SCREEN = 'game'; persist(); return render();
+    case 'resume': MODE = 'local'; ST = store.get('rvb-local'); lastPh = ST.ph; SCREEN = 'game'; return render();
+    case 'host': return hostGame(side);
+    case 'rehost': return hostGame(null, store.get('rvb-host'));
+    case 'join': return joinGame(document.getElementById('joincode').value);
+    case 'show': SHOW[side] = true; return render();
+    case 'hide': SHOW[side] = false; SEL[side] = []; return render();
+    case 'menu': ABORTASK = false; return leave();
+    case 'abortask': ABORTASK = !ABORTASK; return render();
+    case 'abortno': ABORTASK = false; return render();
+    case 'abortyes': ABORTASK = false; dispatch(MODE === 'local' ? (activeSide() || 'r') : MY, { t: 'abort' }); return;
+    case 'again':
+      if (MODE === 'local') { ST = newGame((Math.random() * 4294967296) >>> 0); lastPh = 'setup'; persist(); return render(); }
+      if (MODE === 'host') { ST = newGame((Math.random() * 4294967296) >>> 0); lastPh = 'setup'; persist(); publishHost(); return render(); }
+      return toast('Új játékot a házigazda indíthat.');
+  }
+});
+document.addEventListener('change', e => {
+  const t = e.target;
+  if (t.dataset.role) { const s = t.dataset.role, ro = ST.cfg[s].ro.slice(); ro[+t.dataset.i] = t.checked ? 1 : 0; dispatch(s, { t: 'cfg', n: ST.cfg[s].n, ro }); }
+  if (t.dataset.alt) dispatch(MODE === 'local' ? 'r' : MY, { t: 'alt', v: t.checked });
+});
+document.addEventListener('input', e => { const t = e.target; if (t.dataset.draft) DRAFT[t.dataset.draft][+t.dataset.i] = t.value; });
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Enter') return;
+  const t = e.target;
+  if (t.id === 'joincode') joinGame(t.value);
+  else if (t.dataset && t.dataset.draft) { const b = document.querySelector(`[data-ans="${t.dataset.draft}"]`); if (b && !b.disabled) b.click(); }
+});
+
+render();
+getRoom();
+
+</script>
+
+</body></html>
