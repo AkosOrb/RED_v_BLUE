@@ -190,7 +190,7 @@ const DATA = {"cards": [{"s": "r", "c": 1, "p": 1, "hu": "Aktív szkennelés", "
 const ALPH = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 const enc = i => ALPH[i], dec = ch => ALPH.indexOf(ch);
 const ROLE_KEYS = { r: ['lead', 'recon', 'exploit', 'social', 'crypto'], b: ['ciso', 'soc', 'ir', 'admin', 'crypto'] };
-const DUEL_MS = 120000;
+const DUEL_MS = 300000;
 const other = s => (s === 'r' ? 'b' : 'r');
 const cardOf = ch => DATA.cards[dec(ch)];
 const clone = o => JSON.parse(JSON.stringify(o));
