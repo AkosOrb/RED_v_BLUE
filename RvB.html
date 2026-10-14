@@ -25,7 +25,7 @@ button:focus-visible,input:focus-visible,summary:focus-visible,.hc:focus-visible
 .panel h3{color:var(--white)}
 textarea.sdp{display:block;width:100%;min-width:0;font-family:var(--f-mono);font-size:12px;line-height:1.35;word-break:break-all;padding:8px 10px;border:2px solid var(--ink);background:var(--white);color:var(--ink);resize:vertical;margin:6px 0 8px}
 .p2p h2{color:var(--white);font-size:17px;margin:12px 0 2px}.p2p .hint{color:var(--soft)}.p2p .warn{color:#FFA13D;font-weight:700}
-
+ 
 .lbl{font-family:var(--f-mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase}
 h1,h2,h3{margin:0;text-wrap:balance}
 h2{font-family:var(--f-disp);font-weight:900;font-size:20px;letter-spacing:.04em;text-transform:uppercase}
@@ -81,7 +81,7 @@ input[type=text]{font-family:var(--f-mono);font-size:18px;letter-spacing:.2em;te
 .seg button{flex:1;border:0;background:var(--btn-bg);color:var(--btn-fg);-webkit-text-fill-color:var(--btn-fg);padding:10px 0;font-family:var(--f-disp);font-weight:900}
 .seg button:hover{background:var(--btn-bg2)}
 .seg button[disabled]{opacity:.45;cursor:not-allowed}
-
+ 
 .rolechk{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px dashed var(--mute)}
 .rolechk input{margin-top:4px;width:18px;height:18px;accent-color:var(--ink)}
 .rolechk small{display:block;color:var(--ink2)}
@@ -193,7 +193,7 @@ const DUEL_MS = 120000;
 const other = s => (s === 'r' ? 'b' : 'r');
 const cardOf = ch => DATA.cards[dec(ch)];
 const clone = o => JSON.parse(JSON.stringify(o));
-
+ 
 function rnd(st) { // mulberry32 on st.sd
   let t = (st.sd = (st.sd + 0x6D2B79F5) >>> 0);
   t = Math.imul(t ^ (t >>> 15), t | 1);
@@ -207,7 +207,7 @@ function shuffle(st, s) {
 }
 function has(st, side, key) { return !!st.cfg[side].ro[ROLE_KEYS[side].indexOf(key)]; }
 function log(st, e) { st.lg.push(e); if (st.lg.length > 14) st.lg.shift(); }
-
+ 
 function newGame(seed) {
   return {
     v: 1, ph: 'setup', sq: 0, sd: seed >>> 0,
@@ -217,7 +217,7 @@ function newGame(seed) {
     pl: { r: '', b: '' }, cl: null, du: null, cr: ['', '', '', '', ''], fc: 0, hist: '', w: '', wr: '', lg: []
   };
 }
-
+ 
 function cfgError(st, side, c) {
   const k = c.ro.reduce((a, b) => a + (b ? 1 : 0), 0);
   if (c.n === 2 && k !== 3) return 'A 2 fős csapat pontosan 3 szerepkört választ.';
@@ -225,7 +225,7 @@ function cfgError(st, side, c) {
   if (st.cfg.alt && side === 'b' && c.n === 2 && c.ro[1] && c.ro[2]) return 'Alternatív mód: a 2 fős Blue nem választhatja egyszerre a SOC elemzőt és az Incidenskezelőt.';
   return '';
 }
-
+ 
 function draw(st, side, n) {
   for (let i = 0; i < n; i++) {
     if (!st.dk[side].length) {
@@ -238,7 +238,7 @@ function draw(st, side, n) {
 }
 function refill(st, side) { draw(st, side, Math.max(0, 5 - st.h[side].length)); }
 const hasCat = (st, side, z) => st.h[side].split('').some(ch => cardOf(ch).c === z);
-
+ 
 function startGame(st) {
   let r = '', b = '';
   for (let i = 0; i < 25; i++) { r += enc(i); b += enc(25 + i); }
@@ -255,7 +255,7 @@ function beginRound(st) {
   refill(st, 'r'); refill(st, 'b');
   st.ph = 'atk'; log(st, ['rd', st.rd]);
 }
-
+ 
 function ctrlBonus(st, z) { return st.ct[z - 1].length; }
 function totals(st) {
   const rc = cardOf(st.pl.r), z = st.z;
@@ -271,7 +271,7 @@ function discardClash(st) {
   st.pl = { r: '', b: '' };
 }
 function finish(st, w, why) { st.w = w; st.wr = why; st.ph = 'end'; log(st, ['end', w, why]); }
-
+ 
 function resolve(st) {
   const t = totals(st);
   st.cl = { r: st.pl.r, b: st.pl.b, z: st.z, rt: t.rt, bt: t.bt, rb: t.rb, bb: t.bb, w: '' };
@@ -310,11 +310,11 @@ function after(st) {
   if (st.ov === 1) { st.ov = 2; st.rp = 0; st.ph = 'atk'; log(st, ['ov2', st.z]); return; }
   st.ph = 'fort';
 }
-
+ 
 const norm = x => x.toUpperCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/J/g, 'I').replace(/[^A-Z]/g, '');
 function fnv(x) { let h = 2166136261; for (let i = 0; i < x.length; i++) { h ^= x.charCodeAt(i); h = Math.imul(h, 16777619) >>> 0; } return h >>> 0; }
 function checkAnswer(c, ans) { return c.f.every((f, i) => fnv(norm(ans[i] || '')) === f.h); }
-
+ 
 // returns error string, or '' after mutating st
 function apply(st, side, a) {
   if (st.ph === 'end') return 'A játék véget ért.';
@@ -419,7 +419,7 @@ function act(st, side, a) {
   if (err) return { st, err };
   n.sq++; return { st: n, err: '' };
 }
-
+ 
 // ---------- UI ----------
 const ZN = [null, ['FELDERÍTÉS', 'Reconnaissance'], ['KEZDETI HOZZÁFÉRÉS', 'Initial Access'], ['MEGVETÉS', 'Persistence'], ['OLDALIRÁNYÚ MOZGÁS', 'Lateral Movement'], ['CÉL', 'Crown Jewels']];
 const ICON = {
@@ -436,7 +436,7 @@ const SIDE = { r: 'Red', b: 'Blue' };
 const MORSE_D = ['-----', '.----', '..---', '...--', '....-', '.....', '-....', '--...', '---..', '----.'];
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const roleOf = (side, i) => DATA.roles.find(r => r.s === side && r.n === i + 1);
-
+ 
 let MODE = null;            // 'local' | 'host' | 'guest'
 let ST = null;              // engine state
 let MY = null;              // my side in online play
@@ -445,17 +445,17 @@ let SEL = { r: [], b: [] };
 let SHOW = { r: false, b: false };
 let DRAFT = { r: [], b: [] };
 let TOAST = '', toastT = 0, ABORTASK = false;
-let ROOM = null, GROOM = null, CODE = '', GID = Math.random().toString(36).slice(2, 10), ACTN = 0;
+let KEEP = {}, ROOM = null, GROOM = null, CODE = '', GID = (() => { try { let g = sessionStorage.getItem('rvb-gid'); if (!g) { g = Math.random().toString(36).slice(2, 10); sessionStorage.setItem('rvb-gid', g); } return g; } catch (e) { return Math.random().toString(36).slice(2, 10); } })(), ACTN = Date.now(); // ACTN starts from the clock so a reloaded guest keeps its seat and its moves still count
 let lastHostSt = null, SEAT = '', LASTN = {}, PEERS = [], HOSTOFF = 0, PENDING = false, lastPh = '';
-
+ 
 const store = {
   get(k) { try { return JSON.parse(localStorage.getItem(k) || 'null'); } catch (e) { return null; } },
   set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { } },
   del(k) { try { localStorage.removeItem(k); } catch (e) { } }
 };
-
+ 
 function toast(m) { TOAST = m; clearTimeout(toastT); toastT = setTimeout(() => { TOAST = ''; render(); }, 3800); render(); }
-
+ 
 // ---------- actions ----------
 function dispatch(side, a) {
   if (MODE === 'guest') {
@@ -476,98 +476,99 @@ function persist() {
   if (MODE === 'local') store.set('rvb-local', ST);
   if (MODE === 'host') store.set('rvb-host', { code: CODE, my: MY, st: ST, seat: SEAT });
 }
-
+ 
 // ---------- online ----------
 // Two transports with the same shape: db (shared documents, preferred: survives reloads, late joiners see state) and room (live presence).
 let NETKIND = null, DBNS = null, ROOMNS = null, NETREADY = false;
 async function getRoom() {
   const use = n => (window.claude && window.claude.use ? window.claude.use(n).catch(() => null) : Promise.resolve(null));
   try { [DBNS, ROOMNS] = await Promise.all([use('db'), use('room')]); } catch (e) { }
-  NETKIND = DBNS ? 'db' : ROOMNS ? 'room' : (window.RTCPeerConnection ? 'p2p' : null); ROOM = NETKIND; NETREADY = true;
+  NETKIND = DBNS ? 'db' : ROOMNS ? 'room' : (window.WebSocket ? 'mqtt' : null); ROOM = NETKIND; NETREADY = true;
   render();
 }
-// p2p: direct WebRTC link for a downloaded copy of the file. No server: the two players swap an invite code and a reply code by any chat.
-let P2P = null, KEEP = {}; // { pc, dc, role, mine, theirs, open, err }
-const ICE = [{ urls: ['stun:stun.l.google.com:19302', 'stun:stun.cloudflare.com:3478'] }];
-async function packSdp(d) {
-  const raw = new TextEncoder().encode(JSON.stringify({ t: d.type, s: d.sdp }));
-  let bytes = raw, tag = 'P';
-  if (window.CompressionStream) { try { bytes = new Uint8Array(await new Response(new Blob([raw]).stream().pipeThrough(new CompressionStream('deflate-raw'))).arrayBuffer()); tag = 'Z'; } catch (e) { bytes = raw; } }
-  let b = ''; bytes.forEach(x => b += String.fromCharCode(x));
-  return 'RVB' + tag + btoa(b);
+// net: a downloaded copy of the file has no Claude capabilities, so it relays through free public MQTT brokers over WebSocket.
+// Several brokers at once: whichever ones the network lets through carry the game. Retained messages keep the latest state for late joiners and reloads.
+const BROKERS = window.RVB_BROKERS || ['wss://broker.emqx.io:8084/mqtt', 'wss://broker.hivemq.com:8884/mqtt', 'wss://mqtt.eclipseprojects.io:443/mqtt', 'wss://test.mosquitto.org:8081/mqtt'];
+const TOPIC = 'redvsblue-kiber/v2/';
+let NETUP = 0; // brokers currently connected
+function mqttLink(url, topics, onMsg, onState) {
+  const enc = new TextEncoder(), dec = new TextDecoder();
+  const str = s => { const b = enc.encode(s); return [b.length >> 8, b.length & 255, ...b]; };
+  const pkt = (h, body) => { const out = [h]; let n = body.length; do { let d = n % 128; n = Math.floor(n / 128); if (n) d |= 128; out.push(d); } while (n); return new Uint8Array([...out, ...body]); };
+  let ws = null, up = false, dead = false, ping = 0, wait = 1000, pid = 1, buf = new Uint8Array(0);
+  const L = { up: () => up, pub, close };
+  function pub(topic, text, retain) { if (up) try { ws.send(pkt(0x30 | (retain ? 1 : 0), [...str(topic), ...enc.encode(text)])); } catch (e) { } }
+  function parse() {
+    for (;;) {
+      if (buf.length < 2) return;
+      let n = 0, m = 1, i = 1, d;
+      do { if (i >= buf.length) return; d = buf[i++]; n += (d & 127) * m; m *= 128; } while (d & 128);
+      if (buf.length < i + n) return;
+      const h = buf[0], body = buf.subarray(i, i + n); buf = buf.slice(i + n);
+      if ((h >> 4) === 2) { up = true; wait = 1000; topics.forEach(t => ws.send(pkt(0x82, [0, pid++ & 255, ...str(t), 0]))); onState(L); }
+      else if ((h >> 4) === 3) { const tl = (body[0] << 8) | body[1]; const q = (h >> 1) & 3; const t = dec.decode(body.subarray(2, 2 + tl)); const p = body.subarray(2 + tl + (q ? 2 : 0)); if (p.length) onMsg(t, dec.decode(p)); }
+    }
+  }
+  function open() {
+    if (dead) return;
+    try { ws = new WebSocket(url, 'mqtt'); } catch (e) { return retry(); }
+    ws.binaryType = 'arraybuffer';
+    ws.onopen = () => { ws.send(pkt(0x10, [...str('MQTT'), 4, 2, 0, 45, ...str('rvb' + Math.random().toString(36).slice(2, 12))])); };
+    ws.onmessage = e => { const a = new Uint8Array(e.data), c = new Uint8Array(buf.length + a.length); c.set(buf); c.set(a, buf.length); buf = c; parse(); };
+    ws.onclose = () => { const was = up; up = false; buf = new Uint8Array(0); if (was) onState(L); retry(); };
+    ws.onerror = () => { };
+  }
+  function retry() { if (dead) return; setTimeout(open, wait); wait = Math.min(wait * 2, 15000); }
+  ping = setInterval(() => { if (up) try { ws.send(new Uint8Array([0xC0, 0])); } catch (e) { } }, 20000);
+  function close() { dead = true; clearInterval(ping); if (ws) { try { if (up) ws.send(new Uint8Array([0xE0, 0])); ws.close(); } catch (e) { } } }
+  open();
+  return L;
 }
-async function unpackSdp(code) {
-  code = (code || '').replace(/\s+/g, '');
-  if (!/^RVB[PZ]/.test(code)) throw new Error('bad');
-  const bin = atob(code.slice(4)), bytes = Uint8Array.from(bin, c => c.charCodeAt(0));
-  const raw = code[3] === 'Z' ? new Uint8Array(await new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('deflate-raw'))).arrayBuffer()) : bytes;
-  const o = JSON.parse(new TextDecoder().decode(raw));
-  return { type: o.t, sdp: o.s };
-}
-function iceDone(pc) {
-  return new Promise(res => {
-    if (pc.iceGatheringState === 'complete') return res();
-    const t = setTimeout(res, 5000);
-    pc.addEventListener('icegatheringstatechange', () => { if (pc.iceGatheringState === 'complete') { clearTimeout(t); res(); } });
-  });
-}
-function p2pChannel(role) {
-  const pc = new RTCPeerConnection({ iceServers: ICE });
-  P2P = { pc, dc: null, role, mine: '', theirs: '', open: false, err: '' };
-  let cur = {}, cb = null, last = null;
-  const me = P2P;
-  const send = () => { if (me.dc && me.dc.readyState === 'open') { try { me.dc.send(JSON.stringify(cur)); } catch (e) { } } };
-  const hook = dc => {
-    me.dc = dc;
-    dc.onopen = () => { me.open = true; me.err = ''; send(); render(); };
-    dc.onclose = () => { if (P2P === me && me.open) { me.open = false; me.err = 'Megszakadt a közvetlen kapcsolat.'; toast(me.err); } };
-    dc.onmessage = e => { try { last = JSON.parse(e.data); if (cb) cb([{ presence: last }]); } catch (x) { } };
-  };
-  if (role === 'host') hook(pc.createDataChannel('rvb', { ordered: true }));
-  else pc.ondatachannel = e => hook(e.channel);
-  pc.onconnectionstatechange = () => { if (pc.connectionState === 'failed' && P2P === me) { me.err = 'Nem jött létre a kapcsolat a két gép között. Próbáljátok újra, vagy ugyanarról a hálózatról.'; render(); } };
+function mqttChannel(code, role) {
+  // host writes .../host and reads .../guest/+ ; each guest writes .../guest/<gid> and reads .../host
+  const base = TOPIC + code.toUpperCase() + '/';
+  const mine = role === 'host' ? base + 'host' : base + 'guest/' + GID, theirs = role === 'host' ? base + 'guest/+' : base + 'host';
+  let cur = {}, cb = null, seq = 0;
+  const got = {}; // topic -> latest payload by q
+  const links = BROKERS.map(u => mqttLink(u, [theirs], (t, txt) => {
+    let d; try { d = JSON.parse(txt); } catch (e) { return; }
+    if (!d || (got[t] && got[t].q >= d.q)) return;
+    got[t] = d; if (cb) cb(Object.values(got).map(p => ({ presence: p })));
+  }, l => { NETUP = links.filter(x => x.up()).length; if (l.up()) l.pub(mine, JSON.stringify(cur), true); render(); }));
+  const send = () => { cur.q = Date.now() * 100 + (seq++ % 100); const s = JSON.stringify(cur); links.forEach(l => l.pub(mine, s, true)); };
   return {
     set: p => { cur = { ...cur, ...p }; Object.keys(p).forEach(k => { if (p[k] === null) delete cur[k]; }); send(); },
-    watch: f => { cb = f; if (last) f([{ presence: last }]); },
-    close: () => { try { pc.close(); } catch (e) { } if (P2P === me) P2P = null; }
+    watch: f => { cb = f; },
+    close: () => { links.forEach(l => l.close()); NETUP = 0; }
   };
 }
-async function p2pHostOffer() {
-  const pc = P2P.pc;
-  await pc.setLocalDescription(await pc.createOffer());
-  await iceDone(pc);
-  P2P.mine = await packSdp(pc.localDescription); render();
+const CODECH = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+function newCode() { const r = crypto.getRandomValues(new Uint8Array(6)); return [...r].map(x => CODECH[x % CODECH.length]).join(''); }
+ 
+// lobby: after the link is up, each side presses "Játék indítása"; the game shows once both have.
+let GO = { h: false, g: false };
+function linked() { return MODE === 'host' ? PEERS.some(p => p.presence && p.presence.gid === SEAT) : !!(HOSTP && HOSTP.seat === GID); }
+let HOSTP = null;
+function inLobby() { return (MODE === 'host' || (MODE === 'guest' && (!ST || MY))) && !(GO.h && GO.g); }
+function lobbyHTML() {
+  const host = MODE === 'host', ok = linked(), me = host ? GO.h : GO.g, them = host ? GO.g : GO.h;
+  const net = NETKIND === 'mqtt' ? (NETUP ? `<span class="tag tb">HÁLÓZAT OK · ${NETUP} SZERVER</span>` : '<span class="tag tr">KAPCSOLÓDÁS A HÁLÓZATHOZ…</span>') : '';
+  return `<div class="panel cut lobby" style="margin-top:16px"><div class="row" style="justify-content:space-between;align-items:flex-start"><div>
+    <div class="lbl">${host ? 'Játékkód · küldd el az ellenfélnek' : 'Csatlakozás ehhez a játékhoz'}</div><div class="code" style="color:var(--ink);margin-top:6px">${esc(CODE.toUpperCase())}</div></div><div class="stack" style="gap:6px;align-items:flex-end">${net}</div></div>
+    <p style="margin:12px 0 0">${host ? `Az ellenfél megnyitja a játékot, a „Csatlakozás kóddal” mezőbe beírja ezt a 6 karaktert, és kész. Te a ${SIDE[MY]} csapat vagy.` : MY ? `Te a ${SIDE[MY]} csapat vagy.` : 'Várakozás a házigazda válaszára…'}</p>
+    <div class="row" style="margin-top:14px;align-items:center">
+     ${ok ? '<span class="tag tb">KAPCSOLAT LÉTREJÖTT</span>' : `<span class="tag tr">${host ? 'VÁRAKOZÁS AZ ELLENFÉLRE' : 'VÁRAKOZÁS A HÁZIGAZDÁRA'}</span>`}
+     <button class="btn ${MY === 'r' ? 'red' : 'blue'}" data-a="go" aria-pressed="${me}" ${ok && !me ? '' : 'disabled'}>${me ? 'Indításra kész' : 'Játék indítása'}</button>
+     ${ok ? `<span class="hint" style="color:var(--soft)">${them ? 'Az ellenfél kész.' : 'Az ellenfél még nem nyomott indítást.'}</span>` : ''}</div></div>`;
 }
-async function p2pHostAccept(code) {
-  try { await P2P.pc.setRemoteDescription(await unpackSdp(code)); P2P.theirs = 'ok'; P2P.err = ''; }
-  catch (e) { return toast('Ez nem érvényes válaszkód. Másold be az ellenfél teljes válaszkódját.'); }
-  render();
-}
-async function p2pGuestAnswer(code) {
-  const pc = P2P.pc;
-  await pc.setRemoteDescription(await unpackSdp(code));
-  await pc.setLocalDescription(await pc.createAnswer());
-  await iceDone(pc);
-  P2P.mine = await packSdp(pc.localDescription); render();
-}
-function p2pHTML() {
-  if (!P2P || P2P.open || NETKIND !== 'p2p' || (MODE !== 'host' && MODE !== 'guest')) return '';
-  const host = P2P.role === 'host';
-  const code = P2P.mine ? `<textarea id="p2pmine" class="sdp" readonly rows="4">${esc(P2P.mine)}</textarea><div class="row"><button class="btn" data-a="p2pcopy">Kód másolása</button></div>` : '<p class="hint">Kód készítése…</p>';
-  return `<div class="panel cut p2p" style="margin-top:16px"><div class="lbl">Közvetlen kapcsolat · két gép, szerver nélkül</div>
-   ${host ? `<h2>1. Küldd el ezt a meghívókódot az ellenfélnek</h2><p class="hint">Bármilyen csatornán (Teams, e-mail, chat). Ő a menüben a „Csatlakozás” mezőbe illeszti.</p>${code}
-     <h2>2. Illeszd be az ellenfél válaszkódját</h2><textarea id="p2pans" class="sdp" rows="3" placeholder="Válaszkód beillesztése">${esc(KEEP.p2pans || '')}</textarea><div class="row"><button class="btn" data-a="p2pacc">Kapcsolódás</button></div>
-     ${P2P.theirs ? '<p class="hint">Kapcsolódás folyamatban…</p>' : ''}`
-    : `<h2>Küldd vissza ezt a válaszkódot a házigazdának</h2><p class="hint">Amint beilleszti, a játék automatikusan megjelenik nálad.</p>${code}`}
-   ${P2P.err ? `<p class="warn">${esc(P2P.err)}</p>` : ''}</div>`;
-}
-
+ 
 async function openChannel(code, role) {
-  if (NETKIND === 'p2p') return p2pChannel(role);
+  if (NETKIND === 'mqtt') return mqttChannel(code, role);
   if (NETKIND === 'room') {
     const g = await ROOMNS.join('rvb-' + code);
+    let cur = {};
     return {
-      set: p => g.presence(p).catch(() => { }),
+      set: p => { cur = { ...cur, ...p }; Object.keys(p).forEach(k => { if (p[k] === null) delete cur[k]; }); g.presence(cur).catch(() => { }); },
       watch: cb => g.onPeers(ch => cb(ch.peers.filter(p => !p.sameTab && p.presence).map(p => ({ presence: p.presence })))),
       close: () => g.leave().catch(() => { })
     };
@@ -593,19 +594,19 @@ async function openChannel(code, role) {
 }
 function publishHost() {
   if (MODE !== 'host' || !GROOM) return;
-  GROOM.set({ ro: 'host', sd: MY, st: ST, now: Date.now(), seat: SEAT });
+  GROOM.set({ ro: 'host', sd: MY, st: ST, now: Date.now(), seat: SEAT, go: GO });
 }
 async function hostGame(side, resume) {
   if (!NETKIND) return toast('Az online mód ebben a nézetben nem érhető el.');
   MODE = 'host'; MY = side;
   if (resume) { CODE = resume.code; ST = resume.st; SEAT = resume.seat || ''; MY = resume.my; }
-  else { CODE = Math.random().toString(36).slice(2, 7).replace(/[^a-z0-9]/g, 'x').padEnd(5, 'x'); ST = newGame((Math.random() * 4294967296) >>> 0); SEAT = ''; }
+  else { CODE = newCode(); if (NETKIND !== 'mqtt') CODE = CODE.toLowerCase(); ST = newGame((Math.random() * 4294967296) >>> 0); SEAT = ''; }
+  GO = { h: false, g: false }; HOSTP = null;
   lastPh = ST.ph; SCREEN = 'game'; render();
   try {
     GROOM = await openChannel(CODE, 'host');
     GROOM.watch(list => { PEERS = list; hostPeers(); render(); });
     publishHost(); persist();
-    if (NETKIND === 'p2p') await p2pHostOffer();
   } catch (e) { toast('Nem sikerült megnyitni a játékot.'); }
 }
 function hostPeers() {
@@ -613,38 +614,33 @@ function hostPeers() {
   const seated = guests.find(p => p.presence.gid === SEAT);
   if (!seated && guests.length && (NETKIND === 'db' || !SEAT)) { SEAT = guests[0].presence.gid; publishHost(); persist(); }
   else if (!seated && guests.length) { SEAT = guests[0].presence.gid; publishHost(); persist(); }
+  const sg = guests.find(p => p.presence.gid === SEAT);
+  if (sg && sg.presence.go && !GO.g) { GO = { ...GO, g: true }; publishHost(); }
   guests.forEach(p => {
     const pr = p.presence, A = pr.act;
     if (!A || pr.gid !== SEAT) return;
     if ((LASTN[pr.gid] || 0) >= A.n) return;
     LASTN[pr.gid] = A.n;
     const r = act(ST, other(MY), A.a);
-    if (r.err) { GROOM.set({ ro: 'host', sd: MY, st: ST, now: Date.now(), seat: SEAT, rej: { gid: pr.gid, n: A.n, err: r.err } }); return; }
+    if (r.err) { GROOM.set({ ro: 'host', sd: MY, st: ST, now: Date.now(), seat: SEAT, go: GO, rej: { gid: pr.gid, n: A.n, err: r.err } }); return; }
     ST = r.st; afterChange(); persist(); publishHost();
   });
 }
 async function joinGame(code) {
   if (!NETKIND) return toast('Az online mód ebben a nézetben nem érhető el.');
-  let invite = '';
-  if (NETKIND === 'p2p') {
-    invite = (code || '').replace(/\s+/g, '');
-    if (!/^RVB[PZ]/.test(invite)) return toast('Illeszd be a házigazda teljes meghívókódját (RVB-vel kezdődik).');
-    code = '';
-  } else {
-    code = (code || '').toLowerCase().trim();
-    if (!/^[a-z0-9]{5}$/.test(code)) return toast('A játékkód 5 karakter.');
-  }
-  MODE = 'guest'; CODE = code; SCREEN = 'game'; ST = null; render();
+  code = (code || '').replace(/\s+/g, '').toUpperCase();
+  if (!/^[A-Z0-9]{6}$/.test(code)) return toast('A játékkód 6 karakter.');
+  if (NETKIND !== 'mqtt') code = code.toLowerCase();
+  MODE = 'guest'; CODE = code; SCREEN = 'game'; ST = null; GO = { h: false, g: false }; HOSTP = null; render();
   try {
     GROOM = await openChannel(code, 'guest');
-    if (invite) { try { await p2pGuestAnswer(invite); } catch (e) { leave(); return toast('Ez nem érvényes meghívókód.'); } }
-    GROOM.set({ ro: 'guest', gid: GID, act: null, t: Date.now() });
+    GROOM.set({ ro: 'guest', gid: GID, act: null, go: false, t: Date.now() });
     let lastRej = 0;
     GROOM.watch(list => {
       PEERS = list;
       const h = PEERS.find(p => p.presence.ro === 'host');
       if (h && h.presence.st) {
-        const pr = h.presence;
+        const pr = h.presence; HOSTP = pr; GO = { h: !!(pr.go && pr.go.h), g: GO.g || !!(pr.go && pr.go.g) };
         if (pr.st !== lastHostSt && (!ST || JSON.stringify(pr.st) !== JSON.stringify(ST))) { ST = clone(pr.st); PENDING = false; afterChange(); }
         lastHostSt = pr.st;
         MY = other(pr.sd); HOSTOFF = (pr.now || Date.now()) - Date.now();
@@ -659,12 +655,12 @@ function leave() {
   if (GROOM) { GROOM.close(); GROOM = null; }
   MODE = null; ST = null; SCREEN = 'menu'; PEERS = []; render();
 }
-
+ 
 // ---------- view helpers ----------
 function canAct(side) { return MODE === 'local' || (MY === side && !PENDING); }
 function viewSides() { return MODE === 'local' ? ['r', 'b'] : (MY ? [MY] : []); }
 function activeSide() { return { atk: 'r', def: 'b', fort: 'b' }[ST.ph] || ''; }
-
+ 
 function cardHTML(ch, opts = {}) {
   const c = cardOf(ch), s = c.s;
   const cls = ['hc', 's' + s, opts.sel ? 'sel' : '', opts.play ? 'playable' : '', opts.dim ? 'dim' : ''].join(' ');
@@ -676,7 +672,7 @@ function cardHTML(ch, opts = {}) {
   return `<div class="${cls}">${inner}</div>`;
 }
 const backHTML = (s, small) => `<div class="back s${s} ${small ? 'small' : ''}"><span class="disp ${s}">${s === 'r' ? 'RED' : 'BLUE'}</span>${small ? '' : '<span class="lbl">LEFORDÍTVA</span>'}</div>`;
-
+ 
 function boardHTML() {
   let z = '';
   for (let i = 1; i <= 5; i++) {
@@ -694,7 +690,7 @@ function boardHTML() {
     <div class="row" style="justify-content:space-between;margin-bottom:8px"><span class="lbl">Támadási lánc</span><span class="lbl b">Észlelés ${ST.det}/5</span></div>
     ${z}<div class="lbl" style="margin-top:10px">Kör · 10. vége = Blue nyer</div><div class="track">${t}</div></div></div>`;
 }
-
+ 
 const PHASES = [['atk', 'Támadás'], ['def', 'Védekezés'], ['duel', 'Párbaj'], ['fort', 'Megerősítés']];
 function phaseHTML() {
   const map = {
@@ -710,7 +706,7 @@ function phaseHTML() {
    <div class="steps" aria-hidden="true">${['Húzás', ...PHASES.map(p => p[1]), 'Takarítás'].map((n, i) => `<span class="${(PHASES[i - 1] || [])[0] === ST.ph ? 'on' : ''}">${n.toUpperCase()}</span>`).join('')}</div>
    <div style="flex-basis:100%;font-size:14px;color:var(--soft)">${m[1]}</div></div>`;
 }
-
+ 
 function clashHTML() {
   if (ST.ph === 'def' || (ST.ph === 'atk' && ST.pl.r)) {
     return `<div class="frame cut"><div class="fi"><div class="lbl">Ütközés · ${ZN[ST.z][0]}</div>
@@ -732,7 +728,7 @@ function caseHTML(ch) {
   const c = cardOf(ch);
   return `<div class="case"><span class="tag ${c.s === 'r' ? 'tr' : 'tb'}">VALÓS ESET</span> <b>${esc(c.ct)}</b><br>${esc(c.cx)}<div class="mono" style="font-size:11px;margin-top:4px">${esc(c.id)}</div></div>`;
 }
-
+ 
 function handPanel(side) {
   const mine = viewSides().includes(side);
   const h = ST.h[side].split('').filter(Boolean);
@@ -761,7 +757,7 @@ function handPanel(side) {
   return `<div class="frame cut"><div class="fi"><div class="row" style="justify-content:space-between"><h3>${side === 'r' ? '<span class="r">Red</span>' : '<span class="b">Blue</span>'} kéz</h3>
     <span class="lbl">Pakli ${ST.dk[side].length} · Dobó ${ST.ds[side].length}</span></div>${body}${actionsHTML(side, hidden)}</div></div>`;
 }
-
+ 
 function roleBtn(side, key, label, enabled, a, on) {
   if (!has(ST, side, key)) return '';
   return `<button class="btn ghost" data-act='${JSON.stringify(a)}' data-side="${side}" aria-pressed="${on ? 'true' : 'false'}" ${enabled ? '' : 'disabled'}>${label}</button>`;
@@ -798,7 +794,7 @@ function actionsHTML(side, hidden) {
   }
   return '';
 }
-
+ 
 function morseHTML(num) {
   return num.split('').map((d, i) => (i ? '<hr>' : '') + MORSE_D[+d].split('').map(s => `<i class="${s === '.' ? 'dot' : 'dash'}"></i>`).join('')).join('');
 }
@@ -836,7 +832,7 @@ function duelHTML() {
     ${kcardHTML(c)}${refHTML()}<div class="duelgrid">${panels}</div>
     <p class="hint">Mindkét Kriptográfus egyszer kérhet segítséget a csapatától. Hibás válasz után az a Kriptográfus kiesik. Ha senki sem fejti meg időben, a támadás sikertelen, de a Blue nem kap Észlelés jelzőt.</p></div>`;
 }
-
+ 
 const LOGTXT = {
   start: () => 'A játék elkezdődött. A Red kezd.',
   rd: n => `${n}. KÖR`,
@@ -872,7 +868,7 @@ function rolesHTML() {
   }).join('');
   return `<details class="panel cut"><summary class="lbl" style="cursor:pointer">Szerepkörök és képességek</summary><div class="reftbl" style="margin-top:8px">${s}</div></details>`;
 }
-
+ 
 function setupHTML() {
   const panel = side => {
     const c = ST.cfg[side], mine = MODE === 'local' || MY === side;
@@ -888,11 +884,11 @@ function setupHTML() {
       <div class="row" style="margin-top:12px">${c.ok ? '<span class="tag tb">KÉSZ</span>' : mine ? `<button class="btn ${side === 'r' ? 'red' : 'blue'}" data-act='{"t":"ready"}' data-side="${side}" ${err ? 'disabled' : ''}>Kész vagyunk</button>` : '<span class="lbl">Az ellenfél még beállít…</span>'}</div></div></div>`;
   };
   const opp = MODE === 'host' ? (PEERS.some(p => p.presence && p.presence.gid === SEAT) ? '<span class="tag tb">ELLENFÉL CSATLAKOZOTT</span>' : '<span class="tag tr">VÁRAKOZÁS AZ ELLENFÉLRE</span>') : '';
-  return `${MODE === 'host' ? `<div class="panel cut" style="margin-top:14px"><div class="row" style="justify-content:space-between"><div>${NETKIND === 'p2p' ? `<div class="lbl">Közvetlen kapcsolat</div><div style="color:var(--white);margin-top:6px">Te a ${SIDE[MY]} csapat vagy.</div>` : `<div class="lbl">Játékkód · küldd el az ellenfélnek</div><div class="code" style="color:var(--ink);margin-top:6px">${CODE.toUpperCase()}</div>`}</div>${opp}</div>${NETKIND === 'p2p' ? '' : `<p style="margin:10px 0 0;font-size:14px">Az ellenfél ugyanezt az oldalt nyitja meg, a „Csatlakozás kóddal” gombra kattint, és beírja a kódot. Te a ${SIDE[MY]} csapat vagy.</p>`}</div>` : ''}
+  return `${MODE === 'host' ? `<div class="panel cut" style="margin-top:14px"><div class="row" style="justify-content:space-between"><div><div class="lbl">Játékkód</div><div class="code" style="color:var(--ink);margin-top:6px">${CODE.toUpperCase()}</div></div>${opp}</div><p style="margin:10px 0 0;font-size:14px">Te a ${SIDE[MY]} csapat vagy.</p></div>` : ''}
    <div class="setup">${panel('r')}${panel('b')}</div>
    <label class="rolechk" style="margin-top:12px"><input type="checkbox" data-alt="1" ${ST.cfg.alt ? 'checked' : ''} ${MODE === 'guest' ? 'disabled' : ''}><span><b>Alternatív mód: kiegyensúlyozott kis csapatok</b><small>A 2 fős Blue csapat nem választhatja egyszerre a SOC elemzőt és az Incidenskezelőt.</small></span></label>`;
 }
-
+ 
 function endHTML() {
   if (!ST.w) {
     const hist = ST.hist.split('').filter(Boolean);
@@ -906,7 +902,7 @@ function endHTML() {
    <div class="frame cut"><div class="fi"><h2>Kiértékelés</h2><p class="hint">Menjetek végig a kijátszott lapok valós esetein. Mindkét csapat nevezze meg azt a lépést, amely szerintük eldöntötte a játékot, és hogy a valós esetben mi akadhatott volna meg.</p>
    <div class="detail">${hist.map(caseHTML).join('')}</div></div></div>`;
 }
-
+ 
 function menuHTML() {
   const loc = store.get('rvb-local'), host = store.get('rvb-host');
   const online = !!ROOM;
@@ -917,11 +913,11 @@ function menuHTML() {
    <div class="choices">
     <button class="choice cut" data-a="local"><div class="fi cut"><span class="lbl">Egy eszközön</span><b>Helyi játék</b><span class="hint">Egy képernyő, két csapat. A kezeket a soron lévő csapat fedi fel.</span></div></button>
     ${loc && loc.ph !== 'end' ? `<button class="choice cut" data-a="resume"><div class="fi cut"><span class="lbl">Mentett helyi játék</span><b>Folytatás · ${loc.rd ? loc.rd + '. kör' : 'beállítás'}</b></div></button>` : ''}
-    <div class="choice cut" style="cursor:default"><div class="fi cut"><span class="lbl">Két eszközön</span><b>Online játék indítása</b><span class="hint">${NETKIND === 'p2p' ? 'Kapsz egy meghívókódot, elküldöd az ellenfélnek, ő visszaküld egy válaszkódot.' : 'Kapsz egy kódot, az ellenfél azzal csatlakozik.'}</span>
+    <div class="choice cut" style="cursor:default"><div class="fi cut"><span class="lbl">Két eszközön</span><b>Online játék indítása</b><span class="hint">Kapsz egy 6 karakteres kódot, az ellenfél azzal csatlakozik.</span>
       <div class="row" style="margin-top:8px"><button class="btn red hostred" data-a="host" data-side="r" ${online ? '' : 'disabled'}>Red leszek</button><button class="btn blue" data-a="host" data-side="b" ${online ? '' : 'disabled'}>Blue leszek</button>${host && host.st && host.st.ph !== 'end' && online ? `<button class="btn ghost" data-a="rehost">Folytatás · ${esc(host.code.toUpperCase())}</button>` : ''}</div></div></div>
     <div class="choice cut" style="cursor:default"><div class="fi cut"><span class="lbl">Két eszközön</span><b>Csatlakozás kóddal</b>
-      <div class="row" style="margin-top:8px;flex-wrap:nowrap">${NETKIND === 'p2p' ? `<textarea id="joincode" class="sdp" rows="2" placeholder="Meghívókód beillesztése" aria-label="Meghívókód">${esc(KEEP.joincode || '')}</textarea>` : `<input type="text" id="joincode" maxlength="5" placeholder="KÓD" aria-label="Játékkód" ${online ? '' : 'disabled'}>`}<button class="btn" data-a="join" ${online ? '' : 'disabled'}>Belépés</button></div></div></div>
-    <p class="hint">${!NETREADY ? 'Online kapcsolat ellenőrzése…' : online ? (NETKIND === 'p2p' ? 'Közvetlen kapcsolat két gép között, szerver nélkül: mindkét gépen ez a HTML fájl fut, a két kódot bármilyen chaten átküldhetitek. Internet kell hozzá, vagy ugyanaz a helyi hálózat.' : `Online kapcsolat: ${NETKIND === 'db' ? 'közös játékadatbázis' : 'élő szoba'}. A két eszköz ugyanezt a linket nyitja meg.`) : 'Az online módhoz a játékot a Claude felületén, bejelentkezve kell megnyitni, és legalább Közreműködő (Contributor) hozzáférés kell hozzá. A helyi játék mindenhol működik.'}</p>
+      <div class="row" style="margin-top:8px;flex-wrap:nowrap"><input type="text" id="joincode" maxlength="6" placeholder="KÓD" aria-label="Játékkód" autocomplete="off" value="${esc(KEEP.joincode || '')}" ${online ? '' : 'disabled'}><button class="btn" data-a="join" ${online ? '' : 'disabled'}>Belépés</button></div></div></div>
+    <p class="hint">${!NETREADY ? 'Online kapcsolat ellenőrzése…' : online ? (NETKIND === 'mqtt' ? 'Online kapcsolat ingyenes nyilvános közvetítő szervereken át: bármely internetkapcsolattal működik, a két gépnek nem kell egy hálózaton lennie.' : `Online kapcsolat: ${NETKIND === 'db' ? 'közös játékadatbázis' : 'élő szoba'}. A két eszköz ugyanezt a linket nyitja meg.`) : 'Az online módhoz a játékot a Claude felületén, bejelentkezve kell megnyitni, és legalább Közreműködő (Contributor) hozzáférés kell hozzá. A helyi játék mindenhol működik.'}</p>
    </div></div>
    <div class="frame cut" style="margin-top:20px"><div class="fi"><h2>Egy kör röviden</h2>
    <ol style="margin:8px 0 0;padding-left:20px;columns:2 260px;column-gap:28px">
@@ -929,11 +925,9 @@ function menuHTML() {
     <li><b>Védekezés:</b> a Blue azonos kategóriájú lappal védekezik, vagy passzol.</li><li><b>Felfedés és eredmény:</b> erősség + szerepkör-bónusz + tartós kontrollok. A nagyobb nyer, döntetlennél kriptopárbaj.</li>
     <li><b>Megerősítés:</b> a Blue lerakhat egy „Tartós” lapot kontrollként.</li><li><b>Takarítás:</b> a körjelző lép. A 10. kör végén a Blue nyer.</li></ol></div></div>`;
 }
-
+ 
 function gameHTML() {
-  const pp = p2pHTML();
-  if (pp && (MODE === 'guest' || !ST)) return pp;
-  if (pp) return pp + gameInner();
+  if (inLobby()) return lobbyHTML();
   return gameInner();
 }
 function gameInner() {
@@ -945,19 +939,19 @@ function gameInner() {
   return `<div class="game"><div class="stack">${boardHTML()}${rolesHTML()}${logHTML()}</div>
     <div class="stack" style="min-width:0">${phaseHTML()}${spect}${mid}${ST.ph !== 'end' ? hands : ''}</div></div>`;
 }
-
+ 
 function render() {
   const a = document.activeElement, fid = a && a.id, pos = a && a.selectionStart;
   const mode = { local: 'HELYI JÁTÉK', host: 'ONLINE · ' + (MY ? SIDE[MY].toUpperCase() : ''), guest: 'ONLINE · ' + (MY ? SIDE[MY].toUpperCase() : ST ? 'NÉZŐ' : 'CSATLAKOZÁS') }[MODE] || '';
   document.getElementById('app').innerHTML = `<div class="accent"><i></i><i></i></div>
-   <header class="top"><span class="logo"><span class="r">RED</span><small>VS</small><span class="b">BLUE</span></span>${mode ? `<span class="pill">${mode}</span>` : ''}${MODE !== 'local' && CODE && NETKIND !== 'p2p' && SCREEN === 'game' ? `<span class="pill">KÓD ${esc(CODE.toUpperCase())}</span>` : ''}<span class="sp"></span>
-    ${SCREEN === 'game' && ST && ST.ph !== 'end' && (MODE === 'local' || MY) ? '<button class="btn abort" data-a="abortask" aria-expanded="' + ABORTASK + '">Abort</button>' : ''}${SCREEN === 'game' ? '<button class="btn" data-a="menu">Kilépés a menübe</button>' : ''}</header>
+   <header class="top"><span class="logo"><span class="r">RED</span><small>VS</small><span class="b">BLUE</span></span>${mode ? `<span class="pill">${mode}</span>` : ''}${MODE !== 'local' && CODE && SCREEN === 'game' ? `<span class="pill">KÓD ${esc(CODE.toUpperCase())}</span>` : ''}<span class="sp"></span>
+    ${SCREEN === 'game' && ST && ST.ph !== 'end' && (MODE === 'local' || MY) && !inLobby() ? '<button class="btn abort" data-a="abortask" aria-expanded="' + ABORTASK + '">Abort</button>' : ''}${SCREEN === 'game' ? '<button class="btn" data-a="menu">Kilépés a menübe</button>' : ''}</header>
    ${ABORTASK && SCREEN === 'game' && ST && ST.ph !== 'end' ? '<div class="abortbar" role="alertdialog" aria-label="Játék megszakítása"><b>Biztosan megszakítod a játékot? Nem lesz győztes, és a játszma nem folytatható.</b><div class="row"><button class="btn abort" data-a="abortyes">Igen, megszakítom</button><button class="btn" data-a="abortno">Mégse</button></div></div>' : ''}
    <main class="wrap">${SCREEN === 'menu' ? menuHTML() : gameHTML()}</main>${TOAST ? `<div class="toast" role="status">${esc(TOAST)}</div>` : ''}`;
   if (fid) { const el = document.getElementById(fid); if (el && !el.disabled) { el.focus(); try { if (pos != null) el.setSelectionRange(pos, pos); } catch (e) { } } }
   tick();
 }
-
+ 
 function tick() {
   if (!ST || ST.ph !== 'duel' || !ST.du) return;
   const now = Date.now() + (MODE === 'guest' ? HOSTOFF : 0);
@@ -968,7 +962,7 @@ function tick() {
   if (left <= 0 && MODE !== 'guest') { const r = act(ST, 'r', { t: 'timeout' }); if (!r.err) { ST = r.st; afterChange(); persist(); publishHost(); render(); } }
 }
 setInterval(tick, 500);
-
+ 
 document.addEventListener('click', e => {
   const t = e.target.closest('button,[data-a]'); if (!t || t.disabled) return;
   const side = t.dataset.side;
@@ -990,8 +984,10 @@ document.addEventListener('click', e => {
     case 'host': return hostGame(side);
     case 'rehost': return hostGame(null, store.get('rvb-host'));
     case 'join': return joinGame(document.getElementById('joincode').value);
-    case 'p2pacc': return p2pHostAccept(document.getElementById('p2pans').value);
-    case 'p2pcopy': { const el = document.getElementById('p2pmine'); el.select(); let ok = false; try { ok = document.execCommand('copy'); } catch (x) { } if (navigator.clipboard) navigator.clipboard.writeText(el.value).then(() => toast('Kód a vágólapon.'), () => toast(ok ? 'Kód a vágólapon.' : 'Jelöld ki és másold ki kézzel.')); else toast(ok ? 'Kód a vágólapon.' : 'Jelöld ki és másold ki kézzel.'); return; }
+    case 'go':
+      if (MODE === 'host') { GO = { ...GO, h: true }; publishHost(); return render(); }
+      if (MODE === 'guest' && GROOM) { GO = { ...GO, g: true }; GROOM.set({ go: true }); return render(); }
+      return;
     case 'show': SHOW[side] = true; return render();
     case 'hide': SHOW[side] = false; SEL[side] = []; return render();
     case 'menu': ABORTASK = false; return leave();
@@ -1009,17 +1005,16 @@ document.addEventListener('change', e => {
   if (t.dataset.role) { const s = t.dataset.role, ro = ST.cfg[s].ro.slice(); ro[+t.dataset.i] = t.checked ? 1 : 0; dispatch(s, { t: 'cfg', n: ST.cfg[s].n, ro }); }
   if (t.dataset.alt) dispatch(MODE === 'local' ? 'r' : MY, { t: 'alt', v: t.checked });
 });
-document.addEventListener('input', e => { const t = e.target; if (t.id === 'joincode' || t.id === 'p2pans') KEEP[t.id] = t.value; if (t.dataset.draft) DRAFT[t.dataset.draft][+t.dataset.i] = t.value; });
+document.addEventListener('input', e => { const t = e.target; if (t.id === 'joincode') KEEP[t.id] = t.value; if (t.dataset.draft) DRAFT[t.dataset.draft][+t.dataset.i] = t.value; });
 document.addEventListener('keydown', e => {
   if (e.key !== 'Enter') return;
   const t = e.target;
   if (t.id === 'joincode') { e.preventDefault(); joinGame(t.value); }
-  else if (t.id === 'p2pans') { e.preventDefault(); p2pHostAccept(t.value); }
   else if (t.dataset && t.dataset.draft) { const b = document.querySelector(`[data-ans="${t.dataset.draft}"]`); if (b && !b.disabled) b.click(); }
 });
-
+ 
 render();
 getRoom();
-
+ 
 </script>
 </body></html>
