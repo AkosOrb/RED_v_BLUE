@@ -1,5 +1,5 @@
 <html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-</head><body><title>Red vs Blue</title>
+</head><body><title>Red vs lue</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Chakra+Petch:wght@400;600;700&family=Share+Tech+Mono&display=swap">
 <style>
