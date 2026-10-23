@@ -198,6 +198,16 @@ ul.roles{list-style:none;padding:0}ul.roles li{border-left:4px solid var(--ink);
 input.nm{text-transform:none;letter-spacing:.06em}
 .btn.kick{padding:0 8px;font-size:14px;line-height:20px;clip-path:none;margin-left:4px}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.modesel{margin-top:16px;max-width:560px}
+.modesel .seg button{padding:10px 6px;font-size:13px}
+.res{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.res span{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;padding:2px 8px;background:var(--ink);color:var(--white)}
+.res span.rr{background:var(--red);color:var(--ink)}
+.res span.bb{background:var(--blue);color:var(--ink)}
+.zmark{grid-column:1/-1;display:flex;gap:4px;flex-wrap:wrap;margin-top:-4px}
+.zmark span{font-family:var(--f-mono);font-size:10px;letter-spacing:.08em;padding:1px 6px;background:var(--ink);color:var(--white)}
+.zmark span.pr{background:var(--red);color:var(--ink)}
+.zmark span.cj{background:#FFD23F;color:var(--ink)}
 </style>
 <div id="app"></div>
 <script>
@@ -591,13 +601,27 @@ function shuffle(st, s) {
 function has(st, side, key) { return !!st.cfg[side].ro[ROLE_KEYS[side].indexOf(key)]; }
 function log(st, e) { st.lg.push(e); if (st.lg.length > 14) st.lg.shift(); }
 
-function newGame(seed) {
+// Game modes: 0 = base game, 1 = Haladó (budget, slow draw, reward choice), 2 = Profi (+ staging, noise, missions, crown jewel, priced roles)
+const GM_NAMES = [['ALAPJÁTÉK', 'BASE GAME'], ['HALADÓ', 'ADVANCED'], ['PROFI', 'PRO']];
+const INCOME = { r: 4, b: 3 }, RES_CAP = 10, HAND_MAX = 7, NOISE_MAX = 4;
+const MISSIONS = ['ransom', 'esp', 'wiper', 'se'];
+const adv = st => (st.gm | 0) >= 1, pro = st => (st.gm | 0) >= 2;
+const costOf = (st, ch) => (adv(st) ? cardOf(ch).p : 0);
+const ctrlCost = (st, ch) => (adv(st) ? Math.max(0, cardOf(ch).p - 2) : 0);
+const hasPers = (st, z) => adv(st) && st.ps[z - 1] === '1';
+
+function newGame(seed, gm) {
   return {
-    v: 1, ph: 'setup', sq: 0, sd: seed >>> 0,
+    v: 1, ph: 'setup', sq: 0, sd: seed >>> 0, gm: Math.max(0, Math.min(2, gm | 0)),
     cfg: { r: { n: 3, ro: [1, 1, 1, 1, 1], ok: 0 }, b: { n: 3, ro: [1, 1, 1, 1, 1], ok: 0 }, alt: 0 },
     rd: 0, z: 1, det: 0, dk: { r: '', b: '' }, h: { r: '', b: '' }, ds: { r: '', b: '' },
     ct: ['', '', '', '', ''], u: { lead: 0, recon: 0, ciso: 0, ir: 0 }, ov: 0, rp: 0, pkr: 0, pk: '',
-    pl: { r: '', b: '' }, cl: null, du: null, cr: ['', '', '', '', ''], fc: 0, hist: '', w: '', wr: '', lg: []
+    pl: { r: '', b: '' }, cl: null, du: null, cr: ['', '', '', '', ''], fc: 0, hist: '', w: '', wr: '', lg: [],
+    // modes: rs budget, ps persistence flags per stage, rw reward chooser, ik threat-intel cards, tr trimming side,
+    // sg staged card per stage, sgd staged this round, pls attack came from staging, hu hunted this round,
+    // nz noise, ms mission index, mp mission progress, ep espionage streak, cj crown jewel stage, cjr revealed, pkc Red saw crown
+    rs: { r: 0, b: 0 }, ps: '00000', rw: '', ik: '', tr: '', sg: ['', '', '', '', ''], sgd: 0, pls: 0, hu: 0,
+    nz: 0, ms: -1, mp: 0, ep: 0, cj: 0, cjr: 0, pkc: 0
   };
 }
 
@@ -621,6 +645,8 @@ function draw(st, side, n) {
 }
 function refill(st, side) { draw(st, side, Math.max(0, 5 - st.h[side].length)); }
 const hasCat = (st, side, z) => st.h[side].split('').some(ch => cardOf(ch).c === z);
+// cards Red can attack with right now (in hand and affordable, or staged at this stage)
+const canAttack = st => st.h.r.split('').some(ch => cardOf(ch).c === st.z && costOf(st, ch) <= st.rs.r) || (pro(st) && !!st.sg[st.z - 1]);
 
 function startGame(st) {
   let r = '', b = '';
@@ -631,21 +657,30 @@ function startGame(st) {
     st.cr[l - 1] = shuffle(st, s);
   }
   st.rd = 0; st.z = 1; log(st, ['start']);
+  if (adv(st)) {
+    st.rs = { r: pro(st) ? 4 : 2, b: 2 };
+    draw(st, 'r', 5); draw(st, 'b', 5);
+  }
+  if (pro(st)) { st.ms = Math.floor(rnd(st) * 4); st.ph = 'cj'; return; }
   beginRound(st);
 }
 function beginRound(st) {
   st.rd++; st.ov = 0; st.fc = 0; st.rp = 0; st.pkr = 0; st.pk = ''; st.pl = { r: '', b: '' }; st.du = null;
-  refill(st, 'r'); refill(st, 'b');
+  st.ik = ''; st.sgd = 0; st.pls = 0; st.hu = 0;
+  if (adv(st)) {
+    ['r', 'b'].forEach(s => { st.rs[s] = Math.min(RES_CAP, st.rs[s] + INCOME[s]); draw(st, s, 2); });
+  } else { refill(st, 'r'); refill(st, 'b'); }
   st.ph = 'atk'; log(st, ['rd', st.rd]);
 }
 
 function ctrlBonus(st, z) { return st.ct[z - 1].length; }
 function totals(st) {
   const rc = cardOf(st.pl.r), z = st.z;
-  const rb = (has(st, 'r', 'exploit') && z === 2 ? 1 : 0) + (has(st, 'r', 'social') && rc.se ? 1 : 0);
+  const rb = (has(st, 'r', 'exploit') && z === 2 ? 1 : 0) + (has(st, 'r', 'social') && rc.se ? 1 : 0)
+    + (hasPers(st, z) ? 1 : 0) + (st.pls ? 1 : 0) + (pro(st) && st.ms === 0 && z === 5 ? 2 : 0);
   if (st.pl.b === '-') return { rt: rc.p + rb, rb, bt: 0, bb: 0 };
   const bc = cardOf(st.pl.b);
-  const bb = (has(st, 'b', 'admin') && z === 3 ? 1 : 0) + ctrlBonus(st, z);
+  const bb = (has(st, 'b', 'admin') && z === 3 ? 1 : 0) + ctrlBonus(st, z) + (pro(st) && st.cj === z ? 1 : 0);
   return { rt: rc.p + rb, rb, bt: bc.p + bb, bb };
 }
 function discardClash(st) {
@@ -659,6 +694,17 @@ function resolve(st) {
   const t = totals(st);
   st.cl = { r: st.pl.r, b: st.pl.b, z: st.z, rt: t.rt, bt: t.bt, rb: t.rb, bb: t.bb, w: '' };
   log(st, ['clash', st.pl.r, st.pl.b, t.rt, t.bt]);
+  if (adv(st)) { // costs are paid at reveal, so the face-down strength stays secret until now
+    if (!st.pls) st.rs.r -= costOf(st, st.pl.r);
+    if (st.pl.b !== '-') st.rs.b -= costOf(st, st.pl.b);
+  }
+  if (pro(st)) {
+    if (st.cj === st.z && st.pl.b !== '-' && !st.cjr) { st.cjr = 1; log(st, ['cjr', st.z]); }
+    if (cardOf(st.pl.r).p >= 4 && ++st.nz >= NOISE_MAX) {
+      st.nz = 0; st.det = Math.min(5, st.det + 1); log(st, ['noise', st.det]);
+      if (st.det >= 5) { discardClash(st); return finish(st, 'b', 'b5'); }
+    }
+  }
   if (st.pl.b === '-' || t.rt > t.bt) return redWins(st);
   if (t.bt > t.rt) return blueWins(st, t.bt - t.rt);
   // tie -> crypto duel
@@ -670,28 +716,56 @@ function resolve(st) {
 }
 function redWins(st) {
   st.cl.w = st.cl.w === 'd' ? 'dr' : 'r';
+  const rc = cardOf(st.cl.r);
   discardClash(st);
-  if (st.z === 5) return finish(st, 'r', 'r5');
+  if (pro(st) && ((st.ms === 2 && rc.p >= 4) || (st.ms === 3 && rc.se))) {
+    st.mp++;
+    if ((st.ms === 2 && st.mp >= 4) || (st.ms === 3 && st.mp >= 2)) return finish(st, 'r', 'm' + st.ms);
+  }
+  if (st.z === 5) {
+    if (!pro(st) || st.ms === 0) return finish(st, 'r', 'r5');
+    log(st, ['rw5']); return after(st);
+  }
+  if (adv(st)) { log(st, ['rwa']); st.ph = 'rew'; st.rw = 'r'; return; }
   st.z++; log(st, ['rw', st.z]);
   after(st);
 }
 function blueWins(st, diff) {
   st.cl.w = st.cl.w === 'd' ? 'db' : 'b';
   discardClash(st);
-  st.det++; let soc = 0;
+  if (!adv(st)) st.det++;
+  let soc = 0;
   if (has(st, 'b', 'soc') && diff >= 3) { st.det++; soc = 1; }
   st.det = Math.min(5, st.det);
-  log(st, ['bw', st.det, soc]);
+  if (adv(st)) { log(st, ['bwa']); if (soc) log(st, ['soc', st.det]); }
+  else log(st, ['bw', st.det, soc]);
   if (st.det >= 5) return finish(st, 'b', 'b5');
+  if (adv(st)) { st.ph = 'rew'; st.rw = 'b'; return; }
   after(st);
 }
 function duelFail(st) {
   st.cl.w = 'dt'; discardClash(st); log(st, ['dto']); after(st);
 }
 function after(st) {
-  st.du = null;
+  st.du = null; st.rw = ''; st.pls = 0;
   if (st.ov === 1) { st.ov = 2; st.rp = 0; st.ph = 'atk'; log(st, ['ov2', st.z]); return; }
   st.ph = 'fort';
+}
+// end of round: espionage check, round limit, hand limit, then the next round
+function endRound(st) {
+  if (pro(st) && st.ms === 1) {
+    st.ep = st.z >= 4 ? st.ep + 1 : 0;
+    if (st.ep >= 3) return finish(st, 'r', 'm1');
+  }
+  if (st.rd >= 10) return finish(st, 'b', 'b10');
+  nextTrim(st);
+}
+function nextTrim(st) {
+  if (adv(st)) {
+    const s = ['r', 'b'].find(x => st.h[x].length > HAND_MAX);
+    if (s) { st.ph = 'trim'; st.tr = s; return; }
+  }
+  st.tr = ''; beginRound(st);
 }
 
 const norm = x => x.toUpperCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/J/g, 'I').replace(/[^A-Z]/g, '');
@@ -718,35 +792,59 @@ function apply(st, side, a) {
     }
     return 'Most a beállítás jön.';
   }
+  if (st.ph === 'cj') {
+    if (side !== 'b') return 'Most a Blue választ koronaékszert.';
+    if (a.t !== 'cj' || !(a.z >= 1 && a.z <= 5)) return 'Válassz egy szakaszt (01–05).';
+    st.cj = a.z | 0; log(st, ['cj']); beginRound(st); return '';
+  }
   if (st.ph === 'atk') {
     if (side !== 'r') return 'Most a Red támad.';
     if (st.pl.r) return 'Már kijátszottál lapot.';
-    if (a.t === 'peek') {
-      if (!has(st, 'r', 'recon') || st.u.recon >= 2 || st.pkr) return 'A Felderítő most nem használható.';
+    if (a.t === 'peek' || a.t === 'peekcj') {
+      if (pro(st)) {
+        if (!has(st, 'r', 'recon') || st.pkr) return 'A Felderítő most nem használható.';
+        if (st.rs.r < 2) return 'Nincs elég Erőforrásod (2).';
+      } else if (!has(st, 'r', 'recon') || st.u.recon >= 2 || st.pkr) return 'A Felderítő most nem használható.';
+      if (a.t === 'peekcj') {
+        if (!pro(st)) return 'A Felderítő most nem használható.';
+        st.pkc = 1; st.pkr = 1; st.rs.r -= 2; log(st, ['peekcj']); return '';
+      }
       if (!st.h.b.length) return 'A Blue keze üres.';
-      st.pk = st.h.b[Math.floor(rnd(st) * st.h.b.length)]; st.u.recon++; st.pkr = 1; log(st, ['peek']); return '';
+      st.pk = st.h.b[Math.floor(rnd(st) * st.h.b.length)]; st.pkr = 1;
+      if (pro(st)) st.rs.r -= 2; else st.u.recon++;
+      log(st, ['peek']); return '';
     }
     if (a.t === 'ov') {
       if (!has(st, 'r', 'lead') || st.u.lead || st.ov) return 'Az Operációvezető most nem használható.';
       st.u.lead = 1; st.ov = 1; log(st, ['ov']); return '';
     }
     if (a.t === 'play') {
+      if (a.sg) {
+        if (!pro(st) || !st.sg[st.z - 1] || st.sg[st.z - 1] !== a.c) return 'Itt nincs előkészített lapod.';
+        st.sg[st.z - 1] = ''; st.pl.r = a.c; st.pls = 1; st.ph = 'def'; log(st, ['atks', st.z]); return '';
+      }
       if (!st.h.r.includes(a.c)) return 'Ez a lap nincs a kezedben.';
       if (cardOf(a.c).c !== st.z) return 'Csak a bábu szakaszának kategóriájából támadhatsz.';
+      if (costOf(st, a.c) > st.rs.r) return 'Nincs elég Erőforrásod ehhez a laphoz.';
       st.h.r = st.h.r.replace(a.c, ''); st.pl.r = a.c; st.ph = 'def'; log(st, ['atk', st.z]); return '';
     }
     if (a.t === 'replan') {
-      if (hasCat(st, 'r', st.z)) return 'Van megfelelő lapod, újratervezni nem kell.';
+      if (hasCat(st, 'r', st.z) || (pro(st) && st.sg[st.z - 1])) return 'Van megfelelő lapod, újratervezni nem kell.';
       if (st.rp) return 'Ebben a támadásban már újraterveztél.';
+      if (adv(st)) { if (st.rs.r < 1) return 'Nincs elég Erőforrásod (1).'; st.rs.r--; }
       const cs = (a.cs || []).filter((c, i, arr) => st.h.r.includes(c) && arr.indexOf(c) === i).slice(0, 3);
       cs.forEach(c => { st.h.r = st.h.r.replace(c, ''); st.ds.r += c; });
       draw(st, 'r', cs.length); st.rp = 1; log(st, ['rp', cs.length]);
-      if (!hasCat(st, 'r', st.z)) { log(st, ['noatk']); st.ov = st.ov ? 2 : 0; after(st); }
+      if (!canAttack(st)) { log(st, ['noatk']); st.ov = st.ov ? 2 : 0; after(st); }
       return '';
     }
     if (a.t === 'skip') {
-      if (hasCat(st, 'r', st.z)) return 'Van megfelelő lapod.';
+      if (canAttack(st)) return 'Van megfelelő lapod.';
       log(st, ['noatk']); st.ov = st.ov ? 2 : 0; after(st); return '';
+    }
+    if (a.t === 'quiet') {
+      if (!pro(st)) return 'Ismeretlen lépés.';
+      st.nz = Math.max(0, st.nz - 2); log(st, ['quiet', st.nz]); st.ov = st.ov ? 2 : 0; after(st); return '';
     }
     return 'Ismeretlen lépés.';
   }
@@ -755,6 +853,7 @@ function apply(st, side, a) {
     if (a.t === 'def') {
       if (!st.h.b.includes(a.c)) return 'Ez a lap nincs a kezedben.';
       if (cardOf(a.c).c !== st.z) return 'Csak azonos kategóriájú lappal védekezhetsz.';
+      if (costOf(st, a.c) > st.rs.b) return 'Nincs elég Erőforrásod ehhez a laphoz.';
       st.h.b = st.h.b.replace(a.c, ''); st.pl.b = a.c; resolve(st); return '';
     }
     if (a.t === 'pass') { st.pl.b = '-'; resolve(st); return ''; }
@@ -766,12 +865,43 @@ function apply(st, side, a) {
     if (a.t === 'timeout') { if (Date.now() < d.t0 + DUEL_MS - 1500) return 'Még fut az idő.'; duelFail(st); return ''; }
     if (a.t === 'ans') {
       if (d.out.includes(side)) return 'Hibás válasz után már nem fejthetsz.';
-      if (checkAnswer(c, a.a || [])) { log(st, ['dwin', side]); return side === 'r' ? redWins(st) : blueWins(st, 0), ''; }
+      if (checkAnswer(c, a.a || [])) {
+        log(st, ['dwin', side]);
+        if (pro(st) && has(st, side, 'crypto')) st.rs[side] = Math.min(RES_CAP, st.rs[side] + 1);
+        return side === 'r' ? redWins(st) : blueWins(st, 0), '';
+      }
       d.out += side; log(st, ['dwrong', side]);
       if (d.out.length >= 2) duelFail(st);
       return '';
     }
     return 'Most kriptopárbaj zajlik.';
+  }
+  if (st.ph === 'rew') {
+    if (side !== st.rw) return 'Most az ütközés nyertese választ jutalmat.';
+    if (side === 'r') {
+      if (a.t === 'adv') { st.z++; log(st, ['rw', st.z]); after(st); return ''; }
+      if (a.t === 'pers') {
+        if (hasPers(st, st.z)) return 'Ezen a szakaszon már van Perzisztencia-jelző.';
+        st.ps = st.ps.slice(0, st.z - 1) + '1' + st.ps.slice(st.z); log(st, ['pers', st.z]); after(st); return '';
+      }
+      return 'Válassz: előrelépés vagy Perzisztencia.';
+    }
+    if (a.t === 'det') {
+      st.det = Math.min(5, st.det + 1); log(st, ['bw', st.det, 0]);
+      if (st.det >= 5) return finish(st, 'b', 'b5'), '';
+      after(st); return '';
+    }
+    if (a.t === 'intel') {
+      const h = st.h.r.split('');
+      for (let i = h.length - 1; i > 0; i--) { const j = Math.floor(rnd(st) * (i + 1)); [h[i], h[j]] = [h[j], h[i]]; }
+      st.ik = h.slice(0, 2).join(''); log(st, ['intel']); after(st); return '';
+    }
+    if (a.t === 'evict') {
+      const z = a.z | 0;
+      if (!(z >= 1 && z <= 5) || st.ps[z - 1] !== '1') return 'Ott nincs Perzisztencia-jelző.';
+      st.ps = st.ps.slice(0, z - 1) + '0' + st.ps.slice(z); log(st, ['evict', z]); after(st); return '';
+    }
+    return 'Válassz: Észlelés, Fenyegetés-felderítés vagy Kiűzés.';
   }
   if (st.ph === 'fort') {
     if (side !== 'b') return 'Most a Blue erősít.';
@@ -779,21 +909,58 @@ function apply(st, side, a) {
       const card = st.h.b.includes(a.c) ? cardOf(a.c) : null;
       if (!card || !card.t) return 'Csak „Tartós” jelű lap rakható le kontrollként.';
       if (st.ct[card.c - 1].length >= 2) return 'Ebben a kategóriában már 2 kontroll van kint.';
+      if (ctrlCost(st, a.c) > st.rs.b) return 'Nincs elég Erőforrásod ehhez a kontrollhoz.';
       if (st.fc >= 1) {
-        if (!has(st, 'b', 'ciso') || st.u.ciso || st.fc >= 2) return 'Ebben a körben már raktál le kontrollt.';
+        if (pro(st) || !has(st, 'b', 'ciso') || st.u.ciso || st.fc >= 2) return 'Ebben a körben már raktál le kontrollt.';
         st.u.ciso = 1;
       }
+      st.rs.b -= ctrlCost(st, a.c);
       st.h.b = st.h.b.replace(a.c, ''); st.ct[card.c - 1] += a.c; st.fc++; log(st, ['ctrl', a.c]); return '';
+    }
+    if (a.t === 'cisob') {
+      if (!pro(st) || !has(st, 'b', 'ciso') || st.u.ciso) return 'A CISO most nem használható.';
+      st.u.ciso = 1; st.rs.b = Math.min(RES_CAP, st.rs.b + 3); log(st, ['cisob']); return '';
     }
     if (a.t === 'ir') {
       if (!has(st, 'b', 'ir') || st.u.ir || st.z <= 1) return 'Az Incidenskezelő most nem használható.';
+      if (hasPers(st, st.z)) return 'A Perzisztencia-jelző miatt a bábu innen nem léphet vissza.';
+      if (pro(st)) { if (st.rs.b < 1) return 'Nincs elég Erőforrásod (1).'; st.rs.b--; }
       st.u.ir = 1; st.z--; log(st, ['ir', st.z]); return '';
     }
+    if (a.t === 'hunt') {
+      const z = a.z | 0;
+      if (!pro(st) || st.hu) return 'Ebben a körben már vadásztatok.';
+      if (!(z >= 1 && z <= 5) || !st.sg[z - 1]) return 'Ott nincs előkészített lap.';
+      if (st.rs.b < 2) return 'Nincs elég Erőforrásod (2).';
+      st.rs.b -= 2; st.hu = 1; st.ds.r += st.sg[z - 1]; log(st, ['hunt', z, st.sg[z - 1]]); st.sg[z - 1] = ''; return '';
+    }
     if (a.t === 'end') {
-      if (st.rd >= 10) return finish(st, 'b', 'b10'), '';
-      beginRound(st); return '';
+      if (pro(st)) { st.ph = 'stg'; return ''; }
+      endRound(st); return '';
     }
     return 'Ismeretlen lépés.';
+  }
+  if (st.ph === 'stg') {
+    if (side !== 'r') return 'Most a Red készít elő.';
+    if (a.t === 'stage') {
+      if (st.sgd) return 'Körönként egy lapot készíthetsz elő.';
+      const card = st.h.r.includes(a.c) ? cardOf(a.c) : null;
+      if (!card) return 'Ez a lap nincs a kezedben.';
+      if (card.c <= st.z) return 'Csak a bábu előtti szakaszra készíthetsz elő lapot.';
+      if (st.sg[card.c - 1]) return 'Ezen a szakaszon már van előkészített lap.';
+      if (st.rs.r < 1) return 'Nincs elég Erőforrásod (1).';
+      st.rs.r--; st.sgd = 1; st.h.r = st.h.r.replace(a.c, ''); st.sg[card.c - 1] = a.c; log(st, ['stage', card.c]); return '';
+    }
+    if (a.t === 'done') { endRound(st); return ''; }
+    return 'Ismeretlen lépés.';
+  }
+  if (st.ph === 'trim') {
+    if (side !== st.tr) return 'Most a másik csapat dob el lapot.';
+    const need = st.h[side].length - HAND_MAX;
+    const cs = (a.cs || []).filter((c, i, arr) => st.h[side].includes(c) && arr.indexOf(c) === i);
+    if (a.t !== 'trim' || cs.length !== need) return 'Pontosan annyi lapot jelölj ki, amennyivel 7 fölött vagy.';
+    cs.forEach(c => { st.h[side] = st.h[side].replace(c, ''); st.ds[side] += c; });
+    log(st, ['trim', side, need]); nextTrim(st); return '';
   }
   return 'Ismeretlen állapot.';
 }
@@ -838,6 +1005,29 @@ function applyLang() {
 function setLang(l) { LANG = l; try { localStorage.setItem('rvb-lang', l); } catch (e) { } applyLang(); render(); }
 // messages that arrive as Hungarian text (engine errors, host rejections, toasts)
 const TR_EN = {
+  'Most a Blue választ koronaékszert.': 'Blue is choosing its crown jewel.',
+  'Válassz egy szakaszt (01–05).': 'Pick a stage (01–05).',
+  'Nincs elég Erőforrásod (2).': 'Not enough Resources (2).',
+  'Nincs elég Erőforrásod (1).': 'Not enough Resources (1).',
+  'Itt nincs előkészített lapod.': 'You have no staged card here.',
+  'Nincs elég Erőforrásod ehhez a laphoz.': 'Not enough Resources for this card.',
+  'Nincs elég Erőforrásod ehhez a kontrollhoz.': 'Not enough Resources for this control.',
+  'Most az ütközés nyertese választ jutalmat.': 'The winner of the clash is choosing a reward.',
+  'Ezen a szakaszon már van Perzisztencia-jelző.': 'This stage already has a Persistence token.',
+  'Válassz: előrelépés vagy Perzisztencia.': 'Choose: advance or Persistence.',
+  'Ott nincs Perzisztencia-jelző.': 'There is no Persistence token there.',
+  'Válassz: Észlelés, Fenyegetés-felderítés vagy Kiűzés.': 'Choose: Detection, threat intel or eviction.',
+  'A CISO most nem használható.': 'The CISO cannot be used now.',
+  'Ezt csak a CISO használhatja.': 'Only the CISO can use this.',
+  'A Perzisztencia-jelző miatt a bábu innen nem léphet vissza.': 'Because of the Persistence token the pawn cannot move back from here.',
+  'Ebben a körben már vadásztatok.': 'You already hunted this round.',
+  'Ott nincs előkészített lap.': 'There is no staged card there.',
+  'Most a Red készít elő.': 'Red is staging now.',
+  'Körönként egy lapot készíthetsz elő.': 'You can stage one card per round.',
+  'Csak a bábu előtti szakaszra készíthetsz elő lapot.': 'You can only stage a card at a stage ahead of the pawn.',
+  'Ezen a szakaszon már van előkészített lap.': 'This stage already has a staged card.',
+  'Most a másik csapat dob el lapot.': 'The other team is discarding now.',
+  'Pontosan annyi lapot jelölj ki, amennyivel 7 fölött vagy.': 'Select exactly as many cards as you are over 7.',
   'A 2 fős csapat pontosan 3 szerepkört választ.': 'A 2-person team picks exactly 3 roles.',
   'Legalább 3 fő esetén mind az 5 szerepkör játékban van.': 'With 3 or more players, all 5 roles are in play.',
   'Alternatív mód: a 2 fős Blue nem választhatja egyszerre a SOC elemzőt és az Incidenskezelőt.': 'Alternative mode: a 2-person Blue team cannot pick both SOC Analyst and Incident Handler.',
@@ -886,6 +1076,7 @@ const TR_EN = {
 };
 const tr = m => (LANG === 'en' && TR_EN[m]) || m;
 
+let GMSEL = (() => { try { return Math.max(0, Math.min(2, +localStorage.getItem('rvb-gm') || 0)); } catch (e) { return 0; } })(); // game mode picked on the menu
 let MODE = null;            // 'local' | 'host' | 'guest'
 let ST = null;              // engine state
 let MY = null;              // my side in online play
@@ -1054,7 +1245,7 @@ async function hostGame(side, resume) {
   if (!NETKIND) return toast('Az online mód ebben a nézetben nem érhető el.');
   MODE = 'host'; MY = side; TEAM = false;
   if (resume) { CODE = resume.code; ST = resume.st; SEAT = resume.seat || ''; MY = resume.my; }
-  else { CODE = newCode(); if (NETKIND !== 'mqtt') CODE = CODE.toLowerCase(); ST = newGame((Math.random() * 4294967296) >>> 0); SEAT = ''; }
+  else { CODE = newCode(); if (NETKIND !== 'mqtt') CODE = CODE.toLowerCase(); ST = newGame((Math.random() * 4294967296) >>> 0, GMSEL); SEAT = ''; }
   GO = { h: false, g: false }; HOSTP = null;
   lastPh = ST.ph; SCREEN = 'game'; render();
   try {
@@ -1182,7 +1373,8 @@ function teamPerm(p, side, a) {
   if (ST.ph === 'setup') return 'A csapatokat a váróteremben állítjátok össze.';
   if (p.sd !== side) return 'Ez a másik csapat lépése.';
   const holds = k => p.ro.includes(k);
-  if (a.t === 'peek' && !holds('recon')) return 'Ezt csak a Felderítő használhatja.';
+  if ((a.t === 'peek' || a.t === 'peekcj') && !holds('recon')) return 'Ezt csak a Felderítő használhatja.';
+  if (a.t === 'cisob' && !holds('ciso')) return 'Ezt csak a CISO használhatja.';
   if (a.t === 'ov' && !holds('lead')) return 'Ezt csak az Operációvezető használhatja.';
   if (a.t === 'ir' && !holds('ir')) return 'Ezt csak az Incidenskezelő használhatja.';
   if (a.t === 'ctrl' && ST.fc >= 1 && !holds('ciso')) return 'A második kontrollt csak a CISO rakhatja le.';
@@ -1193,7 +1385,7 @@ async function hostTeam(resume) {
   if (!NETKIND) return toast('Az online mód ebben a nézetben nem érhető el.');
   MODE = 'host'; TEAM = true; MY = null; MYRO = []; PEERS = []; LASTN = {};
   if (resume) { CODE = resume.code; ST = resume.st; ROSTER = resume.pl || []; ME = resume.me || ME; LB = resume.lb || ''; meFromRoster(); }
-  else { CODE = newCode(); if (NETKIND !== 'mqtt') CODE = CODE.toLowerCase(); ST = newGame((Math.random() * 4294967296) >>> 0); ME = { sd: '', ro: [], rdy: '' }; LB = Math.random().toString(36).slice(2, 8); rebuildRoster(); }
+  else { CODE = newCode(); if (NETKIND !== 'mqtt') CODE = CODE.toLowerCase(); ST = newGame((Math.random() * 4294967296) >>> 0, GMSEL); ME = { sd: '', ro: [], rdy: '' }; LB = Math.random().toString(36).slice(2, 8); rebuildRoster(); }
   lastPh = ST.ph; SCREEN = 'game'; render();
   try {
     GROOM = await openChannel(CODE, 'host');
@@ -1261,7 +1453,7 @@ function teamLobbyHTML() {
 // ---------- view helpers ----------
 function canAct(side) { return MODE === 'local' || (MY === side && !PENDING); }
 function viewSides() { return MODE === 'local' ? ['r', 'b'] : (MY ? [MY] : []); }
-function activeSide() { return { atk: 'r', def: 'b', fort: 'b' }[ST.ph] || ''; }
+function activeSide() { return { atk: 'r', def: 'b', fort: 'b', cj: 'b', stg: 'r', rew: ST.rw, trim: ST.tr }[ST.ph] || ''; }
 
 function cardHTML(ch, opts = {}) {
   const c = cardOf(ch), s = c.s;
@@ -1275,6 +1467,25 @@ function cardHTML(ch, opts = {}) {
 }
 const backHTML = (s, small) => `<div class="back s${s} ${small ? 'small' : ''}"><span class="disp ${s}">${s === 'r' ? 'RED' : 'BLUE'}</span>${small ? '' : `<span class="lbl">${L('LEFORDÍTVA', 'FACE DOWN')}</span>`}</div>`;
 
+// what the viewer may know about hidden mode information (Red mission, Blue crown jewel, staged cards)
+const seesSide = s => viewSides().includes(s) && (MODE !== 'local' || SHOW[s]);
+const MS_TXT = [['Zsarolóvírus: sikeres támadás a 05 · CÉL szakaszon (ott +2)', 'Ransomware: successful attack at 05 · OBJECTIVE (+2 there)'],
+  ['Kémkedés: 3 egymást követő kör végén legalább a 04-es szakaszon', 'Espionage: at stage 04 or later at the end of 3 consecutive rounds'],
+  ['Wiper: 4 sikeres támadás legalább 4-es erősségű lappal', 'Wiper: 4 successful attacks with cards of strength 4 or more'],
+  ['Social engineering: 2 sikeres támadás SE lappal', 'Social engineering: 2 successful attacks with SE cards']];
+function missionTxt() {
+  const t = MS_TXT[ST.ms]; if (!t) return '';
+  return L(t[0], t[1]) + (ST.ms === 1 ? ` · ${ST.ep}/3` : ST.ms === 2 ? ` · ${ST.mp}/4` : ST.ms === 3 ? ` · ${ST.mp}/2` : '');
+}
+const gmName = g => L(...GM_NAMES[g | 0]);
+function zoneMarks(i) {
+  if (!adv(ST)) return '';
+  const m = [], sg = pro(ST) && ST.sg[i - 1];
+  if (hasPers(ST, i)) m.push(`<span class="pr">${L('PERZISZTENCIA +1', 'PERSISTENCE +1')}</span>`);
+  if (sg) m.push(`<span class="pr">${seesSide('r') ? L('ELŐKÉSZÍTVE: ', 'STAGED: ') + esc(cardOf(sg).hu) + ` (${cardOf(sg).p}+1)` : L('ELŐKÉSZÍTETT LAP', 'STAGED CARD')}</span>`);
+  if (pro(ST) && ST.cj === i && (ST.cjr || ST.ph === 'end' || seesSide('b') || (ST.pkc && seesSide('r')))) m.push(`<span class="cj">${L('KORONAÉKSZER +1', 'CROWN JEWEL +1')}</span>`);
+  return m.length ? `<div class="zmark">${m.join('')}</div>` : '';
+}
 function boardHTML() {
   let z = '';
   for (let i = 1; i <= 5; i++) {
@@ -1283,25 +1494,31 @@ function boardHTML() {
       <div class="zplate">${icon(i)}<div style="min-width:0"><div class="ze">0${i}${ZN[i][1].toUpperCase() === ZN[i][0] ? '' : ' · ' + ZN[i][1]}</div><div class="zn">${ZN[i][0]}</div></div></div>
       <div class="pawnslot">${ST.z === i && ST.ph !== 'setup' ? `<div class="pawn" aria-label="${L('Red bábu', 'Red pawn')}">RED</div>` : ''}</div>
       <div class="det ${ST.det >= i ? 'on' : ''}" aria-label="${L(`${i}. Észlelés mező`, `Detection slot ${i}`)}${ST.det >= i ? L(', foglalt', ', taken') : ''}">0${i}</div>
-      ${ctrls.length ? `<div class="ctrlrow">${ctrls.map(c => `<span title="${esc(cardOf(c).hu)}">${L('KONTROLL', 'CONTROL')} +1 · ${esc(cardOf(c).hu)}</span>`).join('')}</div>` : ''}
+      ${ctrls.length ? `<div class="ctrlrow">${ctrls.map(c => `<span title="${esc(cardOf(c).hu)}">${L('KONTROLL', 'CONTROL')} +1 · ${esc(cardOf(c).hu)}</span>`).join('')}</div>` : ''}${zoneMarks(i)}
     </div>`;
   }
   let t = '';
   for (let i = 1; i <= 10; i++) t += `<div class="${i < ST.rd ? 'done' : ''} ${i === ST.rd ? 'now' : ''} ${i === 10 ? 'last' : ''}">${i}</div>`;
   return `<div class="board cut"><div class="fi cut">
     <div class="row" style="justify-content:space-between;margin-bottom:8px"><span class="lbl">${L('Támadási lánc', 'Attack chain')}</span><span class="lbl b">${L('Észlelés', 'Detection')} ${ST.det}/5</span></div>
+    ${adv(ST) ? `<div class="res"><span class="rr">RED ${L('ERŐFORRÁS', 'RESOURCES')} ${ST.rs.r}/10</span><span class="bb">BLUE ${L('ERŐFORRÁS', 'RESOURCES')} ${ST.rs.b}/10</span>${pro(ST) ? `<span>${L('ZAJ', 'NOISE')} ${ST.nz}/4</span>` : ''}</div>` : ''}
+    ${pro(ST) && ST.ms >= 0 && (seesSide('r') || ST.ph === 'end') ? `<div class="res"><span class="rr">${L('KÜLDETÉS', 'MISSION')}: ${esc(missionTxt())}</span></div>` : ''}
     ${z}<div class="lbl" style="margin-top:10px">${L('Kör · 10. vége = Blue nyer', 'Round · end of 10 = Blue wins')}</div><div class="track">${t}</div></div></div>`;
 }
 
 const PHASES = [['atk', 'Támadás', 'Attack'], ['def', 'Védekezés', 'Defense'], ['duel', 'Párbaj', 'Duel'], ['fort', 'Megerősítés', 'Fortify']];
 function phaseHTML() {
   const map = {
-    setup: [L('BEÁLLÍTÁS', 'SETUP'), L('Mindkét csapat beállítja a létszámát és a szerepköreit.', 'Both teams set their size and roles.')],
+    setup: [L('BEÁLLÍTÁS', 'SETUP'), L('Mindkét csapat beállítja a létszámát és a szerepköreit.', 'Both teams set their size and roles.') + ` ${L('Játékmód', 'Game mode')}: ${gmName(ST.gm)}.`],
     atk: [`<span class="r">RED</span> ${L('TÁMAD', 'ATTACKS')}`, L(`A Red lefordítva kijátszik egy lapot a ${ZN[ST.z][0]} kategóriából.`, `Red plays a card face down from the ${ZN[ST.z][0]} category.`) + (ST.ov === 2 ? L(' Ez az Operációvezető második támadása.', " This is the Operations Lead's second attack.") : '')],
     def: [`<span class="b">BLUE</span> ${L('VÉDEKEZIK', 'DEFENDS')}`, L('A Blue azonos kategóriájú lappal védekezik, vagy passzol.', 'Blue defends with a card of the same category, or passes.')],
     duel: [L('KRIPTOPÁRBAJ', 'CRYPTO DUEL'), L('Döntetlen. A két Kriptográfus egyszerre fejt, aki előbb helyesen beküldi, nyer.', 'A tie. Both Cryptographers solve at once; the first correct answer wins.')],
     fort: [`<span class="b">BLUE</span> ${L('MEGERŐSÍT', 'FORTIFIES')}`, L('A Blue lerakhat egy „Tartós” lapot kontrollként, majd lezárja a kört.', 'Blue may place a "Persistent" card as a control, then ends the round.')],
-    end: [L('JÁTÉK VÉGE', 'GAME OVER'), '']
+    end: [L('JÁTÉK VÉGE', 'GAME OVER'), ''],
+    cj: [`<span class="b">BLUE</span> ${L('KORONAÉKSZER', 'CROWN JEWEL')}`, L('A Blue titokban kiválasztja a legfontosabb szakaszát. Ott minden védekezése +1-et kap.', 'Blue secretly picks its most important stage. Every defense there gets +1.')],
+    rew: [`<span class="${ST.rw}">${(SIDE[ST.rw] || '').toUpperCase()}</span> ${L('JUTALMAT VÁLASZT', 'PICKS A REWARD')}`, L('Az ütközés nyertese pontosan egy jutalmat választ.', 'The winner of the clash picks exactly one reward.')],
+    stg: [`<span class="r">RED</span> ${L('ELŐKÉSZÍT', 'STAGES')}`, L('A Red 1 Erőforrásért lefordítva letehet egy lapot egy későbbi szakasz mellé, majd lezárja a kört.', 'For 1 Resource Red may stage a card face down at a later stage, then ends the round.')],
+    trim: [`<span class="${ST.tr}">${(SIDE[ST.tr] || '').toUpperCase()}</span> ${L('LAPOT DOB', 'DISCARDS')}`, L('A kézlimit 7 lap, a többletet el kell dobni.', 'The hand limit is 7 cards; discard the excess.')]
   };
   const m = map[ST.ph];
   return `<div class="phase cut"><div><div class="lbl" style="color:var(--soft)">${ST.rd ? L(ST.rd + '. kör / 10', 'Round ' + ST.rd + ' / 10') : L('Előkészítés', 'Setup')}</div><div class="who">${m[0]}</div></div>
@@ -1348,16 +1565,18 @@ function handPanel(side) {
     const multi = side === 'r' && ph === 'atk' && noMatch && !ST.rp;
     body = `<div class="hand" style="margin-top:10px">${h.map(ch => {
       const c = cardOf(ch);
-      const play = (ph === 'atk' && side === 'r' && (c.c === z || multi)) || (ph === 'def' && side === 'b' && c.c === z) || (ph === 'fort' && side === 'b' && c.t && ST.ct[c.c - 1].length < 2);
+      const afford = !adv(ST) || costOf(ST, ch) <= ST.rs[side];
+      const play = (ph === 'atk' && side === 'r' && ((c.c === z && afford) || multi)) || (ph === 'def' && side === 'b' && c.c === z && afford) || (ph === 'fort' && side === 'b' && c.t && ST.ct[c.c - 1].length < 2 && (!adv(ST) || ctrlCost(ST, ch) <= ST.rs.b)) || (ph === 'stg' && side === 'r' && c.c > z && !ST.sg[c.c - 1]) || (ph === 'trim' && side === ST.tr);
       return cardHTML(ch, { btn: true, sel: SEL[side].includes(ch), play: play && myTurn, dim: myTurn && !play });
     }).join('') || `<p class="hint">${L('Nincs lap a kézben.', 'No cards in hand.')}</p>`}</div>`;
     const s1 = SEL[side][0];
     if (s1) { const c = cardOf(s1); body += `<div class="detail" style="margin-top:10px"><div class="case" style="background:var(--white)"><b>${esc(c.hu)}</b><br>${esc(c.d)}</div>${caseHTML(s1)}</div>`; }
+    if (side === 'b' && ST.ik) body += `<div class="panel cut" style="margin-top:10px"><span class="lbl b">${L('Fenyegetés-felderítés · a Red kezében van:', "Threat intel · in Red's hand:")}</span><div class="row" style="margin-top:6px">${ST.ik.split('').map(c => cardHTML(c)).join('')}</div></div>`;
     if (side === 'r' && ST.pk && ST.pkr) body += `<div class="panel cut" style="margin-top:10px"><span class="lbl r">${L('Felderítő · a Blue kezében van:', "Recon · in Blue's hand:")}</span><div style="margin-top:6px">${cardHTML(ST.pk)}</div></div>`;
     if (MODE === 'local') body += `<div style="margin-top:10px"><button class="btn ghost" data-a="hide" data-side="${side}">${L('Kéz elrejtése', 'Hide hand')}</button></div>`;
   }
   return `<div class="frame cut"><div class="fi"><div class="row" style="justify-content:space-between"><h3>${side === 'r' ? '<span class="r">Red</span>' : '<span class="b">Blue</span>'} ${L('kéz', 'hand')}</h3>
-    <span class="lbl">${L('Pakli', 'Deck')} ${ST.dk[side].length} · ${L('Dobó', 'Discard')} ${ST.ds[side].length}</span></div>${body}${actionsHTML(side, hidden)}</div></div>`;
+    <span class="lbl">${adv(ST) ? `${L('Erőforrás', 'Resources')} ${ST.rs[side]} · ` : ''}${L('Pakli', 'Deck')} ${ST.dk[side].length} · ${L('Dobó', 'Discard')} ${ST.ds[side].length}</span></div>${body}${actionsHTML(side, hidden)}</div></div>`;
 }
 
 function roleBtn(side, key, label, enabled, a, on) {
@@ -1366,7 +1585,7 @@ function roleBtn(side, key, label, enabled, a, on) {
   return `<button class="btn ghost" data-act='${JSON.stringify(a)}' data-side="${side}" aria-pressed="${on ? 'true' : 'false'}" ${enabled && !h ? '' : 'disabled'}>${label}${h ? ' · ' + esc(h.nm) : ''}</button>`;
 }
 function actionsHTML(side, hidden) {
-  if (activeSide() !== side || hidden) return '';
+  if (activeSide() !== side || (hidden && ST.ph !== 'rew')) return '';
   if (!canAct(side)) return `<p class="hint" style="margin-top:10px">${PENDING ? L('Lépés elküldve, várakozás…', 'Move sent, waiting…') : ''}</p>`;
   const z = ST.z, h = ST.h[side], sel = SEL[side];
   const s1 = sel[0] ? cardOf(sel[0]) : null;
@@ -1374,26 +1593,58 @@ function actionsHTML(side, hidden) {
   if (ST.ph === 'atk') {
     if (ST.pl.r) return '';
     const noMatch = !h.split('').some(ch => cardOf(ch).c === z);
-    out += `<button class="btn red" data-act='${JSON.stringify({ t: 'play', c: sel[0] || '' })}' data-side="r" ${s1 && s1.c === z && !noMatch ? '' : 'disabled'}>${L('Támadok lefordítva', 'Attack face down')}</button>`;
-    if (noMatch && !ST.rp) out += `<button class="btn" data-act='${JSON.stringify({ t: 'replan', cs: sel.slice(0, 3) })}' data-side="r">${L('Újratervezés', 'Replan')}: ${sel.length ? L(sel.length + ' lap cseréje', 'swap ' + sel.length + ' card' + (sel.length > 1 ? 's' : '')) : L('csere nélkül', 'no swap')}</button><button class="btn ghost" data-act='{"t":"skip"}' data-side="r">${L('Nem támadok', 'Skip attack')}</button>`;
-    out += roleBtn('r', 'recon', L(`Felderítő: belenézek (${2 - ST.u.recon} maradt)`, `Recon: peek (${2 - ST.u.recon} left)`), ST.u.recon < 2 && !ST.pkr, { t: 'peek' });
+    const sgc = pro(ST) && ST.sg[z - 1];
+    out += `<button class="btn red" data-act='${JSON.stringify({ t: 'play', c: sel[0] || '' })}' data-side="r" ${s1 && s1.c === z && !noMatch && (!adv(ST) || s1.p <= ST.rs.r) ? '' : 'disabled'}>${L('Támadok lefordítva', 'Attack face down')}</button>`;
+    if (sgc) out += `<button class="btn red" data-act='${JSON.stringify({ t: 'play', c: sgc, sg: 1 })}' data-side="r">${L('Előkészített lap', 'Staged card')}: ${esc(cardOf(sgc).hu)} (${cardOf(sgc).p}+1, ${L('ingyen', 'free')})</button>`;
+    if (noMatch && !ST.rp && !sgc) out += `<button class="btn" data-act='${JSON.stringify({ t: 'replan', cs: sel.slice(0, 3) })}' data-side="r" ${adv(ST) && ST.rs.r < 1 ? 'disabled' : ''}>${L('Újratervezés', 'Replan')}${adv(ST) ? L(' (1 Erőforrás)', ' (1 Resource)') : ''}: ${sel.length ? L(sel.length + ' lap cseréje', 'swap ' + sel.length + ' card' + (sel.length > 1 ? 's' : '')) : L('csere nélkül', 'no swap')}</button>`;
+    if (!canAttack(ST)) out += `<button class="btn ghost" data-act='{"t":"skip"}' data-side="r">${L('Nem támadok', 'Skip attack')}</button>`;
+    if (pro(ST)) out += `<button class="btn ghost" data-act='{"t":"quiet"}' data-side="r">${L(`Csendes kör (Zaj −2)`, `Quiet round (noise −2)`)}</button>`;
+    if (pro(ST)) {
+      out += roleBtn('r', 'recon', L('Felderítő: belenézek (2 Erőforrás)', 'Recon: peek (2 Resources)'), !ST.pkr && ST.rs.r >= 2, { t: 'peek' });
+      out += roleBtn('r', 'recon', L('Felderítő: koronaékszer (2 Erőforrás)', 'Recon: crown jewel (2 Resources)'), !ST.pkr && ST.rs.r >= 2 && !ST.pkc && !ST.cjr, { t: 'peekcj' });
+    } else out += roleBtn('r', 'recon', L(`Felderítő: belenézek (${2 - ST.u.recon} maradt)`, `Recon: peek (${2 - ST.u.recon} left)`), ST.u.recon < 2 && !ST.pkr, { t: 'peek' });
     out += roleBtn('r', 'lead', ST.ov ? L('Operációvezető: aktív', 'Operations Lead: active') : L('Operációvezető: dupla támadás', 'Operations Lead: double attack'), !ST.u.lead && !ST.ov, { t: 'ov' }, !!ST.ov);
-    const tip = noMatch ? (ST.rp ? '' : L(`Nincs ${ZN[z][0]} lapod. Jelölj ki legfeljebb 3 lapot, és cseréld le őket.`, `You have no ${ZN[z][0]} card. Select up to 3 cards and swap them.`)) : L('Válaszd ki a lapot, amellyel támadsz. Blöffölhetsz gyenge lappal is.', 'Pick the card to attack with. You may bluff with a weak card.');
+    const tip = noMatch ? (ST.rp ? '' : L(`Nincs ${ZN[z][0]} lapod. Jelölj ki legfeljebb 3 lapot, és cseréld le őket.`, `You have no ${ZN[z][0]} card. Select up to 3 cards and swap them.`)) : L('Válaszd ki a lapot, amellyel támadsz. Blöffölhetsz gyenge lappal is.', 'Pick the card to attack with. You may bluff with a weak card.') + (adv(ST) ? L(` A lap ára az erőssége, a felfedéskor fizetitek (most ${ST.rs.r} Erőforrásotok van).`, ` A card costs its strength, paid at the reveal (you have ${ST.rs.r} Resources).`) : '');
     return `<div class="stack" style="margin-top:12px"><p class="hint" style="margin:0">${tip}</p><div class="row">${out}</div></div>`;
   }
   if (ST.ph === 'def') {
     const match = h.split('').some(ch => cardOf(ch).c === z);
-    out = `<button class="btn blue" data-act='${JSON.stringify({ t: 'def', c: sel[0] || '' })}' data-side="b" ${s1 && s1.c === z ? '' : 'disabled'}>${L('Védekezem lefordítva', 'Defend face down')}</button><button class="btn ghost" data-act='{"t":"pass"}' data-side="b">${L('Passz', 'Pass')}</button>`;
-    const bonus = ST.ct[z - 1].length + (has(ST, 'b', 'admin') && z === 3 ? 1 : 0);
-    return `<div class="stack" style="margin-top:12px"><p class="hint" style="margin:0">${match ? L('Válassz egy ' + ZN[z][0] + ' lapot.', 'Pick a ' + ZN[z][0] + ' card.') : L('Nincs megfelelő lapod, passzolnod kell.', 'You have no matching card, you must pass.')}${bonus ? L(` Bónuszod ebben a kategóriában: +${bonus}.`, ` Your bonus in this category: +${bonus}.`) : ''}</p><div class="row">${out}</div></div>`;
+    out = `<button class="btn blue" data-act='${JSON.stringify({ t: 'def', c: sel[0] || '' })}' data-side="b" ${s1 && s1.c === z && (!adv(ST) || s1.p <= ST.rs.b) ? '' : 'disabled'}>${L('Védekezem lefordítva', 'Defend face down')}</button><button class="btn ghost" data-act='{"t":"pass"}' data-side="b">${L('Passz', 'Pass')}</button>`;
+    const bonus = ST.ct[z - 1].length + (has(ST, 'b', 'admin') && z === 3 ? 1 : 0) + (pro(ST) && ST.cj === z ? 1 : 0);
+    return `<div class="stack" style="margin-top:12px"><p class="hint" style="margin:0">${adv(ST) ? L(`Erőforrás: ${ST.rs.b}, a lap ára az erőssége. A passz ingyenes. `, `Resources: ${ST.rs.b}; a card costs its strength. Passing is free. `) : ''}${match ? L('Válassz egy ' + ZN[z][0] + ' lapot.', 'Pick a ' + ZN[z][0] + ' card.') : L('Nincs megfelelő lapod, passzolnod kell.', 'You have no matching card, you must pass.')}${bonus ? L(` Bónuszod ebben a kategóriában: +${bonus}.`, ` Your bonus in this category: +${bonus}.`) : ''}</p><div class="row">${out}</div></div>`;
   }
   if (ST.ph === 'fort') {
-    const canSecond = has(ST, 'b', 'ciso') && !ST.u.ciso && ST.fc === 1;
+    const canSecond = !pro(ST) && has(ST, 'b', 'ciso') && !ST.u.ciso && ST.fc === 1;
     const canCtrl = ST.fc === 0 || canSecond;
-    out = `<button class="btn blue" data-act='${JSON.stringify({ t: 'ctrl', c: sel[0] || '' })}' data-side="b" ${canCtrl && s1 && s1.t && (ST.fc === 0 || myRole('ciso')) ? '' : 'disabled'}>${ST.fc === 1 ? L('CISO: második kontroll', 'CISO: second control') + (TEAM && !myRole('ciso') && holder('b', 'ciso') ? ' · ' + esc(holder('b', 'ciso').nm) : '') : L('Kontroll lerakása', 'Place control')}</button>`;
-    out += roleBtn('b', 'ir', L('Incidenskezelő: bábu vissza', 'Incident Handler: pawn back'), !ST.u.ir && ST.z > 1, { t: 'ir' });
-    out += `<button class="btn" data-act='{"t":"end"}' data-side="b">${ST.rd >= 10 ? L('Utolsó kör lezárása', 'Close final round') : L('Kör vége', 'End round')}</button>`;
-    return `<div class="stack" style="margin-top:12px"><p class="hint" style="margin:0">${L('Jelölj ki egy „Tartós” lapot, ha kontrollt raksz le. Kategóriánként legfeljebb 2 lehet kint.', 'Select a "Persistent" card to place a control. At most 2 per category.')}</p><div class="row">${out}</div></div>`;
+    out = `<button class="btn blue" data-act='${JSON.stringify({ t: 'ctrl', c: sel[0] || '' })}' data-side="b" ${canCtrl && s1 && s1.t && (!adv(ST) || ctrlCost(ST, sel[0]) <= ST.rs.b) && (ST.fc === 0 || myRole('ciso')) ? '' : 'disabled'}>${ST.fc === 1 ? L('CISO: második kontroll', 'CISO: second control') + (TEAM && !myRole('ciso') && holder('b', 'ciso') ? ' · ' + esc(holder('b', 'ciso').nm) : '') : L('Kontroll lerakása', 'Place control')}</button>`;
+    if (pro(ST)) out += roleBtn('b', 'ciso', L('CISO: rendkívüli büdzsé (+3)', 'CISO: emergency budget (+3)'), !ST.u.ciso, { t: 'cisob' });
+    out += roleBtn('b', 'ir', L('Incidenskezelő: bábu vissza', 'Incident Handler: pawn back') + (pro(ST) ? L(' (1 Erőforrás)', ' (1 Resource)') : ''), !ST.u.ir && ST.z > 1 && !hasPers(ST, ST.z) && (!pro(ST) || ST.rs.b >= 1), { t: 'ir' });
+    if (pro(ST)) ST.sg.forEach((c, i) => { if (c) out += `<button class="btn ghost" data-act='${JSON.stringify({ t: 'hunt', z: i + 1 })}' data-side="b" ${!ST.hu && ST.rs.b >= 2 ? '' : 'disabled'}>${L('Fenyegetésvadászat', 'Threat hunt')}: 0${i + 1} (2)</button>`; });
+    out += `<button class="btn" data-act='{"t":"end"}' data-side="b">${pro(ST) ? L('Tovább: Red előkészít', 'Next: Red stages') : ST.rd >= 10 ? L('Utolsó kör lezárása', 'Close final round') : L('Kör vége', 'End round')}</button>`;
+    return `<div class="stack" style="margin-top:12px"><p class="hint" style="margin:0">${L('Jelölj ki egy „Tartós” lapot, ha kontrollt raksz le. Kategóriánként legfeljebb 2 lehet kint.', 'Select a "Persistent" card to place a control. At most 2 per category.')}${adv(ST) ? L(` A kontroll ára: erősség − 2 (Erőforrás: ${ST.rs.b}).`, ` A control costs strength − 2 (Resources: ${ST.rs.b}).`) : ''}</p><div class="row">${out}</div></div>`;
+  }
+  if (ST.ph === 'cj') {
+    out = [1, 2, 3, 4, 5].map(i => `<button class="btn blue" data-act='${JSON.stringify({ t: 'cj', z: i })}' data-side="b">0${i} ${ZN[i][0]}</button>`).join('');
+    return `<div class="stack" style="margin-top:12px"><p class="hint" style="margin:0">${L('Válasszátok ki titokban a koronaékszert: ezen a szakaszon minden védekezésetek +1-et kap. A Red nem látja, amíg először nem védekeztek ott.', 'Secretly pick your crown jewel: every defense at this stage gets +1. Red cannot see it until you first defend there.')}</p><div class="row">${out}</div></div>`;
+  }
+  if (ST.ph === 'rew') {
+    if (side === 'r') {
+      out = `<button class="btn red" data-act='{"t":"adv"}' data-side="r">${L('Előrelépés', 'Advance')}: 0${z + 1} ${ZN[z + 1][0]}</button><button class="btn" data-act='{"t":"pers"}' data-side="r" ${hasPers(ST, z) ? 'disabled' : ''}>${L('Perzisztencia: helyben marad, itt +1', 'Persistence: stay, +1 here')}</button>`;
+      return `<div class="stack" style="margin-top:12px"><p class="hint" style="margin:0">${L('A Perzisztencia-jelző +1-et ad a támadásra ezen a szakaszon, és innen a bábu nem léptethető vissza.', 'A Persistence token gives +1 to attacks at this stage, and the pawn cannot be pushed back from here.')}</p><div class="row">${out}</div></div>`;
+    }
+    out = `<button class="btn blue" data-act='{"t":"det"}' data-side="b">${L('Észlelés jelző', 'Detection token')} (${ST.det + 1}/5)</button><button class="btn" data-act='{"t":"intel"}' data-side="b" ${ST.h.r.length ? '' : 'disabled'}>${L('Fenyegetés-felderítés: 2 Red lap', 'Threat intel: 2 Red cards')}</button>`;
+    for (let i = 1; i <= 5; i++) if (hasPers(ST, i)) out += `<button class="btn ghost" data-act='${JSON.stringify({ t: 'evict', z: i })}' data-side="b">${L('Kiűzés', 'Evict')}: 0${i}</button>`;
+    return `<div class="stack" style="margin-top:12px"><p class="hint" style="margin:0">${L('Válasszatok egy jutalmat. Ha nem az Észlelés jelzőt választjátok, a győzelmetek később jön, de információt vagy biztonságot nyertek.', 'Pick one reward. Skipping the Detection token delays your win, but buys information or safety.')}</p><div class="row">${out}</div></div>`;
+  }
+  if (ST.ph === 'stg') {
+    const ok = s1 && s1.c > z && !ST.sg[s1.c - 1] && ST.rs.r >= 1 && !ST.sgd;
+    out = `<button class="btn red" data-act='${JSON.stringify({ t: 'stage', c: sel[0] || '' })}' data-side="r" ${ok ? '' : 'disabled'}>${L('Előkészítés (1 Erőforrás)', 'Stage (1 Resource)')}</button><button class="btn" data-act='{"t":"done"}' data-side="r">${ST.rd >= 10 ? L('Utolsó kör lezárása', 'Close final round') : L('Kör vége', 'End round')}</button>`;
+    return `<div class="stack" style="margin-top:12px"><p class="hint" style="margin:0">${L('Jelölj ki egy lapot egy későbbi szakasz kategóriájából. Amikor a bábu odaér, ingyen és +1 erősséggel támadhatsz vele. A Blue 2 Erőforrásért levadászhatja.', 'Select a card from a later stage\'s category. When the pawn gets there you can attack with it for free and at +1. Blue can hunt it for 2 Resources.')}</p><div class="row">${out}</div></div>`;
+  }
+  if (ST.ph === 'trim') {
+    const need = h.length - HAND_MAX;
+    out = `<button class="btn ${side === 'r' ? 'red' : 'blue'}" data-act='${JSON.stringify({ t: 'trim', cs: sel })}' data-side="${side}" ${sel.length === need ? '' : 'disabled'}>${L(`${need} lap eldobása`, `Discard ${need} card${need > 1 ? 's' : ''}`)}</button>`;
+    return `<div class="stack" style="margin-top:12px"><p class="hint" style="margin:0">${L(`A kézlimit 7 lap. Jelölj ki ${need} lapot, ezek a nyílt dobópaklira kerülnek.`, `The hand limit is 7. Select ${need} card${need > 1 ? 's' : ''}; they go to the open discard pile.`)}</p><div class="row">${out}</div></div>`;
   }
   return '';
 }
@@ -1458,6 +1709,23 @@ const LOGTXT = {
   dto: () => L('Senki sem fejtette meg: a támadás sikertelen, nincs Észlelés jelző.', 'Nobody solved it: the attack fails, no Detection token.'),
   ctrl: c => L('Tartós kontroll: ', 'Persistent control: ') + `${cardOf(c).hu} (+1, ${ZN[cardOf(c).c][0]}).`,
   ir: z => L(`Incidenskezelő: a bábu visszalép ide: ${ZN[z][0]}.`, `Incident Handler: the pawn moves back to ${ZN[z][0]}.`),
+  rwa: () => L('Sikeres támadás, a Red jutalmat választ.', 'The attack succeeds; Red picks a reward.'),
+  bwa: () => L('Sikeres védekezés, a Blue jutalmat választ.', 'The defense succeeds; Blue picks a reward.'),
+  rw5: () => L('Sikeres támadás a CÉL szakaszon, de a Red küldetése mást kíván.', "Successful attack at the OBJECTIVE, but Red's mission needs something else."),
+  soc: d => L(`SOC elemző: +1 Észlelés jelző (${d}).`, `SOC Analyst: +1 Detection token (${d}).`),
+  pers: z => L(`A Red Perzisztencia-jelzőt tett ide: ${ZN[z][0]}.`, `Red placed a Persistence token at ${ZN[z][0]}.`),
+  intel: () => L('A Blue Fenyegetés-felderítéssel belenézett a Red kezébe.', "Blue used threat intel to look into Red's hand."),
+  evict: z => L(`Kiűzés: a Blue levette a Perzisztencia-jelzőt innen: ${ZN[z][0]}.`, `Eviction: Blue removed the Persistence token from ${ZN[z][0]}.`),
+  cj: () => L('A Blue titokban kiválasztotta a koronaékszert.', 'Blue secretly chose its crown jewel.'),
+  cjr: z => L(`Felfedve: a koronaékszer a ${ZN[z][0]} szakasz.`, `Revealed: the crown jewel is ${ZN[z][0]}.`),
+  noise: d => L(`Túl nagy a zaj: a Blue Észlelés jelzőt kap (${d}).`, `Too much noise: Blue gains a Detection token (${d}).`),
+  atks: z => L(`A Red előkészített lappal támad: ${ZN[z][0]}.`, `Red attacks with a staged card: ${ZN[z][0]}.`),
+  quiet: n => L(`Csendes kör: a Red nem támad, a Zaj most ${n}.`, `Quiet round: Red does not attack; noise is now ${n}.`),
+  peekcj: () => L('Red Felderítő megnézte a koronaékszer-kártyát.', 'Red Recon looked at the crown jewel card.'),
+  cisob: () => L('CISO: rendkívüli büdzsé, a Blue +3 Erőforrást kap.', 'CISO: emergency budget, Blue gains +3 Resources.'),
+  hunt: (z, c) => L(`Fenyegetésvadászat: a Blue eltávolította a Red előkészített lapját (${ZN[z][0]}): ${cardOf(c).hu}.`, `Threat hunt: Blue removed Red's staged card (${ZN[z][0]}): ${cardOf(c).hu}.`),
+  stage: z => L(`A Red előkészített egy lapot ide: ${ZN[z][0]}.`, `Red staged a card at ${ZN[z][0]}.`),
+  trim: (s, n) => L(`A ${SIDE[s]} ${n} lapot dobott el (kézlimit 7).`, `${SIDE[s]} discarded ${n} card(s) (hand limit 7).`),
   end: (w, why) => w ? L(`${SIDE[w]} győzelem.`, `${SIDE[w]} wins.`) : L(`A játékot megszakították (${SIDE[why.split(':')[1]] || ''}).`, `The game was aborted (${SIDE[why.split(':')[1]] || ''}).`)
 };
 function logHTML() {
@@ -1468,7 +1736,7 @@ function rolesHTML() {
     const rs = ROLE_KEYS[side].map((k, i) => ({ k, i, on: ST.cfg[side].ro[i] })).filter(x => x.on);
     return `<div><div class="lbl ${side}" style="margin-bottom:4px">${L(`${SIDE[side]} szerepkörök`, `${SIDE[side]} roles`)}</div>${rs.map(x => {
       const r = roleOf(side, x.i);
-      const used = { lead: ST.u.lead, recon: ST.u.recon >= 2, ciso: ST.u.ciso, ir: ST.u.ir }[x.k];
+      const used = { lead: ST.u.lead, recon: !pro(ST) && ST.u.recon >= 2, ciso: ST.u.ciso, ir: ST.u.ir }[x.k];
       const hn = TEAM && holder(side, x.k);
       return `<div style="font-size:13px;margin-bottom:4px;${used ? 'opacity:.5' : ''}"><b>${esc(r.hu)}</b>${hn ? ' · ' + esc(hn.nm) : ''}${used ? ` <span class="tag">${L('FELHASZNÁLVA', 'USED')}</span>` : ''}<br><span style="color:var(--soft)">${esc(r.ab)}</span></div>`;
     }).join('')}</div>`;
@@ -1502,9 +1770,9 @@ function endHTML() {
     return `<div class="end cut"><div class="lbl">${L(`Megszakítva · ${ST.rd}. kör`, `Aborted · round ${ST.rd}`)}</div><div class="disp" style="color:var(--btn-on-bg)">ABORT</div><p>${L(`A játékot a ${SIDE[ST.wr.split(':')[1]] || ''} csapat megszakította. Nincs győztes.`, `Team ${SIDE[ST.wr.split(':')[1]] || ''} aborted the game. There is no winner.`)}</p>
    <div class="row" style="justify-content:center"><button class="btn" data-a="again">${L('Új játék', 'New game')}</button><button class="btn ghost" data-a="menu">${L('Vissza a menübe', 'Back to menu')}</button></div></div>${hist.length ? `<div class="frame cut"><div class="fi"><h2>${L('Eddig kijátszott lapok', 'Cards played so far')}</h2><div class="detail" style="margin-top:8px">${hist.map(caseHTML).join('')}</div></div></div>` : ''}`;
   }
-  const why = { r5: L('A Red sikeresen támadott a CÉL szakaszon.', 'Red attacked successfully at the OBJECTIVE stage.'), b5: L('A Blue összegyűjtötte az 5. Észlelés jelzőt.', 'Blue collected the 5th Detection token.'), b10: L('A Blue kitartott a 10. kör végéig.', 'Blue held out until the end of round 10.') }[ST.wr];
+  const why = { r5: L('A Red sikeresen támadott a CÉL szakaszon.', 'Red attacked successfully at the OBJECTIVE stage.'), b5: L('A Blue összegyűjtötte az 5. Észlelés jelzőt.', 'Blue collected the 5th Detection token.'), b10: L('A Blue kitartott a 10. kör végéig.', 'Blue held out until the end of round 10.'), m1: L('A Red teljesítette a Kémkedés küldetést.', 'Red completed the Espionage mission.'), m2: L('A Red teljesítette a Wiper küldetést.', 'Red completed the Wiper mission.'), m3: L('A Red teljesítette a Social engineering küldetést.', 'Red completed the Social engineering mission.') }[ST.wr];
   const hist = ST.hist.split('').filter(Boolean);
-  return `<div class="end cut"><div class="lbl">${L(`Játék vége · ${ST.rd}. kör`, `Game over · round ${ST.rd}`)}</div><div class="disp ${ST.w}">${SIDE[ST.w].toUpperCase()} ${L('NYERT', 'WINS')}</div><p>${why}</p>
+  return `<div class="end cut"><div class="lbl">${L(`Játék vége · ${ST.rd}. kör`, `Game over · round ${ST.rd}`)}</div><div class="disp ${ST.w}">${SIDE[ST.w].toUpperCase()} ${L('NYERT', 'WINS')}</div><p>${why}</p>${pro(ST) ? `<p>${L('Red küldetés', 'Red mission')}: ${esc(missionTxt())}${ST.cj ? ` · ${L('Blue koronaékszer', 'Blue crown jewel')}: 0${ST.cj} ${ZN[ST.cj][0]}` : ''}</p>` : ''}
    <div class="row" style="justify-content:center"><button class="btn ${ST.w === 'r' ? 'red' : 'blue'}" data-a="again">${L('Új játék', 'New game')}</button></div></div>
    <div class="frame cut"><div class="fi"><h2>${L('Kiértékelés', 'Debrief')}</h2><p class="hint">${L('Menjetek végig a kijátszott lapok valós esetein. Mindkét csapat nevezze meg azt a lépést, amely szerintük eldöntötte a játékot, és hogy a valós esetben mi akadhatott volna meg.', 'Go through the real cases on the cards played. Each team names the move they think decided the game, and what could have stopped it in the real incident.')}</p>
    <div class="detail">${hist.map(caseHTML).join('')}</div></div></div>`;
@@ -1517,6 +1785,8 @@ function menuHTML() {
     <div class="big"><span class="r">RED</span> <span class="vs">VS</span><br><span class="b">BLUE</span></div>
     <p style="font-size:17px;max-width:56ch">${L('A Red végig akar jutni egy kitalált cég hálózatán a támadási lánc öt szakaszán, a Blue pedig észlelni és megállítani akarja, mielőtt célba ér. Minden lap egy valós támadás vagy védekezés, egy megtörtént esettel.', "Red wants to get through a fictional company's network along the five stages of the attack chain; Blue wants to detect and stop them before they reach the objective. Every card is a real attack or defense, with a real incident behind it.")}</p>
     <div class="row" style="margin-top:14px">${rulesBtns()}</div>
+    <div class="modesel"><div class="lbl" style="margin-bottom:6px">${L('Játékmód', 'Game mode')}</div><div class="seg" role="group" aria-label="${L('Játékmód', 'Game mode')}">${GM_NAMES.map((n, i) => `<button data-a="gm" data-v="${i}" aria-pressed="${GMSEL === i}">${L(n[0], n[1])}</button>`).join('')}</div>
+     <p class="hint" style="margin:6px 0 0">${[L('Az eredeti szabályok.', 'The original rules.'), L('Költségvetés (Erőforrás), lassabb húzás (2 lap, kézlimit 7) és jutalomválasztás minden megnyert ütközés után.', 'Budget (Resources), slower draw (2 cards, hand limit 7) and a reward choice after every won clash.'), L('A Haladó mód, plusz előkészített lapok, Zaj, titkos Red küldetés, Blue koronaékszer és áras szerepkör-képességek.', 'Advanced mode plus staged cards, noise, a secret Red mission, a Blue crown jewel and priced role abilities.')][GMSEL]} ${L('Online játékban a házigazda által választott mód érvényes.', 'In online games the host\'s mode applies.')}</p></div>
     <div class="cats">${[1, 2, 3, 4, 5].map(i => `<div>${icon(i)}<span class="lbl" style="font-size:10px">0${i}</span><b style="font-size:12px">${ZN[i][0]}</b></div>`).join('')}</div></div>
    <div class="choices">
     <button class="choice cut" data-a="local"><div class="fi cut"><span class="lbl">${L('Egy eszközön', 'One device')}</span><b>${L('Helyi játék', 'Local game')}</b><span class="hint">${L('Egy képernyő, két csapat. A kezeket a soron lévő csapat fedi fel.', 'One screen, two teams. The team whose turn it is reveals its hand.')}</span></div></button>
@@ -1565,6 +1835,34 @@ function crefHTML() {
 function rulesBtns(extra = '') {
   return `<button class="btn${extra}" data-a="rules">${L('Játékszabályok', 'Game rules')}</button><button class="btn${extra}" data-a="cref">${L('Kripto segédlet', 'Crypto reference')}</button>`;
 }
+// the two extra modes, written as rule sections; the active game's mode is marked
+function modesRulesHTML() {
+  const cur = ST && SCREEN === 'game' ? ` <span class="tag tb">${L('EBBEN A JÁTÉKBAN', 'THIS GAME')}</span>` : '';
+  const g = ST ? ST.gm | 0 : -1;
+  return LANG === 'en' ? `
+   <section><h3>Advanced mode${g === 1 ? cur : ''}</h3><ul>
+    <li><b>Resources:</b> Red and Blue start with 2. At each draw Red gains +4, Blue +3 (max 10). A card costs its strength, paid at the reveal, so you may only play a card you can afford. Passing is free; role and control bonuses are free. A control costs strength − 2, a replan costs 1.</li>
+    <li><b>Slower draw:</b> start with 5 cards, then each round both teams draw 2 (no refill to 5). Hand limit 7 at the end of the round; the excess goes to the open discard pile. Every strength 1–5 exists once per category and side, so card counting works.</li>
+    <li><b>Reward choice:</b> the winner of a clash (or of the duel) picks one. Red: <i>advance</i>, or <i>Persistence</i> (stay, place a token: +1 to attacks at that stage, and the pawn can never be pushed back from a token stage). Blue: <i>Detection token</i>, <i>threat intel</i> (look at 2 random Red cards) or <i>eviction</i> (remove a Persistence token). The SOC Analyst bonus comes on top.</li></ul></section>
+   <section><h3>Pro mode${g === 2 ? cur : ''}</h3><ul>
+    <li>Everything from Advanced, but Red starts with 4 Resources.</li>
+    <li><b>Staging:</b> after Blue's fortify step, Red may stage one card face down (1 Resource) at a later stage of its category. When the pawn gets there, Red may attack with it for free and +1. <i>Threat hunt:</i> Blue may remove a staged card for 2 Resources, once per round.</li>
+    <li><b>Noise:</b> every attack with a strength 4–5 card gives +1 noise. At 4 noise Blue gains a Detection token and noise resets. <i>Quiet round:</i> Red skips the attack and noise drops by 2.</li>
+    <li><b>Secret mission:</b> Red draws one: Ransomware (succeed at 05, +2 there), Espionage (at 04 or later at the end of 3 consecutive rounds), Wiper (4 successful attacks with strength 4+ cards), Social engineering (2 successful attacks with SE cards). Blue's win conditions do not change.</li>
+    <li><b>Crown jewel:</b> Blue secretly picks a stage; every defense there gets +1. It is revealed the first time Blue defends there.</li>
+    <li><b>Priced roles:</b> Recon peeks once per round for 2 Resources (at a Blue card or the crown jewel). CISO: once, +3 Resources instead of a second control. Incident Handler costs 1. A Cryptographer who wins a duel gains +1 Resource for the team.</li></ul></section>` : `
+   <section><h3>Haladó mód${g === 1 ? cur : ''}</h3><ul>
+    <li><b>Erőforrás:</b> mindkét csapat 2-vel kezd. Minden húzáskor a Red +4, a Blue +3 Erőforrást kap (legfeljebb 10). A lap ára az erőssége, a felfedéskor fizetitek, ezért csak kifizethető lapot tehettek le. A passz ingyenes, a szerepkör- és kontrollbónusz ingyen jár. Kontroll lerakása: erősség − 2, újratervezés: 1.</li>
+    <li><b>Lassabb húzás:</b> a kezdő kéz 5 lap, utána minden körben 2 lapot húztok (nincs feltöltés 5-re). A kézlimit 7: a kör végén a többlet a nyílt dobópaklira kerül. Kategóriánként és oldalanként minden erősség (1–5) egyszer van meg, így a lapszámolás működik.</li>
+    <li><b>Jutalomválasztás:</b> az ütközés (vagy a párbaj) nyertese egyet választ. Red: <i>előrelépés</i>, vagy <i>Perzisztencia</i> (helyben marad, jelzőt tesz le: +1 a támadásra azon a szakaszon, és jelzős szakaszról a bábu soha nem léptethető vissza). Blue: <i>Észlelés jelző</i>, <i>Fenyegetés-felderítés</i> (2 véletlen Red lap megtekintése) vagy <i>Kiűzés</i> (egy Perzisztencia-jelző levétele). A SOC elemző bónusza ezen felül jár.</li></ul></section>
+   <section><h3>Profi mód${g === 2 ? cur : ''}</h3><ul>
+    <li>A Haladó mód minden szabálya, de a Red 4 Erőforrással kezd.</li>
+    <li><b>Előkészítés:</b> a Blue megerősítése után a Red 1 Erőforrásért lefordítva letehet egy lapot egy későbbi, azonos kategóriájú szakasz mellé. Amikor a bábu odaér, ingyen és +1 erősséggel támadhat vele. <i>Fenyegetésvadászat:</i> a Blue 2 Erőforrásért, körönként egyszer eltávolíthat egy előkészített lapot.</li>
+    <li><b>Zaj:</b> minden 4-es vagy 5-ös lappal indított támadás +1 Zajt ad. 4 Zajnál a Blue Észlelés jelzőt kap, és a Zaj nullázódik. <i>Csendes kör:</i> a Red nem támad, a Zaj 2-vel csökken.</li>
+    <li><b>Titkos küldetés:</b> a Red húz egyet: Zsarolóvírus (siker a 05-ön, ott +2), Kémkedés (3 egymást követő kör végén legalább a 04-en), Wiper (4 sikeres támadás legalább 4-es lappal), Social engineering (2 sikeres támadás SE lappal). A Blue győzelmi feltételei nem változnak.</li>
+    <li><b>Koronaékszer:</b> a Blue titokban kiválaszt egy szakaszt, ott minden védekezése +1-et kap. Az első ottani védekezéskor felfedődik.</li>
+    <li><b>Áras szerepkörök:</b> a Felderítő körönként egyszer, 2 Erőforrásért néz be (egy Blue lapba vagy a koronaékszerbe). CISO: egyszer +3 Erőforrás a második kontroll helyett. Az Incidenskezelő 1 Erőforrásba kerül. A párbajt megnyerő Kriptográfus +1 Erőforrást hoz a csapatának.</li></ul></section>`;
+}
 function rulesHTML() {
   const roleRow = s => DATA.roles.filter(r => r.s === s).sort((a, b) => a.n - b.n).map(r => `<li><b>${esc(r.hu)}</b> <span class="tag tg">${esc(r.tm || { always: L('MINDIG', 'ALWAYS'), duel: L('PÁRBAJKOR', 'IN DUEL') }[r.u] || '')}</span><br>${esc(r.ab)}</li>`).join('');
   return `<div class="rulesov" role="dialog" aria-modal="true" aria-label="${L('Játékszabályok', 'Game rules')}"><div class="rulesbox cut">
@@ -1605,6 +1903,7 @@ ${LANG === 'en' ? `   <section><h3>Goal of the game</h3><p>Red, the attacker, wa
    <section><h3>Kriptopárbaj</h3><p>A két Kriptográfus egyszerre fejt egy titkosított üzenetet, <b>5 perc</b> alatt. Aki előbb helyesen beküldi, megnyeri az ütközést. Hibás válasz után az a játékos kiesik, a másik folytathatja. Ha senki sem fejti meg, a támadás sikertelen, de a Blue nem kap Észlelés jelzőt. Mindkét Kriptográfus egyszer kérhet segítséget a csapatától.</p>
     <p>Szintek: I = A+B, II = A+B+C, III = A+B+C+D, IV = A+B+C+D+E, V = egy nagy feladat. A morze (A) adja a Caesar-eltolást (B), a B megfejtése a kulcsszó a C-hez. A D (sövény) és az E (Polybius-rács) független. A segédtáblák a párbaj alatt lenyithatók.</p></section>
 `}
+${modesRulesHTML()}
    <section class="rgrid"><div><h3 class="r">${L('Red szerepkörök', 'Red roles')}</h3><ul class="roles">${roleRow('r')}</ul></div><div><h3 class="b">${L('Blue szerepkörök', 'Blue roles')}</h3><ul class="roles">${roleRow('b')}</ul></div></section>
    <section><h3>${L('Alternatív mód', 'Alternative mode')}</h3><p>${L('Szorosabb játékhoz: a 2 fős Blue csapat nem választhatja egyszerre a SOC elemzőt és az Incidenskezelőt.', 'For a tighter game: a 2-player Blue team cannot pick both SOC Analyst and Incident Handler.')}</p></section>
    <section><h3>${L('Kiértékelés', 'Debrief')}</h3><p>${L('A játék végén menjetek végig a kijátszott lapok valós esetein: melyik lépés döntötte el a játékot, és mi akadhatott volna meg a valóságban?', 'After the game, walk through the real incidents behind the cards played: which move decided the game, and what could have been stopped in reality?')}</p></section>
@@ -1638,7 +1937,8 @@ function helpHTML() {
     if (has(ST, 'r', 'exploit') && z === 2) bon.push(L('Exploit fejlesztő: +1 ebben a kategóriában', 'Exploit Developer: +1 in this category'));
     if (has(ST, 'r', 'social')) bon.push(L('Social engineer: +1 minden SE jelű lapra', 'Social Engineer: +1 on every SE card'));
     if (bon.length) A.push(L('Bónuszok: ', 'Bonuses: ') + bon.join('; ') + '.');
-    if (has(ST, 'r', 'recon') && ST.u.recon < 2 && !ST.pkr) A.push(L(`Felderítő: a támadás előtt belenézhettek egy véletlen Blue lapba (még ${2 - ST.u.recon} alkalom).`, `Recon Specialist: before attacking you may peek at a random Blue card (${2 - ST.u.recon} use${2 - ST.u.recon > 1 ? 's' : ''} left).`));
+    if (pro(ST) && has(ST, 'r', 'recon') && !ST.pkr) A.push(L('Felderítő: körönként egyszer, 2 Erőforrásért belenézhettek egy véletlen Blue lapba vagy a koronaékszer-kártyába.', 'Recon Specialist: once per round, for 2 Resources, you may look at a random Blue card or at the crown jewel card.'));
+    if (!pro(ST) && has(ST, 'r', 'recon') && ST.u.recon < 2 && !ST.pkr) A.push(L(`Felderítő: a támadás előtt belenézhettek egy véletlen Blue lapba (még ${2 - ST.u.recon} alkalom).`, `Recon Specialist: before attacking you may peek at a random Blue card (${2 - ST.u.recon} use${2 - ST.u.recon > 1 ? 's' : ''} left).`));
     if (has(ST, 'r', 'lead') && !ST.u.lead && !ST.ov) A.push(L('Operációvezető: egyszer a játék során két támadást indíthattok egy körben. Ha az első sikeres, a második már a következő szakaszon jön.', 'Operations Lead: once per game you may attack twice in a round. If the first succeeds, the second comes at the next stage.'));
     if (ST.ov === 2) A.push(L('Ez az Operációvezető második támadása.', "This is the Operations Lead's second attack."));
     O.push(L(`A Blue most vár. Tudja, hogy ${zn} támadás jön, de az erősségét nem.`, `Blue is waiting. They know a ${zn} attack is coming, but not its strength.`));
@@ -1661,6 +1961,11 @@ function helpHTML() {
     A.push(L('Mindkét Kriptográfus egyszer kérhet segítséget a csapatától. Ha lejár az idő, a támadás sikertelen, de a Blue nem kap Észlelés jelzőt.', 'Each Cryptographer may ask their team for help once. If time runs out, the attack fails but Blue gets no Detection token.'));
     if (d.out) A.push(L(`${d.out.split('').map(s => SIDE[s]).join(' és ')} már hibázott ebben a párbajban.`, `${d.out.split('').map(s => SIDE[s]).join(' and ')} already made a mistake in this duel.`));
   }
+  if (ST.ph === 'cj') { A.push(L('A Blue titokban kiválasztja a koronaékszert (egy szakaszt). Ott minden védekezése +1-et kap. A Red ezt nem látja.', 'Blue secretly picks its crown jewel (one stage). Every defense there gets +1. Red cannot see it.')); O.push(L('A Red vár.', 'Red is waiting.')); }
+  if (ST.ph === 'rew') A.push(ST.rw === 'r' ? L('A Red választ: előrelép a következő szakaszra, vagy helyben marad, és Perzisztencia-jelzőt tesz le (+1 itt, és innen nem léptethető vissza).', 'Red picks: advance to the next stage, or stay and place a Persistence token (+1 here, and the pawn cannot be pushed back from here).') : L('A Blue választ: Észlelés jelző, Fenyegetés-felderítés (2 Red lap megtekintése) vagy Kiűzés (egy Perzisztencia-jelző levétele).', 'Blue picks: a Detection token, threat intel (look at 2 Red cards) or eviction (remove a Persistence token).'));
+  if (ST.ph === 'stg') A.push(L('A Red 1 Erőforrásért lefordítva letehet egy lapot egy későbbi szakasz mellé (körönként egyet, szakaszonként legfeljebb egyet), majd lezárja a kört.', 'For 1 Resource Red may stage one card face down at a later stage (one per round, at most one per stage), then ends the round.'));
+  if (ST.ph === 'trim') A.push(L(`A ${SIDE[ST.tr]} kezében 7-nél több lap van, a többletet el kell dobni.`, `${SIDE[ST.tr]} has more than 7 cards and must discard the excess.`));
+  if (adv(ST) && ['atk', 'def', 'fort'].includes(ST.ph)) A.push(L(`Erőforrás: Red ${ST.rs.r}, Blue ${ST.rs.b}. Minden kör elején a Red +4, a Blue +3 jár (legfeljebb 10). A lap ára az erőssége, a kontrollé erősség − 2.`, `Resources: Red ${ST.rs.r}, Blue ${ST.rs.b}. Each round Red gains +4 and Blue +3 (max 10). A card costs its strength; a control costs strength − 2.`));
   if (ST.ph === 'fort') {
     const tn = cnt('b', c => c.t);
     const canSecond = has(ST, 'b', 'ciso') && !ST.u.ciso && ST.fc === 1;
@@ -1668,7 +1973,7 @@ function helpHTML() {
     else if (canSecond) A.push(L('CISO: egyszer a játék során lerakhattok egy második kontrollt is ebben a körben.', 'CISO: once per game you may place a second control this round.'));
     else A.push(L('Ebben a körben már lerakhattok kontrollt.', 'You have already placed a control this round.'));
     if (has(ST, 'b', 'ir') && !ST.u.ir && z > 1) A.push(L(`Incidenskezelő: egyszer a játék során visszaléptethetitek a Red bábut ${zn} szakaszról az előzőre.`, `Incident Handler: once per game you may push the Red pawn back from ${zn} to the previous stage.`));
-    A.push(ST.rd >= 10 ? L('Ez az utolsó kör. Ha lezárjátok, és a Red nem ért célba, a Blue nyer.', 'This is the last round. If you end it and Red has not reached the objective, Blue wins.') : L('Ha végeztetek, nyomjátok meg a „Kör vége” gombot. Utána mindkét csapat 5 lapra húz, és a Red támad.', 'When done, press "End round". Then both teams draw up to 5 cards and Red attacks.'));
+    A.push(ST.rd >= 10 ? L('Ez az utolsó kör. Ha lezárjátok, és a Red nem ért célba, a Blue nyer.', 'This is the last round. If you end it and Red has not reached the objective, Blue wins.') : (adv(ST) ? L('Ha végeztetek, lépjetek tovább. A következő körben mindkét csapat 2 lapot húz és Erőforrást kap.', 'When done, move on. Next round both teams draw 2 cards and gain Resources.') : L('Ha végeztetek, nyomjátok meg a „Kör vége” gombot. Utána mindkét csapat 5 lapra húz, és a Red támad.', 'When done, press "End round". Then both teams draw up to 5 cards and Red attacks.')));
     O.push(L('A Red most vár a következő körre.', 'Red is waiting for the next round.'));
   }
   if (!A.length) return '';
@@ -1685,7 +1990,7 @@ function render() {
   const tmode = TEAM ? L('SZEREPKÖRÖS', 'ROLE-BASED') + ' · ' + (MY ? SIDE[MY].toUpperCase() + (MYRO.length ? ' · ' + MYRO.map(k => roleKeyName(MY, k).toUpperCase()).join(', ') : '') : L('NÉZŐ', 'SPECTATOR')) : '';
   const mode = TEAM ? tmode : { local: L('HELYI JÁTÉK', 'LOCAL GAME'), host: 'ONLINE · ' + (MY ? SIDE[MY].toUpperCase() : ''), guest: 'ONLINE · ' + (MY ? SIDE[MY].toUpperCase() : ST ? L('NÉZŐ', 'SPECTATOR') : L('CSATLAKOZÁS', 'JOINING')) }[MODE] || '';
   document.getElementById('app').innerHTML = `<div class="accent"><i></i><i></i></div>
-   <header class="top"><span class="logo"><span class="r">RED</span><small>VS</small><span class="b">BLUE</span></span>${mode ? `<span class="pill">${mode}</span>` : ''}${MODE !== 'local' && CODE && SCREEN === 'game' ? `<span class="pill">${L('KÓD', 'CODE')} ${esc(CODE.toUpperCase())}</span>` : ''}<span class="sp"></span>${SCREEN === 'game' ? rulesBtns() : ''}${langHTML()}
+   <header class="top"><span class="logo"><span class="r">RED</span><small>VS</small><span class="b">BLUE</span></span>${mode ? `<span class="pill">${mode}</span>` : ''}${SCREEN === 'game' && ST ? `<span class="pill">${gmName(ST.gm)}</span>` : ''}${MODE !== 'local' && CODE && SCREEN === 'game' ? `<span class="pill">${L('KÓD', 'CODE')} ${esc(CODE.toUpperCase())}</span>` : ''}<span class="sp"></span>${SCREEN === 'game' ? rulesBtns() : ''}${langHTML()}
     ${SCREEN === 'game' && ST && ST.ph !== 'end' && (MODE === 'local' || MY) && !inLobby() && !(TEAM && ST.ph === 'setup') ? '<button class="btn abort" data-a="abortask" aria-expanded="' + ABORTASK + '">Abort</button>' : ''}${SCREEN === 'game' ? `<button class="btn" data-a="menu">${L('Kilépés a menübe', 'Exit to menu')}</button>` : ''}</header>
    ${ABORTASK && SCREEN === 'game' && ST && ST.ph !== 'end' ? `<div class="abortbar" role="alertdialog" aria-label="${L('Játék megszakítása', 'Abort game')}"><b>${L('Biztosan megszakítod a játékot? Nem lesz győztes, és a játszma nem folytatható.', 'Abort the game? There will be no winner and the game cannot be resumed.')}</b><div class="row"><button class="btn abort" data-a="abortyes">${L('Igen, megszakítom', 'Yes, abort')}</button><button class="btn" data-a="abortno">${L('Mégse', 'Cancel')}</button></div></div>` : ''}
    <main class="wrap">${SCREEN === 'menu' ? menuHTML() : gameHTML()}</main>${RULES ? rulesHTML() : ''}${CREF ? crefHTML() : ''}${TOAST ? `<div class="toast" role="status">${esc(tr(TOAST))}</div>` : ''}`;
@@ -1712,7 +2017,9 @@ document.addEventListener('click', e => {
     if (!viewSides().includes(s)) return;
     const multi = ST.ph === 'atk' && s === 'r' && !hasCat(ST, 'r', ST.z) && !ST.rp;
     const cur = SEL[s];
-    if (multi) SEL[s] = cur.includes(ch) ? cur.filter(x => x !== ch) : (cur.length < 3 ? [...cur, ch] : cur);
+    const trimN = ST.ph === 'trim' && s === ST.tr ? ST.h[s].length - HAND_MAX : 0;
+    if (trimN) SEL[s] = cur.includes(ch) ? cur.filter(x => x !== ch) : (cur.length < trimN ? [...cur, ch] : cur);
+    else if (multi) SEL[s] = cur.includes(ch) ? cur.filter(x => x !== ch) : (cur.length < 3 ? [...cur, ch] : cur);
     else SEL[s] = cur[0] === ch ? [] : [ch];
     return render();
   }
@@ -1720,7 +2027,7 @@ document.addEventListener('click', e => {
   if (t.dataset.act) { dispatch(side, JSON.parse(t.dataset.act)); return; }
   if (t.dataset.ans) { const s = t.dataset.ans; dispatch(s, { t: 'ans', a: DATA.crypto[dec(ST.du.c)].f.map((f, i) => DRAFT[s][i] || '') }); return; }
   switch (t.dataset.a) {
-    case 'local': MODE = 'local'; ST = newGame((Math.random() * 4294967296) >>> 0); lastPh = 'setup'; SCREEN = 'game'; persist(); return render();
+    case 'local': MODE = 'local'; ST = newGame((Math.random() * 4294967296) >>> 0, GMSEL); lastPh = 'setup'; SCREEN = 'game'; persist(); return render();
     case 'resume': MODE = 'local'; ST = store.get('rvb-local'); lastPh = ST.ph; SCREEN = 'game'; return render();
     case 'host': return hostGame(side);
     case 'rehost': return hostGame(null, store.get('rvb-host'));
@@ -1739,6 +2046,7 @@ document.addEventListener('click', e => {
     case 'hide': SHOW[side] = false; SEL[side] = []; return render();
     case 'menu': ABORTASK = false; return leave();
     case 'lang': return setLang(t.dataset.v);
+    case 'gm': GMSEL = +t.dataset.v; store.set('rvb-gm', GMSEL); return render();
     case 'cref': CREF = true; RULES = false; return render();
     case 'crefclose': CREF = false; return render();
     case 'rules': CREF = false; RULES = true; render(); { const b = document.querySelector('.rulesbody'); if (b) b.scrollTop = 0; } return;
@@ -1747,8 +2055,8 @@ document.addEventListener('click', e => {
     case 'abortno': ABORTASK = false; return render();
     case 'abortyes': ABORTASK = false; dispatch(MODE === 'local' ? (activeSide() || 'r') : MY, { t: 'abort' }); return;
     case 'again':
-      if (MODE === 'local') { ST = newGame((Math.random() * 4294967296) >>> 0); lastPh = 'setup'; persist(); return render(); }
-      if (MODE === 'host') { ST = newGame((Math.random() * 4294967296) >>> 0); lastPh = 'setup'; if (TEAM) { LB = Math.random().toString(36).slice(2, 8); ME = { ...ME, rdy: '' }; rebuildRoster(); } persist(); publishHost(); return render(); }
+      if (MODE === 'local') { ST = newGame((Math.random() * 4294967296) >>> 0, ST.gm); lastPh = 'setup'; persist(); return render(); }
+      if (MODE === 'host') { ST = newGame((Math.random() * 4294967296) >>> 0, ST.gm); lastPh = 'setup'; if (TEAM) { LB = Math.random().toString(36).slice(2, 8); ME = { ...ME, rdy: '' }; rebuildRoster(); } persist(); publishHost(); return render(); }
       return toast('Új játékot a házigazda indíthat.');
   }
 });
