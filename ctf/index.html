@@ -113,10 +113,10 @@ const USER_RE = /^[a-z0-9._-]{3,24}$/;
 
 // ---------------------------------------------------------------- rules
 const LAYERS = 7, FLAGS = 4, HINT_COST = [10, 25, 50], MULT = { easy: 1, hard: 1.5 };
-const LAYER_NAMES = {
-  red: [['Felderítés', 'Reconnaissance'], ['Kezdeti behatolás', 'Initial access'], ['Végrehajtás', 'Execution'], ['Beágyazódás', 'Persistence'], ['Jogosultság-emelés', 'Privilege escalation'], ['Oldalirányú mozgás', 'Lateral movement'], ['Adatkiszivárogtatás', 'Exfiltration']],
-  blue: [['Riasztás', 'Alert'], ['Triázs', 'Triage'], ['Naplóelemzés', 'Log analysis'], ['Forenzika', 'Forensics'], ['Elszigetelés', 'Containment'], ['Felszámolás', 'Eradication'], ['Helyreállítás', 'Recovery']],
-};
+// The CTF is incident response only: every game follows these 7 stages. Attacker techniques show up only
+// as something the player has to recognise in the evidence.
+const SIDE = 'blue';
+const LAYER_NAMES = [['Riasztás', 'Alert'], ['Triázs', 'Triage'], ['Naplóelemzés', 'Log analysis'], ['Forenzika', 'Forensics'], ['Elszigetelés', 'Containment'], ['Felszámolás', 'Eradication'], ['Helyreállítás', 'Recovery']];
 function flagPoints(k, mode, hintsTaken, late) {
   const cost = HINT_COST.slice(0, hintsTaken).reduce((a, b) => a + b, 0);
   return Math.round(25 * k * (late ? 0.5 : 1) * (1 - cost / 100) * MULT[mode]);
@@ -280,25 +280,24 @@ function loginHTML() {
     <p class="hint">${L('Felhasználónév: 3–24 karakter, kisbetű, szám, pont, kötőjel vagy aláhúzás. Jelszó: legalább 8 karakter.', 'Username: 3–24 characters, lowercase letters, digits, dot, hyphen or underscore. Password: at least 8 characters.')}</p>
    </div></div>
    <div class="panel cut stack"><h3>${L('Hogyan működik?', 'How does it work?')}</h3>
-    <p>${L('Válassz oldalt (Red vagy Blue) és nehézséget. A rendszer 7 egymásra épülő réteget sorsol valós incidensek alapján. Minden réteg 4 részzászlóból áll; ha legalább 2 megvan, megnyílik a következő réteg, és kapsz egy kulcsot, ami segít a megoldásában.', 'Pick a side (Red or Blue) and a difficulty. The system draws 7 layers built on each other, based on real incidents. Each layer has 4 sub-flags; with at least 2 solved the next layer opens and you get a key that helps you solve it.')}</p>
+    <p>${L('Egy kitalált cég SOC-elemzőjeként egy valós incidens mintájára kezelsz egy támadást a riasztástól a helyreállításig. Válassz nehézséget, és a rendszer 7 egymásra épülő réteget sorsol. Minden réteg 4 részzászlóból áll; ha legalább 2 megvan, megnyílik a következő réteg, és kapsz egy kulcsot, ami segít a megoldásában.', 'As a SOC analyst at a fictional company you handle an attack modelled on a real incident, from the alert to recovery. Pick a difficulty and the system draws 7 layers built on each other. Each layer has 4 sub-flags; with at least 2 solved the next layer opens and you get a key that helps you solve it.')}</p>
     <p>${L('A k-adik réteg legfeljebb 100 × k pontot ér (nehéz módban × 1,5). Visszatérhetsz korábbi rétegekre, de az ott maradt pontok feleződnek. Tippeket is kérhetsz, ezek pontba kerülnek: 10%, 25%, 50%.', 'Layer k is worth up to 100 × k points (× 1.5 in hard mode). You may return to earlier layers, but the points left there are halved. You can ask for hints; they cost 10%, 25% and 50%.')}</p>
    </div></div>`;
 }
 
 function homeHTML() {
   const g = GAME && !GAME.closed ? GAME : null;
-  const sideBtns = s => ['easy', 'hard'].map(m => {
-    const ok = INDEX && [1, 2, 3, 4, 5, 6, 7].every(k => INDEX.tasks.some(t => t.side === s && t.mode === m && t.layer === k));
-    return `<button class="btn ${s === 'red' ? 'red' : 'blue'}" data-a="new" data-side="${s}" data-mode="${m}" ${ok && !g ? '' : 'disabled'}>${m === 'easy' ? L('Könnyű', 'Easy') : L('Nehéz', 'Hard')}${ok ? '' : ' · ' + L('hamarosan', 'coming soon')}</button>`;
+  const modeBtns = ['easy', 'hard'].map(m => {
+    const ok = INDEX && [1, 2, 3, 4, 5, 6, 7].every(k => INDEX.tasks.some(t => t.side === SIDE && t.mode === m && t.layer === k));
+    return `<button class="btn blue" data-a="new" data-mode="${m}" ${ok && !g ? '' : 'disabled'}>${m === 'easy' ? L('Könnyű', 'Easy') : L('Nehéz', 'Hard')}${ok ? '' : ' · ' + L('hamarosan', 'coming soon')}</button>`;
   }).join('');
   return `<div class="stack">
    ${g ? `<div class="panel cut"><div class="lbl">${L('Folyamatban lévő játék', 'Game in progress')}</div>
-     <h2 style="margin:6px 0">${g.side === 'red' ? 'RED' : 'BLUE'} · ${g.mode === 'easy' ? L('könnyű', 'easy') : L('nehéz', 'hard')} · ${g.score} ${L('pont', 'pts')} · ${Math.min(g.state.unlocked, 7)}. ${L('réteg', 'layer')}</h2>
+     <h2 style="margin:6px 0">${g.mode === 'easy' ? L('könnyű', 'easy') : L('nehéz', 'hard')} · ${g.score} ${L('pont', 'pts')} · ${Math.min(g.state.unlocked, 7)}. ${L('réteg', 'layer')}</h2>
      <div class="row"><button class="btn" data-a="resume">${L('Folytatás', 'Continue')}</button></div></div>` : ''}
-   <div class="grid2">
-    <div class="frame cut"><div class="fi stack"><h2 style="color:var(--red)">Red</h2><p>${L('Támadói szemszög: kövesd a támadási lánc 7 szakaszát egy kitalált cég szintetikus nyomai alapján.', 'Attacker view: follow the 7 stages of the attack chain through the synthetic traces of a fictional company.')}</p><div class="row">${sideBtns('red')}</div></div></div>
-    <div class="frame cut"><div class="fi stack"><h2 style="color:var(--blue)">Blue</h2><p>${L('Védői szemszög: vezesd végig az incidenskezelés 7 szakaszát a riasztástól a helyreállításig.', 'Defender view: run the 7 stages of incident response from the alert to recovery.')}</p><div class="row">${sideBtns('blue')}</div></div></div>
-   </div>
+   <div class="frame cut"><div class="fi stack"><h2>${L('Incidenskezelés', 'Incident response')}</h2>
+    <p style="margin:0">${L('Vezesd végig az incidenskezelés 7 szakaszát a riasztástól a helyreállításig. A támadó módszereit a nyomokból kell felismerned és megértened.', 'Run the 7 stages of incident response from the alert to recovery. You have to recognise and understand the attacker\'s methods from the evidence.')}</p>
+    <div class="row">${modeBtns}</div></div></div>
    ${g ? `<p class="hint">${L('Új játékot a mostani lezárása után indíthatsz.', 'You can start a new game after closing the current one.')}</p>` : ''}
    <p class="hint">${L('Könnyű mód: minden a böngészőben megoldható. Nehéz mód: letöltött fájlokkal, saját elemzőeszközökkel dolgozol.', 'Easy mode: everything can be solved in the browser. Hard mode: you work on downloaded files with your own analysis tools.')}</p>
   </div>`;
@@ -309,7 +308,7 @@ function layerListHTML() {
   return `<div class="layers">${s.tasks.map((tid, i) => {
     const k = i + 1, open = k <= s.unlocked, solved = Object.keys(s.flags[tid] || {}).length;
     return `<button class="layer" data-a="layer" data-k="${k}" ${open ? '' : 'disabled'} aria-current="${CUR === k}">
-      <span class="n">0${k}</span><span><b>${L(...LAYER_NAMES[g.side][i])}</b><div class="bar"><i style="width:${solved * 25}%"></i></div></span>
+      <span class="n">0${k}</span><span><b>${L(...LAYER_NAMES[i])}</b><div class="bar"><i style="width:${solved * 25}%"></i></div></span>
       <span class="mono">${open ? solved + '/4' : '🔒'}</span></button>`;
   }).join('')}</div>
   <div class="panel cut" style="margin-top:10px"><div class="lbl">${L('Pontszám', 'Score')}</div><div class="logo" style="color:var(--white)">${g.score}</div>
@@ -342,7 +341,7 @@ function playHTML() {
   const late = (s.maxOpened || 1) > CUR;
   return `<div class="play"><div>${layerListHTML()}</div><div class="stack" style="min-width:0">
    <div class="frame cut"><div class="fi stack">
-    <div><div class="lbl">0${CUR} · ${L(...LAYER_NAMES[g.side][CUR - 1])} · ${L('legfeljebb', 'up to')} ${layerMax(CUR, g.mode)} ${L('pont', 'pts')}</div><h2 style="margin-top:4px">${esc(T(t.title))}</h2></div>
+    <div><div class="lbl">0${CUR} · ${L(...LAYER_NAMES[CUR - 1])} · ${L('legfeljebb', 'up to')} ${layerMax(CUR, g.mode)} ${L('pont', 'pts')}</div><h2 style="margin-top:4px">${esc(T(t.title))}</h2></div>
     <p style="margin:0">${esc(T(t.story))}</p>
     ${prevKey != null ? `<div class="keybox"><div class="lbl">${L('Kulcs az előző rétegből', 'Key from the previous layer')}</div>${esc(T(prevT.keyOut.text))}: <b>${esc(prevKey)}</b></div>` : ''}
     ${late && !g.closed ? `<p class="hint">${L('Ezen a rétegen már túljutottál: az itt maradt részzászlók fél pontot érnek.', 'You have moved past this layer: the sub-flags left here are worth half points.')}</p>` : ''}
@@ -371,8 +370,8 @@ async function boardHTML() {
   for (const r of rows) { const k = r.username; if (!best[k] || r.score > best[k].score) best[k] = r; }
   const list = Object.values(best).sort((a, b) => b.score - a.score || String(a.updated_at).localeCompare(String(b.updated_at)));
   return `<div class="frame cut"><div class="fi"><h2>${L('Ranglista', 'Leaderboard')}</h2><p class="hint">${L('Játékosonként a legjobb eredmény. Holtversenynél az nyer, aki korábban érte el.', 'Best result per player. Ties go to whoever reached it first.')}</p>
-   <table class="lb"><thead><tr><th>#</th><th>${L('Játékos', 'Player')}</th><th>${L('Oldal', 'Side')}</th><th>${L('Mód', 'Mode')}</th><th>${L('Réteg', 'Layer')}</th><th>${L('Pont', 'Points')}</th></tr></thead>
-   <tbody>${list.map((r, i) => `<tr><td>${i + 1}</td><td>${esc(r.username)}</td><td><span class="tag ${r.side === 'red' ? 'r' : 'b'}">${r.side.toUpperCase()}</span></td><td>${r.mode === 'easy' ? L('könnyű', 'easy') : L('nehéz', 'hard')}</td><td>${r.layer}</td><td><b>${r.score}</b></td></tr>`).join('') || `<tr><td colspan="6">${L('Még nincs eredmény.', 'No results yet.')}</td></tr>`}</tbody></table></div></div>`;
+   <table class="lb"><thead><tr><th>#</th><th>${L('Játékos', 'Player')}</th><th>${L('Mód', 'Mode')}</th><th>${L('Réteg', 'Layer')}</th><th>${L('Pont', 'Points')}</th></tr></thead>
+   <tbody>${list.map((r, i) => `<tr><td>${i + 1}</td><td>${esc(r.username)}</td><td>${r.mode === 'easy' ? L('könnyű', 'easy') : L('nehéz', 'hard')}</td><td>${r.layer}</td><td><b>${r.score}</b></td></tr>`).join('') || `<tr><td colspan="5">${L('Még nincs eredmény.', 'No results yet.')}</td></tr>`}</tbody></table></div></div>`;
 }
 
 const EV_NAMES = { start: ['Játék indítása', 'Game started'], open_layer: ['Réteg megnyitása', 'Layer opened'], view_file: ['Fájl megnyitása', 'File viewed'], download: ['Fájl letöltése', 'File downloaded'], submit: ['Zászló beküldése', 'Flag submitted'], hint: ['Tipp kérése', 'Hint taken'], unlock: ['Következő réteg megnyílt', 'Next layer unlocked'], finish: ['Mind a 7 réteg teljesítve', 'All 7 layers completed'], close: ['Játék lezárása', 'Game closed'] };
@@ -384,8 +383,8 @@ async function teachHTML() {
   const dur = g => { const ms = new Date(g.updated_at) - new Date(g.state.startedAt); return isFinite(ms) ? Math.round(ms / 60000) + ' ' + L('perc', 'min') : '–'; };
   const hintsUsed = g => Object.values(g.state.hints || {}).reduce((a, h) => a + Object.values(h).reduce((x, y) => x + y, 0), 0);
   return `<div class="stack"><div class="frame cut"><div class="fi"><div class="row" style="justify-content:space-between"><h2>${L('Oktatói felület', 'Instructor view')}</h2><button class="btn sm" data-a="csv">${L('Összes esemény CSV-ben', 'All events as CSV')}</button></div>
-   <table class="lb"><thead><tr><th>${L('Játékos', 'Player')}</th><th>${L('Oldal', 'Side')}</th><th>${L('Mód', 'Mode')}</th><th>${L('Réteg', 'Layer')}</th><th>${L('Pont', 'Points')}</th><th>${L('Tippek', 'Hints')}</th><th>${L('Idő', 'Time')}</th><th>${L('Állapot', 'State')}</th><th></th></tr></thead>
-   <tbody>${TEACH.games.map(g => `<tr><td>${esc(g.username)}</td><td><span class="tag ${g.side === 'red' ? 'r' : 'b'}">${g.side.toUpperCase()}</span></td><td>${g.mode}</td><td>${g.layer}</td><td><b>${g.score}</b></td><td>${hintsUsed(g)}</td><td>${dur(g)}</td><td>${g.closed ? L('lezárva', 'closed') : L('aktív', 'active')}</td><td><button class="btn sm ghost" data-a="tsel" data-id="${g.id}">${L('Idővonal', 'Timeline')}</button></td></tr>`).join('') || `<tr><td colspan="9">${L('Még nincs játék.', 'No games yet.')}</td></tr>`}</tbody></table></div></div>
+   <table class="lb"><thead><tr><th>${L('Játékos', 'Player')}</th><th>${L('Mód', 'Mode')}</th><th>${L('Réteg', 'Layer')}</th><th>${L('Pont', 'Points')}</th><th>${L('Tippek', 'Hints')}</th><th>${L('Idő', 'Time')}</th><th>${L('Állapot', 'State')}</th><th></th></tr></thead>
+   <tbody>${TEACH.games.map(g => `<tr><td>${esc(g.username)}</td><td>${g.mode}</td><td>${g.layer}</td><td><b>${g.score}</b></td><td>${hintsUsed(g)}</td><td>${dur(g)}</td><td>${g.closed ? L('lezárva', 'closed') : L('aktív', 'active')}</td><td><button class="btn sm ghost" data-a="tsel" data-id="${g.id}">${L('Idővonal', 'Timeline')}</button></td></tr>`).join('') || `<tr><td colspan="8">${L('Még nincs játék.', 'No games yet.')}</td></tr>`}</tbody></table></div></div>
    ${sel ? `<div class="frame cut"><div class="fi"><h2>${esc(sel.username)} · ${L('idővonal', 'timeline')}</h2>
     <table class="lb"><thead><tr><th>${L('Idő', 'Time')}</th><th>${L('Esemény', 'Event')}</th><th>${L('Részletek', 'Details')}</th></tr></thead>
     <tbody>${TEACH.events.map(e => `<tr><td class="mono">${esc(new Date(e.at).toLocaleString(LANG === 'en' ? 'en-GB' : 'hu-HU'))}</td><td>${esc(L(...(EV_NAMES[e.type] || [e.type, e.type])))}</td><td class="mono">${esc(evDetail(e))}</td></tr>`).join('')}</tbody></table></div></div>` : ''}</div>`;
@@ -399,7 +398,7 @@ function evDetail(e) {
   if (d.tier) parts.push(`${L('fokozat', 'tier')} ${d.tier}`);
   if ('ok' in d) parts.push(d.ok ? L('helyes', 'correct') : L('hibás', 'wrong') + (d.value ? `: "${d.value}"` : ''));
   if (d.pts != null) parts.push(`+${d.pts}`);
-  if (d.side) parts.push(`${d.side}/${d.mode}`);
+  if (d.mode) parts.push(d.mode);
   if (d.score != null) parts.push(`${d.score} ${L('pont', 'pts')}`);
   return parts.join(' · ');
 }
@@ -444,7 +443,8 @@ async function openLayer(k) {
   log('open_layer', { layer: k });
 }
 
-async function newGame(side, mode) {
+async function newGame(mode) {
+  const side = SIDE;
   await loadIndex();
   // Prefer one whole chain (same story, ids differ only in the layer number) so each key fits the next layer's files;
   // fall back to drawing each layer separately when no complete chain exists.
@@ -501,9 +501,9 @@ async function viewFile(name) {
 
 async function exportCSV() {
   const games = TEACH.games || await BACK.allGames();
-  const lines = [['jatekos', 'jatek_id', 'oldal', 'mod', 'ido', 'esemeny', 'reszletek'].join(',')];
+  const lines = [['jatekos', 'jatek_id', 'mod', 'ido', 'esemeny', 'reszletek'].join(',')];
   for (const g of games) for (const e of await BACK.events(g.id))
-    lines.push([g.username, g.id, g.side, g.mode, e.at, e.type, JSON.stringify(e.data || {})].map(x => `"${String(x).replace(/"/g, '""')}"`).join(','));
+    lines.push([g.username, g.id, g.mode, e.at, e.type, JSON.stringify(e.data || {})].map(x => `"${String(x).replace(/"/g, '""')}"`).join(','));
   const a = document.createElement('a');
   a.href = URL.createObjectURL(new Blob(['﻿' + lines.join('\n')], { type: 'text/csv' }));
   a.download = 'rvb_ctf_esemenyek.csv'; a.click();
@@ -538,7 +538,7 @@ app.addEventListener('click', async ev => {
     else if (a === 'teach') { VIEW = 'teach'; TEACH.sel = null; }
     else if (a === 'tsel') TEACH.sel = el.dataset.id;
     else if (a === 'csv') await exportCSV();
-    else if (a === 'new') await newGame(el.dataset.side, el.dataset.mode);
+    else if (a === 'new') await newGame(el.dataset.mode);
     else if (a === 'resume') { await openLayer(Math.min(GAME.state.unlocked, LAYERS)); VIEW = 'play'; }
     else if (a === 'layer') await openLayer(+el.dataset.k);
     else if (a === 'submit') await submit(el.dataset.f);

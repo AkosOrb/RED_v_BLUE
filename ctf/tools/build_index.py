@@ -9,7 +9,8 @@ import json, os, sys
 ROOT = os.path.join(os.path.dirname(__file__), '..')
 TASKS = os.path.join(ROOT, 'tasks')
 KEY_TYPES = {1: 'hostname', 2: 'account', 3: 'time', 4: 'domain', 5: 'subnet', 6: 'keyword', 7: 'final'}
-SIDES, MODES = ('red', 'blue'), ('easy', 'hard')
+# A CTF csak incidenskezelésről szól, ezért minden feladat a blue oldalon van.
+SIDES, MODES = ('blue',), ('easy', 'hard')
 
 errors, index = [], []
 

@@ -1,6 +1,7 @@
 # Red vs Blue CTF – feladatbank
 
-Egyéni, jeopardy-stílusú CTF játékmód a Red vs Blue webapphoz. A szabályterv:
+Egyéni, jeopardy-stílusú CTF játékmód a Red vs Blue webapphoz. A játék kizárólag az incidenskezelésről szól
+(riasztástól a helyreállításig); a támadói módszerek csak a bizonyítékokban, felismerendő nyomként jelennek meg. A szabályterv:
 [Red vs Blue CTF – szabályterv és játékmenet](https://claude.ai/artifact/3EzsQwQ324WrNDFcFgay5K).
 
 ## Szerkezet
@@ -14,7 +15,7 @@ ctf/
   tools/build_index.py   ellenőrzés + index generálás
 ```
 
-- `side`: `red` | `blue`, `mode`: `easy` | `hard`, réteg: 1–7.
+- `side`: mindig `blue` (incidenskezelés), `mode`: `easy` | `hard`, réteg: 1–7.
 - Minden réteg rögzített kulcstípust ad tovább, így bármelyik két változat összeilleszthető:
   1 `hostname` → 2 `account` → 3 `time` → 4 `domain` → 5 `subnet` → 6 `keyword` → 7 `final`.
 - Sorsoláskor a játék egy teljes, azonos történetű láncot választ (az azonosítók csak a réteg számában térnek el,

@@ -13,7 +13,7 @@ create table if not exists public.profiles (
 create table if not exists public.games (
   id uuid primary key default gen_random_uuid(),
   user_id uuid not null references public.profiles on delete cascade,
-  side text not null check (side in ('red', 'blue')),
+  side text not null default 'blue' check (side = 'blue'),  -- csak incidenskezelés
   mode text not null check (mode in ('easy', 'hard')),
   state jsonb not null,
   score integer not null default 0,
