@@ -242,6 +242,9 @@ const app = document.getElementById('app');
 // Standalone build (ctf/tools/build_standalone.py) embeds every task and file in window.CTF_BUNDLE,
 // so the page also works opened straight from disk, without a web server.
 const BUNDLE = window.CTF_BUNDLE || null;
+// Inside a claude.ai Artifact the viewer blocks file downloads, so files open as raw text with a copy button instead.
+const NO_DL = !!window.CTF_ARTIFACT;
+let CONFIRM_CLOSE = false;
 const getText = path => BUNDLE ? Promise.resolve(BUNDLE.files[path]) : fetch(path).then(r => r.text());
 async function loadIndex() {
   if (!INDEX) INDEX = BUNDLE ? BUNDLE.index : await fetch('index.json', { cache: 'no-store' }).then(r => r.json());
@@ -317,17 +320,22 @@ function layerListHTML() {
   }).join('')}</div>
   <div class="panel cut" style="margin-top:10px"><div class="lbl">${L('Pontszám', 'Score')}</div><div class="logo" style="color:var(--white)">${g.score}</div>
    <div class="hint" style="color:var(--soft)">${L('Legfeljebb', 'Max')} ${[1, 2, 3, 4, 5, 6, 7].reduce((a, k) => a + layerMax(k, g.mode), 0)}</div>
-   ${g.closed ? `<p>${L('A játék lezárva.', 'The game is closed.')}</p>` : `<button class="btn sm ghost" data-a="close" style="margin-top:8px">${L('Játék lezárása', 'Close game')}</button>`}</div>`;
+   ${g.closed ? `<p>${L('A játék lezárva.', 'The game is closed.')}</p>` : CONFIRM_CLOSE
+     ? `<p style="margin:8px 0 6px">${L('Biztosan lezárod? Utána a pontszám végleges.', 'Close the game? The score becomes final.')}</p><div class="row"><button class="btn sm" data-a="closeyes">${L('Igen, lezárom', 'Yes, close it')}</button><button class="btn sm ghost" data-a="closeno">${L('Mégse', 'Cancel')}</button></div>`
+     : `<button class="btn sm ghost" data-a="close" style="margin-top:8px">${L('Játék lezárása', 'Close game')}</button>`}</div>`;
 }
 
 function fileHTML(t) {
   return `<div class="row">${t.files.map(f => `<button class="btn sm${FILEVIEW && FILEVIEW.name === f.name ? '' : ' ghost'}" data-a="file" data-f="${esc(f.name)}" ${GAME.mode === 'hard' ? 'hidden' : ''}>${esc(f.name)}</button>
-     <a class="btn sm ghost" href="${BUNDLE ? '#' : `${esc(t._base)}/files/${encodeURIComponent(f.name)}`}" download="${esc(f.name)}" data-a="dl" data-f="${esc(f.name)}">⬇ ${GAME.mode === 'hard' ? esc(f.name) : L('letöltés', 'download')}</a>`).join('')}</div>
-   ${FILEVIEW && GAME.mode !== 'hard' ? fileViewHTML() : ''}`;
+     ${NO_DL ? `<button class="btn sm${FILEVIEW && FILEVIEW.kind === 'raw' && FILEVIEW.name === f.name ? '' : ' ghost'}" data-a="raw" data-f="${esc(f.name)}">${GAME.mode === 'hard' ? esc(f.name) : L('nyers szöveg', 'raw text')}</button>`
+      : `<a class="btn sm ghost" href="${BUNDLE ? '#' : `${esc(t._base)}/files/${encodeURIComponent(f.name)}`}" download="${esc(f.name)}" data-a="dl" data-f="${esc(f.name)}">⬇ ${GAME.mode === 'hard' ? esc(f.name) : L('letöltés', 'download')}</a>`}`).join('')}</div>
+   ${FILEVIEW && (GAME.mode !== 'hard' || FILEVIEW.kind === 'raw') ? fileViewHTML() : ''}`;
 }
 function fileViewHTML() {
   const v = FILEVIEW;
   if (v.kind === 'text') return `<pre class="txt" style="margin-top:10px">${esc(v.text)}</pre>`;
+  if (v.kind === 'raw') return `<div class="row" style="margin:10px 0 6px"><button class="btn sm" data-a="copy">${L('Másolás vágólapra', 'Copy to clipboard')}</button><span class="hint" id="copymsg">${L('Másold ki, és elemezd a saját eszközeiddel.', 'Copy it and analyse it with your own tools.')}</span></div>
+   <pre class="txt" id="rawtext" style="max-height:420px;overflow:auto;white-space:pre">${esc(v.text)}</pre>`;
   const [head, ...body] = v.rows;
   const q = (v.filter || '').toLowerCase();
   let rows = q ? body.filter(r => r.join(' ').toLowerCase().includes(q)) : body.slice();
@@ -496,11 +504,11 @@ async function hint(fid) {
   await persist();
 }
 
-async function viewFile(name) {
+async function viewFile(name, raw) {
   const t = TASKS[GAME.state.tasks[CUR - 1]], f = t.files.find(x => x.name === name);
   const text = await getText(`${t._base}/files/${name}`);
-  FILEVIEW = f.view === 'table' ? { name, kind: 'table', rows: parseCSV(text), sort: null, dir: 1 } : { name, kind: 'text', text };
-  log('view_file', { layer: CUR, file: name });
+  FILEVIEW = raw ? { name, kind: 'raw', text } : f.view === 'table' ? { name, kind: 'table', rows: parseCSV(text), sort: null, dir: 1 } : { name, kind: 'text', text };
+  log(raw ? 'download' : 'view_file', { layer: CUR, file: name });
 }
 
 async function exportCSV() {
@@ -557,12 +565,18 @@ app.addEventListener('click', async ev => {
     else if (a === 'submit') await submit(el.dataset.f);
     else if (a === 'hint') await hint(el.dataset.f);
     else if (a === 'file') await viewFile(el.dataset.f);
-    else if (a === 'sort') { const i = +el.dataset.i; FILEVIEW.dir = FILEVIEW.sort === i ? -FILEVIEW.dir : 1; FILEVIEW.sort = i; }
-    else if (a === 'close') {
-      if (confirm(L('Biztosan lezárod a játékot? Utána a pontszám végleges.', 'Close the game? The score becomes final.'))) {
-        log('close', { score: GAME.score }); GAME.closed = true; await persist();
-      }
+    else if (a === 'raw') await viewFile(el.dataset.f, true);
+    else if (a === 'copy') {
+      const msg = document.getElementById('copymsg'), pre = document.getElementById('rawtext');
+      const selectAll = () => { const r = document.createRange(); r.selectNodeContents(pre); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); };
+      try { await navigator.clipboard.writeText(FILEVIEW.text); msg.textContent = L('Kimásolva.', 'Copied.'); }
+      catch (e) { selectAll(); msg.textContent = L('A szöveget kijelöltem, másold Ctrl+C-vel.', 'The text is selected; copy it with Ctrl+C.'); }
+      BUSY = false; return;
     }
+    else if (a === 'sort') { const i = +el.dataset.i; FILEVIEW.dir = FILEVIEW.sort === i ? -FILEVIEW.dir : 1; FILEVIEW.sort = i; }
+    else if (a === 'close') CONFIRM_CLOSE = true;
+    else if (a === 'closeno') CONFIRM_CLOSE = false;
+    else if (a === 'closeyes') { CONFIRM_CLOSE = false; log('close', { score: GAME.score }); GAME.closed = true; await persist(); }
   } catch (e) { MSG.login = e.message; console.error(e); }
   BUSY = false;
   await render();
