@@ -1,0 +1,21 @@
+ido,gep,pid,ppid,szulo,folyamat,parancssor,felhasznalo
+2026-03-16 07:54:00,CSK-FIN-03,1028,612,userinit.exe,explorer.exe,explorer.exe,varga.bence
+2026-03-16 08:19:00,CSK-FIN-03,1065,1028,explorer.exe,outlook.exe,outlook.exe,varga.bence
+2026-03-16 08:32:00,CSK-FIN-03,1106,1028,explorer.exe,chrome.exe,chrome.exe --profile-directory=Default,varga.bence
+2026-03-16 08:52:00,CSK-FIN-03,1172,1028,explorer.exe,PenzTar.exe,PenzTar.exe,varga.bence
+2026-03-16 09:12:53,CSK-FIN-03,1203,1172,PenzTar.exe,ptupdate.exe,ptupdate.exe /check /silent,varga.bence
+2026-03-16 09:13:30,CSK-FIN-03,1257,1203,ptupdate.exe,msiexec.exe,msiexec /i PenzTar_update_7.0.4.msi /qn,varga.bence
+2026-03-16 07:40:00,CSK-FIN-10,1695,612,userinit.exe,explorer.exe,explorer.exe,horvath.reka
+2026-03-16 08:19:00,CSK-FIN-10,1773,1695,explorer.exe,outlook.exe,outlook.exe,horvath.reka
+2026-03-16 08:35:00,CSK-FIN-10,1853,1695,explorer.exe,chrome.exe,chrome.exe --profile-directory=Default,horvath.reka
+2026-03-16 08:55:00,CSK-FIN-10,1864,1695,explorer.exe,PenzTar.exe,PenzTar.exe,horvath.reka
+2026-03-16 09:12:41,CSK-FIN-10,1928,1864,PenzTar.exe,ptupdate.exe,ptupdate.exe /check /silent,horvath.reka
+2026-03-16 09:14:03,CSK-FIN-10,1966,1928,ptupdate.exe,rundll32.exe,"rundll32.exe C:\ProgramData\ptlib.dll,#1",SYSTEM
+2026-03-16 09:15:28,CSK-FIN-10,2009,1966,rundll32.exe,schtasks.exe,schtasks /create /tn CSKReboot /sc once /st 10:30 /ru SYSTEM,SYSTEM
+2026-03-16 09:16:01,CSK-FIN-10,2020,1966,rundll32.exe,wmic.exe,"wmic /node:<celgep> /user:CSK\adm.racz process call create ""rundll32 ...ptlib.dll,#1""",SYSTEM
+2026-03-16 07:59:00,CSK-LOG-02,1295,612,userinit.exe,explorer.exe,explorer.exe,takacs.nora
+2026-03-16 08:03:00,CSK-LOG-02,1372,1295,explorer.exe,outlook.exe,outlook.exe,takacs.nora
+2026-03-16 08:37:00,CSK-LOG-02,1457,1295,explorer.exe,chrome.exe,chrome.exe --profile-directory=Default,takacs.nora
+2026-03-16 08:52:00,CSK-LOG-02,1532,1295,explorer.exe,PenzTar.exe,PenzTar.exe,takacs.nora
+2026-03-16 09:12:54,CSK-LOG-02,1551,1532,PenzTar.exe,ptupdate.exe,ptupdate.exe /check /silent,takacs.nora
+2026-03-16 09:13:30,CSK-LOG-02,1632,1551,ptupdate.exe,msiexec.exe,msiexec /i PenzTar_update_7.0.4.msi /qn,takacs.nora

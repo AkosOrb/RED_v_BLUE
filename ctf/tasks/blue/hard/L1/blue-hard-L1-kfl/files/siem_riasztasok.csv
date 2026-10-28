@@ -1,0 +1,259 @@
+ido,sulyossag,szabaly,gep,leiras
+2026-03-16 06:01:25,MEDIUM,R-2210,KFL-ERP-01,Ritka böngésző-bővítmény telepítése
+2026-03-16 06:01:58,LOW,R-1102,KFL-FIN-02,Sikertelen bejelentkezés (1x)
+2026-03-16 06:03:54,MEDIUM,R-3001,KFL-LOG-03,Nagy kimenő levélforgalom
+2026-03-16 06:06:05,MEDIUM,R-2210,KFL-ERP-01,Ritka böngésző-bővítmény telepítése
+2026-03-16 06:06:19,LOW,R-1307,KFL-LOG-03,USB-tároló csatlakoztatva
+2026-03-16 06:07:58,MEDIUM,R-3001,KFL-ERP-01,Nagy kimenő levélforgalom
+2026-03-16 06:08:00,LOW,R-1102,KFL-MAIL-01,Sikertelen bejelentkezés (1x)
+2026-03-16 06:08:34,MEDIUM,R-3001,KFL-FIN-02,Nagy kimenő levélforgalom
+2026-03-16 06:08:55,MEDIUM,R-3001,KFL-FIN-09,Nagy kimenő levélforgalom
+2026-03-16 06:10:29,LOW,R-1307,KFL-FIN-09,USB-tároló csatlakoztatva
+2026-03-16 06:10:48,MEDIUM,R-3001,KFL-MAIL-01,Nagy kimenő levélforgalom
+2026-03-16 06:13:28,MEDIUM,R-3001,KFL-ERP-01,Nagy kimenő levélforgalom
+2026-03-16 06:14:11,MEDIUM,R-3001,KFL-LOG-08,Nagy kimenő levélforgalom
+2026-03-16 06:14:27,LOW,R-1102,KFL-LOG-08,Sikertelen bejelentkezés (1x)
+2026-03-16 06:14:30,LOW,R-1307,KFL-FIN-02,USB-tároló csatlakoztatva
+2026-03-16 06:14:42,LOW,R-1307,KFL-FIN-02,USB-tároló csatlakoztatva
+2026-03-16 06:15:20,MEDIUM,R-3001,KFL-FIN-09,Nagy kimenő levélforgalom
+2026-03-16 06:15:50,MEDIUM,R-3001,KFL-LOG-03,Nagy kimenő levélforgalom
+2026-03-16 06:17:10,LOW,R-1102,KFL-LOG-03,Sikertelen bejelentkezés (1x)
+2026-03-16 06:18:42,MEDIUM,R-2210,KFL-LOG-03,Ritka böngésző-bővítmény telepítése
+2026-03-16 06:18:53,LOW,R-1307,KFL-MAIL-01,USB-tároló csatlakoztatva
+2026-03-16 06:19:45,LOW,R-1307,KFL-LOG-03,USB-tároló csatlakoztatva
+2026-03-16 06:21:10,MEDIUM,R-2210,KFL-LOG-03,Ritka böngésző-bővítmény telepítése
+2026-03-16 06:21:43,LOW,R-1102,KFL-ERP-01,Sikertelen bejelentkezés (1x)
+2026-03-16 06:23:44,MEDIUM,R-2210,KFL-LOG-08,Ritka böngésző-bővítmény telepítése
+2026-03-16 06:25:27,LOW,R-1102,KFL-LOG-08,Sikertelen bejelentkezés (1x)
+2026-03-16 06:26:09,MEDIUM,R-2210,KFL-MAIL-01,Ritka böngésző-bővítmény telepítése
+2026-03-16 06:26:14,MEDIUM,R-3001,KFL-ERP-01,Nagy kimenő levélforgalom
+2026-03-16 06:26:40,MEDIUM,R-2210,KFL-LOG-03,Ritka böngésző-bővítmény telepítése
+2026-03-16 06:28:29,MEDIUM,R-2210,KFL-FIN-02,Ritka böngésző-bővítmény telepítése
+2026-03-16 06:28:46,MEDIUM,R-3001,KFL-LOG-03,Nagy kimenő levélforgalom
+2026-03-16 06:29:38,MEDIUM,R-2210,KFL-FIN-02,Ritka böngésző-bővítmény telepítése
+2026-03-16 06:30:05,LOW,R-1307,KFL-MAIL-01,USB-tároló csatlakoztatva
+2026-03-16 06:30:07,LOW,R-1102,KFL-ERP-01,Sikertelen bejelentkezés (1x)
+2026-03-16 06:30:09,LOW,R-1307,KFL-MAIL-01,USB-tároló csatlakoztatva
+2026-03-16 06:30:38,LOW,R-1102,KFL-FIN-09,Sikertelen bejelentkezés (1x)
+2026-03-16 06:32:23,LOW,R-1102,KFL-LOG-03,Sikertelen bejelentkezés (1x)
+2026-03-16 06:32:41,LOW,R-1307,KFL-FIN-09,USB-tároló csatlakoztatva
+2026-03-16 06:33:10,MEDIUM,R-2210,KFL-ERP-01,Ritka böngésző-bővítmény telepítése
+2026-03-16 06:33:18,MEDIUM,R-2210,KFL-MAIL-01,Ritka böngésző-bővítmény telepítése
+2026-03-16 06:33:45,LOW,R-1307,KFL-MAIL-01,USB-tároló csatlakoztatva
+2026-03-16 06:34:40,MEDIUM,R-3001,KFL-ERP-01,Nagy kimenő levélforgalom
+2026-03-16 06:35:25,LOW,R-1307,KFL-MAIL-01,USB-tároló csatlakoztatva
+2026-03-16 06:36:23,MEDIUM,R-2210,KFL-ERP-01,Ritka böngésző-bővítmény telepítése
+2026-03-16 06:37:01,LOW,R-1102,KFL-MAIL-01,Sikertelen bejelentkezés (1x)
+2026-03-16 06:38:31,MEDIUM,R-3001,KFL-MAIL-01,Nagy kimenő levélforgalom
+2026-03-16 06:39:17,LOW,R-1307,KFL-LOG-08,USB-tároló csatlakoztatva
+2026-03-16 06:40:17,LOW,R-1307,KFL-FIN-09,USB-tároló csatlakoztatva
+2026-03-16 06:40:19,MEDIUM,R-2210,KFL-MAIL-01,Ritka böngésző-bővítmény telepítése
+2026-03-16 06:40:44,MEDIUM,R-3001,KFL-MAIL-01,Nagy kimenő levélforgalom
+2026-03-16 06:41:02,MEDIUM,R-2210,KFL-FIN-02,Ritka böngésző-bővítmény telepítése
+2026-03-16 06:41:39,LOW,R-1102,KFL-FIN-09,Sikertelen bejelentkezés (1x)
+2026-03-16 06:43:12,LOW,R-1102,KFL-LOG-03,Sikertelen bejelentkezés (1x)
+2026-03-16 06:44:10,MEDIUM,R-2210,KFL-FIN-09,Ritka böngésző-bővítmény telepítése
+2026-03-16 06:44:40,LOW,R-1307,KFL-LOG-08,USB-tároló csatlakoztatva
+2026-03-16 06:44:52,LOW,R-1307,KFL-MAIL-01,USB-tároló csatlakoztatva
+2026-03-16 06:44:56,LOW,R-1307,KFL-ERP-01,USB-tároló csatlakoztatva
+2026-03-16 06:45:05,LOW,R-1307,KFL-FIN-09,USB-tároló csatlakoztatva
+2026-03-16 06:45:26,LOW,R-1307,KFL-FIN-02,USB-tároló csatlakoztatva
+2026-03-16 06:45:39,LOW,R-1102,KFL-LOG-08,Sikertelen bejelentkezés (1x)
+2026-03-16 06:48:02,LOW,R-1102,KFL-FIN-02,Sikertelen bejelentkezés (1x)
+2026-03-16 06:53:04,MEDIUM,R-2210,KFL-FIN-09,Ritka böngésző-bővítmény telepítése
+2026-03-16 06:53:07,MEDIUM,R-3001,KFL-LOG-08,Nagy kimenő levélforgalom
+2026-03-16 06:53:33,LOW,R-1102,KFL-FIN-02,Sikertelen bejelentkezés (1x)
+2026-03-16 06:53:37,LOW,R-1307,KFL-ERP-01,USB-tároló csatlakoztatva
+2026-03-16 06:54:05,MEDIUM,R-2210,KFL-ERP-01,Ritka böngésző-bővítmény telepítése
+2026-03-16 06:54:43,MEDIUM,R-3001,KFL-MAIL-01,Nagy kimenő levélforgalom
+2026-03-16 06:54:55,MEDIUM,R-2210,KFL-LOG-08,Ritka böngésző-bővítmény telepítése
+2026-03-16 06:56:32,LOW,R-1102,KFL-MAIL-01,Sikertelen bejelentkezés (1x)
+2026-03-16 06:56:49,MEDIUM,R-2210,KFL-FIN-02,Ritka böngésző-bővítmény telepítése
+2026-03-16 06:57:21,LOW,R-1307,KFL-LOG-08,USB-tároló csatlakoztatva
+2026-03-16 06:57:52,MEDIUM,R-3001,KFL-FIN-02,Nagy kimenő levélforgalom
+2026-03-16 06:58:00,LOW,R-1307,KFL-LOG-08,USB-tároló csatlakoztatva
+2026-03-16 06:59:10,LOW,R-1307,KFL-LOG-08,USB-tároló csatlakoztatva
+2026-03-16 06:59:23,LOW,R-1102,KFL-ERP-01,Sikertelen bejelentkezés (1x)
+2026-03-16 06:59:57,LOW,R-1102,KFL-LOG-08,Sikertelen bejelentkezés (1x)
+2026-03-16 07:02:00,MEDIUM,R-2210,KFL-ERP-01,Ritka böngésző-bővítmény telepítése
+2026-03-16 07:04:15,MEDIUM,R-3001,KFL-ERP-01,Nagy kimenő levélforgalom
+2026-03-16 07:05:45,MEDIUM,R-3001,KFL-FIN-02,Nagy kimenő levélforgalom
+2026-03-16 07:06:22,LOW,R-1307,KFL-FIN-02,USB-tároló csatlakoztatva
+2026-03-16 07:07:23,LOW,R-1307,KFL-MAIL-01,USB-tároló csatlakoztatva
+2026-03-16 07:07:38,LOW,R-1307,KFL-LOG-03,USB-tároló csatlakoztatva
+2026-03-16 07:07:44,MEDIUM,R-3001,KFL-LOG-08,Nagy kimenő levélforgalom
+2026-03-16 07:10:02,MEDIUM,R-3001,KFL-MAIL-01,Nagy kimenő levélforgalom
+2026-03-16 07:10:26,MEDIUM,R-2210,KFL-FIN-09,Ritka böngésző-bővítmény telepítése
+2026-03-16 07:11:33,MEDIUM,R-3001,KFL-LOG-08,Nagy kimenő levélforgalom
+2026-03-16 07:12:47,MEDIUM,R-2210,KFL-ERP-01,Ritka böngésző-bővítmény telepítése
+2026-03-16 07:13:09,MEDIUM,R-2210,KFL-FIN-02,Ritka böngésző-bővítmény telepítése
+2026-03-16 07:13:19,MEDIUM,R-2210,KFL-LOG-08,Ritka böngésző-bővítmény telepítése
+2026-03-16 07:14:42,MEDIUM,R-3001,KFL-MAIL-01,Nagy kimenő levélforgalom
+2026-03-16 07:15:22,LOW,R-1102,KFL-ERP-01,Sikertelen bejelentkezés (1x)
+2026-03-16 07:15:24,LOW,R-1102,KFL-LOG-03,Sikertelen bejelentkezés (1x)
+2026-03-16 07:17:11,LOW,R-1307,KFL-LOG-08,USB-tároló csatlakoztatva
+2026-03-16 07:17:12,LOW,R-1102,KFL-LOG-03,Sikertelen bejelentkezés (1x)
+2026-03-16 07:18:35,LOW,R-1307,KFL-LOG-08,USB-tároló csatlakoztatva
+2026-03-16 07:18:40,LOW,R-1307,KFL-FIN-09,USB-tároló csatlakoztatva
+2026-03-16 07:20:43,LOW,R-1102,KFL-FIN-02,Sikertelen bejelentkezés (1x)
+2026-03-16 07:20:59,LOW,R-1307,KFL-ERP-01,USB-tároló csatlakoztatva
+2026-03-16 07:21:19,MEDIUM,R-3001,KFL-LOG-08,Nagy kimenő levélforgalom
+2026-03-16 07:22:48,LOW,R-1102,KFL-FIN-09,Sikertelen bejelentkezés (1x)
+2026-03-16 07:23:13,MEDIUM,R-3001,KFL-ERP-01,Nagy kimenő levélforgalom
+2026-03-16 07:23:14,MEDIUM,R-3001,KFL-FIN-09,Nagy kimenő levélforgalom
+2026-03-16 07:23:46,LOW,R-1102,KFL-MAIL-01,Sikertelen bejelentkezés (1x)
+2026-03-16 07:25:13,MEDIUM,R-2210,KFL-FIN-09,Ritka böngésző-bővítmény telepítése
+2026-03-16 07:26:06,MEDIUM,R-2210,KFL-ERP-01,Ritka böngésző-bővítmény telepítése
+2026-03-16 07:26:43,LOW,R-1102,KFL-FIN-09,Sikertelen bejelentkezés (1x)
+2026-03-16 07:27:32,LOW,R-1307,KFL-FIN-02,USB-tároló csatlakoztatva
+2026-03-16 07:27:59,LOW,R-1102,KFL-MAIL-01,Sikertelen bejelentkezés (1x)
+2026-03-16 07:28:01,LOW,R-1102,KFL-LOG-03,Sikertelen bejelentkezés (1x)
+2026-03-16 07:28:06,LOW,R-1102,KFL-LOG-03,Sikertelen bejelentkezés (1x)
+2026-03-16 07:28:17,MEDIUM,R-2210,KFL-LOG-03,Ritka böngésző-bővítmény telepítése
+2026-03-16 07:28:26,LOW,R-1102,KFL-LOG-03,Sikertelen bejelentkezés (1x)
+2026-03-16 07:28:53,MEDIUM,R-2210,KFL-LOG-03,Ritka böngésző-bővítmény telepítése
+2026-03-16 07:29:33,MEDIUM,R-2210,KFL-FIN-09,Ritka böngésző-bővítmény telepítése
+2026-03-16 07:29:54,LOW,R-1307,KFL-LOG-08,USB-tároló csatlakoztatva
+2026-03-16 07:30:00,LOW,R-1307,KFL-FIN-09,USB-tároló csatlakoztatva
+2026-03-16 07:30:11,MEDIUM,R-2210,KFL-FIN-09,Ritka böngésző-bővítmény telepítése
+2026-03-16 07:32:03,MEDIUM,R-3001,KFL-FIN-02,Nagy kimenő levélforgalom
+2026-03-16 07:32:13,LOW,R-1307,KFL-LOG-08,USB-tároló csatlakoztatva
+2026-03-16 07:34:16,LOW,R-1102,KFL-ERP-01,Sikertelen bejelentkezés (1x)
+2026-03-16 07:35:00,LOW,R-1102,KFL-ERP-01,Sikertelen bejelentkezés (1x)
+2026-03-16 07:35:01,LOW,R-1307,KFL-LOG-08,USB-tároló csatlakoztatva
+2026-03-16 07:36:08,LOW,R-1102,KFL-MAIL-01,Sikertelen bejelentkezés (1x)
+2026-03-16 07:36:32,LOW,R-1307,KFL-FIN-09,USB-tároló csatlakoztatva
+2026-03-16 07:36:46,LOW,R-1307,KFL-LOG-08,USB-tároló csatlakoztatva
+2026-03-16 07:38:41,LOW,R-1102,KFL-FIN-02,Sikertelen bejelentkezés (1x)
+2026-03-16 07:39:04,MEDIUM,R-2210,KFL-MAIL-01,Ritka böngésző-bővítmény telepítése
+2026-03-16 07:39:13,LOW,R-1307,KFL-LOG-08,USB-tároló csatlakoztatva
+2026-03-16 07:39:56,LOW,R-1307,KFL-FIN-02,USB-tároló csatlakoztatva
+2026-03-16 07:40:38,MEDIUM,R-2210,KFL-LOG-08,Ritka böngésző-bővítmény telepítése
+2026-03-16 07:41:07,LOW,R-1307,KFL-LOG-03,USB-tároló csatlakoztatva
+2026-03-16 07:41:47,LOW,R-1102,KFL-LOG-03,Sikertelen bejelentkezés (1x)
+2026-03-16 07:43:02,LOW,R-1307,KFL-ERP-01,USB-tároló csatlakoztatva
+2026-03-16 07:43:57,LOW,R-1102,KFL-FIN-02,Sikertelen bejelentkezés (1x)
+2026-03-16 07:45:30,LOW,R-1102,KFL-LOG-08,Sikertelen bejelentkezés (1x)
+2026-03-16 07:45:46,MEDIUM,R-3001,KFL-FIN-09,Nagy kimenő levélforgalom
+2026-03-16 07:47:31,LOW,R-1102,KFL-FIN-02,Sikertelen bejelentkezés (1x)
+2026-03-16 07:47:35,LOW,R-1307,KFL-FIN-09,USB-tároló csatlakoztatva
+2026-03-16 07:48:54,LOW,R-1307,KFL-LOG-03,USB-tároló csatlakoztatva
+2026-03-16 07:49:34,LOW,R-1102,KFL-LOG-08,Sikertelen bejelentkezés (1x)
+2026-03-16 07:49:40,LOW,R-1102,KFL-LOG-03,Sikertelen bejelentkezés (1x)
+2026-03-16 07:49:55,MEDIUM,R-3001,KFL-ERP-01,Nagy kimenő levélforgalom
+2026-03-16 07:50:08,MEDIUM,R-2210,KFL-ERP-01,Ritka böngésző-bővítmény telepítése
+2026-03-16 07:50:10,LOW,R-1102,KFL-FIN-02,Sikertelen bejelentkezés (1x)
+2026-03-16 07:50:18,LOW,R-1102,KFL-LOG-08,Sikertelen bejelentkezés (1x)
+2026-03-16 07:50:55,LOW,R-1102,KFL-ERP-01,Sikertelen bejelentkezés (1x)
+2026-03-16 07:51:24,LOW,R-1102,KFL-ERP-01,Sikertelen bejelentkezés (1x)
+2026-03-16 07:52:15,LOW,R-1307,KFL-ERP-01,USB-tároló csatlakoztatva
+2026-03-16 07:52:25,MEDIUM,R-3001,KFL-FIN-02,Nagy kimenő levélforgalom
+2026-03-16 07:53:50,MEDIUM,R-2210,KFL-ERP-01,Ritka böngésző-bővítmény telepítése
+2026-03-16 07:54:05,MEDIUM,R-3001,KFL-FIN-02,Nagy kimenő levélforgalom
+2026-03-16 07:54:57,LOW,R-1102,KFL-FIN-09,Sikertelen bejelentkezés (1x)
+2026-03-16 07:56:34,LOW,R-1102,KFL-ERP-01,Sikertelen bejelentkezés (1x)
+2026-03-16 07:56:41,MEDIUM,R-2210,KFL-MAIL-01,Ritka böngésző-bővítmény telepítése
+2026-03-16 07:58:32,LOW,R-1102,KFL-FIN-02,Sikertelen bejelentkezés (1x)
+2026-03-16 07:59:32,LOW,R-1307,KFL-LOG-08,USB-tároló csatlakoztatva
+2026-03-16 07:59:59,LOW,R-1102,KFL-LOG-03,Sikertelen bejelentkezés (1x)
+2026-03-16 08:00:28,LOW,R-1307,KFL-FIN-02,USB-tároló csatlakoztatva
+2026-03-16 08:02:31,LOW,R-1307,KFL-MAIL-01,USB-tároló csatlakoztatva
+2026-03-16 08:02:45,LOW,R-1102,KFL-FIN-09,Sikertelen bejelentkezés (1x)
+2026-03-16 08:04:25,LOW,R-1307,KFL-MAIL-01,USB-tároló csatlakoztatva
+2026-03-16 08:06:26,LOW,R-1307,KFL-FIN-02,USB-tároló csatlakoztatva
+2026-03-16 08:06:47,LOW,R-1307,KFL-ERP-01,USB-tároló csatlakoztatva
+2026-03-16 08:08:32,LOW,R-1102,KFL-LOG-08,Sikertelen bejelentkezés (1x)
+2026-03-16 08:09:07,MEDIUM,R-2210,KFL-LOG-03,Ritka böngésző-bővítmény telepítése
+2026-03-16 08:09:08,LOW,R-1307,KFL-MAIL-01,USB-tároló csatlakoztatva
+2026-03-16 08:09:23,LOW,R-1102,KFL-LOG-08,Sikertelen bejelentkezés (1x)
+2026-03-16 08:09:49,LOW,R-1307,KFL-LOG-03,USB-tároló csatlakoztatva
+2026-03-16 08:10:17,LOW,R-1307,KFL-FIN-02,USB-tároló csatlakoztatva
+2026-03-16 08:11:13,LOW,R-1102,KFL-MAIL-01,Sikertelen bejelentkezés (1x)
+2026-03-16 08:11:18,MEDIUM,R-2210,KFL-LOG-03,Ritka böngésző-bővítmény telepítése
+2026-03-16 08:11:20,LOW,R-1102,KFL-ERP-01,Sikertelen bejelentkezés (1x)
+2026-03-16 08:11:23,MEDIUM,R-3001,KFL-FIN-09,Nagy kimenő levélforgalom
+2026-03-16 08:11:42,LOW,R-1307,KFL-LOG-03,USB-tároló csatlakoztatva
+2026-03-16 08:12:40,LOW,R-1102,KFL-LOG-03,Sikertelen bejelentkezés (1x)
+2026-03-16 08:12:55,LOW,R-1102,KFL-LOG-03,Sikertelen bejelentkezés (1x)
+2026-03-16 08:12:57,LOW,R-1307,KFL-FIN-02,USB-tároló csatlakoztatva
+2026-03-16 08:14:49,LOW,R-1102,KFL-LOG-03,Sikertelen bejelentkezés (1x)
+2026-03-16 08:14:59,LOW,R-1102,KFL-FIN-09,Sikertelen bejelentkezés (1x)
+2026-03-16 08:15:30,LOW,R-1102,KFL-LOG-08,Sikertelen bejelentkezés (1x)
+2026-03-16 08:16:13,LOW,R-1307,KFL-MAIL-01,USB-tároló csatlakoztatva
+2026-03-16 08:16:25,MEDIUM,R-2210,KFL-FIN-09,Ritka böngésző-bővítmény telepítése
+2026-03-16 08:16:56,LOW,R-1307,KFL-ERP-01,USB-tároló csatlakoztatva
+2026-03-16 08:17:32,LOW,R-1102,KFL-LOG-08,Sikertelen bejelentkezés (1x)
+2026-03-16 08:17:37,LOW,R-1307,KFL-FIN-09,USB-tároló csatlakoztatva
+2026-03-16 08:18:09,MEDIUM,R-3001,KFL-FIN-09,Nagy kimenő levélforgalom
+2026-03-16 08:18:53,MEDIUM,R-3001,KFL-MAIL-01,Nagy kimenő levélforgalom
+2026-03-16 08:19:28,MEDIUM,R-3001,KFL-LOG-08,Nagy kimenő levélforgalom
+2026-03-16 08:20:56,MEDIUM,R-3001,KFL-LOG-03,Nagy kimenő levélforgalom
+2026-03-16 08:22:02,MEDIUM,R-3001,KFL-LOG-03,Nagy kimenő levélforgalom
+2026-03-16 08:22:38,MEDIUM,R-3001,KFL-ERP-01,Nagy kimenő levélforgalom
+2026-03-16 08:23:19,MEDIUM,R-2210,KFL-FIN-09,Ritka böngésző-bővítmény telepítése
+2026-03-16 08:23:20,LOW,R-1102,KFL-LOG-08,Sikertelen bejelentkezés (1x)
+2026-03-16 08:24:44,MEDIUM,R-2210,KFL-MAIL-01,Ritka böngésző-bővítmény telepítése
+2026-03-16 08:24:47,MEDIUM,R-2210,KFL-MAIL-01,Ritka böngésző-bővítmény telepítése
+2026-03-16 08:25:15,LOW,R-1307,KFL-FIN-09,USB-tároló csatlakoztatva
+2026-03-16 08:27:12,MEDIUM,R-3001,KFL-FIN-02,Nagy kimenő levélforgalom
+2026-03-16 08:27:19,MEDIUM,R-3001,KFL-MAIL-01,Nagy kimenő levélforgalom
+2026-03-16 08:28:02,MEDIUM,R-3001,KFL-LOG-03,Nagy kimenő levélforgalom
+2026-03-16 08:29:03,MEDIUM,R-2210,KFL-LOG-08,Ritka böngésző-bővítmény telepítése
+2026-03-16 08:29:43,MEDIUM,R-3001,KFL-ERP-01,Nagy kimenő levélforgalom
+2026-03-16 08:29:49,LOW,R-1307,KFL-FIN-09,USB-tároló csatlakoztatva
+2026-03-16 08:30:46,MEDIUM,R-2210,KFL-FIN-02,Ritka böngésző-bővítmény telepítése
+2026-03-16 08:31:02,LOW,R-1102,KFL-FIN-02,Sikertelen bejelentkezés (1x)
+2026-03-16 08:34:23,MEDIUM,R-2210,KFL-LOG-03,Ritka böngésző-bővítmény telepítése
+2026-03-16 08:34:44,MEDIUM,R-3001,KFL-LOG-03,Nagy kimenő levélforgalom
+2026-03-16 08:36:40,MEDIUM,R-2210,KFL-ERP-01,Ritka böngésző-bővítmény telepítése
+2026-03-16 08:36:59,LOW,R-1102,KFL-FIN-02,Sikertelen bejelentkezés (1x)
+2026-03-16 08:38:50,MEDIUM,R-3001,KFL-FIN-09,Nagy kimenő levélforgalom
+2026-03-16 08:39:13,LOW,R-1102,KFL-FIN-02,Sikertelen bejelentkezés (1x)
+2026-03-16 08:39:29,MEDIUM,R-3001,KFL-MAIL-01,Nagy kimenő levélforgalom
+2026-03-16 08:39:52,LOW,R-1102,KFL-MAIL-01,Sikertelen bejelentkezés (1x)
+2026-03-16 08:40:15,MEDIUM,R-2210,KFL-FIN-09,Ritka böngésző-bővítmény telepítése
+2026-03-16 08:41:09,LOW,R-1102,KFL-LOG-03,Sikertelen bejelentkezés (1x)
+2026-03-16 08:41:48,LOW,R-1102,KFL-FIN-02,Sikertelen bejelentkezés (1x)
+2026-03-16 08:42:00,MEDIUM,R-3001,KFL-FIN-09,Nagy kimenő levélforgalom
+2026-03-16 08:42:01,MEDIUM,R-3001,KFL-FIN-09,Nagy kimenő levélforgalom
+2026-03-16 08:43:58,MEDIUM,R-3001,KFL-LOG-03,Nagy kimenő levélforgalom
+2026-03-16 08:44:54,MEDIUM,R-3001,KFL-FIN-02,Nagy kimenő levélforgalom
+2026-03-16 08:45:38,MEDIUM,R-2210,KFL-ERP-01,Ritka böngésző-bővítmény telepítése
+2026-03-16 08:46:01,MEDIUM,R-3001,KFL-LOG-08,Nagy kimenő levélforgalom
+2026-03-16 08:46:02,MEDIUM,R-3001,KFL-LOG-08,Nagy kimenő levélforgalom
+2026-03-16 08:46:28,MEDIUM,R-2210,KFL-LOG-03,Ritka böngésző-bővítmény telepítése
+2026-03-16 08:47:45,LOW,R-1307,KFL-MAIL-01,USB-tároló csatlakoztatva
+2026-03-16 08:48:33,MEDIUM,R-3001,KFL-FIN-09,Nagy kimenő levélforgalom
+2026-03-16 08:48:36,MEDIUM,R-2210,KFL-LOG-03,Ritka böngésző-bővítmény telepítése
+2026-03-16 08:48:51,MEDIUM,R-3001,KFL-FIN-09,Nagy kimenő levélforgalom
+2026-03-16 08:48:56,LOW,R-1307,KFL-MAIL-01,USB-tároló csatlakoztatva
+2026-03-16 08:50:01,LOW,R-1102,KFL-ERP-01,Sikertelen bejelentkezés (1x)
+2026-03-16 08:51:12,LOW,R-1307,KFL-FIN-07,USB-tároló csatlakoztatva
+2026-03-16 08:51:23,MEDIUM,R-2210,KFL-MAIL-01,Ritka böngésző-bővítmény telepítése
+2026-03-16 08:51:59,MEDIUM,R-2210,KFL-FIN-09,Ritka böngésző-bővítmény telepítése
+2026-03-16 08:52:33,MEDIUM,R-2210,KFL-LOG-08,Ritka böngésző-bővítmény telepítése
+2026-03-16 08:53:02,MEDIUM,R-3001,KFL-LOG-08,Nagy kimenő levélforgalom
+2026-03-16 08:53:30,LOW,R-1307,KFL-MAIL-01,USB-tároló csatlakoztatva
+2026-03-16 08:54:43,MEDIUM,R-2210,KFL-FIN-09,Ritka böngésző-bővítmény telepítése
+2026-03-16 08:54:48,MEDIUM,R-2210,KFL-FIN-02,Ritka böngésző-bővítmény telepítése
+2026-03-16 08:55:03,LOW,R-1102,KFL-FIN-02,Sikertelen bejelentkezés (1x)
+2026-03-16 08:56:16,MEDIUM,R-3001,KFL-ERP-01,Nagy kimenő levélforgalom
+2026-03-16 08:56:52,LOW,R-1307,KFL-MAIL-01,USB-tároló csatlakoztatva
+2026-03-16 08:57:33,MEDIUM,R-2210,KFL-FIN-02,Ritka böngésző-bővítmény telepítése
+2026-03-16 09:14:07,CRITICAL,R-4021,KFL-FIN-07,Könyvelőprogram frissítője rundll32-t indított
+2026-03-16 09:15:30,HIGH,R-4410,KFL-FIN-07,Ütemezett feladat létrehozva rendszerjoggal
+2026-03-16 09:16:05,CRITICAL,R-5530,KFL-FIN-01,Távoli folyamatindítás WMI-n keresztül
+2026-03-16 09:16:55,CRITICAL,R-5530,KFL-FIN-02,Távoli folyamatindítás WMI-n keresztül
+2026-03-16 09:17:39,HIGH,R-4410,KFL-FIN-03,Ütemezett feladat létrehozva rendszerjoggal
+2026-03-16 09:18:34,HIGH,R-4410,KFL-FIN-04,Ütemezett feladat létrehozva rendszerjoggal
+2026-03-16 09:19:02,CRITICAL,R-5530,KFL-FIN-05,Távoli folyamatindítás WMI-n keresztül
+2026-03-16 09:19:50,CRITICAL,R-5530,KFL-FIN-06,Távoli folyamatindítás WMI-n keresztül
+2026-03-16 09:20:45,CRITICAL,R-5530,KFL-FIN-08,Távoli folyamatindítás WMI-n keresztül
+2026-03-16 09:21:12,HIGH,R-4410,KFL-FIN-09,Ütemezett feladat létrehozva rendszerjoggal
+2026-03-16 09:21:36,CRITICAL,R-5530,KFL-FIN-10,Távoli folyamatindítás WMI-n keresztül
+2026-03-16 09:22:32,CRITICAL,R-5530,KFL-FIN-11,Távoli folyamatindítás WMI-n keresztül
+2026-03-16 09:23:43,CRITICAL,R-5530,KFL-LOG-02,Távoli folyamatindítás WMI-n keresztül
+2026-03-16 09:24:16,HIGH,R-4410,KFL-LOG-05,Ütemezett feladat létrehozva rendszerjoggal
+2026-03-16 09:25:00,CRITICAL,R-5530,KFL-FS-01,Távoli folyamatindítás WMI-n keresztül
+2026-03-16 09:25:52,CRITICAL,R-5530,KFL-ERP-01,Távoli folyamatindítás WMI-n keresztül
+2026-03-16 09:26:21,CRITICAL,R-5530,KFL-DC-01,Távoli folyamatindítás WMI-n keresztül

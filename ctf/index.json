@@ -1,11 +1,32 @@
 {
  "tasks": [
   {
+   "id": "blue-easy-L1-csk",
+   "side": "blue",
+   "mode": "easy",
+   "layer": 1,
+   "path": "tasks/blue/easy/L1/blue-easy-L1-csk"
+  },
+  {
    "id": "blue-easy-L1-kfl",
    "side": "blue",
    "mode": "easy",
    "layer": 1,
    "path": "tasks/blue/easy/L1/blue-easy-L1-kfl"
+  },
+  {
+   "id": "blue-easy-L1-vtm",
+   "side": "blue",
+   "mode": "easy",
+   "layer": 1,
+   "path": "tasks/blue/easy/L1/blue-easy-L1-vtm"
+  },
+  {
+   "id": "blue-easy-L2-csk",
+   "side": "blue",
+   "mode": "easy",
+   "layer": 2,
+   "path": "tasks/blue/easy/L2/blue-easy-L2-csk"
   },
   {
    "id": "blue-easy-L2-kfl",
@@ -15,11 +36,39 @@
    "path": "tasks/blue/easy/L2/blue-easy-L2-kfl"
   },
   {
+   "id": "blue-easy-L2-vtm",
+   "side": "blue",
+   "mode": "easy",
+   "layer": 2,
+   "path": "tasks/blue/easy/L2/blue-easy-L2-vtm"
+  },
+  {
+   "id": "blue-easy-L3-csk",
+   "side": "blue",
+   "mode": "easy",
+   "layer": 3,
+   "path": "tasks/blue/easy/L3/blue-easy-L3-csk"
+  },
+  {
    "id": "blue-easy-L3-kfl",
    "side": "blue",
    "mode": "easy",
    "layer": 3,
    "path": "tasks/blue/easy/L3/blue-easy-L3-kfl"
+  },
+  {
+   "id": "blue-easy-L3-vtm",
+   "side": "blue",
+   "mode": "easy",
+   "layer": 3,
+   "path": "tasks/blue/easy/L3/blue-easy-L3-vtm"
+  },
+  {
+   "id": "blue-easy-L4-csk",
+   "side": "blue",
+   "mode": "easy",
+   "layer": 4,
+   "path": "tasks/blue/easy/L4/blue-easy-L4-csk"
   },
   {
    "id": "blue-easy-L4-kfl",
@@ -29,11 +78,39 @@
    "path": "tasks/blue/easy/L4/blue-easy-L4-kfl"
   },
   {
+   "id": "blue-easy-L4-vtm",
+   "side": "blue",
+   "mode": "easy",
+   "layer": 4,
+   "path": "tasks/blue/easy/L4/blue-easy-L4-vtm"
+  },
+  {
+   "id": "blue-easy-L5-csk",
+   "side": "blue",
+   "mode": "easy",
+   "layer": 5,
+   "path": "tasks/blue/easy/L5/blue-easy-L5-csk"
+  },
+  {
    "id": "blue-easy-L5-kfl",
    "side": "blue",
    "mode": "easy",
    "layer": 5,
    "path": "tasks/blue/easy/L5/blue-easy-L5-kfl"
+  },
+  {
+   "id": "blue-easy-L5-vtm",
+   "side": "blue",
+   "mode": "easy",
+   "layer": 5,
+   "path": "tasks/blue/easy/L5/blue-easy-L5-vtm"
+  },
+  {
+   "id": "blue-easy-L6-csk",
+   "side": "blue",
+   "mode": "easy",
+   "layer": 6,
+   "path": "tasks/blue/easy/L6/blue-easy-L6-csk"
   },
   {
    "id": "blue-easy-L6-kfl",
@@ -43,11 +120,179 @@
    "path": "tasks/blue/easy/L6/blue-easy-L6-kfl"
   },
   {
+   "id": "blue-easy-L6-vtm",
+   "side": "blue",
+   "mode": "easy",
+   "layer": 6,
+   "path": "tasks/blue/easy/L6/blue-easy-L6-vtm"
+  },
+  {
+   "id": "blue-easy-L7-csk",
+   "side": "blue",
+   "mode": "easy",
+   "layer": 7,
+   "path": "tasks/blue/easy/L7/blue-easy-L7-csk"
+  },
+  {
    "id": "blue-easy-L7-kfl",
    "side": "blue",
    "mode": "easy",
    "layer": 7,
    "path": "tasks/blue/easy/L7/blue-easy-L7-kfl"
+  },
+  {
+   "id": "blue-easy-L7-vtm",
+   "side": "blue",
+   "mode": "easy",
+   "layer": 7,
+   "path": "tasks/blue/easy/L7/blue-easy-L7-vtm"
+  },
+  {
+   "id": "blue-hard-L1-csk",
+   "side": "blue",
+   "mode": "hard",
+   "layer": 1,
+   "path": "tasks/blue/hard/L1/blue-hard-L1-csk"
+  },
+  {
+   "id": "blue-hard-L1-kfl",
+   "side": "blue",
+   "mode": "hard",
+   "layer": 1,
+   "path": "tasks/blue/hard/L1/blue-hard-L1-kfl"
+  },
+  {
+   "id": "blue-hard-L1-vtm",
+   "side": "blue",
+   "mode": "hard",
+   "layer": 1,
+   "path": "tasks/blue/hard/L1/blue-hard-L1-vtm"
+  },
+  {
+   "id": "blue-hard-L2-csk",
+   "side": "blue",
+   "mode": "hard",
+   "layer": 2,
+   "path": "tasks/blue/hard/L2/blue-hard-L2-csk"
+  },
+  {
+   "id": "blue-hard-L2-kfl",
+   "side": "blue",
+   "mode": "hard",
+   "layer": 2,
+   "path": "tasks/blue/hard/L2/blue-hard-L2-kfl"
+  },
+  {
+   "id": "blue-hard-L2-vtm",
+   "side": "blue",
+   "mode": "hard",
+   "layer": 2,
+   "path": "tasks/blue/hard/L2/blue-hard-L2-vtm"
+  },
+  {
+   "id": "blue-hard-L3-csk",
+   "side": "blue",
+   "mode": "hard",
+   "layer": 3,
+   "path": "tasks/blue/hard/L3/blue-hard-L3-csk"
+  },
+  {
+   "id": "blue-hard-L3-kfl",
+   "side": "blue",
+   "mode": "hard",
+   "layer": 3,
+   "path": "tasks/blue/hard/L3/blue-hard-L3-kfl"
+  },
+  {
+   "id": "blue-hard-L3-vtm",
+   "side": "blue",
+   "mode": "hard",
+   "layer": 3,
+   "path": "tasks/blue/hard/L3/blue-hard-L3-vtm"
+  },
+  {
+   "id": "blue-hard-L4-csk",
+   "side": "blue",
+   "mode": "hard",
+   "layer": 4,
+   "path": "tasks/blue/hard/L4/blue-hard-L4-csk"
+  },
+  {
+   "id": "blue-hard-L4-kfl",
+   "side": "blue",
+   "mode": "hard",
+   "layer": 4,
+   "path": "tasks/blue/hard/L4/blue-hard-L4-kfl"
+  },
+  {
+   "id": "blue-hard-L4-vtm",
+   "side": "blue",
+   "mode": "hard",
+   "layer": 4,
+   "path": "tasks/blue/hard/L4/blue-hard-L4-vtm"
+  },
+  {
+   "id": "blue-hard-L5-csk",
+   "side": "blue",
+   "mode": "hard",
+   "layer": 5,
+   "path": "tasks/blue/hard/L5/blue-hard-L5-csk"
+  },
+  {
+   "id": "blue-hard-L5-kfl",
+   "side": "blue",
+   "mode": "hard",
+   "layer": 5,
+   "path": "tasks/blue/hard/L5/blue-hard-L5-kfl"
+  },
+  {
+   "id": "blue-hard-L5-vtm",
+   "side": "blue",
+   "mode": "hard",
+   "layer": 5,
+   "path": "tasks/blue/hard/L5/blue-hard-L5-vtm"
+  },
+  {
+   "id": "blue-hard-L6-csk",
+   "side": "blue",
+   "mode": "hard",
+   "layer": 6,
+   "path": "tasks/blue/hard/L6/blue-hard-L6-csk"
+  },
+  {
+   "id": "blue-hard-L6-kfl",
+   "side": "blue",
+   "mode": "hard",
+   "layer": 6,
+   "path": "tasks/blue/hard/L6/blue-hard-L6-kfl"
+  },
+  {
+   "id": "blue-hard-L6-vtm",
+   "side": "blue",
+   "mode": "hard",
+   "layer": 6,
+   "path": "tasks/blue/hard/L6/blue-hard-L6-vtm"
+  },
+  {
+   "id": "blue-hard-L7-csk",
+   "side": "blue",
+   "mode": "hard",
+   "layer": 7,
+   "path": "tasks/blue/hard/L7/blue-hard-L7-csk"
+  },
+  {
+   "id": "blue-hard-L7-kfl",
+   "side": "blue",
+   "mode": "hard",
+   "layer": 7,
+   "path": "tasks/blue/hard/L7/blue-hard-L7-kfl"
+  },
+  {
+   "id": "blue-hard-L7-vtm",
+   "side": "blue",
+   "mode": "hard",
+   "layer": 7,
+   "path": "tasks/blue/hard/L7/blue-hard-L7-vtm"
   }
  ]
 }

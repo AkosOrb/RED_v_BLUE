@@ -1,0 +1,178 @@
+{
+  "id": "blue-easy-L1-csk",
+  "side": "blue",
+  "mode": "easy",
+  "layer": 1,
+  "incident": {
+    "name": "NotPetya / Maersk (2017)",
+    "url": "https://www.wired.com/story/notpetya-cyberattack-ukraine-russia-code-crashed-the-world/"
+  },
+  "title": {
+    "hu": "Hétfő reggeli riasztások",
+    "en": "Monday morning alerts"
+  },
+  "story": {
+    "hu": "2026. március 16., hétfő. A Csillag Klinika Kft. SOC-elemzője vagy. A SIEM reggel óta egyre több riasztást ad. Nézd át a riasztási listát, és találd meg, hol kezdődött a baj.",
+    "en": "Monday, 16 March 2026. You are a SOC analyst at Csillag Klinika Kft. The SIEM has been raising more and more alerts since morning. Review the alert list and find where the trouble started."
+  },
+  "keyIn": null,
+  "keyOut": {
+    "type": "hostname",
+    "text": {
+      "hu": "A kiinduló gép neve",
+      "en": "Name of the first affected host"
+    },
+    "enc": {
+      "f1+f2": "9b2691e558f70f41b136",
+      "f1+f3": "8a609ac8a2364dd4a5a7",
+      "f1+f4": "399669f09b1d483b5dde",
+      "f2+f3": "827d0533d547f1bb022e",
+      "f2+f4": "23a94fda97bd4fb8424b",
+      "f3+f4": "46916de5227e68f71f25"
+    }
+  },
+  "flags": [
+    {
+      "id": "f1",
+      "q": {
+        "hu": "Melyik gépen jelent meg az első CRITICAL riasztás?",
+        "en": "Which host raised the first CRITICAL alert?"
+      },
+      "hash": "668ae2731b51b0cc2580257ed346e399b6e4b3e36c0a59f32bbb48e04dcfcb02",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "Szűrj a súlyosság oszlopra.",
+            "en": "Filter on the severity column."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "Rendezd a CRITICAL sorokat idő szerint.",
+            "en": "Sort the CRITICAL rows by time."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "A legkorábbi CRITICAL sor gep oszlopa a válasz.",
+            "en": "The host column of the earliest CRITICAL row is the answer."
+          }
+        }
+      ]
+    },
+    {
+      "id": "f2",
+      "q": {
+        "hu": "Melyik szabály (szabály-azonosító) váltotta ki?",
+        "en": "Which rule (rule ID) triggered it?"
+      },
+      "hash": "c85373eacedef1d7d6db8d65141e16beac9ca974ec39f2eb2c5fbe1f16c56c6b",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "Ugyanaz a sor, mint az előző kérdésnél.",
+            "en": "Same row as the previous question."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "A szabály oszlopot keresd.",
+            "en": "Look at the rule column."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "R-betűvel kezdődő azonosító.",
+            "en": "An ID starting with R-."
+          }
+        }
+      ]
+    },
+    {
+      "id": "f3",
+      "q": {
+        "hu": "Mikor jelent meg (ÓÓ:PP)?",
+        "en": "When did it appear (HH:MM)?"
+      },
+      "hash": "e9a95b72034be2db6f1b1b81c6162d3d39414531ed7b6e797cb82ca868bf7d2d",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "Az ido oszlop.",
+            "en": "The time column."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "Csak óra és perc kell.",
+            "en": "Only hours and minutes are needed."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "Formátum: 09:00",
+            "en": "Format: 09:00"
+          }
+        }
+      ]
+    },
+    {
+      "id": "f4",
+      "q": {
+        "hu": "Hány különböző gépen van CRITICAL riasztás?",
+        "en": "How many distinct hosts have a CRITICAL alert?"
+      },
+      "hash": "fdca38a42de92a82b43145ef14def24e5273eb5783e12ddd1d97746900d79d0b",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "Csak a CRITICAL sorok számítanak.",
+            "en": "Only CRITICAL rows count."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "Egy gépet csak egyszer számolj.",
+            "en": "Count each host once."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "A kiinduló gépet is számold bele.",
+            "en": "Include the first host as well."
+          }
+        }
+      ]
+    }
+  ],
+  "files": [
+    {
+      "name": "siem_riasztasok.csv",
+      "view": "table"
+    }
+  ]
+}

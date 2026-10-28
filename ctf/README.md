@@ -17,6 +17,8 @@ ctf/
 - `side`: `red` | `blue`, `mode`: `easy` | `hard`, réteg: 1–7.
 - Minden réteg rögzített kulcstípust ad tovább, így bármelyik két változat összeilleszthető:
   1 `hostname` → 2 `account` → 3 `time` → 4 `domain` → 5 `subnet` → 6 `keyword` → 7 `final`.
+- Sorsoláskor a játék egy teljes, azonos történetű láncot választ (az azonosítók csak a réteg számában térnek el,
+  pl. `blue-easy-L1-kfl` … `blue-easy-L7-kfl`); ha nincs teljes lánc, rétegenként sorsol.
 - Nyílt válasz soha nem kerül a repóba. A megoldókulcs az oktatónál van.
 
 ## Zászló-ellenőrzés

@@ -1,0 +1,189 @@
+{
+  "id": "blue-hard-L5-vtm",
+  "side": "blue",
+  "mode": "hard",
+  "layer": 5,
+  "incident": {
+    "name": "NotPetya / Maersk (2017)",
+    "url": "https://www.wired.com/story/notpetya-cyberattack-ukraine-russia-code-crashed-the-world/"
+  },
+  "title": {
+    "hu": "Hová terjedt?",
+    "en": "Where did it spread?"
+  },
+  "story": {
+    "hu": "Ideje elszigetelni. A DNS-naplóból és a hálózati kapcsolatokból állapítsd meg, mely gépek érintettek, és mit kell blokkolni.",
+    "en": "Time to contain. Use the DNS log and network connections to work out which hosts are affected and what must be blocked."
+  },
+  "keyIn": {
+    "type": "domain",
+    "from": "L4"
+  },
+  "keyOut": {
+    "type": "subnet",
+    "text": {
+      "hu": "A leginkább érintett alhálózat",
+      "en": "The most affected subnet"
+    },
+    "enc": {
+      "f1+f2": "0ae11ebfd555efd2647b3ca9",
+      "f1+f3": "b0813ee829bc737adefaf5c1",
+      "f1+f4": "b614b223d49ae7858d1dca84",
+      "f2+f3": "d7f05f333fd9c0f4a5b96172",
+      "f2+f4": "8ad21e2534450f9e2ddbd890",
+      "f3+f4": "488420762af91ac7cfde0a65"
+    }
+  },
+  "flags": [
+    {
+      "id": "f1",
+      "q": {
+        "hu": "Milyen IP-címre oldódott fel a frissítés domainje?",
+        "en": "Which IP address did the update domain resolve to?"
+      },
+      "hash": "956ad6be70b9b345d01b4d2afa98e86534ab0fe6781e170e8cf8ced218095031",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "Szűrj a kulcsként kapott domainre.",
+            "en": "Filter on the domain you got as key."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "A valasz_ip oszlop.",
+            "en": "The answer IP column."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "Dokumentációs (203.0.113.x) cím.",
+            "en": "A documentation (203.0.113.x) address."
+          }
+        }
+      ]
+    },
+    {
+      "id": "f2",
+      "q": {
+        "hu": "Hány belső gép kérdezte le ezt a domaint?",
+        "en": "How many internal hosts queried this domain?"
+      },
+      "hash": "94636388f9600942697628650c4772b872738266ffb45ba82e17a82786a43dfb",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "Ugyanaz a szűrés, mint előbb.",
+            "en": "Same filter as before."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "Egyedi gépeket számolj.",
+            "en": "Count unique hosts."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "A gep oszlop különböző értékei.",
+            "en": "Distinct values of the host column."
+          }
+        }
+      ]
+    },
+    {
+      "id": "f3",
+      "q": {
+        "hu": "Melyik célporton ment a legtöbb adat a kiinduló gépről a terjedés alatt?",
+        "en": "Which destination port carried the most data from the first host during the spreading?"
+      },
+      "hash": "1b2af83c76b2dc3198ff3b74131a90f47e7f032c261d79d2950418c10ba224a7",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "Nézd a kiinduló gép IP-jéről induló kapcsolatokat a terjedés kezdete után.",
+            "en": "Look at connections from the first host's IP after the spreading began."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "Add össze a bájtokat portonként.",
+            "en": "Sum the bytes per port."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "Fájlmegosztási (SMB) port.",
+            "en": "A file sharing (SMB) port."
+          }
+        }
+      ]
+    },
+    {
+      "id": "f4",
+      "q": {
+        "hu": "Melyik /24-es alhálózatot kell elsőként leválasztani (ebben van a legtöbb célgép)?",
+        "en": "Which /24 subnet must be isolated first (it holds the most target hosts)?"
+      },
+      "hash": "9caa98266ce88350f5ae6d5f62bba9fccd5d1727a156d0caf7c6933da3204e53",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "A terjedés célgépeit a kapcsolatok cel_ip oszlopa adja.",
+            "en": "The cel_ip column gives the spreading targets."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "Csoportosítsd az IP-ket az első három oktett szerint.",
+            "en": "Group the IPs by their first three octets."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "Formátum: 10.0.0.0/24",
+            "en": "Format: 10.0.0.0/24"
+          }
+        }
+      ]
+    }
+  ],
+  "files": [
+    {
+      "name": "dns_naplo.csv",
+      "view": "table"
+    },
+    {
+      "name": "halozati_kapcsolatok.csv",
+      "view": "table"
+    },
+    {
+      "name": "gepek.csv",
+      "view": "table"
+    }
+  ]
+}

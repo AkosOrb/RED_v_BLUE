@@ -1,0 +1,55 @@
+gep,ip,tipus,nev,utvonal
+CSK-DC-01,172.18.1.10,szolgaltatas,CsSync,C:\Windows\cssync.exe
+CSK-DC-01,172.18.1.10,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+CSK-DC-01,172.18.1.10,utemezett_feladat,GoogleUpdateTaskMachine,C:\Program Files\Google\Update\GoogleUpdate.exe
+CSK-ERP-01,172.18.1.30,szolgaltatas,CsSync,C:\Windows\cssync.exe
+CSK-ERP-01,172.18.1.30,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+CSK-FIN-01,172.18.4.23,szolgaltatas,CsSync,C:\Windows\cssync.exe
+CSK-FIN-01,172.18.4.23,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+CSK-FIN-02,172.18.4.26,szolgaltatas,CsSync,C:\Windows\cssync.exe
+CSK-FIN-02,172.18.4.26,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+CSK-FIN-02,172.18.4.26,utemezett_feladat,GoogleUpdateTaskMachine,C:\Program Files\Google\Update\GoogleUpdate.exe
+CSK-FIN-03,172.18.4.29,szolgaltatas,CsSync,C:\Windows\cssync.exe
+CSK-FIN-03,172.18.4.29,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+CSK-FIN-04,172.18.4.32,szolgaltatas,CsSync,C:\Windows\cssync.exe
+CSK-FIN-04,172.18.4.32,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+CSK-FIN-04,172.18.4.32,utemezett_feladat,GoogleUpdateTaskMachine,C:\Program Files\Google\Update\GoogleUpdate.exe
+CSK-FIN-05,172.18.4.35,szolgaltatas,CsSync,C:\Windows\cssync.exe
+CSK-FIN-05,172.18.4.35,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+CSK-FIN-06,172.18.4.38,szolgaltatas,CsSync,C:\Windows\cssync.exe
+CSK-FIN-06,172.18.4.38,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+CSK-FIN-06,172.18.4.38,utemezett_feladat,GoogleUpdateTaskMachine,C:\Program Files\Google\Update\GoogleUpdate.exe
+CSK-FIN-07,172.18.4.41,szolgaltatas,CsSync,C:\Windows\cssync.exe
+CSK-FIN-07,172.18.4.41,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+CSK-FIN-07,172.18.4.41,utemezett_feladat,GoogleUpdateTaskMachine,C:\Program Files\Google\Update\GoogleUpdate.exe
+CSK-FIN-08,172.18.4.44,szolgaltatas,CsSync,C:\Windows\cssync.exe
+CSK-FIN-08,172.18.4.44,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+CSK-FIN-08,172.18.4.44,utemezett_feladat,GoogleUpdateTaskMachine,C:\Program Files\Google\Update\GoogleUpdate.exe
+CSK-FIN-09,172.18.4.47,szolgaltatas,CsSync,C:\Windows\cssync.exe
+CSK-FIN-09,172.18.4.47,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+CSK-FIN-10,172.18.4.50,szolgaltatas,CsSync,C:\Windows\cssync.exe
+CSK-FIN-10,172.18.4.50,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+CSK-FIN-11,172.18.4.53,szolgaltatas,CsSync,C:\Windows\cssync.exe
+CSK-FIN-11,172.18.4.53,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+CSK-FIN-11,172.18.4.53,utemezett_feladat,GoogleUpdateTaskMachine,C:\Program Files\Google\Update\GoogleUpdate.exe
+CSK-FIN-12,172.18.4.56,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+CSK-FS-01,172.18.1.20,szolgaltatas,CsSync,C:\Windows\cssync.exe
+CSK-FS-01,172.18.1.20,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+CSK-FS-01,172.18.1.20,utemezett_feladat,GoogleUpdateTaskMachine,C:\Program Files\Google\Update\GoogleUpdate.exe
+CSK-JUMP-01,172.18.1.50,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+CSK-JUMP-01,172.18.1.50,utemezett_feladat,GoogleUpdateTaskMachine,C:\Program Files\Google\Update\GoogleUpdate.exe
+CSK-LOG-01,172.18.5.34,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+CSK-LOG-02,172.18.5.38,szolgaltatas,CsSync,C:\Windows\cssync.exe
+CSK-LOG-02,172.18.5.38,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+CSK-LOG-03,172.18.5.42,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+CSK-LOG-04,172.18.5.46,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+CSK-LOG-05,172.18.5.50,szolgaltatas,CsSync,C:\Windows\cssync.exe
+CSK-LOG-05,172.18.5.50,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+CSK-LOG-06,172.18.5.54,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+CSK-LOG-06,172.18.5.54,utemezett_feladat,GoogleUpdateTaskMachine,C:\Program Files\Google\Update\GoogleUpdate.exe
+CSK-LOG-07,172.18.5.58,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+CSK-LOG-08,172.18.5.62,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+CSK-LOG-09,172.18.5.66,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+CSK-LOG-09,172.18.5.66,utemezett_feladat,GoogleUpdateTaskMachine,C:\Program Files\Google\Update\GoogleUpdate.exe
+CSK-LOG-10,172.18.5.70,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+CSK-MAIL-01,172.18.1.40,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe

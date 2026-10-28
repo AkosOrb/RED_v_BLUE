@@ -1,0 +1,185 @@
+{
+  "id": "blue-easy-L7-csk",
+  "side": "blue",
+  "mode": "easy",
+  "layer": 7,
+  "incident": {
+    "name": "NotPetya / Maersk (2017)",
+    "url": "https://www.wired.com/story/notpetya-cyberattack-ukraine-russia-code-crashed-the-world/"
+  },
+  "title": {
+    "hu": "Újraindítás",
+    "en": "Restart"
+  },
+  "story": {
+    "hu": "A támadó kiszorult, jöhet a helyreállítás. A kézikönyv titkosított jegyzete megmondja a sorrendet; a mentési katalógusból válaszd ki, mit szabad visszatölteni.",
+    "en": "The attacker is out; time to recover. The encrypted note in the handbook gives the order; use the backup catalog to choose what may be restored."
+  },
+  "keyIn": {
+    "type": "keyword",
+    "from": "L6"
+  },
+  "keyOut": {
+    "type": "final",
+    "text": {
+      "hu": "Vége a láncnak",
+      "en": "End of the chain"
+    },
+    "enc": {
+      "f1+f2": "3828acccbd15878c8cc971",
+      "f1+f3": "d7f2d3bec36c2d97ebbb1a",
+      "f1+f4": "a7ca2b7f538dbd3f6f1b78",
+      "f2+f3": "a87b1a10e5f1a37db14bbe",
+      "f2+f4": "2bfd1a5f6e3f1024ea864f",
+      "f3+f4": "d0582a1070a52fd7f6e9e9"
+    }
+  },
+  "flags": [
+    {
+      "id": "f1",
+      "q": {
+        "hu": "Mi a helyreállítási kódszó a jegyzetben?",
+        "en": "What is the recovery codeword in the note?"
+      },
+      "hash": "c797d3104328a1fcb4169adba460d15b205a04f52488e5a1c98a0e5962dcb185",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "Vigenère-rejtjel; a kulcsot az előző réteg adta.",
+            "en": "Vigenère cipher; the previous layer gave the key."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "Ékezet nélküli magyar szöveg, a szóközök megmaradtak.",
+            "en": "Hungarian text without accents; spaces are kept."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "A kulcsszó betűit vond ki a rejtett szöveg betűiből, ismétlődve.",
+            "en": "Subtract the keyword letters from the ciphertext letters, repeating."
+          }
+        }
+      ]
+    },
+    {
+      "id": "f2",
+      "q": {
+        "hu": "Melyik szervert kell elsőként visszaállítani (gépnév)?",
+        "en": "Which server must be restored first (host name)?"
+      },
+      "hash": "5f751423edc0127aada32fa27b5f0eb9e7143edcc55de1a367eb0786cfc9a635",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "A jegyzet megnevezi a szerver szerepét.",
+            "en": "The note names the server's role."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "A tartományvezérlő gépnevét a katalógusban találod.",
+            "en": "Find the domain controller host name in the catalog."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "DC = domain controller.",
+            "en": "DC = domain controller."
+          }
+        }
+      ]
+    },
+    {
+      "id": "f3",
+      "q": {
+        "hu": "Melyik mentésből kell visszaállítani (mentés-azonosító)?",
+        "en": "Which backup must it be restored from (backup ID)?"
+      },
+      "hash": "22cf875a7954f458feb1a661daf4a03487d6956f8739ce5e3f3bba1545a5f3b6",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "A jegyzet: a terjedés előtti utolsó teljes mentés.",
+            "en": "The note: the last full backup before the spreading."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "A terjedés kezdetét a 3. rétegben találtad meg.",
+            "en": "You found the spreading start in layer 3."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "A márc. 16-i mentés már a terjedés után készült.",
+            "en": "The 16 March backup was taken after the spreading."
+          }
+        }
+      ]
+    },
+    {
+      "id": "f4",
+      "q": {
+        "hu": "Hány mentés készült fertőzött szerverről a terjedés kezdete után (ezek nem használhatók)?",
+        "en": "How many backups were taken of infected servers after the spreading began (these are unusable)?"
+      },
+      "hash": "1392606e834b0191f59753754b7229000944248d98402072a65362540ac6a5f1",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "A fertőzött gépek listáját a korábbi rétegekből ismered.",
+            "en": "You know the infected hosts from earlier layers."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "A levelezőszerver nem fertőződött.",
+            "en": "The mail server was not infected."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "Csak a márc. 16-i, terjedés utáni mentések számítanak.",
+            "en": "Only backups on 16 March after the spreading count."
+          }
+        }
+      ]
+    }
+  ],
+  "files": [
+    {
+      "name": "mentesi_katalogus.csv",
+      "view": "table"
+    },
+    {
+      "name": "helyreallitasi_jegyzet.txt",
+      "view": "text"
+    }
+  ]
+}

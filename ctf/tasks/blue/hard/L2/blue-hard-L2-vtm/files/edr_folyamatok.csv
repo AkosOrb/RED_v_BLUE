@@ -1,0 +1,21 @@
+ido,gep,pid,ppid,szulo,folyamat,parancssor,felhasznalo
+2026-03-16 07:43:00,VTM-FIN-03,1050,612,userinit.exe,explorer.exe,explorer.exe,balogh.mate
+2026-03-16 08:10:00,VTM-FIN-03,1083,1050,explorer.exe,outlook.exe,outlook.exe,balogh.mate
+2026-03-16 08:48:00,VTM-FIN-03,1133,1050,explorer.exe,chrome.exe,chrome.exe --profile-directory=Default,balogh.mate
+2026-03-16 08:52:00,VTM-FIN-03,1194,1050,explorer.exe,MerlegSoft.exe,MerlegSoft.exe,balogh.mate
+2026-03-16 09:12:52,VTM-FIN-03,1211,1194,MerlegSoft.exe,mgupdate.exe,mgupdate.exe /check /silent,balogh.mate
+2026-03-16 09:13:30,VTM-FIN-03,1288,1211,mgupdate.exe,msiexec.exe,msiexec /i MerlegSoft_update_2.8.1.msi /qn,balogh.mate
+2026-03-16 07:53:00,VTM-FIN-05,1615,612,userinit.exe,explorer.exe,explorer.exe,nemeth.zsofia
+2026-03-16 08:25:00,VTM-FIN-05,1630,1615,explorer.exe,outlook.exe,outlook.exe,nemeth.zsofia
+2026-03-16 08:50:00,VTM-FIN-05,1657,1615,explorer.exe,chrome.exe,chrome.exe --profile-directory=Default,nemeth.zsofia
+2026-03-16 08:55:00,VTM-FIN-05,1713,1615,explorer.exe,MerlegSoft.exe,MerlegSoft.exe,nemeth.zsofia
+2026-03-16 09:12:41,VTM-FIN-05,1720,1713,MerlegSoft.exe,mgupdate.exe,mgupdate.exe /check /silent,nemeth.zsofia
+2026-03-16 09:14:03,VTM-FIN-05,1788,1720,mgupdate.exe,rundll32.exe,"rundll32.exe C:\ProgramData\mgcore.dll,#1",SYSTEM
+2026-03-16 09:15:28,VTM-FIN-05,1826,1788,rundll32.exe,schtasks.exe,schtasks /create /tn VTMReboot /sc once /st 10:30 /ru SYSTEM,SYSTEM
+2026-03-16 09:16:01,VTM-FIN-05,1841,1788,rundll32.exe,wmic.exe,"wmic /node:<celgep> /user:VTM\adm.feher process call create ""rundll32 ...mgcore.dll,#1""",SYSTEM
+2026-03-16 07:48:00,VTM-LOG-02,1370,612,userinit.exe,explorer.exe,explorer.exe,balogh.mate
+2026-03-16 08:15:00,VTM-LOG-02,1415,1370,explorer.exe,outlook.exe,outlook.exe,balogh.mate
+2026-03-16 08:35:00,VTM-LOG-02,1463,1370,explorer.exe,chrome.exe,chrome.exe --profile-directory=Default,balogh.mate
+2026-03-16 08:52:00,VTM-LOG-02,1480,1370,explorer.exe,MerlegSoft.exe,MerlegSoft.exe,balogh.mate
+2026-03-16 09:12:54,VTM-LOG-02,1527,1480,MerlegSoft.exe,mgupdate.exe,mgupdate.exe /check /silent,balogh.mate
+2026-03-16 09:13:30,VTM-LOG-02,1542,1527,mgupdate.exe,msiexec.exe,msiexec /i MerlegSoft_update_2.8.1.msi /qn,balogh.mate

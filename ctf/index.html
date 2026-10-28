@@ -117,11 +117,12 @@ const LAYER_NAMES = {
   red: [['Felderítés', 'Reconnaissance'], ['Kezdeti behatolás', 'Initial access'], ['Végrehajtás', 'Execution'], ['Beágyazódás', 'Persistence'], ['Jogosultság-emelés', 'Privilege escalation'], ['Oldalirányú mozgás', 'Lateral movement'], ['Adatkiszivárogtatás', 'Exfiltration']],
   blue: [['Riasztás', 'Alert'], ['Triázs', 'Triage'], ['Naplóelemzés', 'Log analysis'], ['Forenzika', 'Forensics'], ['Elszigetelés', 'Containment'], ['Felszámolás', 'Eradication'], ['Helyreállítás', 'Recovery']],
 };
-const layerMax = (k, mode) => Math.round(100 * k * MULT[mode]);
 function flagPoints(k, mode, hintsTaken, late) {
   const cost = HINT_COST.slice(0, hintsTaken).reduce((a, b) => a + b, 0);
   return Math.round(25 * k * (late ? 0.5 : 1) * (1 - cost / 100) * MULT[mode]);
 }
+// Sum of the rounded flag values, so the shown maximum always matches what can be earned.
+const layerMax = (k, mode) => FLAGS * flagPoints(k, mode, 0, false);
 function scoreOf(g) {
   let s = 0;
   for (const tid of g.state.tasks) for (const f of Object.values(g.state.flags[tid] || {})) s += f.pts;
@@ -445,7 +446,13 @@ async function openLayer(k) {
 
 async function newGame(side, mode) {
   await loadIndex();
-  const pick = k => { const c = INDEX.tasks.filter(t => t.side === side && t.mode === mode && t.layer === k); return c[Math.floor(Math.random() * c.length)].id; };
+  // Prefer one whole chain (same story, ids differ only in the layer number) so each key fits the next layer's files;
+  // fall back to drawing each layer separately when no complete chain exists.
+  const cand = INDEX.tasks.filter(t => t.side === side && t.mode === mode);
+  const chainOf = id => id.replace(/-L\d-/, '-');
+  const chains = [...new Set(cand.map(t => chainOf(t.id)))].filter(c => [1, 2, 3, 4, 5, 6, 7].every(k => cand.some(t => t.layer === k && chainOf(t.id) === c)));
+  const chain = chains.length ? chains[Math.floor(Math.random() * chains.length)] : null;
+  const pick = k => { const c = cand.filter(t => t.layer === k && (!chain || chainOf(t.id) === chain)); return c[Math.floor(Math.random() * c.length)].id; };
   GAME = { id: uid(), side, mode, closed: false, score: 0, layer: 1,
     state: { tasks: [1, 2, 3, 4, 5, 6, 7].map(pick), flags: {}, hints: {}, keys: {}, unlocked: 1, maxOpened: 1, startedAt: new Date().toISOString() } };
   await persist();
