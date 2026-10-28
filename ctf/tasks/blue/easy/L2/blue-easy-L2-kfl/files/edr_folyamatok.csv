@@ -1,0 +1,21 @@
+ido,gep,pid,ppid,szulo,folyamat,parancssor,felhasznalo
+2026-03-16 07:59:00,KFL-FIN-03,1064,612,userinit.exe,explorer.exe,explorer.exe,farkas.eva
+2026-03-16 08:14:00,KFL-FIN-03,1092,1064,explorer.exe,outlook.exe,outlook.exe,farkas.eva
+2026-03-16 08:49:00,KFL-FIN-03,1174,1064,explorer.exe,chrome.exe,chrome.exe --profile-directory=Default,farkas.eva
+2026-03-16 08:52:00,KFL-FIN-03,1247,1064,explorer.exe,KonyvPro.exe,KonyvPro.exe,farkas.eva
+2026-03-16 09:12:54,KFL-FIN-03,1336,1247,KonyvPro.exe,kpupdate.exe,kpupdate.exe /check /silent,farkas.eva
+2026-03-16 09:13:30,KFL-FIN-03,1354,1336,kpupdate.exe,msiexec.exe,msiexec /i KonyvPro_update_5.3.2.msi /qn,farkas.eva
+2026-03-16 07:54:00,KFL-FIN-07,1564,612,userinit.exe,explorer.exe,explorer.exe,kovacs.anna
+2026-03-16 08:02:00,KFL-FIN-07,1581,1564,explorer.exe,outlook.exe,outlook.exe,kovacs.anna
+2026-03-16 08:46:00,KFL-FIN-07,1598,1564,explorer.exe,chrome.exe,chrome.exe --profile-directory=Default,kovacs.anna
+2026-03-16 08:55:00,KFL-FIN-07,1667,1564,explorer.exe,KonyvPro.exe,KonyvPro.exe,kovacs.anna
+2026-03-16 09:12:41,KFL-FIN-07,1697,1667,KonyvPro.exe,kpupdate.exe,kpupdate.exe /check /silent,kovacs.anna
+2026-03-16 09:14:03,KFL-FIN-07,1711,1697,kpupdate.exe,rundll32.exe,"rundll32.exe C:\ProgramData\kfdata.dll,#1",SYSTEM
+2026-03-16 09:15:28,KFL-FIN-07,1785,1711,rundll32.exe,schtasks.exe,schtasks /create /tn KFLReboot /sc once /st 10:30 /ru SYSTEM,SYSTEM
+2026-03-16 09:16:01,KFL-FIN-07,1807,1711,rundll32.exe,wmic.exe,"wmic /node:<celgep> /user:KFL\adm.szabo process call create ""rundll32 ...kfdata.dll,#1""",SYSTEM
+2026-03-16 07:45:00,KFL-LOG-02,1398,612,userinit.exe,explorer.exe,explorer.exe,farkas.eva
+2026-03-16 08:07:00,KFL-LOG-02,1415,1398,explorer.exe,outlook.exe,outlook.exe,farkas.eva
+2026-03-16 08:44:00,KFL-LOG-02,1437,1398,explorer.exe,chrome.exe,chrome.exe --profile-directory=Default,farkas.eva
+2026-03-16 08:52:00,KFL-LOG-02,1472,1398,explorer.exe,KonyvPro.exe,KonyvPro.exe,farkas.eva
+2026-03-16 09:12:55,KFL-LOG-02,1513,1472,KonyvPro.exe,kpupdate.exe,kpupdate.exe /check /silent,farkas.eva
+2026-03-16 09:13:30,KFL-LOG-02,1538,1513,kpupdate.exe,msiexec.exe,msiexec /i KonyvPro_update_5.3.2.msi /qn,farkas.eva

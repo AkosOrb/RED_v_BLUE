@@ -1,0 +1,25 @@
+ido,sulyossag,szabaly,gep,leiras
+2026-03-16 06:26:36,MEDIUM,R-2210,KFL-ERP-01,Ritka böngésző-bővítmény telepítése
+2026-03-16 06:47:25,LOW,R-1307,KFL-FIN-02,USB-tároló csatlakoztatva
+2026-03-16 06:47:47,LOW,R-1102,KFL-LOG-08,Sikertelen bejelentkezés (1x)
+2026-03-16 06:51:09,MEDIUM,R-3001,KFL-LOG-03,Nagy kimenő levélforgalom
+2026-03-16 07:09:35,MEDIUM,R-3001,KFL-MAIL-01,Nagy kimenő levélforgalom
+2026-03-16 08:36:17,LOW,R-1307,KFL-FIN-09,USB-tároló csatlakoztatva
+2026-03-16 08:51:12,LOW,R-1307,KFL-FIN-07,USB-tároló csatlakoztatva
+2026-03-16 09:14:07,CRITICAL,R-4021,KFL-FIN-07,Könyvelőprogram frissítője rundll32-t indított
+2026-03-16 09:15:30,HIGH,R-4410,KFL-FIN-07,Ütemezett feladat létrehozva rendszerjoggal
+2026-03-16 09:16:13,CRITICAL,R-5530,KFL-FIN-01,Távoli folyamatindítás WMI-n keresztül
+2026-03-16 09:16:53,CRITICAL,R-5530,KFL-FIN-02,Távoli folyamatindítás WMI-n keresztül
+2026-03-16 09:17:56,HIGH,R-4410,KFL-FIN-03,Ütemezett feladat létrehozva rendszerjoggal
+2026-03-16 09:18:36,HIGH,R-4410,KFL-FIN-04,Ütemezett feladat létrehozva rendszerjoggal
+2026-03-16 09:19:14,HIGH,R-4410,KFL-FIN-05,Ütemezett feladat létrehozva rendszerjoggal
+2026-03-16 09:19:48,CRITICAL,R-5530,KFL-FIN-06,Távoli folyamatindítás WMI-n keresztül
+2026-03-16 09:20:17,CRITICAL,R-5530,KFL-FIN-08,Távoli folyamatindítás WMI-n keresztül
+2026-03-16 09:21:05,CRITICAL,R-5530,KFL-FIN-09,Távoli folyamatindítás WMI-n keresztül
+2026-03-16 09:21:34,CRITICAL,R-5530,KFL-FIN-10,Távoli folyamatindítás WMI-n keresztül
+2026-03-16 09:22:17,HIGH,R-4410,KFL-FIN-11,Ütemezett feladat létrehozva rendszerjoggal
+2026-03-16 09:22:58,HIGH,R-4410,KFL-LOG-02,Ütemezett feladat létrehozva rendszerjoggal
+2026-03-16 09:23:39,CRITICAL,R-5530,KFL-LOG-05,Távoli folyamatindítás WMI-n keresztül
+2026-03-16 09:24:36,CRITICAL,R-5530,KFL-FS-01,Távoli folyamatindítás WMI-n keresztül
+2026-03-16 09:25:33,CRITICAL,R-5530,KFL-ERP-01,Távoli folyamatindítás WMI-n keresztül
+2026-03-16 09:26:10,CRITICAL,R-5530,KFL-DC-01,Távoli folyamatindítás WMI-n keresztül

@@ -1,0 +1,174 @@
+{
+  "id": "blue-easy-L2-kfl",
+  "side": "blue",
+  "mode": "easy",
+  "layer": 2,
+  "incident": {
+    "name": "NotPetya / Maersk (2017)",
+    "url": "https://www.wired.com/story/notpetya-cyberattack-ukraine-russia-code-crashed-the-world/"
+  },
+  "title": {
+    "hu": "Mi fut a gépen?",
+    "en": "What is running on the host?"
+  },
+  "story": {
+    "hu": "Megvan a kiinduló gép. Az EDR folyamatlistájából derítsd ki, melyik program indította a gyanús folyamatláncot, és milyen fiókot próbál használni a támadó.",
+    "en": "You have the first host. Use the EDR process list to find which program started the suspicious process chain and which account the attacker is trying to use."
+  },
+  "keyIn": {
+    "type": "hostname",
+    "from": "L1"
+  },
+  "keyOut": {
+    "type": "account",
+    "value": "adm.szabo",
+    "text": {
+      "hu": "A támadó által használt rendszergazdai fiók",
+      "en": "Admin account used by the attacker"
+    }
+  },
+  "flags": [
+    {
+      "id": "f1",
+      "q": {
+        "hu": "Melyik szülőfolyamat indította a rundll32.exe-t a kiinduló gépen?",
+        "en": "Which parent process started rundll32.exe on the first host?"
+      },
+      "hash": "c20aaf87acb8857264fc3f6bceee6666677fdeeeef88d941e7d3db79507e7c16",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "Szűrj a kulcsként kapott gépre.",
+            "en": "Filter on the host you got as key."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "Keresd a rundll32.exe sort, és nézd a szulo oszlopot.",
+            "en": "Find the rundll32.exe row and check the parent column."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "A könyvelőprogram frissítőjéről van szó.",
+            "en": "It is the accounting software updater."
+          }
+        }
+      ]
+    },
+    {
+      "id": "f2",
+      "q": {
+        "hu": "Melyik DLL-fájlt töltötte be a rundll32.exe?",
+        "en": "Which DLL file did rundll32.exe load?"
+      },
+      "hash": "5b7e0933d0d6aef0deb1c2fd16fd76b342c607d64368bba1d276704ac5f827f7",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "Nézd a parancssor oszlopot.",
+            "en": "Look at the command line column."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "A ProgramData mappában van.",
+            "en": "It is in the ProgramData folder."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "Csak a fájlnév kell, kiterjesztéssel.",
+            "en": "Only the file name is needed, with extension."
+          }
+        }
+      ]
+    },
+    {
+      "id": "f3",
+      "q": {
+        "hu": "Melyik felhasználó munkamenetében indult a könyvelőprogram?",
+        "en": "In which user's session was the accounting software started?"
+      },
+      "hash": "2553000aeea5d6530cd6766573c924f06011882c15615624c6f29011e856c599",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "A KonyvPro.exe sort keresd.",
+            "en": "Find the KonyvPro.exe row."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "A felhasznalo oszlop.",
+            "en": "The user column."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "vezeteknev.keresztnev formátum.",
+            "en": "surname.firstname format."
+          }
+        }
+      ]
+    },
+    {
+      "id": "f4",
+      "q": {
+        "hu": "Melyik rendszergazdai fiók szerepel a távoli folyamatindítás parancssorában?",
+        "en": "Which admin account appears in the remote process creation command line?"
+      },
+      "hash": "a41c18525afbaa970894b70e0ae3c7b9d1a29a04315aa58c0e5cead2649d4bb1",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "A wmic.exe sort keresd.",
+            "en": "Find the wmic.exe row."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "A /user: kapcsoló után áll.",
+            "en": "It follows the /user: switch."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "A tartománynév (KFL\\) nélkül add meg.",
+            "en": "Give it without the domain (KFL\\)."
+          }
+        }
+      ]
+    }
+  ],
+  "files": [
+    {
+      "name": "edr_folyamatok.csv",
+      "view": "table"
+    }
+  ]
+}

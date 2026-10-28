@@ -1,0 +1,53 @@
+{
+ "tasks": [
+  {
+   "id": "blue-easy-L1-kfl",
+   "side": "blue",
+   "mode": "easy",
+   "layer": 1,
+   "path": "tasks/blue/easy/L1/blue-easy-L1-kfl"
+  },
+  {
+   "id": "blue-easy-L2-kfl",
+   "side": "blue",
+   "mode": "easy",
+   "layer": 2,
+   "path": "tasks/blue/easy/L2/blue-easy-L2-kfl"
+  },
+  {
+   "id": "blue-easy-L3-kfl",
+   "side": "blue",
+   "mode": "easy",
+   "layer": 3,
+   "path": "tasks/blue/easy/L3/blue-easy-L3-kfl"
+  },
+  {
+   "id": "blue-easy-L4-kfl",
+   "side": "blue",
+   "mode": "easy",
+   "layer": 4,
+   "path": "tasks/blue/easy/L4/blue-easy-L4-kfl"
+  },
+  {
+   "id": "blue-easy-L5-kfl",
+   "side": "blue",
+   "mode": "easy",
+   "layer": 5,
+   "path": "tasks/blue/easy/L5/blue-easy-L5-kfl"
+  },
+  {
+   "id": "blue-easy-L6-kfl",
+   "side": "blue",
+   "mode": "easy",
+   "layer": 6,
+   "path": "tasks/blue/easy/L6/blue-easy-L6-kfl"
+  },
+  {
+   "id": "blue-easy-L7-kfl",
+   "side": "blue",
+   "mode": "easy",
+   "layer": 7,
+   "path": "tasks/blue/easy/L7/blue-easy-L7-kfl"
+  }
+ ]
+}
