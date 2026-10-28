@@ -2,7 +2,7 @@
 // minden adat csak az adott böngészőben tárolódik.
 window.CTF_CONFIG = {
   supabaseUrl: '',      // pl. 'https://abcd1234.supabase.co'
-  supabaseAnonKey: '',  // a projekt nyilvános (anon) kulcsa
+  supabaseAnonKey: 'sb_publishable_kmOz3NrDQKioCSfUvfW5wQ_9EvzEUEr',  // a projekt nyilvános (publishable/anon) kulcsa
   // Csak helyi próbamódban: ezek a felhasználónevek látják az oktatói felületet.
   // Supabase módban az oktatói jogot az adatbázisban kell megadni (lásd supabase/schema.sql).
   localInstructors: ['oktato'],

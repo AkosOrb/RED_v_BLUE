@@ -192,7 +192,7 @@ const SupabaseBackend = {
   async rest(path, opt = {}, retry = true) {
     const s = this.sess();
     const r = await fetch(`${this.url}/rest/v1/${path}`, {
-      ...opt, headers: { apikey: this.key, Authorization: `Bearer ${s ? s.access_token : this.key}`, 'Content-Type': 'application/json', Prefer: 'return=representation', ...(opt.headers || {}) },
+      ...opt, headers: { apikey: this.key, ...(s ? { Authorization: `Bearer ${s.access_token}` } : {}), 'Content-Type': 'application/json', Prefer: 'return=representation', ...(opt.headers || {}) },
     });
     if (r.status === 401 && retry && await this.refresh()) return this.rest(path, opt, false);
     const j = await r.json().catch(() => null);
