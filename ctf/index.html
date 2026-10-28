@@ -182,6 +182,12 @@ const LocalBackend = {
   },
   async leaderboard() { return this.games().map(g => ({ username: g.username, side: g.side, mode: g.mode, score: g.score, layer: g.layer, closed: g.closed, updated_at: g.updated_at })); },
   async allGames() { return this.games(); },
+  async deleteGames(ids) {
+    const gone = id => ids === 'all' || ids.includes(id), games = this.games();
+    store.set('rvbctf-games', games.filter(g => !gone(g.id)));
+    store.set('rvbctf-events', (store.get('rvbctf-events') || []).filter(e => !gone(e.game_id)));
+    return games.filter(g => gone(g.id)).length;
+  },
   async events(gameId) { return (store.get('rvbctf-events') || []).filter(e => e.game_id === gameId); },
 };
 
@@ -240,6 +246,12 @@ const SupabaseBackend = {
     try { await this.rest('events', { method: 'POST', headers: { Prefer: 'return=minimal' }, body: JSON.stringify({ user_id: user.id, game_id: gameId, type, data }) }); } catch (e) { console.warn('log', e); }
   },
   async leaderboard() { return this.rest('leaderboard?select=*'); },
+  // Instructors only (games_delete policy); events go with their game (on delete cascade).
+  async deleteGames(ids) {
+    const r = await this.rest(ids === 'all' ? 'games?id=not.is.null&select=id' : `games?id=in.(${ids.join(',')})&select=id`, { method: 'DELETE' });
+    if (!r.length) throw new Error(L('Nem sikerült törölni. Az adatbázisban hiányzik az oktatói törlési jog (lásd supabase/schema.sql).', 'Nothing was deleted. The database lacks the instructor delete permission (see supabase/schema.sql).'));
+    return r.length;
+  },
   async allGames() { return this.rest('games?select=*,profiles(username)&order=updated_at.desc').then(r => r.map(g => ({ ...g, username: g.profiles && g.profiles.username }))); },
   async events(gameId) { return this.rest(`events?game_id=eq.${gameId}&select=*&order=at.asc`); },
 };
@@ -248,7 +260,7 @@ const BACK = CFG.supabaseUrl && CFG.supabaseAnonKey ? SupabaseBackend : LocalBac
 // ---------------------------------------------------------------- app state
 let USER = null, GAME = null, INDEX = null, VIEW = 'login', CUR = 1, MSG = {}, BUSY = false;
 let FILEVIEW = null;            // {name, kind, rows|text, sort, filter}
-let TEACH = { games: null, sel: null, events: null, seen: null, at: null };
+let TEACH = { games: null, sel: null, events: null, seen: null, at: null, pick: new Set(), del: null, msg: '' };  // del: null | 'sel' | 'all' (awaiting confirmation)
 const LIVE_MS = 5000;           // instructor view refresh interval
 const TASKS = {};
 const app = document.getElementById('app');
@@ -452,11 +464,17 @@ async function teachHTML() {
   const sel = TEACH.games.find(g => g.id === TEACH.sel);
   if (sel) TEACH.events = await BACK.events(sel.id);
   TEACH.at = new Date();
+  for (const id of TEACH.pick) if (!TEACH.games.some(g => g.id === id)) TEACH.pick.delete(id);
+  const np = TEACH.pick.size, allPicked = TEACH.games.length > 0 && np === TEACH.games.length;
+  const delBar = TEACH.del
+    ? `<div class="keybox row" style="margin-top:10px"><b>${TEACH.del === 'all' ? L(`Biztosan törlöd mind a ${TEACH.games.length} játszmát?`, `Delete all ${TEACH.games.length} games?`) : L(`Biztosan törlöd a kijelölt ${np} játszmát?`, `Delete the ${np} selected games?`)}</b><span class="hint">${L('Az eseménynaplójuk is törlődik, és ez nem vonható vissza.', 'Their event logs are deleted too, and this cannot be undone.')}</span>
+       <button class="btn sm red" data-a="delyes">${L('Igen, törlés', 'Yes, delete')}</button><button class="btn sm ghost" data-a="delno">${L('Mégsem', 'Cancel')}</button></div>`
+    : `<div class="row" style="margin-top:10px"><button class="btn sm red" data-a="delsel" ${np ? '' : 'disabled'}>${L('Kijelöltek törlése', 'Delete selected')} (${np})</button><button class="btn sm red" data-a="delall" ${TEACH.games.length ? '' : 'disabled'}>${L('Összes törlése', 'Delete all')}</button><span class="err">${esc(TEACH.msg)}</span></div>`;
   const dur = g => { const ms = new Date(g.updated_at) - new Date(g.state.startedAt); return isFinite(ms) ? Math.round(ms / 60000) + ' ' + L('perc', 'min') : '–'; };
   const hintsUsed = g => Object.values(g.state.hints || {}).reduce((a, h) => a + Object.values(h).reduce((x, y) => x + y, 0), 0);
   return `<div class="stack"><div class="frame cut"><div class="fi"><div class="row" style="justify-content:space-between"><h2>${L('Oktatói felület', 'Instructor view')}</h2><button class="btn sm" data-a="csv">${L('Összes esemény CSV-ben', 'All events as CSV')}</button></div>
-   <table class="lb"><thead><tr><th>${L('Játékos', 'Player')}</th><th>${L('Mód', 'Mode')}</th><th>${L('Réteg', 'Layer')}</th><th>${L('Pont', 'Points')}</th><th>${L('Tippek', 'Hints')}</th><th>${L('Idő', 'Time')}</th><th>${L('Állapot', 'State')}</th><th></th></tr></thead>
-   <tbody>${TEACH.games.map(g => `<tr><td>${esc(g.username)}</td><td>${g.mode}</td><td>${g.layer}</td><td><b>${g.score}</b></td><td>${hintsUsed(g)}</td><td>${dur(g)}</td><td>${g.closed ? L('lezárva', 'closed') : L('aktív', 'active')}</td><td><button class="btn sm ghost" data-a="tsel" data-id="${g.id}">${L('Idővonal', 'Timeline')}</button></td></tr>`).join('') || `<tr><td colspan="8">${L('Még nincs játék.', 'No games yet.')}</td></tr>`}</tbody></table></div></div>
+   <table class="lb"><thead><tr><th><input type="checkbox" data-a="pickall" aria-label="${L('Összes kijelölése', 'Select all')}" ${allPicked ? 'checked' : ''}></th><th>${L('Játékos', 'Player')}</th><th>${L('Mód', 'Mode')}</th><th>${L('Réteg', 'Layer')}</th><th>${L('Pont', 'Points')}</th><th>${L('Tippek', 'Hints')}</th><th>${L('Idő', 'Time')}</th><th>${L('Állapot', 'State')}</th><th></th></tr></thead>
+   <tbody>${TEACH.games.map(g => `<tr><td><input type="checkbox" data-a="pick" data-id="${g.id}" aria-label="${L('Kijelölés', 'Select')}: ${esc(g.username)}" ${TEACH.pick.has(g.id) ? 'checked' : ''}></td><td>${esc(g.username)}</td><td>${g.mode}</td><td>${g.layer}</td><td><b>${g.score}</b></td><td>${hintsUsed(g)}</td><td>${dur(g)}</td><td>${g.closed ? L('lezárva', 'closed') : L('aktív', 'active')}</td><td><button class="btn sm ghost" data-a="tsel" data-id="${g.id}">${L('Idővonal', 'Timeline')}</button></td></tr>`).join('') || `<tr><td colspan="9">${L('Még nincs játék.', 'No games yet.')}</td></tr>`}</tbody></table>${delBar}</div></div>
    ${sel ? `<div class="frame cut"><div class="fi stack"><div class="row" style="justify-content:space-between"><h2>${esc(sel.username)} · ${L('idővonal', 'timeline')}</h2>
      <div class="row"><span class="hint"><span class="live"></span>${L('Élő, 5 másodpercenként frissül', 'Live, refreshes every 5 seconds')} · ${TEACH.at.toLocaleTimeString(LANG === 'en' ? 'en-GB' : 'hu-HU')}</span><button class="btn sm ghost" data-a="replay">${L('Visszajátszás', 'Replay')}</button></div></div>
     ${timelineChart(sel, TEACH.events)}
@@ -621,6 +639,20 @@ app.addEventListener('click', async ev => {
     else if (a === 'teach') { VIEW = 'teach'; TEACH.sel = null; }
     else if (a === 'tsel') { TEACH.sel = el.dataset.id; TEACH.seen = null; }
     else if (a === 'replay') TEACH.seen = null;
+    else if (a === 'pick') { const id = el.dataset.id; TEACH.pick.has(id) ? TEACH.pick.delete(id) : TEACH.pick.add(id); }
+    else if (a === 'pickall') TEACH.pick = TEACH.pick.size === TEACH.games.length ? new Set() : new Set(TEACH.games.map(g => g.id));
+    else if (a === 'delsel' || a === 'delall') { TEACH.del = a === 'delall' ? 'all' : 'sel'; TEACH.msg = ''; }
+    else if (a === 'delno') TEACH.del = null;
+    else if (a === 'delyes') {
+      const ids = TEACH.del === 'all' ? 'all' : [...TEACH.pick];
+      TEACH.del = null;
+      try {
+        const n = await BACK.deleteGames(ids);
+        TEACH.msg = L(`${n} játszma törölve.`, `${n} games deleted.`);
+        if (ids === 'all' || ids.includes(TEACH.sel)) TEACH.sel = null;
+        TEACH.pick = new Set();
+      } catch (e) { TEACH.msg = e.message; }
+    }
     else if (a === 'csv') await exportCSV();
     else if (a === 'new') await newGame(el.dataset.mode);
     else if (a === 'resume') { await openLayer(Math.min(GAME.state.unlocked, LAYERS)); VIEW = 'play'; }

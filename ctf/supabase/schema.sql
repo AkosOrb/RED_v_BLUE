@@ -69,6 +69,11 @@ drop policy if exists games_update on public.games;
 create policy games_update on public.games for update to authenticated
   using (user_id = auth.uid() and not closed) with check (user_id = auth.uid());
 
+-- Játszmák törlése: csak oktató (az eseménynapló a játszmával együtt törlődik).
+drop policy if exists games_delete on public.games;
+create policy games_delete on public.games for delete to authenticated
+  using (public.is_instructor());
+
 drop policy if exists events_read on public.events;
 create policy events_read on public.events for select to authenticated
   using (user_id = auth.uid() or public.is_instructor());
