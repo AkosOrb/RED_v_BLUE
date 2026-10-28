@@ -43,6 +43,12 @@ A CTF-mód a `ctf/index.html` oldal; a főmenüben a „CTF – zászlószerzés
 A feladatokat a böngésző `fetch`-csel tölti be, ezért webszerverről kell futnia (GitHub Pages, vagy helyben
 `python3 -m http.server` a repó gyökeréből, majd `http://localhost:8000/ctf/`). Közvetlenül fájlként megnyitva nem működik.
 
+### Önálló, egyfájlos változat
+
+`python3 ctf/tools/build_standalone.py RedVsBlue_CTF.html` minden feladatot beágyaz egyetlen HTML-fájlba.
+Ez szerver és adatbázis nélkül, dupla kattintással is fut (mindig helyi próbamódban).
+A feladatbank minden módosítása után újra kell generálni.
+
 ### Helyi próbamód
 
 Ha a `ctf/config.js`-ben üres a Supabase URL és kulcs, a játék helyi próbamódban fut: a fiókok, játékok és

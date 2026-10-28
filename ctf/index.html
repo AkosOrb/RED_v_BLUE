@@ -239,15 +239,19 @@ let TEACH = { games: null, sel: null, events: null };
 const TASKS = {};
 const app = document.getElementById('app');
 
+// Standalone build (ctf/tools/build_standalone.py) embeds every task and file in window.CTF_BUNDLE,
+// so the page also works opened straight from disk, without a web server.
+const BUNDLE = window.CTF_BUNDLE || null;
+const getText = path => BUNDLE ? Promise.resolve(BUNDLE.files[path]) : fetch(path).then(r => r.text());
 async function loadIndex() {
-  if (!INDEX) INDEX = await fetch('index.json', { cache: 'no-store' }).then(r => r.json());
+  if (!INDEX) INDEX = BUNDLE ? BUNDLE.index : await fetch('index.json', { cache: 'no-store' }).then(r => r.json());
   return INDEX;
 }
 async function loadTask(tid) {
   if (!TASKS[tid]) {
     const meta = INDEX.tasks.find(t => t.id === tid);
     const base = meta.path;
-    TASKS[tid] = await fetch(`${base}/task.json`).then(r => r.json());
+    TASKS[tid] = JSON.parse(await getText(`${base}/task.json`));
     TASKS[tid]._base = base;
   }
   return TASKS[tid];
@@ -261,13 +265,13 @@ async function persist() {
 
 // ---------------------------------------------------------------- views
 function topHTML() {
-  return `<div class="top"><div class="row"><a class="logo" href="../index.html" title="${L('Vissza a Red vs Blue főmenübe', 'Back to the Red vs Blue menu')}"><span class="r">RED</span> VS <span class="b">BLUE</span></a><span class="pill">CTF</span></div>
+  return `<div class="top"><div class="row"><a class="logo" href="${BUNDLE ? (CFG.menuUrl || '#') : '../index.html'}" title="${L('Vissza a Red vs Blue főmenübe', 'Back to the Red vs Blue menu')}"><span class="r">RED</span> VS <span class="b">BLUE</span></a><span class="pill">CTF</span></div>
    <div class="row">${USER ? `<span class="mono">${esc(USER.username)}${USER.role === 'instructor' ? ' · ' + L('oktató', 'instructor') : ''}</span>
     <button class="btn sm ghost" data-a="home">${L('Kezdőlap', 'Home')}</button><button class="btn sm ghost" data-a="board">${L('Ranglista', 'Leaderboard')}</button>
     ${USER.role === 'instructor' ? `<button class="btn sm ghost" data-a="teach">${L('Oktatói felület', 'Instructor view')}</button>` : ''}
     <button class="btn sm ghost" data-a="logout">${L('Kilépés', 'Log out')}</button>` : ''}
     <button class="btn sm" data-a="lang">${LANG === 'en' ? 'HU' : 'EN'}</button></div></div>
-   ${BACK.kind === 'local' ? `<div class="banner">${L('Helyi próbamód: a fiókok és eredmények csak ebben a böngészőben tárolódnak. Az online módhoz a config.js-ben meg kell adni a Supabase adatait.', 'Local trial mode: accounts and results are stored only in this browser. Online mode needs the Supabase settings in config.js.')}</div>` : ''}`;
+   ${BACK.kind === 'local' ? `<div class="banner">${L('Helyi próbamód: a fiókok és eredmények csak ebben a böngészőben tárolódnak.', 'Local trial mode: accounts and results are stored only in this browser.')}${BUNDLE ? '' : ' ' + L('Az online módhoz a config.js-ben meg kell adni a Supabase adatait.', 'Online mode needs the Supabase settings in config.js.')}</div>` : ''}`;
 }
 
 function loginHTML() {
@@ -318,7 +322,7 @@ function layerListHTML() {
 
 function fileHTML(t) {
   return `<div class="row">${t.files.map(f => `<button class="btn sm${FILEVIEW && FILEVIEW.name === f.name ? '' : ' ghost'}" data-a="file" data-f="${esc(f.name)}" ${GAME.mode === 'hard' ? 'hidden' : ''}>${esc(f.name)}</button>
-     <a class="btn sm ghost" href="${esc(t._base)}/files/${encodeURIComponent(f.name)}" download data-a="dl" data-f="${esc(f.name)}">⬇ ${GAME.mode === 'hard' ? esc(f.name) : L('letöltés', 'download')}</a>`).join('')}</div>
+     <a class="btn sm ghost" href="${BUNDLE ? '#' : `${esc(t._base)}/files/${encodeURIComponent(f.name)}`}" download="${esc(f.name)}" data-a="dl" data-f="${esc(f.name)}">⬇ ${GAME.mode === 'hard' ? esc(f.name) : L('letöltés', 'download')}</a>`).join('')}</div>
    ${FILEVIEW && GAME.mode !== 'hard' ? fileViewHTML() : ''}`;
 }
 function fileViewHTML() {
@@ -494,7 +498,7 @@ async function hint(fid) {
 
 async function viewFile(name) {
   const t = TASKS[GAME.state.tasks[CUR - 1]], f = t.files.find(x => x.name === name);
-  const text = await fetch(`${t._base}/files/${encodeURIComponent(name)}`).then(r => r.text());
+  const text = await getText(`${t._base}/files/${name}`);
   FILEVIEW = f.view === 'table' ? { name, kind: 'table', rows: parseCSV(text), sort: null, dir: 1 } : { name, kind: 'text', text };
   log('view_file', { layer: CUR, file: name });
 }
@@ -526,7 +530,16 @@ async function afterLogin() {
 app.addEventListener('click', async ev => {
   const el = ev.target.closest('[data-a]'); if (!el || BUSY) return;
   const a = el.dataset.a;
-  if (a === 'dl') { log('download', { layer: CUR, file: el.dataset.f }); return; }
+  if (a === 'dl') {
+    log('download', { layer: CUR, file: el.dataset.f });
+    if (BUNDLE) {
+      ev.preventDefault();
+      const t = TASKS[GAME.state.tasks[CUR - 1]], d = document.createElement('a');
+      d.href = URL.createObjectURL(new Blob([BUNDLE.files[`${t._base}/files/${el.dataset.f}`]], { type: 'text/plain' }));
+      d.download = el.dataset.f; d.click();
+    }
+    return;
+  }
   ev.preventDefault();
   BUSY = true;
   try {
