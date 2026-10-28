@@ -151,6 +151,7 @@ input[type=text]{font-family:var(--f-mono);font-size:18px;letter-spacing:.2em;te
 .clash .side{display:flex;flex-direction:column;align-items:center;gap:8px;min-width:0}
 .clash .sum{font-family:var(--f-disp);font-weight:900;font-size:28px}
 .clash .vs{font-family:var(--f-disp);font-weight:900;font-size:22px}
+@media (max-width:600px){.clash{gap:6px}.clash .hc,.clash .back{width:100%;max-width:148px}.clash .ci{min-width:0}.clash .top2{min-width:0;overflow:hidden}.clash .sum{font-size:22px}}
 .result{font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:8px 12px;text-align:center}
 .result.rw{background:var(--red);color:var(--ink)}.result.bw{background:var(--blue);color:var(--ink)}.result.tw{background:var(--ink);color:var(--white)}
 /* crypto */
@@ -176,6 +177,16 @@ details.ref summary{cursor:pointer;font-weight:700;text-transform:uppercase;font
 /* log */
 .log{list-style:none;margin:0;padding:0;font-size:13px;max-height:260px;overflow:auto}
 .log li{padding:5px 0;border-bottom:1px dashed var(--mute)}
+.specscore{margin-top:14px}
+.scoregrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;margin-top:10px}
+.scoregrid>div{background:var(--ink2);padding:8px 10px;display:flex;flex-direction:column;gap:2px}
+.scoregrid b{font-size:24px;color:var(--white)}.scoregrid b.r{color:var(--red)}.scoregrid b.b{color:var(--blue)}
+.sumwrap{overflow-x:auto;margin-top:8px}
+.sumtbl{border-collapse:collapse;width:100%;font-size:13px;min-width:560px}
+.sumtbl th,.sumtbl td{text-align:left;padding:6px 8px;border-bottom:1px dashed var(--mute);vertical-align:top}
+.sumtbl th{font-family:var(--f-mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase}
+.sumlog{margin:8px 0 0;padding-left:0;list-style:none;font-size:13px}
+.sumlog li{padding:6px 0;border-bottom:1px dashed var(--mute)}.sumlog .rd{font-family:var(--f-mono);letter-spacing:.16em;font-weight:700}
 .log li.rd{font-family:var(--f-mono);letter-spacing:.16em;color:var(--white);border-bottom-color:var(--soft)}
 .toast{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--white);padding:10px 16px;border-left:6px solid var(--red);max-width:min(92vw,520px);z-index:9;font-size:14px}
 .end{background:var(--ink);color:var(--white);padding:22px;text-align:center}
@@ -599,7 +610,9 @@ function shuffle(st, s) {
   return a.join('');
 }
 function has(st, side, key) { return !!st.cfg[side].ro[ROLE_KEYS[side].indexOf(key)]; }
-function log(st, e) { st.lg.push(e); if (st.lg.length > 14) st.lg.shift(); }
+function log(st, e) { st.lg.push(e); if (st.lg.length > 14) st.lg.shift(); (st.fl = st.fl || []).push(e); }
+// one row per finished clash for the end-of-game summary: [round, stage, red card, blue card, red total, blue total, result, duel level, duel ms]
+function summ(st) { const c = st.cl; (st.sm = st.sm || []).push([st.rd, c.z, c.r, c.b, c.rt, c.bt, c.w, c.lv || 0, c.dt == null ? -1 : c.dt]); }
 
 // Game modes: 0 = base game, 1 = Haladó (budget, slow draw, reward choice), 2 = Profi (+ staging, noise, missions, crown jewel, priced roles)
 const GM_NAMES = [['ALAPJÁTÉK', 'BASE GAME'], ['HALADÓ', 'ADVANCED'], ['PROFI', 'PRO']];
@@ -616,7 +629,7 @@ function newGame(seed, gm) {
     cfg: { r: { n: 3, ro: [1, 1, 1, 1, 1], ok: 0 }, b: { n: 3, ro: [1, 1, 1, 1, 1], ok: 0 }, alt: 0 },
     rd: 0, z: 1, det: 0, dk: { r: '', b: '' }, h: { r: '', b: '' }, ds: { r: '', b: '' },
     ct: ['', '', '', '', ''], u: { lead: 0, recon: 0, ciso: 0, ir: 0 }, ov: 0, rp: 0, pkr: 0, pk: '',
-    pl: { r: '', b: '' }, cl: null, du: null, cr: ['', '', '', '', ''], fc: 0, hist: '', w: '', wr: '', lg: [],
+    pl: { r: '', b: '' }, cl: null, du: null, cr: ['', '', '', '', ''], fc: 0, hist: '', w: '', wr: '', lg: [], fl: [], sm: [],
     // modes: rs budget, ps persistence flags per stage, rw reward chooser, ik threat-intel cards, tr trimming side,
     // sg staged card per stage, sgd staged this round, pls attack came from staging, hu hunted this round,
     // nz noise, ms mission index, mp mission progress, ep espionage streak, cj crown jewel stage, cjr revealed, pkc Red saw crown
@@ -702,7 +715,7 @@ function resolve(st) {
     if (st.cj === st.z && st.pl.b !== '-' && !st.cjr) { st.cjr = 1; log(st, ['cjr', st.z]); }
     if (cardOf(st.pl.r).p >= 4 && ++st.nz >= NOISE_MAX) {
       st.nz = 0; st.det = Math.min(5, st.det + 1); log(st, ['noise', st.det]);
-      if (st.det >= 5) { discardClash(st); return finish(st, 'b', 'b5'); }
+      if (st.det >= 5) { st.cl.w = 'n'; summ(st); discardClash(st); return finish(st, 'b', 'b5'); }
     }
   }
   if (st.pl.b === '-' || t.rt > t.bt) return redWins(st);
@@ -712,10 +725,10 @@ function resolve(st) {
   if (!st.cr[lv - 1].length) { let s = ''; DATA.crypto.forEach((c, i) => { if (c.l === lv) s += enc(i); }); st.cr[lv - 1] = shuffle(st, s); }
   const c = st.cr[lv - 1][0]; st.cr[lv - 1] = st.cr[lv - 1].slice(1);
   st.du = { c, lv, t0: Date.now(), out: '', hp: '' };
-  st.cl.w = 'd'; st.ph = 'duel'; log(st, ['duel', lv]);
+  st.cl.w = 'd'; st.cl.lv = lv; st.ph = 'duel'; log(st, ['duel', lv]);
 }
 function redWins(st) {
-  st.cl.w = st.cl.w === 'd' ? 'dr' : 'r';
+  st.cl.w = st.cl.w === 'd' ? 'dr' : 'r'; summ(st);
   const rc = cardOf(st.cl.r);
   discardClash(st);
   if (pro(st) && ((st.ms === 2 && rc.p >= 4) || (st.ms === 3 && rc.se))) {
@@ -731,7 +744,7 @@ function redWins(st) {
   after(st);
 }
 function blueWins(st, diff) {
-  st.cl.w = st.cl.w === 'd' ? 'db' : 'b';
+  st.cl.w = st.cl.w === 'd' ? 'db' : 'b'; summ(st);
   discardClash(st);
   if (!adv(st)) st.det++;
   let soc = 0;
@@ -744,7 +757,7 @@ function blueWins(st, diff) {
   after(st);
 }
 function duelFail(st) {
-  st.cl.w = 'dt'; discardClash(st); log(st, ['dto']); after(st);
+  st.cl.w = 'dt'; if (st.du) st.cl.dt = Math.max(0, Math.min(DUEL_MS, Date.now() - st.du.t0)); summ(st); discardClash(st); log(st, ['dto']); after(st);
 }
 function after(st) {
   st.du = null; st.rw = ''; st.pls = 0;
@@ -866,11 +879,11 @@ function apply(st, side, a) {
     if (a.t === 'ans') {
       if (d.out.includes(side)) return 'Hibás válasz után már nem fejthetsz.';
       if (checkAnswer(c, a.a || [])) {
-        log(st, ['dwin', side]);
+        st.cl.dt = Math.max(0, Math.min(DUEL_MS, Date.now() - d.t0)); log(st, ['dwin', side, st.cl.dt]);
         if (pro(st) && has(st, side, 'crypto')) st.rs[side] = Math.min(RES_CAP, st.rs[side] + 1);
         return side === 'r' ? redWins(st) : blueWins(st, 0), '';
       }
-      d.out += side; log(st, ['dwrong', side]);
+      d.out += side; log(st, ['dwrong', side, Math.max(0, Math.min(DUEL_MS, Date.now() - d.t0))]);
       if (d.out.length >= 2) duelFail(st);
       return '';
     }
@@ -1080,6 +1093,7 @@ let GMSEL = (() => { try { return Math.max(0, Math.min(2, +localStorage.getItem(
 let MODE = null;            // 'local' | 'host' | 'guest'
 let ST = null;              // engine state
 let MY = null;              // my side in online play
+let SPEC = false;           // read-only spectator (broadcast view) of an online game
 let SCREEN = 'menu';
 let SEL = { r: [], b: [] };
 let SHOW = { r: false, b: false };
@@ -1098,6 +1112,7 @@ function toast(m) { TOAST = m; clearTimeout(toastT); toastT = setTimeout(() => {
 
 // ---------- actions ----------
 function dispatch(side, a) {
+  if (SPEC) return;
   if (MODE === 'guest') {
     if (!GROOM) return toast('Nincs kapcsolat a játékkal.');
     ACTN++; PENDING = true;
@@ -1167,17 +1182,17 @@ function mqttLink(url, topics, onMsg, onState) {
   return L;
 }
 function mqttChannel(code, role) {
-  // host writes .../host and reads .../guest/+ ; each guest writes .../guest/<gid> and reads .../host
+  // host writes .../host and reads .../guest/+ ; each guest writes .../guest/<gid> and reads .../host ; a spectator only reads .../host
   const base = TOPIC + code.toUpperCase() + '/';
-  const mine = role === 'host' ? base + 'host' : base + 'guest/' + GID, theirs = role === 'host' ? base + 'guest/+' : base + 'host';
+  const mine = role === 'host' ? base + 'host' : role === 'spec' ? '' : base + 'guest/' + GID, theirs = role === 'host' ? base + 'guest/+' : base + 'host';
   let cur = {}, cb = null, seq = 0;
   const got = {}; // topic -> latest payload by q
   const links = BROKERS.map(u => mqttLink(u, [theirs], (t, txt) => {
     let d; try { d = JSON.parse(txt); } catch (e) { return; }
     if (!d || (got[t] && got[t].q >= d.q)) return;
     got[t] = d; if (cb) cb(Object.values(got).map(p => ({ presence: p })));
-  }, l => { NETUP = links.filter(x => x.up()).length; if (l.up()) l.pub(mine, JSON.stringify(cur), true); render(); }));
-  const send = () => { cur.q = Date.now() * 100 + (seq++ % 100); const s = JSON.stringify(cur); links.forEach(l => l.pub(mine, s, true)); };
+  }, l => { NETUP = links.filter(x => x.up()).length; if (l.up() && mine) l.pub(mine, JSON.stringify(cur), true); render(); }));
+  const send = () => { if (!mine) return; cur.q = Date.now() * 100 + (seq++ % 100); const s = JSON.stringify(cur); links.forEach(l => l.pub(mine, s, true)); };
   return {
     set: p => { cur = { ...cur, ...p }; Object.keys(p).forEach(k => { if (p[k] === null) delete cur[k]; }); send(); },
     watch: f => { cb = f; },
@@ -1191,13 +1206,13 @@ function newCode() { const r = crypto.getRandomValues(new Uint8Array(6)); return
 let GO = { h: false, g: false };
 function linked() { return MODE === 'host' ? PEERS.some(p => p.presence && p.presence.gid === SEAT) : !!(HOSTP && HOSTP.seat === GID); }
 let HOSTP = null;
-function inLobby() { return !TEAM && (MODE === 'host' || (MODE === 'guest' && (!ST || MY))) && !(GO.h && GO.g); }
+function inLobby() { return !SPEC && !TEAM && (MODE === 'host' || (MODE === 'guest' && (!ST || MY))) && !(GO.h && GO.g); }
 function lobbyHTML() {
   const host = MODE === 'host', ok = linked(), me = host ? GO.h : GO.g, them = host ? GO.g : GO.h;
   const net = NETKIND === 'mqtt' ? (NETUP ? `<span class="tag tb">${L('HÁLÓZAT OK', 'NETWORK OK')} · ${NETUP} ${L('SZERVER', 'SERVER' + (NETUP > 1 ? 'S' : ''))}</span>` : `<span class="tag tr">${L('KAPCSOLÓDÁS A HÁLÓZATHOZ…', 'CONNECTING TO THE NETWORK…')}</span>`) : '';
   return `<div class="panel cut lobby" style="margin-top:16px"><div class="row" style="justify-content:space-between;align-items:flex-start"><div>
     <div class="lbl">${host ? L('Játékkód · küldd el az ellenfélnek', 'Game code · send it to your opponent') : L('Csatlakozás ehhez a játékhoz', 'Joining this game')}</div><div class="code" style="color:var(--ink);margin-top:6px">${esc(CODE.toUpperCase())}</div></div><div class="stack" style="gap:6px;align-items:flex-end">${net}</div></div>
-    <p style="margin:12px 0 0">${host ? L(`Az ellenfél megnyitja a játékot, a „Csatlakozás kóddal” mezőbe beírja ezt a 6 karaktert, és kész. Te a ${SIDE[MY]} csapat vagy.`, `Your opponent opens the game, types these 6 characters into "Join with code", and that's it. You are team ${SIDE[MY]}.`) : MY ? L(`Te a ${SIDE[MY]} csapat vagy.`, `You are team ${SIDE[MY]}.`) : L('Várakozás a házigazda válaszára…', 'Waiting for the host…')}</p>
+    <p style="margin:12px 0 0">${host ? L(`Az ellenfél megnyitja a játékot, a „Csatlakozás kóddal” mezőbe beírja ezt a 6 karaktert, és kész. Te a ${SIDE[MY]} csapat vagy. Nézők ugyanezzel a kóddal a „Közvetítés” gombbal követhetik a játékot.`, `Your opponent opens the game, types these 6 characters into "Join with code", and that's it. You are team ${SIDE[MY]}. Spectators can follow the game with the same code using the "Watch" button.`) : MY ? L(`Te a ${SIDE[MY]} csapat vagy.`, `You are team ${SIDE[MY]}.`) : L('Várakozás a házigazda válaszára…', 'Waiting for the host…')}</p>
     <div class="row" style="margin-top:14px;align-items:center">
      ${ok ? `<span class="tag tb">${L('KAPCSOLAT LÉTREJÖTT', 'CONNECTED')}</span>` : `<span class="tag tr">${host ? L('VÁRAKOZÁS AZ ELLENFÉLRE', 'WAITING FOR OPPONENT') : L('VÁRAKOZÁS A HÁZIGAZDÁRA', 'WAITING FOR HOST')}</span>`}
      <button class="btn ${MY === 'r' ? 'red' : 'blue'}" data-a="go" aria-pressed="${me}" ${ok && !me ? '' : 'disabled'}>${me ? L('Indításra kész', 'Ready to start') : L('Játék indítása', 'Start game')}</button>
@@ -1210,13 +1225,13 @@ async function openChannel(code, role) {
     const g = await ROOMNS.join('rvb-' + code);
     let cur = {};
     return {
-      set: p => { cur = { ...cur, ...p }; Object.keys(p).forEach(k => { if (p[k] === null) delete cur[k]; }); g.presence(cur).catch(() => { }); },
+      set: p => { if (role === 'spec') return; cur = { ...cur, ...p }; Object.keys(p).forEach(k => { if (p[k] === null) delete cur[k]; }); g.presence(cur).catch(() => { }); },
       watch: cb => g.onPeers(ch => cb(ch.peers.filter(p => !p.sameTab && p.presence).map(p => ({ presence: p.presence })))),
       close: () => g.leave().catch(() => { })
     };
   }
-  // host: rvb/<code>-host ; each guest: rvb/<code>/g/<gid> (host watches the whole subcollection)
-  const mine = DBNS.doc(role === 'host' ? 'rvb/' + code + '-host' : 'rvb/' + code + '/g/' + GID);
+  // host: rvb/<code>-host ; each guest: rvb/<code>/g/<gid> (host watches the whole subcollection) ; a spectator writes nothing
+  const mine = role === 'spec' ? null : DBNS.doc(role === 'host' ? 'rvb/' + code + '-host' : 'rvb/' + code + '/g/' + GID);
   const theirs = role === 'host' ? DBNS.collection('rvb/' + code + '/g') : DBNS.doc('rvb/' + code + '-host');
   let cur = {}, pending = null, busy = false, unsub = null, dead = false;
   async function flush() {
@@ -1231,7 +1246,7 @@ async function openChannel(code, role) {
     busy = false;
   }
   return {
-    set: p => { cur = { ...cur, ...p }; Object.keys(p).forEach(k => { if (p[k] === null) delete cur[k]; }); pending = JSON.parse(JSON.stringify(cur)); flush(); },
+    set: p => { if (!mine) return; cur = { ...cur, ...p }; Object.keys(p).forEach(k => { if (p[k] === null) delete cur[k]; }); pending = JSON.parse(JSON.stringify(cur)); flush(); },
     watch: cb => { unsub = theirs.onSnapshot(s => cb(s.docs ? s.docs.map(d => ({ presence: d.data() })) : s.exists ? [{ presence: s.data() }] : []), () => toast('Megszakadt a kapcsolat a játékkal.')); },
     close: () => { dead = true; if (unsub) unsub(); }
   };
@@ -1272,15 +1287,16 @@ function hostPeers() {
     ST = r.st; afterChange(); persist(); publishHost();
   });
 }
-async function joinGame(code) {
+// spectate: same code as the teams, read-only. The spectator never writes, so the host never seats it and it needs no write access.
+async function joinGame(code, spec) {
   if (!NETKIND) return toast('Az online mód ebben a nézetben nem érhető el.');
   code = (code || '').replace(/\s+/g, '').toUpperCase();
   if (!/^[A-Z0-9]{6}$/.test(code)) return toast('A játékkód 6 karakter.');
   if (NETKIND !== 'mqtt') code = code.toLowerCase();
-  MODE = 'guest'; CODE = code; SCREEN = 'game'; ST = null; GO = { h: false, g: false }; HOSTP = null; TEAM = false; ROSTER = []; MYRO = []; ME = { sd: '', ro: [], rdy: '' }; render();
+  MODE = 'guest'; SPEC = !!spec; MY = null; CODE = code; SCREEN = 'game'; ST = null; GO = { h: false, g: false }; HOSTP = null; TEAM = false; ROSTER = []; MYRO = []; ME = { sd: '', ro: [], rdy: '' }; render();
   try {
-    GROOM = await openChannel(code, 'guest');
-    GROOM.set({ ro: 'guest', gid: GID, act: null, go: false, t: JT, j: Date.now(), left: 0, nm: myName(), want: { sd: '', ro: [] }, rdy: '' });
+    GROOM = await openChannel(code, SPEC ? 'spec' : 'guest');
+    if (!SPEC) GROOM.set({ ro: 'guest', gid: GID, act: null, go: false, t: JT, j: Date.now(), left: 0, nm: myName(), want: { sd: '', ro: [] }, rdy: '' });
     let lastRej = 0;
     GROOM.watch(list => {
       PEERS = list;
@@ -1291,6 +1307,7 @@ async function joinGame(code) {
         lastHostSt = pr.st;
         HOSTOFF = (pr.now || Date.now()) - Date.now();
         TEAM = !!pr.tm;
+        if (SPEC) { ROSTER = TEAM ? pr.pl || [] : []; MY = null; MYRO = []; PENDING = false; return render(); }
         if (TEAM) {
           ROSTER = pr.pl || []; LB = pr.lb || ''; meFromRoster();
           const me = ROSTER.find(p => p.gid === GID);
@@ -1308,9 +1325,9 @@ async function joinGame(code) {
   } catch (e) { toast('Nem sikerült csatlakozni.'); }
 }
 function leave() {
-  if (GROOM && MODE === 'guest') try { GROOM.set({ left: 1, want: { sd: '', ro: [] }, rdy: '' }); } catch (e) { }
+  if (GROOM && MODE === 'guest' && !SPEC) try { GROOM.set({ left: 1, want: { sd: '', ro: [] }, rdy: '' }); } catch (e) { }
   if (GROOM) { const g = GROOM; GROOM = null; setTimeout(() => g.close(), 300); }
-  TEAM = false; ROSTER = []; MYRO = [];
+  TEAM = false; SPEC = false; ROSTER = []; MYRO = [];
   MODE = null; ST = null; SCREEN = 'menu'; PEERS = []; render();
 }
 
@@ -1534,13 +1551,14 @@ function clashHTML() {
   }
   const c = ST.cl; if (!c) return '';
   const rc = cardOf(c.r);
-  const res = { r: ['rw', L('A támadás sikeres', 'The attack succeeds')], b: ['bw', L('A védekezés sikeres', 'The defense succeeds')], d: ['tw', L('Döntetlen: kriptopárbaj', 'Tie: crypto duel')], dr: ['rw', L('Párbaj: a Red nyert', 'Duel: Red won')], db: ['bw', L('Párbaj: a Blue nyert', 'Duel: Blue won')], dt: ['tw', L('Lejárt az idő: a támadás sikertelen', 'Time is up: the attack fails')] }[c.w];
+  const res = { r: ['rw', L('A támadás sikeres', 'The attack succeeds')], b: ['bw', L('A védekezés sikeres', 'The defense succeeds')], d: ['tw', L('Döntetlen: kriptopárbaj', 'Tie: crypto duel')], dr: ['rw', L('Párbaj: a Red nyert', 'Duel: Red won')], db: ['bw', L('Párbaj: a Blue nyert', 'Duel: Blue won')], dt: ['tw', L('Lejárt az idő: a támadás sikertelen', 'Time is up: the attack fails')], n: ['bw', L('Túl nagy a zaj: a Blue észlelte a támadást', 'Too much noise: Blue detected the attack')] }[c.w];
+  const dtx = c.dt >= 0 && (c.w === 'dr' || c.w === 'db') ? ` · ${L('megfejtési idő', 'solve time')} ${mmss(c.dt)}` : '';
   return `<div class="frame cut"><div class="fi"><div class="lbl">${L('Legutóbbi ütközés', 'Last clash')} · ${ZN[c.z][0]}</div>
    <div class="clash" style="margin-top:8px">
     <div class="side">${cardHTML(c.r)}<div class="sum r">${rc.p}${c.rb ? ' + ' + c.rb : ''} = ${c.rt}</div></div>
     <div class="vs">VS</div>
     <div class="side">${c.b === '-' ? `<div class="back" style="background:transparent;box-shadow:inset 0 0 0 2px var(--ink);color:var(--ink)"><span class="disp" style="font-size:18px">${L('PASSZ', 'PASS')}</span></div><div class="sum b">0</div>` : cardHTML(c.b) + `<div class="sum b">${cardOf(c.b).p}${c.bb ? ' + ' + c.bb : ''} = ${c.bt}</div>`}</div>
-   </div>${res ? `<div class="result ${res[0]}" style="margin-top:10px">${res[1]}</div>` : ''}
+   </div>${res ? `<div class="result ${res[0]}" style="margin-top:10px">${res[1]}${dtx}</div>` : ''}
    <div class="detail" style="margin-top:10px">${caseHTML(c.r)}${c.b !== '-' ? caseHTML(c.b) : ''}</div></div></div>`;
 }
 function caseHTML(ch) {
@@ -1704,8 +1722,8 @@ const LOGTXT = {
   rw: z => L(`Sikeres támadás, a bábu ide lép: ${ZN[z][0]}.`, `Attack succeeds, the pawn moves to ${ZN[z][0]}.`),
   bw: (d, soc) => L(`Sikeres védekezés: ${d}. Észlelés jelző`, `Defense succeeds: Detection token ${d}`) + (soc ? L(' (SOC elemző: +1)', ' (SOC Analyst: +1)') : '') + '.',
   duel: lv => L(`Döntetlen: ${ROMAN[lv]}. szintű kriptopárbaj.`, `Tie: level ${ROMAN[lv]} crypto duel.`),
-  dwin: s => L(`A ${SIDE[s]} Kriptográfusa fejtette meg előbb.`, `The ${SIDE[s]} Cryptographer solved it first.`),
-  dwrong: s => L(`A ${SIDE[s]} Kriptográfusa hibás választ adott, kiesett.`, `The ${SIDE[s]} Cryptographer gave a wrong answer and is out.`),
+  dwin: (s, ms) => L(`A ${SIDE[s]} Kriptográfusa fejtette meg előbb`, `The ${SIDE[s]} Cryptographer solved it first`) + (ms >= 0 ? ` (${mmss(ms)})` : '') + '.',
+  dwrong: (s, ms) => L(`A ${SIDE[s]} Kriptográfusa hibás választ adott, kiesett`, `The ${SIDE[s]} Cryptographer gave a wrong answer and is out`) + (ms >= 0 ? ` (${mmss(ms)})` : '') + '.',
   dto: () => L('Senki sem fejtette meg: a támadás sikertelen, nincs Észlelés jelző.', 'Nobody solved it: the attack fails, no Detection token.'),
   ctrl: c => L('Tartós kontroll: ', 'Persistent control: ') + `${cardOf(c).hu} (+1, ${ZN[cardOf(c).c][0]}).`,
   ir: z => L(`Incidenskezelő: a bábu visszalép ide: ${ZN[z][0]}.`, `Incident Handler: the pawn moves back to ${ZN[z][0]}.`),
@@ -1728,6 +1746,7 @@ const LOGTXT = {
   trim: (s, n) => L(`A ${SIDE[s]} ${n} lapot dobott el (kézlimit 7).`, `${SIDE[s]} discarded ${n} card(s) (hand limit 7).`),
   end: (w, why) => w ? L(`${SIDE[w]} győzelem.`, `${SIDE[w]} wins.`) : L(`A játékot megszakították (${SIDE[why.split(':')[1]] || ''}).`, `The game was aborted (${SIDE[why.split(':')[1]] || ''}).`)
 };
+const mmss = ms => `${Math.floor(ms / 60000)}:${String(Math.floor(ms / 1000) % 60).padStart(2, '0')}`;
 function logHTML() {
   return `<div class="panel cut"><div class="lbl" style="margin-bottom:6px">${L('Napló', 'Log')}</div><ul class="log">${ST.lg.slice().reverse().map(e => `<li class="${e[0] === 'rd' ? 'rd' : ''}">${esc((LOGTXT[e[0]] || (() => ''))(...e.slice(1)))}</li>`).join('')}</ul></div>`;
 }
@@ -1775,7 +1794,7 @@ function endHTML() {
   return `<div class="end cut"><div class="lbl">${L(`Játék vége · ${ST.rd}. kör`, `Game over · round ${ST.rd}`)}</div><div class="disp ${ST.w}">${SIDE[ST.w].toUpperCase()} ${L('NYERT', 'WINS')}</div><p>${why}</p>${pro(ST) ? `<p>${L('Red küldetés', 'Red mission')}: ${esc(missionTxt())}${ST.cj ? ` · ${L('Blue koronaékszer', 'Blue crown jewel')}: 0${ST.cj} ${ZN[ST.cj][0]}` : ''}</p>` : ''}
    <div class="row" style="justify-content:center"><button class="btn ${ST.w === 'r' ? 'red' : 'blue'}" data-a="again">${L('Új játék', 'New game')}</button></div></div>
    <div class="frame cut"><div class="fi"><h2>${L('Kiértékelés', 'Debrief')}</h2><p class="hint">${L('Menjetek végig a kijátszott lapok valós esetein. Mindkét csapat nevezze meg azt a lépést, amely szerintük eldöntötte a játékot, és hogy a valós esetben mi akadhatott volna meg.', 'Go through the real cases on the cards played. Each team names the move they think decided the game, and what could have stopped it in the real incident.')}</p>
-   <div class="detail">${hist.map(caseHTML).join('')}</div></div></div>`;
+   <div class="detail">${hist.map(caseHTML).join('')}</div></div></div>${summaryHTML()}`;
 }
 
 function menuHTML() {
@@ -1797,7 +1816,8 @@ function menuHTML() {
       <div class="row" style="margin-top:8px"><button class="btn" data-a="hostteam" ${online ? '' : 'disabled'}>${L('Új szerepkörös játék', 'New role-based game')}</button>${team && team.st && team.st.ph !== 'end' && online ? `<button class="btn ghost" data-a="reteam">${L('Folytatás', 'Continue')} · ${esc(team.code.toUpperCase())}</button>` : ''}</div></div></div>
     <a class="choice cut" href="ctf/" style="text-decoration:none;color:inherit"><div class="fi cut"><span class="lbl">${L('Egyéni játékmód', 'Individual mode')}</span><b>${L('CTF – zászlószerzés', 'CTF – capture the flag')}</b><span class="hint">${L('Incidenskezelés saját fiókkal, saját tempóban: 7 egymásra épülő réteg a riasztástól a helyreállításig, valós incidensek alapján, közös ranglistával.', 'Incident response with your own account, at your own pace: 7 layers built on each other from the alert to recovery, based on real incidents, with a shared leaderboard.')}</span></div></a>
     <div class="choice cut" style="cursor:default"><div class="fi cut"><span class="lbl">${L('Csatlakozás bármelyik online játékhoz', 'Join any online game')}</span><b>${L('Csatlakozás kóddal', 'Join with code')}</b>
-      <div class="row" style="margin-top:8px;flex-wrap:nowrap"><input type="text" id="joincode" maxlength="6" placeholder="${L('KÓD', 'CODE')}" aria-label="${L('Játékkód', 'Game code')}" autocomplete="off" value="${esc(KEEP.joincode || '')}" ${online ? '' : 'disabled'}><button class="btn" data-a="join" ${online ? '' : 'disabled'}>${L('Belépés', 'Join')}</button></div></div></div>
+      <div class="row" style="margin-top:8px;flex-wrap:nowrap"><input type="text" id="joincode" maxlength="6" placeholder="${L('KÓD', 'CODE')}" aria-label="${L('Játékkód', 'Game code')}" autocomplete="off" value="${esc(KEEP.joincode || '')}" ${online ? '' : 'disabled'}><button class="btn" data-a="join" ${online ? '' : 'disabled'}>${L('Belépés', 'Join')}</button><button class="btn ghost" data-a="watch" ${online ? '' : 'disabled'} title="${L('Csak nézőként követed a játékot', 'Follow the game as a spectator only')}">${L('Közvetítés', 'Watch')}</button></div>
+      <span class="hint">${L('Közvetítés: ugyanazzal a kóddal, csak nézőként (például kivetítőn). Látod az állást és a lépéseket, a lapokat csak felfedés után.', 'Watch: the same code, as a spectator only (for example on a projector). You see the score and the moves, and cards only once they are revealed.')}</span></div></div>
     <p class="hint">${!NETREADY ? L('Online kapcsolat ellenőrzése…', 'Checking the online connection…') : online ? (NETKIND === 'mqtt' ? L('Online kapcsolat ingyenes nyilvános közvetítő szervereken át: bármely internetkapcsolattal működik, a két gépnek nem kell egy hálózaton lennie.', 'Online play runs through free public relay servers: it works on any internet connection, and the devices do not need to be on the same network.') : L(`Online kapcsolat: ${NETKIND === 'db' ? 'közös játékadatbázis' : 'élő szoba'}. A két eszköz ugyanezt a linket nyitja meg.`, `Online connection: ${NETKIND === 'db' ? 'shared game database' : 'live room'}. All devices open this same link.`)) : L('Az online módhoz a játékot a Claude felületén, bejelentkezve kell megnyitni, és legalább Közreműködő (Contributor) hozzáférés kell hozzá. A helyi játék mindenhol működik.', 'For online play, open the game in Claude while signed in, with at least Contributor access. Local play works everywhere.')}</p>
    </div></div>
    <div class="frame cut" style="margin-top:20px"><div class="fi"><h2>${L('Egy kör röviden', 'A round in brief')}</h2>
@@ -1811,8 +1831,50 @@ function menuHTML() {
 }
 
 function gameHTML() {
+  if (SPEC) return specHTML();
   if (inLobby()) return lobbyHTML();
   return gameInner();
+}
+// ---------- spectator (broadcast) view: score, steps, face-down cards until both sides revealed, duel time + result, end summary ----------
+function specScoreHTML() {
+  const act = ST.ph === 'end' ? '' : ST.ph === 'duel' ? L('KRIPTOPÁRBAJ', 'CRYPTO DUEL') : activeSide() ? `${L('SORON', 'UP')}: ${SIDE[activeSide()].toUpperCase()}` : '';
+  const cell = (k, v, c) => `<div><span class="lbl">${k}</span><b class="disp ${c || ''}">${v}</b></div>`;
+  return `<div class="panel cut specscore"><div class="row" style="justify-content:space-between"><span class="lbl">${L('Közvetítés', 'Live broadcast')} · ${L('kód', 'code')} ${esc(CODE.toUpperCase())}${TEAM ? ' · ' + L('szerepkörös', 'role-based') : ''}</span>${act ? `<span class="tag">${act}</span>` : ''}</div>
+    <div class="scoregrid">${cell(L('Kör', 'Round'), `${ST.rd}/10`)}${cell(L('Red bábu', 'Red pawn'), `0${ST.z}/05`, 'r')}${cell(L('Blue észlelés', 'Blue detection'), `${ST.det}/5`, 'b')}${adv(ST) ? cell(L('Erőforrás R · B', 'Resources R · B'), `${ST.rs.r} · ${ST.rs.b}`) : ''}${cell(L('Kéz R · B', 'Hand R · B'), `${ST.h.r.length} · ${ST.h.b.length}`)}</div></div>`;
+}
+function specDuelHTML() {
+  const d = ST.du;
+  const st = s => d.out.includes(s) ? `<span class="tag tr">${L('KIESETT', 'OUT')}</span>` : `<span class="tag tg">${L('FEJT…', 'SOLVING…')}</span>`;
+  return `<div class="stack"><div class="frame cut"><div class="fi"><div class="row" style="justify-content:space-between"><span class="lbl">${L('Kriptopárbaj', 'Crypto duel')} · ${ROMAN[d.lv]} · ${L('hátralévő idő', 'time left')}</span><span class="disp" id="tleft" style="font-size:28px">--</span></div><div class="timer" style="margin-top:6px"><i id="tbar" style="width:100%"></i></div>
+    <div class="row" style="margin-top:10px">${['r', 'b'].map(s => `<span><b class="${s}">${SIDE[s]}</b> ${st(s)}${d.hp.includes(s) ? ` <span class="tag">${L('SEGÍTSÉGET KÉRT', 'ASKED FOR HELP')}</span>` : ''}</span>`).join('')}</div></div></div>${clashHTML()}</div>`;
+}
+function summaryHTML() {
+  const sm = ST.sm || [], fl = ST.fl && ST.fl.length ? ST.fl : ST.lg;
+  const res = { r: ['r', L('Támadás sikeres', 'Attack succeeds')], b: ['b', L('Védekezés sikeres', 'Defense succeeds')], dr: ['r', L('Párbaj: Red', 'Duel: Red')], db: ['b', L('Párbaj: Blue', 'Duel: Blue')], dt: ['', L('Párbaj: senki', 'Duel: nobody')], n: ['b', L('Zaj: észlelve', 'Noise: detected')] };
+  const rows = sm.map(e => {
+    const [rd, z, r, b, rt, bt, w, lv, dt] = e, x = res[w] || ['', ''];
+    return `<tr><td>${rd}</td><td>0${z} ${esc(ZN[z][0])}</td><td>${esc(cardOf(r).hu)} <b>${rt}</b></td><td>${b === '-' ? L('passz', 'pass') : `${esc(cardOf(b).hu)} <b>${bt}</b>`}</td><td class="${x[0]}"><b>${x[1]}</b></td><td>${lv ? ROMAN[lv] + (dt >= 0 ? ' · ' + mmss(dt) : '') : ''}</td></tr>`;
+  }).join('');
+  const rounds = []; fl.forEach(e => { if (e[0] === 'rd' || !rounds.length) rounds.push([]); rounds[rounds.length - 1].push(e); });
+  return `<div class="frame cut"><div class="fi"><h2>${L('Lépés-összefoglaló', 'Move summary')}</h2>
+    ${rows ? `<div class="sumwrap"><table class="sumtbl"><thead><tr><th>${L('Kör', 'Rd')}</th><th>${L('Szakasz', 'Stage')}</th><th>Red</th><th>Blue</th><th>${L('Eredmény', 'Result')}</th><th>${L('Párbaj · idő', 'Duel · time')}</th></tr></thead><tbody>${rows}</tbody></table></div>` : `<p class="hint">${L('Nem volt ütközés.', 'There was no clash.')}</p>`}
+    <details style="margin-top:10px"><summary class="lbl" style="cursor:pointer">${L('Minden lépés körönként', 'Every move by round')}</summary><ol class="sumlog">${rounds.map(g => `<li>${g.map(e => `<div class="${e[0] === 'rd' ? 'rd' : ''}">${esc((LOGTXT[e[0]] || (() => ''))(...e.slice(1)))}</div>`).join('')}</li>`).join('')}</ol></details></div></div>`;
+}
+function specHTML() {
+  if (!ST) return gameInner();
+  if (ST.ph === 'setup' || (!TEAM && !(GO.h && GO.g))) {
+    const team = s => TEAM ? ROSTER.filter(p => p.sd === s).map(p => esc(p.nm)).join(', ') || L('még senki', 'nobody yet') : ST.cfg[s].ok ? L('kész', 'ready') : L('beállít…', 'setting up…');
+    return `<div class="panel cut" style="margin-top:16px"><div class="lbl">${L('Közvetítés', 'Live broadcast')} · ${esc(CODE.toUpperCase())}</div><h2 style="color:var(--white);margin-top:6px">${L('A játék még nem kezdődött el', 'The game has not started yet')}</h2>
+      <p>${L('A csapatok felkészülnek. Amint elindul a játék, itt követheted az állást és a lépéseket.', 'The teams are getting ready. Once the game starts, you can follow the score and the moves here.')}</p>
+      <p><b class="r">Red</b>: ${team('r')}<br><b class="b">Blue</b>: ${team('b')}</p></div>`;
+  }
+  const mid = ST.ph === 'end' ? specEndHTML() : ST.ph === 'duel' && ST.du ? specDuelHTML() : clashHTML();
+  return `${specScoreHTML()}<div class="game"><div class="stack">${boardHTML()}${rolesHTML()}${logHTML()}</div>
+    <div class="stack" style="min-width:0">${phaseHTML()}${mid}${ST.ph !== 'end' ? ['r', 'b'].map(handPanel).join('') : ''}</div></div>`;
+}
+function specEndHTML() {
+  const why = ST.w ? { r5: L('A Red sikeresen támadott a CÉL szakaszon.', 'Red attacked successfully at the OBJECTIVE stage.'), b5: L('A Blue összegyűjtötte az 5. Észlelés jelzőt.', 'Blue collected the 5th Detection token.'), b10: L('A Blue kitartott a 10. kör végéig.', 'Blue held out until the end of round 10.'), m1: L('A Red teljesítette a Kémkedés küldetést.', 'Red completed the Espionage mission.'), m2: L('A Red teljesítette a Wiper küldetést.', 'Red completed the Wiper mission.'), m3: L('A Red teljesítette a Social engineering küldetést.', 'Red completed the Social engineering mission.') }[ST.wr] : L(`A játékot a ${SIDE[ST.wr.split(':')[1]] || ''} csapat megszakította.`, `Team ${SIDE[ST.wr.split(':')[1]] || ''} aborted the game.`);
+  return `<div class="end cut"><div class="lbl">${L(`Játék vége · ${ST.rd}. kör`, `Game over · round ${ST.rd}`)}</div><div class="disp ${ST.w || ''}" ${ST.w ? '' : 'style="color:var(--btn-on-bg)"'}>${ST.w ? `${SIDE[ST.w].toUpperCase()} ${L('NYERT', 'WINS')}` : 'ABORT'}</div><p>${why}</p>${pro(ST) && ST.w ? `<p>${L('Red küldetés', 'Red mission')}: ${esc(missionTxt())}${ST.cj ? ` · ${L('Blue koronaékszer', 'Blue crown jewel')}: 0${ST.cj} ${ZN[ST.cj][0]}` : ''}</p>` : ''}</div>${clashHTML()}${summaryHTML()}`;
 }
 function gameInner() {
   if (!ST) return `<div class="panel cut" style="margin-top:16px"><div class="lbl">${L('Csatlakozás', 'Joining')}</div><h2 style="color:var(--white);margin-top:6px">${L('Várakozás a házigazdára', 'Waiting for the host')} · ${esc(CODE.toUpperCase())}</h2><p>${L('Ha sokáig nem történik semmi, ellenőrizd a kódot.', 'If nothing happens for a while, check the code.')}</p></div>`;
@@ -1989,7 +2051,7 @@ function langHTML() {
 function render() {
   const a = document.activeElement, fid = a && a.id, pos = a && a.selectionStart;
   const tmode = TEAM ? L('SZEREPKÖRÖS', 'ROLE-BASED') + ' · ' + (MY ? SIDE[MY].toUpperCase() + (MYRO.length ? ' · ' + MYRO.map(k => roleKeyName(MY, k).toUpperCase()).join(', ') : '') : L('NÉZŐ', 'SPECTATOR')) : '';
-  const mode = TEAM ? tmode : { local: L('HELYI JÁTÉK', 'LOCAL GAME'), host: 'ONLINE · ' + (MY ? SIDE[MY].toUpperCase() : ''), guest: 'ONLINE · ' + (MY ? SIDE[MY].toUpperCase() : ST ? L('NÉZŐ', 'SPECTATOR') : L('CSATLAKOZÁS', 'JOINING')) }[MODE] || '';
+  const mode = SPEC ? L('KÖZVETÍTÉS', 'LIVE BROADCAST') : TEAM ? tmode : { local: L('HELYI JÁTÉK', 'LOCAL GAME'), host: 'ONLINE · ' + (MY ? SIDE[MY].toUpperCase() : ''), guest: 'ONLINE · ' + (MY ? SIDE[MY].toUpperCase() : ST ? L('NÉZŐ', 'SPECTATOR') : L('CSATLAKOZÁS', 'JOINING')) }[MODE] || '';
   document.getElementById('app').innerHTML = `<div class="accent"><i></i><i></i></div>
    <header class="top"><span class="logo"><span class="r">RED</span><small>VS</small><span class="b">BLUE</span></span>${mode ? `<span class="pill">${mode}</span>` : ''}${SCREEN === 'game' && ST ? `<span class="pill">${gmName(ST.gm)}</span>` : ''}${MODE !== 'local' && CODE && SCREEN === 'game' ? `<span class="pill">${L('KÓD', 'CODE')} ${esc(CODE.toUpperCase())}</span>` : ''}<span class="sp"></span>${SCREEN === 'game' ? rulesBtns() : ''}${langHTML()}
     ${SCREEN === 'game' && ST && ST.ph !== 'end' && (MODE === 'local' || MY) && !inLobby() && !(TEAM && ST.ph === 'setup') ? '<button class="btn abort" data-a="abortask" aria-expanded="' + ABORTASK + '">Abort</button>' : ''}${SCREEN === 'game' ? `<button class="btn" data-a="menu">${L('Kilépés a menübe', 'Exit to menu')}</button>` : ''}</header>
@@ -2033,6 +2095,7 @@ document.addEventListener('click', e => {
     case 'host': return hostGame(side);
     case 'rehost': return hostGame(null, store.get('rvb-host'));
     case 'join': return joinGame(document.getElementById('joincode').value);
+    case 'watch': return joinGame(document.getElementById('joincode').value, true);
     case 'hostteam': return hostTeam();
     case 'reteam': return hostTeam(store.get('rvb-team'));
     case 'tside': ME = { sd: t.dataset.v, ro: [], rdy: '' }; return teamChanged();
