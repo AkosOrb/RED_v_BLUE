@@ -75,6 +75,19 @@ table.lb th{font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-t
 .tag{display:inline-block;font-family:var(--f-mono);font-size:11px;padding:1px 6px;background:var(--ink);color:var(--white)}
 .tag.r{background:var(--red)}.tag.b{background:var(--blue)}
 .err{color:#a01818;font-weight:700;min-height:1.4em}
+svg.tl{width:100%;height:auto;display:block;background:var(--soft);border:2px solid var(--ink);font-family:var(--f-mono)}
+svg.tl text{font-size:12px;fill:var(--ink)}
+svg.tl .grid{stroke:#9a9a9a;stroke-width:1}
+svg.tl .score{fill:none;stroke:var(--blue);stroke-width:3}
+svg.tl .area{fill:var(--blue);opacity:.15}
+svg.tl .draw{stroke-dasharray:var(--len);stroke-dashoffset:var(--len);animation:tl-draw 1.6s ease-out forwards}
+svg.tl .pop{transform-box:fill-box;transform-origin:center;animation:tl-pop .6s cubic-bezier(.3,1.6,.5,1) backwards}
+svg.tl .now{stroke:var(--btn-on-bg);stroke-width:2;animation:tl-pulse 1.5s ease-in-out infinite}
+@keyframes tl-draw{to{stroke-dashoffset:0}}
+@keyframes tl-pop{from{transform:scale(0);opacity:0}}
+@keyframes tl-pulse{50%{opacity:.25}}
+.live{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--ok);margin-right:6px;animation:tl-pulse 1.5s ease-in-out infinite}
+@media (prefers-reduced-motion:reduce){svg.tl .draw,svg.tl .pop,svg.tl .now,.live{animation:none;stroke-dashoffset:0}}
 </style>
 <script src="config.js"></script>
 </head>
@@ -235,7 +248,8 @@ const BACK = CFG.supabaseUrl && CFG.supabaseAnonKey ? SupabaseBackend : LocalBac
 // ---------------------------------------------------------------- app state
 let USER = null, GAME = null, INDEX = null, VIEW = 'login', CUR = 1, MSG = {}, BUSY = false;
 let FILEVIEW = null;            // {name, kind, rows|text, sort, filter}
-let TEACH = { games: null, sel: null, events: null };
+let TEACH = { games: null, sel: null, events: null, seen: null, at: null };
+const LIVE_MS = 5000;           // instructor view refresh interval
 const TASKS = {};
 const app = document.getElementById('app');
 
@@ -387,17 +401,65 @@ async function boardHTML() {
 }
 
 const EV_NAMES = { start: ['Játék indítása', 'Game started'], open_layer: ['Réteg megnyitása', 'Layer opened'], view_file: ['Fájl megnyitása', 'File viewed'], download: ['Fájl letöltése', 'File downloaded'], submit: ['Zászló beküldése', 'Flag submitted'], hint: ['Tipp kérése', 'Hint taken'], unlock: ['Következő réteg megnyílt', 'Next layer unlocked'], finish: ['Mind a 7 réteg teljesítve', 'All 7 layers completed'], close: ['Játék lezárása', 'Game closed'] };
+// Animated timeline chart: cumulative score on top, one lane per event kind below.
+// Events not seen before pop in; the first view of a game (or Replay) animates everything in order.
+const TL_LANES = [
+  { kind: e => ['start', 'open_layer', 'unlock', 'finish', 'close'].includes(e.type), hu: 'Rétegek', en: 'Layers', color: 'var(--ink)' },
+  { kind: e => e.type === 'submit' && e.data && e.data.ok, hu: 'Helyes', en: 'Correct', color: 'var(--ok)' },
+  { kind: e => e.type === 'submit' && !(e.data && e.data.ok), hu: 'Hibás', en: 'Wrong', color: '#a01818' },
+  { kind: e => e.type === 'hint', hu: 'Tipp', en: 'Hint', color: 'var(--btn-on-bg)' },
+  { kind: e => e.type === 'view_file' || e.type === 'download', hu: 'Fájl', en: 'File', color: 'var(--btn-bg)' },
+];
+function timelineChart(g, events) {
+  const fresh = !TEACH.seen;
+  if (fresh) TEACH.seen = new Set();
+  const W = 1000, X0 = 80, X1 = W - 20, SH = 150, LH = 26, Y0 = 20, LY = Y0 + SH + 30, H = LY + TL_LANES.length * LH + 30;
+  const t0 = +new Date(g.state.startedAt || (events[0] && events[0].at) || Date.now());
+  const last = events.length ? +new Date(events[events.length - 1].at) : t0;
+  const t1 = Math.max(g.closed ? last : Date.now(), t0 + 60000);
+  const x = t => X0 + (X1 - X0) * (t - t0) / (t1 - t0);
+  // score steps
+  let sc = 0; const pts = [[X0, 0]];
+  for (const e of events) if (e.type === 'submit' && e.data && e.data.ok) { const xx = x(+new Date(e.at)); pts.push([xx, sc]); sc += e.data.pts || 0; pts.push([xx, sc]); }
+  pts.push([x(t1), sc]);
+  const top = Math.max(100, Math.ceil(sc / 100) * 100), y = v => Y0 + SH - SH * v / top;
+  const line = pts.map(([a, b]) => `${a.toFixed(1)},${y(b).toFixed(1)}`).join(' ');
+  const len = Math.round(pts.reduce((a, p, i) => i ? a + Math.abs(p[0] - pts[i - 1][0]) + Math.abs(y(p[1]) - y(pts[i - 1][1])) : 0, 0)) + 1;
+  // x ticks in minutes
+  const mins = (t1 - t0) / 60000, step = [1, 2, 5, 10, 15, 30, 60, 120, 240].find(s => mins / s <= 8) || 480;
+  let ticks = '';
+  for (let m = 0; m <= mins; m += step) { const xx = x(t0 + m * 60000); ticks += `<line class="grid" x1="${xx}" x2="${xx}" y1="${Y0}" y2="${H - 24}"/><text x="${xx}" y="${H - 8}" text-anchor="middle">${m} ${L('p', 'm')}</text>`; }
+  const yt = [0, top / 2, top].map(v => `<line class="grid" x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}"/><text x="${X0 - 8}" y="${y(v) + 4}" text-anchor="end">${v}</text>`).join('');
+  const lanes = TL_LANES.map((ln, i) => `<text x="${X0 - 8}" y="${LY + i * LH + 4}" text-anchor="end">${L(ln.hu, ln.en)}</text><line class="grid" x1="${X0}" x2="${X1}" y1="${LY + i * LH}" y2="${LY + i * LH}"/>`).join('');
+  let n = 0;
+  const dots = events.map(e => {
+    const i = TL_LANES.findIndex(ln => ln.kind(e)); if (i < 0) return '';
+    const id = e.id != null ? e.id : e.at + e.type, isNew = !TEACH.seen.has(id); TEACH.seen.add(id);
+    const delay = fresh ? Math.min(n++ * 60, 3000) : 0;
+    return `<circle cx="${x(+new Date(e.at)).toFixed(1)}" cy="${LY + i * LH}" r="7" fill="${TL_LANES[i].color}" stroke="var(--white)" stroke-width="1.5"${isNew ? ` class="pop" style="animation-delay:${delay}ms"` : ''}><title>${esc(new Date(e.at).toLocaleTimeString(LANG === 'en' ? 'en-GB' : 'hu-HU'))} · ${esc(L(...(EV_NAMES[e.type] || [e.type, e.type])))} · ${esc(evDetail(e))}</title></circle>`;
+  }).join('');
+  const nowLine = g.closed ? '' : `<line class="now" x1="${X1}" x2="${X1}" y1="${Y0}" y2="${H - 24}"/>`;
+  return `<svg class="tl" viewBox="0 0 ${W} ${H}" role="img" aria-label="${L('Idővonal-grafikon', 'Timeline chart')}">
+    ${yt}${ticks}<text x="${X0}" y="${Y0 - 6}">${L('Pontszám', 'Score')}: ${sc}</text>
+    <polygon class="area" points="${X0},${y(0)} ${line} ${x(t1)},${y(0)}"/>
+    <polyline class="score${fresh ? ' draw' : ''}" style="--len:${len}" points="${line}"/>
+    ${lanes}${dots}${nowLine}</svg>`;
+}
+
 async function teachHTML() {
   if (USER.role !== 'instructor') return '';
   TEACH.games = await BACK.allGames();
   const sel = TEACH.games.find(g => g.id === TEACH.sel);
   if (sel) TEACH.events = await BACK.events(sel.id);
+  TEACH.at = new Date();
   const dur = g => { const ms = new Date(g.updated_at) - new Date(g.state.startedAt); return isFinite(ms) ? Math.round(ms / 60000) + ' ' + L('perc', 'min') : '–'; };
   const hintsUsed = g => Object.values(g.state.hints || {}).reduce((a, h) => a + Object.values(h).reduce((x, y) => x + y, 0), 0);
   return `<div class="stack"><div class="frame cut"><div class="fi"><div class="row" style="justify-content:space-between"><h2>${L('Oktatói felület', 'Instructor view')}</h2><button class="btn sm" data-a="csv">${L('Összes esemény CSV-ben', 'All events as CSV')}</button></div>
    <table class="lb"><thead><tr><th>${L('Játékos', 'Player')}</th><th>${L('Mód', 'Mode')}</th><th>${L('Réteg', 'Layer')}</th><th>${L('Pont', 'Points')}</th><th>${L('Tippek', 'Hints')}</th><th>${L('Idő', 'Time')}</th><th>${L('Állapot', 'State')}</th><th></th></tr></thead>
    <tbody>${TEACH.games.map(g => `<tr><td>${esc(g.username)}</td><td>${g.mode}</td><td>${g.layer}</td><td><b>${g.score}</b></td><td>${hintsUsed(g)}</td><td>${dur(g)}</td><td>${g.closed ? L('lezárva', 'closed') : L('aktív', 'active')}</td><td><button class="btn sm ghost" data-a="tsel" data-id="${g.id}">${L('Idővonal', 'Timeline')}</button></td></tr>`).join('') || `<tr><td colspan="8">${L('Még nincs játék.', 'No games yet.')}</td></tr>`}</tbody></table></div></div>
-   ${sel ? `<div class="frame cut"><div class="fi"><h2>${esc(sel.username)} · ${L('idővonal', 'timeline')}</h2>
+   ${sel ? `<div class="frame cut"><div class="fi stack"><div class="row" style="justify-content:space-between"><h2>${esc(sel.username)} · ${L('idővonal', 'timeline')}</h2>
+     <div class="row"><span class="hint"><span class="live"></span>${L('Élő, 5 másodpercenként frissül', 'Live, refreshes every 5 seconds')} · ${TEACH.at.toLocaleTimeString(LANG === 'en' ? 'en-GB' : 'hu-HU')}</span><button class="btn sm ghost" data-a="replay">${L('Visszajátszás', 'Replay')}</button></div></div>
+    ${timelineChart(sel, TEACH.events)}
     <table class="lb"><thead><tr><th>${L('Idő', 'Time')}</th><th>${L('Esemény', 'Event')}</th><th>${L('Részletek', 'Details')}</th></tr></thead>
     <tbody>${TEACH.events.map(e => `<tr><td class="mono">${esc(new Date(e.at).toLocaleString(LANG === 'en' ? 'en-GB' : 'hu-HU'))}</td><td>${esc(L(...(EV_NAMES[e.type] || [e.type, e.type])))}</td><td class="mono">${esc(evDetail(e))}</td></tr>`).join('')}</tbody></table></div></div>` : ''}</div>`;
 }
@@ -557,7 +619,8 @@ app.addEventListener('click', async ev => {
     else if (a === 'home') VIEW = 'home';
     else if (a === 'board') VIEW = 'board';
     else if (a === 'teach') { VIEW = 'teach'; TEACH.sel = null; }
-    else if (a === 'tsel') TEACH.sel = el.dataset.id;
+    else if (a === 'tsel') { TEACH.sel = el.dataset.id; TEACH.seen = null; }
+    else if (a === 'replay') TEACH.seen = null;
     else if (a === 'csv') await exportCSV();
     else if (a === 'new') await newGame(el.dataset.mode);
     else if (a === 'resume') { await openLayer(Math.min(GAME.state.unlocked, LAYERS)); VIEW = 'play'; }
@@ -587,6 +650,13 @@ app.addEventListener('keydown', ev => {
   if (id.startsWith('ans-')) document.querySelector(`[data-a=submit][data-f="${id.slice(4)}"]`).click();
   if (id === 'p') document.querySelector('[data-a=login]').click();
 });
+
+// Instructor view refreshes itself while it is open and the tab is visible.
+setInterval(async () => {
+  if (VIEW !== 'teach' || !USER || USER.role !== 'instructor' || BUSY || document.hidden) return;
+  BUSY = true;
+  try { await render(); } finally { BUSY = false; }
+}, LIVE_MS);
 
 (async () => {
   try { USER = await BACK.me(); if (USER) await afterLogin(); } catch (e) { USER = null; }
