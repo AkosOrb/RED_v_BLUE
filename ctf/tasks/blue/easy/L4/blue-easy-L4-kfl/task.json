@@ -21,10 +21,17 @@
   },
   "keyOut": {
     "type": "domain",
-    "value": "update.konyvpro.example",
     "text": {
       "hu": "A fertőzött frissítés forrásdomainje",
       "en": "Source domain of the infected update"
+    },
+    "enc": {
+      "f1+f2": "6f3d79cf164bd5128672ab5c804f8a7df209679c515e05",
+      "f1+f3": "af7b0e3cf95d700aaed3456862634232a7412859f4eece",
+      "f1+f4": "b09afb18a57dec14ff4aa5dc947fb83b99f4a22d3dcd77",
+      "f2+f3": "e21319b276e4c3334ec65832e13d90349cf05290b2158b",
+      "f2+f4": "5503897d286ab74948ba02f7e55b8a6b277c377d674009",
+      "f3+f4": "f0318a309922c3e1f60f208227b0d74a9449b4e7f53006"
     }
   },
   "flags": [

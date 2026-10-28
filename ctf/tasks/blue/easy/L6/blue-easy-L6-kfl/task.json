@@ -21,10 +21,17 @@
   },
   "keyOut": {
     "type": "keyword",
-    "value": "VIHAR",
     "text": {
       "hu": "A helyreállítási jegyzet kulcsszava: a tiszta vészhelyzeti fiók nevének második része, nagybetűvel",
       "en": "Keyword of the recovery note: second part of the clean break-glass account name, upper case"
+    },
+    "enc": {
+      "f1+f2": "d3347b26c9",
+      "f1+f3": "56481821df",
+      "f1+f4": "c926158173",
+      "f2+f3": "3b77016924",
+      "f2+f4": "510bc4de3a",
+      "f3+f4": "685982744c"
     }
   },
   "flags": [

@@ -21,10 +21,17 @@
   },
   "keyOut": {
     "type": "account",
-    "value": "adm.szabo",
     "text": {
       "hu": "A támadó által használt rendszergazdai fiók",
       "en": "Admin account used by the attacker"
+    },
+    "enc": {
+      "f1+f2": "0c3b1f10f0f51b270f",
+      "f1+f3": "21062f7e745ff812dc",
+      "f1+f4": "819a29cb134ce64304",
+      "f2+f3": "6771e93f1f628a2dcf",
+      "f2+f4": "1f49d517c55c808a06",
+      "f3+f4": "79e02fe2c27ac99cb2"
     }
   },
   "flags": [

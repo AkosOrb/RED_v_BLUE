@@ -39,7 +39,8 @@ for side in SIDES:
                     need({'hu', 'en'} <= set(t.get(k, {})), rel, f'{k}: hu és en kell')
                 ko = t.get('keyOut') or {}
                 need(ko.get('type') == KEY_TYPES[layer], rel, f'keyOut.type legyen {KEY_TYPES[layer]}')
-                need('value' in ko, rel, 'keyOut.value hiányzik')
+                need('value' not in ko, rel, 'keyOut.value nem lehet nyílt; csak titkosítva (enc)')
+                need(len(ko.get('enc', {})) == 6, rel, 'keyOut.enc: mind a 6 zászlópárhoz kell titkosított kulcs')
                 ki = t.get('keyIn')
                 if layer == 1:
                     need(ki is None, rel, 'az 1. rétegnek nincs keyIn-je')

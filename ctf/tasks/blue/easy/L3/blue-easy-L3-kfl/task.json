@@ -21,10 +21,17 @@
   },
   "keyOut": {
     "type": "time",
-    "value": "09:16:02",
     "text": {
       "hu": "A terjedés kezdete",
       "en": "Start of the spreading"
+    },
+    "enc": {
+      "f1+f2": "80c7fcfa4ea335b3",
+      "f1+f3": "4df08141d3fb99bc",
+      "f1+f4": "6e7d08f374c530bb",
+      "f2+f3": "7e1d3361638ef222",
+      "f2+f4": "0d7b546cedcb5484",
+      "f3+f4": "ef89891ae41de183"
     }
   },
   "flags": [

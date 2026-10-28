@@ -21,10 +21,17 @@
   },
   "keyOut": {
     "type": "final",
-    "value": "TISZTALAP",
     "text": {
       "hu": "Vége a láncnak",
       "en": "End of the chain"
+    },
+    "enc": {
+      "f1+f2": "89893c00af7ed30406",
+      "f1+f3": "98ba549277010d58b8",
+      "f1+f4": "dadbaf57f62fb17088",
+      "f2+f3": "de9257207941195736",
+      "f2+f4": "f4c4c6ad48f378a1dd",
+      "f3+f4": "3b7d638c0928a74c50"
     }
   },
   "flags": [

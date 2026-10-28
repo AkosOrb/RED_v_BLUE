@@ -18,10 +18,17 @@
   "keyIn": null,
   "keyOut": {
     "type": "hostname",
-    "value": "KFL-FIN-07",
     "text": {
       "hu": "A kiinduló gép neve",
       "en": "Name of the first affected host"
+    },
+    "enc": {
+      "f1+f2": "1641e4e9d4a140ed2749",
+      "f1+f3": "d7161e29b9ceaec9a20e",
+      "f1+f4": "f89e610f4ac5bbed290c",
+      "f2+f3": "dfe115d5857665b1291a",
+      "f2+f4": "193d9a4f417d06cd5e58",
+      "f3+f4": "09b0ee692634a36f75b6"
     }
   },
   "flags": [

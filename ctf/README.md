@@ -33,3 +33,33 @@ const norm = s => s.toUpperCase().normalize('NFD').replace(/[̀-ͯ]/g, '').repla
 2. Minden fájl szintetikus legyen: kitalált cég, `.example` domainek, dokumentációs IP-tartományok,
    futtatható kártevő és működő exploit nélkül.
 3. `python3 ctf/tools/build_index.py` – ha hibát ír, javítsd. Push után a GitHub Action is lefuttatja.
+
+## A játék futtatása
+
+A CTF-mód a `ctf/index.html` oldal; a főmenüben a „CTF – zászlószerzés” kártya nyitja meg.
+A feladatokat a böngésző `fetch`-csel tölti be, ezért webszerverről kell futnia (GitHub Pages, vagy helyben
+`python3 -m http.server` a repó gyökeréből, majd `http://localhost:8000/ctf/`). Közvetlenül fájlként megnyitva nem működik.
+
+### Helyi próbamód
+
+Ha a `ctf/config.js`-ben üres a Supabase URL és kulcs, a játék helyi próbamódban fut: a fiókok, játékok és
+naplók csak az adott böngésző localStorage-ában vannak. Az oktatói felületet ilyenkor a `localInstructors`
+listában szereplő felhasználónevek látják (alapból: `oktato`).
+
+### Online mód (Supabase)
+
+1. Hozz létre egy ingyenes projektet a [supabase.com](https://supabase.com) oldalon.
+2. Authentication → Sign In / Providers → Email: kapcsold ki a „Confirm email” opciót.
+3. SQL Editor: futtasd le a `ctf/supabase/schema.sql` teljes tartalmát.
+4. Project Settings → API: másold a Project URL-t és az `anon` kulcsot a `ctf/config.js`-be.
+5. Oktatói jog: regisztrálj a játékban, majd az SQL Editorban:
+   `update public.profiles set role = 'instructor' where username = '<név>';`
+
+A játékosok regisztrációkor mindig `player` szerepkört kapnak; oktatóvá csak az adatbázisban lehet valakit tenni.
+
+## Pontozás röviden
+
+- A k-adik réteg legfeljebb 100 × k pont (nehéz módban × 1,5), 4 részzászló, egyenként 25%.
+- 2 megoldott részzászló nyitja a következő réteget, és ekkor fejthető vissza a kulcs.
+- Ha a játékos már megnyitott egy későbbi réteget, a korábbi rétegek maradék részzászlói fél pontot érnek.
+- Tippek: 10%, 25%, 50% levonás az adott részzászló értékéből, összeadódva.

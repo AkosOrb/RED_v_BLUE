@@ -21,10 +21,17 @@
   },
   "keyOut": {
     "type": "subnet",
-    "value": "10.20.4.0/24",
     "text": {
       "hu": "A leginkább érintett alhálózat",
       "en": "The most affected subnet"
+    },
+    "enc": {
+      "f1+f2": "3f3b2c87d6006e469943901b",
+      "f1+f3": "b42e0377495fd2bf495827c2",
+      "f1+f4": "e8e21ac992f3df47b05c3a0e",
+      "f2+f3": "94d527bbb07b22ac6168ae5a",
+      "f2+f4": "26363002a6381e9782b2ba91",
+      "f3+f4": "9a2a7698de32d08a4d1aa0f9"
     }
   },
   "flags": [
