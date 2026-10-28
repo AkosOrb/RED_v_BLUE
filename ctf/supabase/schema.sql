@@ -81,6 +81,8 @@ create or replace view public.leaderboard as
   select p.username, g.side, g.mode, g.score, g.layer, g.closed, g.updated_at
   from public.games g join public.profiles p on p.id = g.user_id;
 grant select on public.leaderboard to authenticated;
+-- A nézet a tulajdonos jogaival fut, ezért a be nem jelentkezett (anon) látogatótól el kell venni.
+revoke all on public.leaderboard from anon, public;
 
 -- Oktatói jog megadása (csak itt, az SQL Editorban):
 -- update public.profiles set role = 'instructor' where username = 'oktato';
