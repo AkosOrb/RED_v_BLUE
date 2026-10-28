@@ -1,0 +1,185 @@
+{
+  "id": "blue-easy-L6-csk",
+  "side": "blue",
+  "mode": "easy",
+  "layer": 6,
+  "incident": {
+    "name": "NotPetya / Maersk (2017)",
+    "url": "https://www.wired.com/story/notpetya-cyberattack-ukraine-russia-code-crashed-the-world/"
+  },
+  "title": {
+    "hu": "Takarítás",
+    "en": "Clean-up"
+  },
+  "story": {
+    "hu": "A leválasztott alhálózatban fel kell számolni a támadó jelenlétét. A fiók- és perzisztencia-listából döntsd el, mit kell törölni és melyik fiókokat kell lecserélni.",
+    "en": "In the isolated subnet you must remove the attacker's foothold. Use the account and persistence lists to decide what to delete and which credentials to reset."
+  },
+  "keyIn": {
+    "type": "subnet",
+    "from": "L5"
+  },
+  "keyOut": {
+    "type": "keyword",
+    "text": {
+      "hu": "A helyreállítási jegyzet kulcsszava: a tiszta vészhelyzeti fiók nevének második része, nagybetűvel",
+      "en": "Keyword of the recovery note: second part of the clean break-glass account name, upper case"
+    },
+    "enc": {
+      "f1+f2": "1422b1844ca4",
+      "f1+f3": "33918943c133",
+      "f1+f4": "79b274f2ab20",
+      "f2+f3": "56586a1dd641",
+      "f2+f4": "05f5b7e91cd2",
+      "f3+f4": "1eb9101e28fd"
+    }
+  },
+  "flags": [
+    {
+      "id": "f1",
+      "q": {
+        "hu": "Hány kiemelt fiók lépett be az alhálózat gépeire a terjedés kezdete óta (ezeket kell lecserélni)?",
+        "en": "How many privileged accounts logged on to hosts in the subnet since the spreading began (these must be reset)?"
+      },
+      "hash": "177cc5a434e49c62abbef5ed76398e003248d7bb4c63e5621ef84bf86d61a6bc",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "Csak a kiemelt = igen fiókok számítanak.",
+            "en": "Only accounts with kiemelt = igen count."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "A gép IP-jét a perzisztencia.csv-ből tudod meg.",
+            "en": "Find the host IP in perzisztencia.csv."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "Az idő a terjedés kezdete után legyen.",
+            "en": "The time must be after the spreading began."
+          }
+        }
+      ]
+    },
+    {
+      "id": "f2",
+      "q": {
+        "hu": "Melyik szolgáltatás a támadó perzisztenciája?",
+        "en": "Which service is the attacker's persistence?"
+      },
+      "hash": "7280a4c543047c7e93f8024407cc00a37cb2335d73b7dce4596ecd6eb0eab184",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "Keresd azt a bejegyzést, ami csak a fertőzött gépeken van.",
+            "en": "Find the entry that only exists on infected hosts."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "Szokatlan útvonal a Windows mappában.",
+            "en": "An unusual path in the Windows folder."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "A nev oszlop értéke kell.",
+            "en": "The value of the name column is needed."
+          }
+        }
+      ]
+    },
+    {
+      "id": "f3",
+      "q": {
+        "hu": "Hány gépen kell eltávolítani az alhálózatban?",
+        "en": "On how many hosts in the subnet must it be removed?"
+      },
+      "hash": "f34dd550fb9dacaf680004acf04bce6d418b8d33cfc45bc950e7b30ca9989a41",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "Szűrj a szolgáltatás nevére.",
+            "en": "Filter on the service name."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "Csak a kulcsként kapott alhálózat számít.",
+            "en": "Only the subnet you got as key counts."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "Az IP első három oktettje dönt.",
+            "en": "The first three octets of the IP decide."
+          }
+        }
+      ]
+    },
+    {
+      "id": "f4",
+      "q": {
+        "hu": "Melyik vészhelyzeti fiók maradt érintetlen, és használható a helyreállításhoz?",
+        "en": "Which break-glass account stayed untouched and can be used for recovery?"
+      },
+      "hash": "37d2649b3c172c52d4291a9d1f8268867c2d94a04b81cf1af9d03fad7b036ba2",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "A tipus = veszhelyzeti fiókokat nézd.",
+            "en": "Look at accounts with tipus = veszhelyzeti."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "Az egyik az incidens alatt bejelentkezett.",
+            "en": "One of them logged on during the incident."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "Az érintetlen fiók soha nem lépett be.",
+            "en": "The untouched account has never logged on."
+          }
+        }
+      ]
+    }
+  ],
+  "files": [
+    {
+      "name": "fiokok.csv",
+      "view": "table"
+    },
+    {
+      "name": "perzisztencia.csv",
+      "view": "table"
+    }
+  ]
+}

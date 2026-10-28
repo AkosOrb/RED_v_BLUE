@@ -1,0 +1,185 @@
+{
+  "id": "blue-hard-L3-vtm",
+  "side": "blue",
+  "mode": "hard",
+  "layer": 3,
+  "incident": {
+    "name": "NotPetya / Maersk (2017)",
+    "url": "https://www.wired.com/story/notpetya-cyberattack-ukraine-russia-code-crashed-the-world/"
+  },
+  "title": {
+    "hu": "Egy fiók, sok gép",
+    "en": "One account, many hosts"
+  },
+  "story": {
+    "hu": "A támadó egy rendszergazdai fiókkal terjed. A tartományvezérlő bejelentkezési naplójából állapítsd meg, honnan és mikor kezdődött a terjedés, és mekkora a kár.",
+    "en": "The attacker spreads using an admin account. Use the domain controller logon log to find where and when the spreading began and how big the damage is."
+  },
+  "keyIn": {
+    "type": "account",
+    "from": "L2"
+  },
+  "keyOut": {
+    "type": "time",
+    "text": {
+      "hu": "A terjedés kezdete",
+      "en": "Start of the spreading"
+    },
+    "enc": {
+      "f1+f2": "e44a985671b8661e",
+      "f1+f3": "d1f96639b1e26a95",
+      "f1+f4": "73eb758b40831791",
+      "f2+f3": "c055471987d1aa28",
+      "f2+f4": "6fda80d427d7e96b",
+      "f3+f4": "67c284672f74f522"
+    }
+  },
+  "flags": [
+    {
+      "id": "f1",
+      "q": {
+        "hu": "Melyik IP-címről indultak a fiók szokatlan bejelentkezései?",
+        "en": "From which IP address did the account's unusual logons come?"
+      },
+      "hash": "2884dc2f964ba50a7b365b4870641ae9a80454eeb44f395a291355ecc3140f49",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "Szűrj a kulcsként kapott fiókra.",
+            "en": "Filter on the account you got as key."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "Reggel a rendszergazda az ugrógépről lép be; keresd a másik forrást.",
+            "en": "In the morning the admin logs on from the jump host; find the other source."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "A gepek.csv megmondja, melyik géphez tartozik az IP.",
+            "en": "gepek.csv tells you which host owns the IP."
+          }
+        }
+      ]
+    },
+    {
+      "id": "f2",
+      "q": {
+        "hu": "Mikor volt az első ilyen bejelentkezés (ÓÓ:PP:MM)?",
+        "en": "When was the first such logon (HH:MM:SS)?"
+      },
+      "hash": "3bd3d57513e6e1cce2277144980a71267dc8e9909c6736dd00c39450f549ee22",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "Csak a szokatlan forrásból jövő sorok kellenek.",
+            "en": "Only rows from the unusual source count."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "Rendezd idő szerint.",
+            "en": "Sort by time."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "Formátum: 09:00:00",
+            "en": "Format: 09:00:00"
+          }
+        }
+      ]
+    },
+    {
+      "id": "f3",
+      "q": {
+        "hu": "Milyen bejelentkezéstípus (szám) jellemző ezekre?",
+        "en": "Which logon type (number) do these use?"
+      },
+      "hash": "ad22f0cf04565c60f0c74509b505591790c42e0b87b45a2f60835530ed490dd2",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "A bejelentkezes_tipus oszlop.",
+            "en": "The logon type column."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "Hálózati bejelentkezés.",
+            "en": "Network logon."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "Egyjegyű szám.",
+            "en": "A one-digit number."
+          }
+        }
+      ]
+    },
+    {
+      "id": "f4",
+      "q": {
+        "hu": "Hány különböző gépre lépett be a fiók ebből a forrásból 09:15 és 09:30 között?",
+        "en": "How many distinct hosts did the account log on to from this source between 09:15 and 09:30?"
+      },
+      "hash": "8ea319b0bcc9d7cbbf5e4876bf2b3726fefe49e1ef938f49e9d1e6baef6f962d",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "Csak a sikeres (4624) sorok számítanak.",
+            "en": "Only successful (4624) rows count."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "A celgep oszlop egyedi értékeit számold.",
+            "en": "Count the unique values of the target host column."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "Az ugrógépről jövő reggeli belépések nem számítanak.",
+            "en": "Morning logons from the jump host do not count."
+          }
+        }
+      ]
+    }
+  ],
+  "files": [
+    {
+      "name": "bejelentkezesek.csv",
+      "view": "table"
+    },
+    {
+      "name": "gepek.csv",
+      "view": "table"
+    }
+  ]
+}

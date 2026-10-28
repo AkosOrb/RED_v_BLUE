@@ -1,0 +1,181 @@
+{
+  "id": "blue-easy-L4-kfl",
+  "side": "blue",
+  "mode": "easy",
+  "layer": 4,
+  "incident": {
+    "name": "NotPetya / Maersk (2017)",
+    "url": "https://www.wired.com/story/notpetya-cyberattack-ukraine-russia-code-crashed-the-world/"
+  },
+  "title": {
+    "hu": "A kiinduló gép idővonala",
+    "en": "Timeline of the first host"
+  },
+  "story": {
+    "hu": "Megkaptad a kiinduló gép fájlrendszer-idővonalát. Derítsd ki, honnan jött a fertőzés, és milyen nyomokat hagyott a gépen.",
+    "en": "You received the file system timeline of the first host. Find out where the infection came from and what traces it left."
+  },
+  "keyIn": {
+    "type": "time",
+    "from": "L3"
+  },
+  "keyOut": {
+    "type": "domain",
+    "text": {
+      "hu": "A fertőzött frissítés forrásdomainje",
+      "en": "Source domain of the infected update"
+    },
+    "enc": {
+      "f1+f2": "6f3d79cf164bd5128672ab5c804f8a7df209679c515e05",
+      "f1+f3": "af7b0e3cf95d700aaed3456862634232a7412859f4eece",
+      "f1+f4": "b09afb18a57dec14ff4aa5dc947fb83b99f4a22d3dcd77",
+      "f2+f3": "e21319b276e4c3334ec65832e13d90349cf05290b2158b",
+      "f2+f4": "5503897d286ab74948ba02f7e55b8a6b277c377d674009",
+      "f3+f4": "f0318a309922c3e1f60f208227b0d74a9449b4e7f53006"
+    }
+  },
+  "flags": [
+    {
+      "id": "f1",
+      "q": {
+        "hu": "Melyik verziószámú frissítőcsomag töltődött le?",
+        "en": "Which update package version was downloaded?"
+      },
+      "hash": "c66fe8230865070402edfb732ddbec9caeed28cfd63c0d9c07c31d185d4bbf16",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "Keresd a .msi fájlt.",
+            "en": "Look for the .msi file."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "A verzió a fájlnévben van.",
+            "en": "The version is in the file name."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "Formátum: 1.2.3",
+            "en": "Format: 1.2.3"
+          }
+        }
+      ]
+    },
+    {
+      "id": "f2",
+      "q": {
+        "hu": "Mi a gyanús DLL SHA-256 hash-ének első 8 karaktere?",
+        "en": "What are the first 8 characters of the suspicious DLL's SHA-256 hash?"
+      },
+      "hash": "de1bcc0dca69a6f92a1242971b0ba24277880d839978cbbdf2705ad2312c55d2",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "A DLL nevét az előző rétegben már láttad.",
+            "en": "You saw the DLL name in an earlier layer."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "Az utolsó oszlopban van a hash.",
+            "en": "The hash is in the last column."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "Kisbetűs hexadecimális karakterek.",
+            "en": "Lowercase hexadecimal characters."
+          }
+        }
+      ]
+    },
+    {
+      "id": "f3",
+      "q": {
+        "hu": "Milyen nevű ütemezett feladat jött létre?",
+        "en": "What is the name of the scheduled task created?"
+      },
+      "hash": "b9dcbfeeb709973e236e5e09fa3992d027a5f05560671cefae12014ade1fbd7d",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "Az ütemezett feladatok a Tasks mappában vannak.",
+            "en": "Scheduled tasks live in the Tasks folder."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "Nézd a System32\\Tasks útvonalat.",
+            "en": "Check the System32\\Tasks path."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "Az útvonal utolsó eleme a név.",
+            "en": "The last element of the path is the name."
+          }
+        }
+      ]
+    },
+    {
+      "id": "f4",
+      "q": {
+        "hu": "Melyik domainről töltődött le a frissítés?",
+        "en": "From which domain was the update downloaded?"
+      },
+      "hash": "2057fa8c03a452c14bb038ef40b419c82b1044968befccba77363de8c86a7ab7",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "A Windows megjegyzi a letöltött fájlok forrását.",
+            "en": "Windows records where downloaded files came from."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "Keresd a Zone.Identifier sort.",
+            "en": "Find the Zone.Identifier row."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "A HostUrl-ből csak a domain kell.",
+            "en": "Only the domain from HostUrl is needed."
+          }
+        }
+      ]
+    }
+  ],
+  "files": [
+    {
+      "name": "idovonal_KFL-FIN-07.csv",
+      "view": "table"
+    }
+  ]
+}

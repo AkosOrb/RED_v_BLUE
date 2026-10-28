@@ -1,0 +1,25 @@
+ido,sulyossag,szabaly,gep,leiras
+2026-03-16 06:02:31,LOW,R-1102,VTM-FIN-02,Sikertelen bejelentkezés (1x)
+2026-03-16 06:30:58,LOW,R-1307,VTM-MAIL-01,USB-tároló csatlakoztatva
+2026-03-16 06:38:44,LOW,R-1307,VTM-FIN-09,USB-tároló csatlakoztatva
+2026-03-16 07:14:59,LOW,R-1307,VTM-LOG-08,USB-tároló csatlakoztatva
+2026-03-16 08:11:08,LOW,R-1102,VTM-ERP-01,Sikertelen bejelentkezés (1x)
+2026-03-16 08:51:12,LOW,R-1307,VTM-FIN-05,USB-tároló csatlakoztatva
+2026-03-16 08:51:55,LOW,R-1102,VTM-LOG-03,Sikertelen bejelentkezés (1x)
+2026-03-16 09:14:07,CRITICAL,R-4021,VTM-FIN-05,Könyvelőprogram frissítője rundll32-t indított
+2026-03-16 09:15:30,HIGH,R-4410,VTM-FIN-05,Ütemezett feladat létrehozva rendszerjoggal
+2026-03-16 09:16:15,HIGH,R-4410,VTM-FIN-01,Ütemezett feladat létrehozva rendszerjoggal
+2026-03-16 09:17:15,CRITICAL,R-5530,VTM-FIN-02,Távoli folyamatindítás WMI-n keresztül
+2026-03-16 09:18:18,CRITICAL,R-5530,VTM-FIN-03,Távoli folyamatindítás WMI-n keresztül
+2026-03-16 09:18:56,CRITICAL,R-5530,VTM-FIN-04,Távoli folyamatindítás WMI-n keresztül
+2026-03-16 09:19:46,CRITICAL,R-5530,VTM-FIN-06,Távoli folyamatindítás WMI-n keresztül
+2026-03-16 09:20:41,HIGH,R-4410,VTM-FIN-07,Ütemezett feladat létrehozva rendszerjoggal
+2026-03-16 09:21:11,CRITICAL,R-5530,VTM-FIN-08,Távoli folyamatindítás WMI-n keresztül
+2026-03-16 09:21:51,CRITICAL,R-5530,VTM-FIN-09,Távoli folyamatindítás WMI-n keresztül
+2026-03-16 09:22:45,HIGH,R-4410,VTM-FIN-10,Ütemezett feladat létrehozva rendszerjoggal
+2026-03-16 09:23:26,HIGH,R-4410,VTM-FIN-11,Ütemezett feladat létrehozva rendszerjoggal
+2026-03-16 09:24:32,CRITICAL,R-5530,VTM-LOG-02,Távoli folyamatindítás WMI-n keresztül
+2026-03-16 09:25:32,HIGH,R-4410,VTM-LOG-05,Ütemezett feladat létrehozva rendszerjoggal
+2026-03-16 09:26:07,CRITICAL,R-5530,VTM-FS-01,Távoli folyamatindítás WMI-n keresztül
+2026-03-16 09:26:44,HIGH,R-4410,VTM-ERP-01,Ütemezett feladat létrehozva rendszerjoggal
+2026-03-16 09:27:10,CRITICAL,R-5530,VTM-DC-01,Távoli folyamatindítás WMI-n keresztül

@@ -1,0 +1,25 @@
+ido,sulyossag,szabaly,gep,leiras
+2026-03-16 07:12:00,MEDIUM,R-2210,CSK-LOG-08,Ritka böngésző-bővítmény telepítése
+2026-03-16 07:16:12,LOW,R-1102,CSK-LOG-03,Sikertelen bejelentkezés (1x)
+2026-03-16 07:35:08,MEDIUM,R-3001,CSK-ERP-01,Nagy kimenő levélforgalom
+2026-03-16 07:52:59,MEDIUM,R-3001,CSK-MAIL-01,Nagy kimenő levélforgalom
+2026-03-16 07:53:32,MEDIUM,R-3001,CSK-FIN-09,Nagy kimenő levélforgalom
+2026-03-16 08:28:01,LOW,R-1102,CSK-FIN-02,Sikertelen bejelentkezés (1x)
+2026-03-16 08:51:12,LOW,R-1307,CSK-FIN-10,USB-tároló csatlakoztatva
+2026-03-16 09:14:07,CRITICAL,R-4021,CSK-FIN-10,Könyvelőprogram frissítője rundll32-t indított
+2026-03-16 09:15:30,HIGH,R-4410,CSK-FIN-10,Ütemezett feladat létrehozva rendszerjoggal
+2026-03-16 09:16:06,CRITICAL,R-5530,CSK-FIN-01,Távoli folyamatindítás WMI-n keresztül
+2026-03-16 09:16:50,HIGH,R-4410,CSK-FIN-02,Ütemezett feladat létrehozva rendszerjoggal
+2026-03-16 09:17:15,HIGH,R-4410,CSK-FIN-03,Ütemezett feladat létrehozva rendszerjoggal
+2026-03-16 09:18:13,CRITICAL,R-5530,CSK-FIN-04,Távoli folyamatindítás WMI-n keresztül
+2026-03-16 09:19:11,CRITICAL,R-5530,CSK-FIN-05,Távoli folyamatindítás WMI-n keresztül
+2026-03-16 09:20:06,HIGH,R-4410,CSK-FIN-06,Ütemezett feladat létrehozva rendszerjoggal
+2026-03-16 09:20:44,CRITICAL,R-5530,CSK-FIN-07,Távoli folyamatindítás WMI-n keresztül
+2026-03-16 09:21:41,HIGH,R-4410,CSK-FIN-08,Ütemezett feladat létrehozva rendszerjoggal
+2026-03-16 09:22:36,HIGH,R-4410,CSK-FIN-09,Ütemezett feladat létrehozva rendszerjoggal
+2026-03-16 09:23:07,HIGH,R-4410,CSK-FIN-11,Ütemezett feladat létrehozva rendszerjoggal
+2026-03-16 09:23:51,CRITICAL,R-5530,CSK-LOG-02,Távoli folyamatindítás WMI-n keresztül
+2026-03-16 09:24:41,CRITICAL,R-5530,CSK-LOG-05,Távoli folyamatindítás WMI-n keresztül
+2026-03-16 09:25:18,CRITICAL,R-5530,CSK-FS-01,Távoli folyamatindítás WMI-n keresztül
+2026-03-16 09:25:47,CRITICAL,R-5530,CSK-ERP-01,Távoli folyamatindítás WMI-n keresztül
+2026-03-16 09:26:14,CRITICAL,R-5530,CSK-DC-01,Távoli folyamatindítás WMI-n keresztül

@@ -1,0 +1,56 @@
+gep,ip,tipus,nev,utvonal
+VTM-DC-01,10.31.1.10,szolgaltatas,VmSync,C:\Windows\vmsync.exe
+VTM-DC-01,10.31.1.10,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+VTM-DC-01,10.31.1.10,utemezett_feladat,GoogleUpdateTaskMachine,C:\Program Files\Google\Update\GoogleUpdate.exe
+VTM-ERP-01,10.31.1.30,szolgaltatas,VmSync,C:\Windows\vmsync.exe
+VTM-ERP-01,10.31.1.30,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+VTM-FIN-01,10.31.4.23,szolgaltatas,VmSync,C:\Windows\vmsync.exe
+VTM-FIN-01,10.31.4.23,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+VTM-FIN-01,10.31.4.23,utemezett_feladat,GoogleUpdateTaskMachine,C:\Program Files\Google\Update\GoogleUpdate.exe
+VTM-FIN-02,10.31.4.26,szolgaltatas,VmSync,C:\Windows\vmsync.exe
+VTM-FIN-02,10.31.4.26,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+VTM-FIN-03,10.31.4.29,szolgaltatas,VmSync,C:\Windows\vmsync.exe
+VTM-FIN-03,10.31.4.29,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+VTM-FIN-04,10.31.4.32,szolgaltatas,VmSync,C:\Windows\vmsync.exe
+VTM-FIN-04,10.31.4.32,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+VTM-FIN-05,10.31.4.35,szolgaltatas,VmSync,C:\Windows\vmsync.exe
+VTM-FIN-05,10.31.4.35,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+VTM-FIN-05,10.31.4.35,utemezett_feladat,GoogleUpdateTaskMachine,C:\Program Files\Google\Update\GoogleUpdate.exe
+VTM-FIN-06,10.31.4.38,szolgaltatas,VmSync,C:\Windows\vmsync.exe
+VTM-FIN-06,10.31.4.38,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+VTM-FIN-06,10.31.4.38,utemezett_feladat,GoogleUpdateTaskMachine,C:\Program Files\Google\Update\GoogleUpdate.exe
+VTM-FIN-07,10.31.4.41,szolgaltatas,VmSync,C:\Windows\vmsync.exe
+VTM-FIN-07,10.31.4.41,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+VTM-FIN-08,10.31.4.44,szolgaltatas,VmSync,C:\Windows\vmsync.exe
+VTM-FIN-08,10.31.4.44,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+VTM-FIN-08,10.31.4.44,utemezett_feladat,GoogleUpdateTaskMachine,C:\Program Files\Google\Update\GoogleUpdate.exe
+VTM-FIN-09,10.31.4.47,szolgaltatas,VmSync,C:\Windows\vmsync.exe
+VTM-FIN-09,10.31.4.47,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+VTM-FIN-10,10.31.4.50,szolgaltatas,VmSync,C:\Windows\vmsync.exe
+VTM-FIN-10,10.31.4.50,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+VTM-FIN-10,10.31.4.50,utemezett_feladat,GoogleUpdateTaskMachine,C:\Program Files\Google\Update\GoogleUpdate.exe
+VTM-FIN-11,10.31.4.53,szolgaltatas,VmSync,C:\Windows\vmsync.exe
+VTM-FIN-11,10.31.4.53,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+VTM-FIN-11,10.31.4.53,utemezett_feladat,GoogleUpdateTaskMachine,C:\Program Files\Google\Update\GoogleUpdate.exe
+VTM-FIN-12,10.31.4.56,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+VTM-FIN-12,10.31.4.56,utemezett_feladat,GoogleUpdateTaskMachine,C:\Program Files\Google\Update\GoogleUpdate.exe
+VTM-FS-01,10.31.1.20,szolgaltatas,VmSync,C:\Windows\vmsync.exe
+VTM-FS-01,10.31.1.20,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+VTM-JUMP-01,10.31.1.50,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+VTM-LOG-01,10.31.5.34,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+VTM-LOG-01,10.31.5.34,utemezett_feladat,GoogleUpdateTaskMachine,C:\Program Files\Google\Update\GoogleUpdate.exe
+VTM-LOG-02,10.31.5.38,szolgaltatas,VmSync,C:\Windows\vmsync.exe
+VTM-LOG-02,10.31.5.38,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+VTM-LOG-03,10.31.5.42,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+VTM-LOG-04,10.31.5.46,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+VTM-LOG-04,10.31.5.46,utemezett_feladat,GoogleUpdateTaskMachine,C:\Program Files\Google\Update\GoogleUpdate.exe
+VTM-LOG-05,10.31.5.50,szolgaltatas,VmSync,C:\Windows\vmsync.exe
+VTM-LOG-05,10.31.5.50,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+VTM-LOG-06,10.31.5.54,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+VTM-LOG-06,10.31.5.54,utemezett_feladat,GoogleUpdateTaskMachine,C:\Program Files\Google\Update\GoogleUpdate.exe
+VTM-LOG-07,10.31.5.58,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+VTM-LOG-08,10.31.5.62,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+VTM-LOG-09,10.31.5.66,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+VTM-LOG-09,10.31.5.66,utemezett_feladat,GoogleUpdateTaskMachine,C:\Program Files\Google\Update\GoogleUpdate.exe
+VTM-LOG-10,10.31.5.70,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+VTM-MAIL-01,10.31.1.40,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe

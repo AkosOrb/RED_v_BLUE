@@ -1,0 +1,54 @@
+gep,ip,tipus,nev,utvonal
+KFL-DC-01,10.20.1.10,szolgaltatas,KfSync,C:\Windows\kfsync.exe
+KFL-DC-01,10.20.1.10,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+KFL-ERP-01,10.20.1.30,szolgaltatas,KfSync,C:\Windows\kfsync.exe
+KFL-ERP-01,10.20.1.30,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+KFL-ERP-01,10.20.1.30,utemezett_feladat,GoogleUpdateTaskMachine,C:\Program Files\Google\Update\GoogleUpdate.exe
+KFL-FIN-01,10.20.4.23,szolgaltatas,KfSync,C:\Windows\kfsync.exe
+KFL-FIN-01,10.20.4.23,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+KFL-FIN-02,10.20.4.26,szolgaltatas,KfSync,C:\Windows\kfsync.exe
+KFL-FIN-02,10.20.4.26,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+KFL-FIN-02,10.20.4.26,utemezett_feladat,GoogleUpdateTaskMachine,C:\Program Files\Google\Update\GoogleUpdate.exe
+KFL-FIN-03,10.20.4.29,szolgaltatas,KfSync,C:\Windows\kfsync.exe
+KFL-FIN-03,10.20.4.29,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+KFL-FIN-03,10.20.4.29,utemezett_feladat,GoogleUpdateTaskMachine,C:\Program Files\Google\Update\GoogleUpdate.exe
+KFL-FIN-04,10.20.4.32,szolgaltatas,KfSync,C:\Windows\kfsync.exe
+KFL-FIN-04,10.20.4.32,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+KFL-FIN-05,10.20.4.35,szolgaltatas,KfSync,C:\Windows\kfsync.exe
+KFL-FIN-05,10.20.4.35,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+KFL-FIN-05,10.20.4.35,utemezett_feladat,GoogleUpdateTaskMachine,C:\Program Files\Google\Update\GoogleUpdate.exe
+KFL-FIN-06,10.20.4.38,szolgaltatas,KfSync,C:\Windows\kfsync.exe
+KFL-FIN-06,10.20.4.38,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+KFL-FIN-07,10.20.4.41,szolgaltatas,KfSync,C:\Windows\kfsync.exe
+KFL-FIN-07,10.20.4.41,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+KFL-FIN-07,10.20.4.41,utemezett_feladat,GoogleUpdateTaskMachine,C:\Program Files\Google\Update\GoogleUpdate.exe
+KFL-FIN-08,10.20.4.44,szolgaltatas,KfSync,C:\Windows\kfsync.exe
+KFL-FIN-08,10.20.4.44,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+KFL-FIN-09,10.20.4.47,szolgaltatas,KfSync,C:\Windows\kfsync.exe
+KFL-FIN-09,10.20.4.47,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+KFL-FIN-10,10.20.4.50,szolgaltatas,KfSync,C:\Windows\kfsync.exe
+KFL-FIN-10,10.20.4.50,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+KFL-FIN-10,10.20.4.50,utemezett_feladat,GoogleUpdateTaskMachine,C:\Program Files\Google\Update\GoogleUpdate.exe
+KFL-FIN-11,10.20.4.53,szolgaltatas,KfSync,C:\Windows\kfsync.exe
+KFL-FIN-11,10.20.4.53,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+KFL-FIN-12,10.20.4.56,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+KFL-FS-01,10.20.1.20,szolgaltatas,KfSync,C:\Windows\kfsync.exe
+KFL-FS-01,10.20.1.20,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+KFL-FS-01,10.20.1.20,utemezett_feladat,GoogleUpdateTaskMachine,C:\Program Files\Google\Update\GoogleUpdate.exe
+KFL-JUMP-01,10.20.1.50,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+KFL-LOG-01,10.20.5.34,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+KFL-LOG-02,10.20.5.38,szolgaltatas,KfSync,C:\Windows\kfsync.exe
+KFL-LOG-02,10.20.5.38,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+KFL-LOG-03,10.20.5.42,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+KFL-LOG-04,10.20.5.46,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+KFL-LOG-05,10.20.5.50,szolgaltatas,KfSync,C:\Windows\kfsync.exe
+KFL-LOG-05,10.20.5.50,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+KFL-LOG-06,10.20.5.54,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+KFL-LOG-07,10.20.5.58,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+KFL-LOG-08,10.20.5.62,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+KFL-LOG-08,10.20.5.62,utemezett_feladat,GoogleUpdateTaskMachine,C:\Program Files\Google\Update\GoogleUpdate.exe
+KFL-LOG-09,10.20.5.66,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+KFL-LOG-09,10.20.5.66,utemezett_feladat,GoogleUpdateTaskMachine,C:\Program Files\Google\Update\GoogleUpdate.exe
+KFL-LOG-10,10.20.5.70,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe
+KFL-LOG-10,10.20.5.70,utemezett_feladat,GoogleUpdateTaskMachine,C:\Program Files\Google\Update\GoogleUpdate.exe
+KFL-MAIL-01,10.20.1.40,szolgaltatas,WinDefend,C:\ProgramData\Microsoft\Windows Defender\MsMpEng.exe

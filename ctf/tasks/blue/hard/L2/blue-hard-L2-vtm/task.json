@@ -1,0 +1,181 @@
+{
+  "id": "blue-hard-L2-vtm",
+  "side": "blue",
+  "mode": "hard",
+  "layer": 2,
+  "incident": {
+    "name": "NotPetya / Maersk (2017)",
+    "url": "https://www.wired.com/story/notpetya-cyberattack-ukraine-russia-code-crashed-the-world/"
+  },
+  "title": {
+    "hu": "Mi fut a gépen?",
+    "en": "What is running on the host?"
+  },
+  "story": {
+    "hu": "Megvan a kiinduló gép. Az EDR folyamatlistájából derítsd ki, melyik program indította a gyanús folyamatláncot, és milyen fiókot próbál használni a támadó.",
+    "en": "You have the first host. Use the EDR process list to find which program started the suspicious process chain and which account the attacker is trying to use."
+  },
+  "keyIn": {
+    "type": "hostname",
+    "from": "L1"
+  },
+  "keyOut": {
+    "type": "account",
+    "text": {
+      "hu": "A támadó által használt rendszergazdai fiók",
+      "en": "Admin account used by the attacker"
+    },
+    "enc": {
+      "f1+f2": "5e8a3f22a49d19c02f",
+      "f1+f3": "87f3c7a7db82839bed",
+      "f1+f4": "bde09426af271234ab",
+      "f2+f3": "df53e97348ec3083af",
+      "f2+f4": "7e5a6b0bdf2379276a",
+      "f3+f4": "98be8cd891267987a0"
+    }
+  },
+  "flags": [
+    {
+      "id": "f1",
+      "q": {
+        "hu": "Melyik szülőfolyamat indította a rundll32.exe-t a kiinduló gépen?",
+        "en": "Which parent process started rundll32.exe on the first host?"
+      },
+      "hash": "c03a6adcb8f4b83a77e744c397fe6a283f27cc5e83a4827011a3e5fbc09d7288",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "Szűrj a kulcsként kapott gépre.",
+            "en": "Filter on the host you got as key."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "Keresd a rundll32.exe sort, és nézd a szulo oszlopot.",
+            "en": "Find the rundll32.exe row and check the parent column."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "A könyvelőprogram frissítőjéről van szó.",
+            "en": "It is the accounting software updater."
+          }
+        }
+      ]
+    },
+    {
+      "id": "f2",
+      "q": {
+        "hu": "Melyik DLL-fájlt töltötte be a rundll32.exe?",
+        "en": "Which DLL file did rundll32.exe load?"
+      },
+      "hash": "4b9690c2afa90459d4617b7631d4142708ae31b9c1555034b8d2e4c8b4d620d2",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "Nézd a parancssor oszlopot.",
+            "en": "Look at the command line column."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "A ProgramData mappában van.",
+            "en": "It is in the ProgramData folder."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "Csak a fájlnév kell, kiterjesztéssel.",
+            "en": "Only the file name is needed, with extension."
+          }
+        }
+      ]
+    },
+    {
+      "id": "f3",
+      "q": {
+        "hu": "Melyik felhasználó munkamenetében indult a könyvelőprogram?",
+        "en": "In which user's session was the accounting software started?"
+      },
+      "hash": "5ad09d99fe0e91175ea4f830fec3ca04116bf7316cce765dc86c4eb8bd9756da",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "A MerlegSoft.exe sort keresd.",
+            "en": "Find the MerlegSoft.exe row."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "A felhasznalo oszlop.",
+            "en": "The user column."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "vezeteknev.keresztnev formátum.",
+            "en": "surname.firstname format."
+          }
+        }
+      ]
+    },
+    {
+      "id": "f4",
+      "q": {
+        "hu": "Melyik rendszergazdai fiók szerepel a távoli folyamatindítás parancssorában?",
+        "en": "Which admin account appears in the remote process creation command line?"
+      },
+      "hash": "905714521d38fa98dc2803b3cfda70fa100f8cbe019b763a16df282284f9f50b",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "A wmic.exe sort keresd.",
+            "en": "Find the wmic.exe row."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "A /user: kapcsoló után áll.",
+            "en": "It follows the /user: switch."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "A tartománynév (VTM\\) nélkül add meg.",
+            "en": "Give it without the domain (VTM\\)."
+          }
+        }
+      ]
+    }
+  ],
+  "files": [
+    {
+      "name": "edr_folyamatok.csv",
+      "view": "table"
+    }
+  ]
+}
