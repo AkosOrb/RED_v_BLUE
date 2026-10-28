@@ -75,6 +75,23 @@ table.lb th{font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-t
 .tag{display:inline-block;font-family:var(--f-mono);font-size:11px;padding:1px 6px;background:var(--ink);color:var(--white)}
 .tag.r{background:var(--red)}.tag.b{background:var(--blue)}
 .err{color:#a01818;font-weight:700;min-height:1.4em}
+.homegrid{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:14px;align-items:stretch}
+.homegrid>.frame{display:flex}.homegrid>.frame>.fi{flex:1}
+@media (max-width:720px){.homegrid{grid-template-columns:1fr}}
+.demo{aspect-ratio:1/1;width:100%;max-width:420px;margin:0 auto}
+.demo>.fi{height:100%;padding:10px;display:grid;grid-template-columns:62px minmax(0,1fr);gap:8px;overflow:hidden}
+.demo .dl{display:flex;flex-direction:column;gap:4px}
+.demo .dl i{flex:1;display:flex;align-items:center;justify-content:center;font-style:normal;font-family:var(--f-disp);font-weight:900;font-size:13px;background:var(--ink);color:var(--mute);clip-path:polygon(5px 0,100% 0,100% calc(100% - 5px),calc(100% - 5px) 100%,0 100%,0 5px);transition:background .4s,color .4s}
+.demo .dl i.open{color:var(--white)}.demo .dl i.done{background:var(--ok);color:var(--white)}.demo .dl i.cur{background:var(--btn-on-bg);color:var(--ink)}
+.demo .dm{display:flex;flex-direction:column;gap:6px;min-width:0;font-size:12px}
+.demo .dh{display:flex;justify-content:space-between;align-items:baseline;gap:6px}
+.demo .dh b{font-family:var(--f-disp);font-size:12px;text-transform:uppercase;letter-spacing:.04em}
+.demo .dlog{flex:1;background:var(--ink);color:#8fd18f;font-family:var(--f-mono);font-size:11px;padding:6px;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;line-height:1.35}
+.demo .dlog div{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.demo .din{font-family:var(--f-mono);font-size:13px;border:2px solid var(--ink);background:var(--white);padding:4px 6px;min-height:28px;white-space:nowrap;overflow:hidden}
+.demo .din::after{content:'▌';animation:tl-pulse 1s steps(1) infinite}
+.demo .dres{min-height:18px;font-weight:700}
+@media (prefers-reduced-motion:reduce){.demo .din::after{animation:none}}
 svg.tl{width:100%;height:auto;display:block;background:var(--soft);border:2px solid var(--ink);font-family:var(--f-mono)}
 svg.tl text{font-size:12px;fill:var(--ink)}
 svg.tl .grid{stroke:#9a9a9a;stroke-width:1}
@@ -318,6 +335,55 @@ function loginHTML() {
    </div></div>`;
 }
 
+// Sample game animation on the home page: a scripted, looping play-through of the
+// 7 layers (evidence scrolls in, an answer is typed, points are scored, the next layer opens).
+const DEMO_LAYERS = [
+  ['Riasztás', 'Alert', 'EDR: gyanús PowerShell', 'EDR: suspicious PowerShell', 'WS-FIN-07'],
+  ['Triázs', 'Triage', 'érintett gépek: 3', 'affected hosts: 3', 'R-4021'],
+  ['Naplóelemzés', 'Log analysis', '4624 logon 10.0.4.12', '4624 logon 10.0.4.12', '10.0.4.12'],
+  ['Forenzika', 'Forensics', 'prefetch: UPDSVC.EXE', 'prefetch: UPDSVC.EXE', 'updsvc.exe'],
+  ['Elszigetelés', 'Containment', 'tűzfal: blokk 203.0.113.7', 'firewall: block 203.0.113.7', '203.0.113.7'],
+  ['Felszámolás', 'Eradication', 'schtask: SvcUpdate', 'schtask: SvcUpdate', 'SvcUpdate'],
+  ['Helyreállítás', 'Recovery', 'backup: 02:00 OK', 'backup: 02:00 OK', '02:00'],
+];
+// One frame per tick: [layer, log lines shown, typed chars, result] with result null | 'ok' | 'bad' | 'hint' | 'key'.
+const DEMO_FRAMES = (() => {
+  const f = [];
+  DEMO_LAYERS.forEach((d, k) => {
+    for (let n = 1; n <= 3; n++) f.push([k, n, 0, null], [k, n, 0, null]);
+    if (k === 2) { for (let c = 1; c <= 5; c++) f.push([k, 3, -c, null]); f.push([k, 3, -5, 'bad'], [k, 3, -5, 'bad'], [k, 3, -5, 'bad']); }
+    if (k === 4) f.push([k, 3, 0, 'hint'], [k, 3, 0, 'hint'], [k, 3, 0, 'hint']);
+    for (let c = 1; c <= d[4].length; c++) f.push([k, 3, c, null]);
+    f.push(...Array(4).fill([k, 3, d[4].length, 'ok']), ...Array(4).fill([k, 3, d[4].length, 'key']));
+  });
+  f.push(...Array(12).fill([7, 0, 0, 'end']));
+  return f;
+})();
+let DEMO_T = 0;
+// Lines left in the log by the layers already solved.
+const demoLog = k => DEMO_LAYERS.slice(0, k).flatMap((d, i) => [L(d[2], d[3]), `L${i + 1} ✓ ${d[4]}`]);
+function demoHTML() {
+  const [k, nLog, typed, res] = DEMO_FRAMES[DEMO_T % DEMO_FRAMES.length];
+  let score = 0;
+  for (let i = 0; i < Math.min(k, 7); i++) score += (i + 1) * 100;
+  if (k < 7 && (res === 'ok' || res === 'key')) score += (k + 1) * 100 * (k === 4 ? 0.9 : 1);
+  const tiles = DEMO_LAYERS.map((d, i) => `<i class="${i < k || (i === k && res === 'key') ? 'done' : i === k ? 'cur' : ''}">L${i + 1}</i>`).join('');
+  if (k >= 7) return `<div class="fi"><div class="dl">${tiles}</div><div class="dm"><div class="dh"><b>${L('Incidens lezárva', 'Incident closed')}</b><span class="mono">${score} ${L('pont', 'pts')}</span></div>
+    <div class="dlog"><div>&gt; ${L('mind a 7 réteg kész', 'all 7 layers done')}</div><div>&gt; ${L('jelentés elküldve', 'report sent')}</div></div><div class="dres ok">${L('Gratulálunk!', 'Well done!')}</div></div></div>`;
+  const d = DEMO_LAYERS[k], logs = [L(d[2], d[3]), L('nyomok gyűjtése…', 'collecting evidence…'), L('kérdés: mi a kulcs?', 'question: what is the key?')];
+  const val = typed < 0 ? 'xyz12'.slice(0, -typed) : d[4].slice(0, typed);
+  const msg = { ok: `<span class="ok">✓ ${L('helyes', 'correct')} +${(k + 1) * 100 * (k === 4 ? 0.9 : 1)}</span>`, bad: `<span class="bad">✗ ${L('nem ez a válasz', 'not the answer')}</span>`,
+    hint: `<span class="mono">${L('tipp: −10%', 'hint: −10%')}</span>`, key: k < 6 ? `<span class="ok">${L('kulcs', 'key')} → L${k + 2}</span>` : `<span class="ok">✓</span>` }[res] || '';
+  return `<div class="fi"><div class="dl">${tiles}</div><div class="dm"><div class="dh"><b>L${k + 1} · ${L(d[0], d[1])}</b><span class="mono">${score} ${L('pont', 'pts')}</span></div>
+    <div class="dlog">${demoLog(k).concat(logs.slice(0, nLog)).slice(-14).map(t => `<div>&gt; ${esc(t)}</div>`).join('')}</div>
+    <div class="din">${esc(res === 'bad' || res === 'hint' ? (res === 'bad' ? val : '') : val)}</div><div class="dres">${msg}</div></div></div>`;
+}
+setInterval(() => {
+  const el = document.getElementById('demo');
+  if (!el || document.hidden || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  DEMO_T++; el.innerHTML = demoHTML();
+}, 280);
+
 function homeHTML() {
   const g = GAME && !GAME.closed ? GAME : null;
   const modeBtns = ['easy', 'hard'].map(m => {
@@ -328,9 +394,10 @@ function homeHTML() {
    ${g ? `<div class="panel cut"><div class="lbl">${L('Folyamatban lévő játék', 'Game in progress')}</div>
      <h2 style="margin:6px 0">${g.mode === 'easy' ? L('könnyű', 'easy') : L('nehéz', 'hard')} · ${g.score} ${L('pont', 'pts')} · ${Math.min(g.state.unlocked, 7)}. ${L('réteg', 'layer')}</h2>
      <div class="row"><button class="btn" data-a="resume">${L('Folytatás', 'Continue')}</button></div></div>` : ''}
-   <div class="frame cut"><div class="fi stack"><h2>${L('Incidenskezelés', 'Incident response')}</h2>
+   <div class="homegrid"><div class="frame cut"><div class="fi stack"><h2>${L('Incidenskezelés', 'Incident response')}</h2>
     <p style="margin:0">${L('Vezesd végig az incidenskezelés 7 szakaszát a riasztástól a helyreállításig. A támadó módszereit a nyomokból kell felismerned és megértened.', 'Run the 7 stages of incident response from the alert to recovery. You have to recognise and understand the attacker\'s methods from the evidence.')}</p>
     <div class="row">${modeBtns}</div></div></div>
+    <div class="frame cut demo" id="demo" role="img" aria-label="${L('Mintajáték-animáció', 'Sample game animation')}">${demoHTML()}</div></div>
    ${g ? `<p class="hint">${L('Új játékot a mostani lezárása után indíthatsz.', 'You can start a new game after closing the current one.')}</p>` : ''}
    <p class="hint">${L('Könnyű mód: minden a böngészőben megoldható. Nehéz mód: letöltött fájlokkal, saját elemzőeszközökkel dolgozol.', 'Easy mode: everything can be solved in the browser. Hard mode: you work on downloaded files with your own analysis tools.')}</p>
   </div>`;
