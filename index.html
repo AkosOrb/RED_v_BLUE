@@ -1,4 +1,8 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body><title>Red vs Blue</title>
+<!doctype html><html lang="hu"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Red vs Blue</title>
+<meta name="description" content="Red vs Blue: kiberbiztonsági stratégiai kártyajáték. A Red végig akar jutni a támadási lánc öt szakaszán, a Blue észlelni és megállítani akarja. Minden lap egy valós támadás vagy védekezés.">
+<meta property="og:title" content="Red vs Blue – kiberbiztonsági kártyajáték">
+<meta property="og:description" content="Támadók és védők a támadási lánc öt szakaszán, valós esetekkel. Helyi, online és szerepkörös játék, valamint CTF mód.">
+<meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Chakra+Petch:wght@400;600;700&family=Share+Tech+Mono&display=swap">
 <style>
@@ -14,7 +18,12 @@
 html,body{min-height:100%}
 body{background:var(--ground);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.4;margin:0}
 button{font:inherit;color:var(--ink);cursor:pointer}
-button:focus-visible,input:focus-visible,summary:focus-visible,.hc:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+/* clip-path cuts off anything outside the box, so chamfered controls draw the ring inside instead */
+.btn:focus-visible,.seg button:focus-visible,.choice:focus-visible{outline:3px solid var(--white);outline-offset:-6px}
+.hc:focus-visible{outline:3px solid var(--ink);outline-offset:-6px}
+.cats button:focus-visible{outline:3px solid var(--white);outline-offset:-6px}
+.top :focus-visible{outline-color:var(--white)}
 .mono{font-family:var(--f-mono);letter-spacing:.14em}
 .disp{font-family:var(--f-disp);font-weight:900}
 .wrap{max-width:1280px;margin:0 auto;padding-inline:16px;padding-block:12px 40px}
@@ -61,20 +70,31 @@ h3{font-size:16px;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
 /* menu */
 .hero{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:24px;align-items:center;margin-top:18px}
 .hero .big{font-family:var(--f-disp);font-weight:900;font-size:clamp(56px,10vw,112px);line-height:.9}
-.hero .big span.vs{font-size:.32em;vertical-align:middle;color:var(--ink)}
+.hero .big span.vs{font-size:.32em;vertical-align:middle;color:var(--ink);-webkit-text-stroke:0}
 .choices{display:grid;gap:12px}
 .choice{display:block;text-align:left;width:100%;border:0;padding:2px;background:var(--ink);color:var(--ink)}
 .choice .fi{padding:14px 16px;background:var(--paper);color:var(--ink);clip-path:polygon(11px 0,100% 0,100% calc(100% - 11px),calc(100% - 11px) 100%,0 100%,0 11px)}
 .choice b{display:block;font-size:17px;text-transform:uppercase;letter-spacing:.04em}
 .choice .hint{color:inherit}
-button.choice{background:var(--btn-bg)}
-button.choice .fi{background:var(--btn-bg);color:var(--btn-fg);-webkit-text-fill-color:var(--btn-fg)}
-button.choice:hover .fi{background:var(--btn-bg2)}
-button.choice:active .fi{background:var(--btn-on-bg);color:var(--btn-on-fg);-webkit-text-fill-color:var(--btn-on-fg)}
+button.choice,a.choice{background:var(--btn-bg)}
+button.choice .fi,a.choice .fi{background:var(--btn-bg);color:var(--btn-fg);-webkit-text-fill-color:var(--btn-fg)}
+button.choice:hover .fi,a.choice:hover .fi{background:var(--btn-bg2)}
+button.choice:active .fi,a.choice:active .fi{background:var(--btn-on-bg);color:var(--btn-on-fg);-webkit-text-fill-color:var(--btn-on-fg)}
+.choice .go{display:inline-block;margin-top:8px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;font-size:13px;border-bottom:2px solid currentColor}
+.choice h3{font-size:17px;letter-spacing:.04em}
 .choice[disabled]{opacity:.5;cursor:not-allowed}
-.cats{display:flex;gap:6px;flex-wrap:wrap;margin-top:16px}
-.cats>div{flex:1 1 110px;background:var(--ink);color:var(--white);padding:10px;display:flex;flex-direction:column;gap:6px}
+.cats{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.cats button{flex:1 1 110px;border:0;text-align:left;background:var(--ink);color:var(--white);padding:10px;display:flex;flex-direction:column;gap:6px;box-shadow:inset 0 -3px 0 var(--mute)}
+.cats button:hover{box-shadow:inset 0 -3px 0 var(--red)}
+.cats button[aria-expanded=true]{box-shadow:inset 0 -5px 0 var(--red)}
 .cats svg{width:26px;height:26px}
+.catinfo{background:var(--ink);color:var(--soft);padding:10px 12px;margin-top:6px;font-size:14px}
+.catinfo b{color:var(--white)}
+@media (max-width:600px){.cats button{flex:1 1 0;min-width:0;padding:8px 4px;align-items:center;gap:4px}.cats b{display:none}}
+.hero .big{-webkit-text-stroke:6px var(--ink);paint-order:stroke fill}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+/* 09: comfortable touch targets on touch screens */
+@media (pointer:coarse){.btn,.seg button{min-height:44px}.top .btn{min-height:40px;min-width:44px}}
 input[type=text]{font-family:var(--f-mono);font-size:18px;letter-spacing:.2em;text-transform:uppercase;padding:9px 10px;border:2px solid var(--ink);background:var(--white);color:var(--ink);width:100%;min-width:0}
 /* setup */
 .setup{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:16px;margin-top:16px}
@@ -1002,7 +1022,7 @@ const roleOf = (side, i) => DATA.roles.find(r => r.s === side && r.n === i + 1);
 
 // ---------- language ----------
 // Each device picks its own language; the shared game state carries no text, so HU and EN players can share a game.
-let LANG = (() => { try { return localStorage.getItem('rvb-lang') === 'en' ? 'en' : 'hu'; } catch (e) { return 'hu'; } })();
+let LANG = (() => { const q = new URLSearchParams(location.search).get('lang'); if (q === 'en' || q === 'hu') return q; try { return localStorage.getItem('rvb-lang') === 'en' ? 'en' : 'hu'; } catch (e) { return 'hu'; } })();
 const L = (hu, en) => (LANG === 'en' ? en : hu);
 const HU_TXT = { cards: DATA.cards.map(c => ({ hu: c.hu, d: c.d, ct: c.ct, cx: c.cx })), roles: DATA.roles.map(r => ({ hu: r.hu, ab: r.ab, tm: r.tm, rw: r.rw })), zn: ZN.map(z => z && z[0]), lv: LEVELHU.slice() };
 const ZN_EN = [null, 'RECONNAISSANCE', 'INITIAL ACCESS', 'PERSISTENCE', 'LATERAL MOVEMENT', 'OBJECTIVE'];
@@ -1799,35 +1819,48 @@ function endHTML() {
 
 function menuHTML() {
   const loc = store.get('rvb-local'), host = store.get('rvb-host'), team = store.get('rvb-team');
-  const online = !!ROOM;
+  const online = !!ROOM, narrow = NARROW.matches;
+  const join = `<div class="choice cut" style="cursor:default"><div class="fi cut"><span class="lbl">${L('Csatlakozás bármelyik online játékhoz', 'Join any online game')}</span><h3>${L('Csatlakozás kóddal', 'Join with code')}</h3>
+      <div class="row" style="margin-top:8px;flex-wrap:nowrap"><input type="text" id="joincode" maxlength="6" placeholder="${L('KÓD', 'CODE')}" aria-label="${L('Játékkód', 'Game code')}" autocomplete="off" value="${esc(KEEP.joincode || '')}" ${online ? '' : 'disabled'}><button class="btn" data-a="join" ${online ? '' : 'disabled'}>${L('Belépés', 'Join')}</button><button class="btn ghost" data-a="watch" ${online ? '' : 'disabled'} title="${L('Csak nézőként követed a játékot', 'Follow the game as a spectator only')}">${L('Közvetítés', 'Watch')}</button></div>
+      <span class="hint">${L('Közvetítés: ugyanazzal a kóddal, csak nézőként (például kivetítőn). Látod az állást és a lépéseket, a lapokat csak felfedés után.', 'Watch: the same code, as a spectator only (for example on a projector). You see the score and the moves, and cards only once they are revealed.')}</span></div></div>`;
   return `<div class="hero"><div><div class="lbl">${L('Kiberbiztonsági stratégiai kártyajáték', 'Cybersecurity strategy card game')}</div>
-    <div class="big"><span class="r">RED</span> <span class="vs">VS</span><br><span class="b">BLUE</span></div>
+    <h1 class="big"><span class="r">RED</span> <span class="vs">VS</span><br><span class="b">BLUE</span></h1>
+    ${narrow ? `<div style="margin-top:14px">${join}</div>` : ''}
     <p style="font-size:17px;max-width:56ch">${L('A Red végig akar jutni egy kitalált cég hálózatán a támadási lánc öt szakaszán, a Blue pedig észlelni és megállítani akarja, mielőtt célba ér. Minden lap egy valós támadás vagy védekezés, egy megtörtént esettel.', "Red wants to get through a fictional company's network along the five stages of the attack chain; Blue wants to detect and stop them before they reach the objective. Every card is a real attack or defense, with a real incident behind it.")}</p>
     <div class="row" style="margin-top:14px">${rulesBtns()}</div>
     <div class="modesel"><div class="lbl" style="margin-bottom:6px">${L('Játékmód', 'Game mode')}</div><div class="seg" role="group" aria-label="${L('Játékmód', 'Game mode')}">${GM_NAMES.map((n, i) => `<button data-a="gm" data-v="${i}" aria-pressed="${GMSEL === i}">${L(n[0], n[1])}</button>`).join('')}</div>
-     <p class="hint" style="margin:6px 0 0">${[L('Az eredeti szabályok.', 'The original rules.'), L('Költségvetés (Erőforrás), lassabb húzás (2 lap, kézlimit 7) és jutalomválasztás minden megnyert ütközés után.', 'Budget (Resources), slower draw (2 cards, hand limit 7) and a reward choice after every won clash.'), L('A Haladó mód, plusz előkészített lapok, Zaj, titkos Red küldetés, Blue koronaékszer és áras szerepkör-képességek.', 'Advanced mode plus staged cards, noise, a secret Red mission, a Blue crown jewel and priced role abilities.')][GMSEL]} ${L('Online játékban a házigazda által választott mód érvényes.', 'In online games the host\'s mode applies.')}</p></div>
-    <div class="cats">${[1, 2, 3, 4, 5].map(i => `<div>${icon(i)}<span class="lbl" style="font-size:10px">0${i}</span><b style="font-size:12px">${ZN[i][0]}</b></div>`).join('')}</div></div>
-   <div class="choices">
-    <button class="choice cut" data-a="local"><div class="fi cut"><span class="lbl">${L('Egy eszközön', 'One device')}</span><b>${L('Helyi játék', 'Local game')}</b><span class="hint">${L('Egy képernyő, két csapat. A kezeket a soron lévő csapat fedi fel.', 'One screen, two teams. The team whose turn it is reveals its hand.')}</span></div></button>
+     <p class="hint" style="margin:6px 0 0">${[L('Az eredeti szabályok.', 'The original rules.'), L('Erőforrás-gazdálkodás, lassabb húzás (2 lap, kézlimit 7) és jutalomválasztás minden megnyert ütközés után.', 'Resource management, slower draw (2 cards, hand limit 7) and a reward choice after every won clash.'), L('A Haladó mód, plusz előkészített lapok, Zaj, titkos Red küldetés, Blue koronaékszer (egy titokban kiválasztott, kiemelten védett szakasz) és költséggel járó szerepkör-képességek.', 'Advanced mode plus staged cards, noise, a secret Red mission, a Blue crown jewel (a secretly chosen, extra-protected stage) and role abilities that cost Resources.')][GMSEL]} ${L('Online játékban a házigazda által választott mód érvényes.', 'In online games the host\'s mode applies.')}</p></div>
+    <div class="lbl" style="margin-top:16px">${L('A támadási lánc öt szakasza · kattints rá a magyarázatért', 'The five stages of the attack chain · click one for an explanation')}</div>
+    <div class="cats">${[1, 2, 3, 4, 5].map(i => `<button id="cat${i}" data-a="cat" data-v="${i}" aria-expanded="${CATSEL === i}" aria-controls="catinfo" title="${esc(ZN[i][0])}">${icon(i)}<span class="lbl" style="font-size:10px">0${i}</span><b style="font-size:12px">${ZN[i][0]}</b></button>`).join('')}</div>
+    <div id="catinfo" class="catinfo" ${CATSEL ? '' : 'hidden'}>${CATSEL ? `<b>0${CATSEL} · ${ZN[CATSEL][0]}:</b> ${L(...STAGE_INFO[CATSEL])}` : ''}</div></div>
+   <div class="choices"><h2 class="sr-only">${L('Játék indítása', 'Start playing')}</h2>
+    <button class="choice cut" data-a="local"><div class="fi cut"><span class="lbl">${L('Egy eszközön', 'One device')}</span><b>${L('Helyi játék', 'Local game')}</b><span class="hint">${L('Egy képernyő, két csapat. A lapok rejtve vannak, mindig csak a soron lévő csapat fedi fel a sajátjait.', 'One screen, two teams. Cards stay hidden; only the team whose turn it is reveals its own.')}</span></div></button>
     ${loc && loc.ph !== 'end' ? `<button class="choice cut" data-a="resume"><div class="fi cut"><span class="lbl">${L('Mentett helyi játék', 'Saved local game')}</span><b>${L('Folytatás', 'Continue')} · ${loc.rd ? L(loc.rd + '. kör', 'round ' + loc.rd) : L('beállítás', 'setup')}</b></div></button>` : ''}
-    <div class="choice cut" style="cursor:default"><div class="fi cut"><span class="lbl">${L('Két eszközön', 'Two devices')}</span><b>${L('Online játék indítása', 'Start an online game')}</b><span class="hint">${L('Kapsz egy 6 karakteres kódot, az ellenfél azzal csatlakozik.', 'You get a 6-character code; your opponent joins with it.')}</span>
+    <div class="choice cut" style="cursor:default"><div class="fi cut"><span class="lbl">${L('Két eszközön', 'Two devices')}</span><h3>${L('Online játék indítása', 'Start an online game')}</h3><span class="hint">${L('Kapsz egy 6 karakteres kódot, az ellenfél azzal csatlakozik.', 'You get a 6-character code; your opponent joins with it.')}</span>
       <div class="row" style="margin-top:8px"><button class="btn red hostred" data-a="host" data-side="r" ${online ? '' : 'disabled'}>${L('Red leszek', 'I play Red')}</button><button class="btn blue" data-a="host" data-side="b" ${online ? '' : 'disabled'}>${L('Blue leszek', 'I play Blue')}</button>${host && host.st && host.st.ph !== 'end' && online ? `<button class="btn ghost" data-a="rehost">${L('Folytatás', 'Continue')} · ${esc(host.code.toUpperCase())}</button>` : ''}</div></div></div>
-    <div class="choice cut" style="cursor:default"><div class="fi cut"><span class="lbl">${L('Mindenki a saját eszközén', 'Everyone on their own device')}</span><b>${L('Szerepkörös játék', 'Role-based game')}</b><span class="hint">${L('Minden játékos a saját eszközéről csatlakozik, és ott választja ki a csapatát és a szerepkörét. A házigazda gépe lehet kivetítő is.', "Every player joins from their own device and picks a team and role there. The host's device can serve as a projector.")}</span>
+    <div class="choice cut" style="cursor:default"><div class="fi cut"><span class="lbl">${L('Mindenki a saját eszközén', 'Everyone on their own device')}</span><h3>${L('Szerepkörös játék', 'Role-based game')}</h3><span class="hint">${L('Minden játékos a saját eszközéről csatlakozik, és ott választja ki a csapatát és a szerepkörét. A házigazda gépe lehet kivetítő is.', "Every player joins from their own device and picks a team and role there. The host's device can serve as a projector.")}</span>
       <div class="row" style="margin-top:8px"><button class="btn" data-a="hostteam" ${online ? '' : 'disabled'}>${L('Új szerepkörös játék', 'New role-based game')}</button>${team && team.st && team.st.ph !== 'end' && online ? `<button class="btn ghost" data-a="reteam">${L('Folytatás', 'Continue')} · ${esc(team.code.toUpperCase())}</button>` : ''}</div></div></div>
-    <a class="choice cut" href="ctf/" style="text-decoration:none;color:inherit"><div class="fi cut"><span class="lbl">${L('Egyéni játékmód', 'Individual mode')}</span><b>${L('CTF – zászlószerzés', 'CTF – capture the flag')}</b><span class="hint">${L('Incidenskezelés saját fiókkal, saját tempóban: 7 egymásra épülő réteg a riasztástól a helyreállításig, valós incidensek alapján, közös ranglistával.', 'Incident response with your own account, at your own pace: 7 layers built on each other from the alert to recovery, based on real incidents, with a shared leaderboard.')}</span></div></a>
-    <div class="choice cut" style="cursor:default"><div class="fi cut"><span class="lbl">${L('Csatlakozás bármelyik online játékhoz', 'Join any online game')}</span><b>${L('Csatlakozás kóddal', 'Join with code')}</b>
-      <div class="row" style="margin-top:8px;flex-wrap:nowrap"><input type="text" id="joincode" maxlength="6" placeholder="${L('KÓD', 'CODE')}" aria-label="${L('Játékkód', 'Game code')}" autocomplete="off" value="${esc(KEEP.joincode || '')}" ${online ? '' : 'disabled'}><button class="btn" data-a="join" ${online ? '' : 'disabled'}>${L('Belépés', 'Join')}</button><button class="btn ghost" data-a="watch" ${online ? '' : 'disabled'} title="${L('Csak nézőként követed a játékot', 'Follow the game as a spectator only')}">${L('Közvetítés', 'Watch')}</button></div>
-      <span class="hint">${L('Közvetítés: ugyanazzal a kóddal, csak nézőként (például kivetítőn). Látod az állást és a lépéseket, a lapokat csak felfedés után.', 'Watch: the same code, as a spectator only (for example on a projector). You see the score and the moves, and cards only once they are revealed.')}</span></div></div>
+    <a class="choice cut" href="ctf/" style="text-decoration:none"><div class="fi cut"><span class="lbl">${L('Egyéni játékmód', 'Individual mode')}</span><b>${L('CTF – zászlószerzés', 'CTF – capture the flag')}</b><span class="hint">${L('Incidenskezelés saját fiókkal, saját tempóban: 7 egymásra épülő réteg a riasztástól a helyreállításig, valós incidensek alapján, közös ranglistával.', 'Incident response with your own account, at your own pace: 7 layers built on each other from the alert to recovery, based on real incidents, with a shared leaderboard.')}</span><span class="go" aria-hidden="true">${L('Megnyitás', 'Open')} →</span></div></a>
+    ${narrow ? '' : join}
     <p class="hint">${!NETREADY ? L('Online kapcsolat ellenőrzése…', 'Checking the online connection…') : online ? (NETKIND === 'mqtt' ? L('Online kapcsolat ingyenes nyilvános közvetítő szervereken át: bármely internetkapcsolattal működik, a két gépnek nem kell egy hálózaton lennie.', 'Online play runs through free public relay servers: it works on any internet connection, and the devices do not need to be on the same network.') : L(`Online kapcsolat: ${NETKIND === 'db' ? 'közös játékadatbázis' : 'élő szoba'}. A két eszköz ugyanezt a linket nyitja meg.`, `Online connection: ${NETKIND === 'db' ? 'shared game database' : 'live room'}. All devices open this same link.`)) : L('Az online módhoz a játékot a Claude felületén, bejelentkezve kell megnyitni, és legalább Közreműködő (Contributor) hozzáférés kell hozzá. A helyi játék mindenhol működik.', 'For online play, open the game in Claude while signed in, with at least Contributor access. Local play works everywhere.')}</p>
    </div></div>
-   <div class="frame cut" style="margin-top:20px"><div class="fi"><h2>${L('Egy kör röviden', 'A round in brief')}</h2>
-   <ol style="margin:8px 0 0;padding-left:20px;columns:2 260px;column-gap:28px">${LANG === 'en' ? `
-    <li><b>Draw:</b> both teams fill their hands to 5 cards.</li><li><b>Attack:</b> Red plays a card face down from the category of the pawn's stage.</li>
-    <li><b>Defense:</b> Blue defends with a card of the same category, or passes.</li><li><b>Reveal and result:</b> strength + role bonus + persistent controls. Higher wins; a tie means a crypto duel.</li>
-    <li><b>Fortify:</b> Blue may place a "Persistent" card as a control.</li><li><b>Cleanup:</b> the round marker advances. At the end of round 10, Blue wins.</li>` : `
-    <li><b>Húzás:</b> mindkét csapat 5 lapra egészít ki.</li><li><b>Támadás:</b> a Red lefordítva kijátszik egy lapot a bábu szakaszának kategóriájából.</li>
-    <li><b>Védekezés:</b> a Blue azonos kategóriájú lappal védekezik, vagy passzol.</li><li><b>Felfedés és eredmény:</b> erősség + szerepkör-bónusz + tartós kontrollok. A nagyobb nyer, döntetlennél kriptopárbaj.</li>
-    <li><b>Megerősítés:</b> a Blue lerakhat egy „Tartós” lapot kontrollként.</li><li><b>Takarítás:</b> a körjelző lép. A 10. kör végén a Blue nyer.</li>`}</ol></div></div>`;
+   <div class="frame cut" style="margin-top:20px"><div class="fi"><h2>${L('Egy kör röviden', 'A round in brief')} · ${L(...GM_NAMES[GMSEL])}</h2>
+   <ol style="margin:8px 0 0;padding-left:20px;columns:2 260px;column-gap:28px">${roundBrief(GMSEL).map(([h, t]) => `<li><b>${h}:</b> ${t}</li>`).join('')}</ol>
+   ${GMSEL ? `<p class="hint" style="margin:8px 0 0">${L('A részletek a Játékszabályok között vannak.', 'The details are in the Game rules.')}</p>` : ''}</div></div>`;
+}
+// Steps of one round for the menu summary, in the mode picked on the menu.
+function roundBrief(gm) {
+  const S = [];
+  S.push(gm ? [L('Húzás', 'Draw'), L('mindkét csapat 2 lapot húz (kézlimit 7). A Red +4, a Blue +3 Erőforrást kap.', 'both teams draw 2 cards (hand limit 7). Red gains +4 Resources, Blue +3.')]
+    : [L('Húzás', 'Draw'), L('mindkét csapat 5 lapra egészít ki.', 'both teams fill their hands to 5 cards.')]);
+  S.push([L('Támadás', 'Attack'), L('a Red lefordítva kijátszik egy lapot a bábu szakaszának kategóriájából.', "Red plays a card face down from the category of the pawn's stage.") + (gm === 2 ? L(' Erős (4–5) lap Zajt kelt.', ' A strong (4–5) card makes noise.') : '')]);
+  S.push([L('Védekezés', 'Defense'), L('a Blue azonos kategóriájú lappal védekezik, vagy passzol.', 'Blue defends with a card of the same category, or passes.') + (gm === 2 ? L(' A koronaékszer szakaszán +1.', ' +1 at the crown jewel stage.') : '')]);
+  S.push([L('Felfedés és eredmény', 'Reveal and result'), L('erősség + szerepkör-bónusz + tartós kontrollok. A nagyobb nyer, döntetlennél kriptopárbaj.', 'strength + role bonus + persistent controls. Higher wins; a tie means a crypto duel.') + (gm ? L(' A lapok árát (az erősségüket) Erőforrásból fizetitek.', ' Each card costs its strength in Resources.') : '')]);
+  if (gm) S.push([L('Jutalom', 'Reward'), L('az ütközés nyertese jutalmat választ (például előrelépés, Perzisztencia vagy Észlelés jelző).', 'the winner of the clash picks a reward (for example advance, Persistence or a Detection token).')]);
+  S.push([L('Megerősítés', 'Fortify'), L('a Blue lerakhat egy „Tartós” lapot kontrollként.', 'Blue may place a "Persistent" card as a control.')]);
+  if (gm === 2) S.push([L('Előkészítés', 'Staging'), L('a Red 1 Erőforrásért lefordítva letehet egy lapot egy későbbi szakaszhoz.', 'for 1 Resource Red may stage a card face down at a later stage.')]);
+  S.push([L('Takarítás', 'Cleanup'), L('a körjelző lép. A 10. kör végén a Blue nyer.', 'the round marker advances. At the end of round 10, Blue wins.')]);
+  return S;
 }
 
 function gameHTML() {
@@ -1889,6 +1922,17 @@ function gameInner() {
 
 // ---------- rules & situational help ----------
 let RULES = false, CREF = false, HELPOPEN = true;
+let CATSEL = 0; // stage tile opened on the menu
+// Narrow screens get the join card right under the title; re-render when crossing the breakpoint.
+const NARROW = matchMedia('(max-width:900px)');
+NARROW.addEventListener('change', () => { if (SCREEN === 'menu') render(); });
+const STAGE_INFO = [null,
+  ['a támadó információt gyűjt a célpontról: nyilvános adatok, munkatársak, elérhető szolgáltatások és nyitott portok.', 'the attacker gathers information about the target: public data, staff, exposed services and open ports.'],
+  ['az első lábnyom a hálózatban, például adathalász levéllel, kiszivárgott jelszóval vagy egy sérülékeny szolgáltatáson át.', 'the first foothold in the network, for example through a phishing email, a leaked password or a vulnerable service.'],
+  ['a támadó tartósan bent marad: ütemezett feladatot, új fiókot vagy hátsó kaput hagy maga után.', 'the attacker makes sure to stay in: a scheduled task, a new account or a backdoor.'],
+  ['gépről gépre halad, jogosultságot emel, és a fontos rendszerek felé tart.', 'moving from host to host, escalating privileges and heading for the important systems.'],
+  ['amiért a támadó jött: adatlopás, zsarolóvírusos titkosítás vagy rombolás. Ide kell eljutnia a Rednek.', 'what the attacker came for: data theft, ransomware encryption or destruction. This is where Red has to get.'],
+];
 function crefHTML() {
   return `<div class="rulesov" role="dialog" aria-modal="true" aria-label="${L('Kriptográfiai segédlet', 'Crypto reference')}"><div class="rulesbox cut">
    <div class="rulestop"><h2>${L('Kriptográfiai segédlet', 'Crypto reference')}</h2><button class="btn" data-a="crefclose">${L('Bezárás', 'Close')}</button></div>
@@ -1913,7 +1957,7 @@ function modesRulesHTML() {
     <li><b>Noise:</b> every attack with a strength 4–5 card gives +1 noise. At 4 noise Blue gains a Detection token and noise resets. <i>Quiet round:</i> Red skips the attack and noise drops by 2.</li>
     <li><b>Secret mission:</b> Red draws one: Ransomware (succeed at 05, +2 there), Espionage (at 04 or later at the end of 3 consecutive rounds), Wiper (4 successful attacks with strength 4+ cards), Social engineering (2 successful attacks with SE cards). Blue's win conditions do not change.</li>
     <li><b>Crown jewel:</b> Blue secretly picks a stage; every defense there gets +1. It is revealed the first time Blue defends there.</li>
-    <li><b>Priced roles:</b> Recon peeks once per round for 2 Resources (at a Blue card or the crown jewel). CISO: once, +3 Resources instead of a second control. Incident Handler costs 1. A Cryptographer who wins a duel gains +1 Resource for the team.</li></ul></section>` : `
+    <li><b>Roles that cost Resources:</b> Recon peeks once per round for 2 Resources (at a Blue card or the crown jewel). CISO: once, +3 Resources instead of a second control. Incident Handler costs 1. A Cryptographer who wins a duel gains +1 Resource for the team.</li></ul></section>` : `
    <section><h3>Haladó mód${g === 1 ? cur : ''}</h3><ul>
     <li><b>Erőforrás:</b> mindkét csapat 2-vel kezd. Minden húzáskor a Red +4, a Blue +3 Erőforrást kap (legfeljebb 10). A lap ára az erőssége, a felfedéskor fizetitek, ezért csak kifizethető lapot tehettek le. A passz ingyenes, a szerepkör- és kontrollbónusz ingyen jár. Kontroll lerakása: erősség − 2, újratervezés: 1.</li>
     <li><b>Lassabb húzás:</b> a kezdő kéz 5 lap, utána minden körben 2 lapot húztok (nincs feltöltés 5-re). A kézlimit 7: a kör végén a többlet a nyílt dobópaklira kerül. Kategóriánként és oldalanként minden erősség (1–5) egyszer van meg, így a lapszámolás működik.</li>
@@ -1924,7 +1968,7 @@ function modesRulesHTML() {
     <li><b>Zaj:</b> minden 4-es vagy 5-ös lappal indított támadás +1 Zajt ad. 4 Zajnál a Blue Észlelés jelzőt kap, és a Zaj nullázódik. <i>Csendes kör:</i> a Red nem támad, a Zaj 2-vel csökken.</li>
     <li><b>Titkos küldetés:</b> a Red húz egyet: Zsarolóvírus (siker a 05-ön, ott +2), Kémkedés (3 egymást követő kör végén legalább a 04-en), Wiper (4 sikeres támadás legalább 4-es lappal), Social engineering (2 sikeres támadás SE lappal). A Blue győzelmi feltételei nem változnak.</li>
     <li><b>Koronaékszer:</b> a Blue titokban kiválaszt egy szakaszt, ott minden védekezése +1-et kap. Az első ottani védekezéskor felfedődik.</li>
-    <li><b>Áras szerepkörök:</b> a Felderítő körönként egyszer, 2 Erőforrásért néz be (egy Blue lapba vagy a koronaékszerbe). CISO: egyszer +3 Erőforrás a második kontroll helyett. Az Incidenskezelő 1 Erőforrásba kerül. A párbajt megnyerő Kriptográfus +1 Erőforrást hoz a csapatának.</li></ul></section>`;
+    <li><b>Költséggel járó szerepkörök:</b> a Felderítő körönként egyszer, 2 Erőforrásért néz be (egy Blue lapba vagy a koronaékszerbe). CISO: egyszer +3 Erőforrás a második kontroll helyett. Az Incidenskezelő 1 Erőforrásba kerül. A párbajt megnyerő Kriptográfus +1 Erőforrást hoz a csapatának.</li></ul></section>`;
 }
 function rulesHTML() {
   const roleRow = s => DATA.roles.filter(r => r.s === s).sort((a, b) => a.n - b.n).map(r => `<li><b>${esc(r.hu)}</b> <span class="tag tg">${esc(r.tm || { always: L('MINDIG', 'ALWAYS'), duel: L('PÁRBAJKOR', 'IN DUEL') }[r.u] || '')}</span><br>${esc(r.ab)}</li>`).join('');
@@ -2111,6 +2155,7 @@ document.addEventListener('click', e => {
     case 'menu': ABORTASK = false; return leave();
     case 'lang': return setLang(t.dataset.v);
     case 'gm': GMSEL = +t.dataset.v; store.set('rvb-gm', GMSEL); return render();
+    case 'cat': CATSEL = CATSEL === +t.dataset.v ? 0 : +t.dataset.v; return render();
     case 'cref': CREF = true; RULES = false; return render();
     case 'crefclose': CREF = false; return render();
     case 'rules': CREF = false; RULES = true; render(); { const b = document.querySelector('.rulesbody'); if (b) b.scrollTop = 0; } return;
