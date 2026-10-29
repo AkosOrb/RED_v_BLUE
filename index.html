@@ -239,7 +239,8 @@ input[type=text]{font-family:var(--f-mono);font-size:18px;letter-spacing:.2em;te
 .back.small{width:46px;height:64px}.back.small .disp{font-size:9px}
 .detail{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
 @media (max-width:600px){.detail{grid-template-columns:minmax(0,1fr)}.hc{width:calc(50% - 5px)}.back{width:calc(50% - 5px)}}
-.case{border:2px solid var(--ink);border-left-width:6px;padding:8px 10px;font-size:13px;background:rgba(246,243,238,.5)}
+.case{border:2px solid var(--ink);border-left-width:6px;padding:8px 10px;font-size:13px;background:var(--field)}
+:root[data-atm=r] .case{color:var(--white)}
 /* clash */
 .clash{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:12px;align-items:center}
 .clash .side{display:flex;flex-direction:column;align-items:center;gap:8px;min-width:0}
@@ -1699,7 +1700,7 @@ function handPanel(side) {
       return cardHTML(ch, { btn: true, sel: SEL[side].includes(ch), play: play && myTurn, dim: myTurn && !play });
     }).join('') || `<p class="hint">${L('Nincs lap a kézben.', 'No cards in hand.')}</p>`}</div>`;
     const s1 = SEL[side][0];
-    if (s1) { const c = cardOf(s1); body += `<div class="detail" style="margin-top:10px"><div class="case" style="background:var(--white)"><b>${esc(c.hu)}</b><br>${esc(c.d)}</div>${caseHTML(s1)}</div>`; }
+    if (s1) { const c = cardOf(s1); body += `<div class="detail" style="margin-top:10px"><div class="case"><b>${esc(c.hu)}</b><br>${esc(c.d)}</div>${caseHTML(s1)}</div>`; }
     if (side === 'b' && ST.ik) body += `<div class="panel cut" style="margin-top:10px"><span class="lbl b">${L('Fenyegetés-felderítés · a Red kezében van:', "Threat intel · in Red's hand:")}</span><div class="row" style="margin-top:6px">${ST.ik.split('').map(c => cardHTML(c)).join('')}</div></div>`;
     if (side === 'r' && ST.pk && ST.pkr) body += `<div class="panel cut" style="margin-top:10px"><span class="lbl r">${L('Felderítő · a Blue kezében van:', "Recon · in Blue's hand:")}</span><div style="margin-top:6px">${cardHTML(ST.pk)}</div></div>`;
     if (MODE === 'local') body += `<div style="margin-top:10px"><button class="btn ghost" data-a="hide" data-side="${side}">${L('Kéz elrejtése', 'Hide hand')}</button></div>`;
