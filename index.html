@@ -28,6 +28,53 @@
   color-scheme:dark;
 }
 .top .theme{min-width:40px;display:inline-flex;align-items:center;justify-content:center}
+/* Team atmosphere in the game: the page takes on the look of the team that acts now.
+   Red = black terminal with crimson ink, scanlines and glitches; Blue = calm teal ops room with black panels,
+   crosshair marks and a slowly turning dial. Duel, setup and the menu keep the neutral look. */
+:root[data-atm=r]{
+  --ground:#070707; --paper:#140709; --ink:#FF3355; --ink2:#FF8A9E; --mute:#A84457; --char:#1E0A10;
+  --white:#FFE3E8; --soft:#F2A7B4; --red:#FF2648; --blue:#3D9BF0; --ok:#4fb874;
+  --btn-bg:#2C0F17; --btn-bg2:#3E1420; --btn-fg:#FFD3DB; --btn-on-bg:#FF2648; --btn-on-fg:#0a0a0a;
+  --on-ink:#0a0a0a; --field:#0E0507; --gridline:rgba(255,51,85,.07); --red-t:#FF5C77; --blue-t:#6FB0EE;
+  color-scheme:dark;
+}
+:root[data-atm=b]{
+  --ground:#5BB8C4; --paper:#8BD0D9; --ink:#0F1A1C; --ink2:#1D2E31; --mute:#2F5960; --char:#141A1B;
+  --white:#F4FBFC; --soft:#CFE9EC; --red:#E0300F; --blue:#0E5AA0; --ok:#0F6B3A;
+  --btn-bg:#141A1B; --btn-bg2:#27393C; --btn-fg:#F4FBFC; --btn-on-bg:#F4FBFC; --btn-on-fg:#0F1A1C;
+  --on-ink:#F4FBFC; --field:#F4FBFC; --gridline:rgba(15,26,28,.08); --red-t:#A9260B; --blue-t:#0B477F;
+  --cross:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='128' height='128'%3E%3Cpath d='M64 57v14M57 64h14' stroke='%230F1A1C' stroke-width='1.5'/%3E%3C/svg%3E");
+  color-scheme:light;
+}
+:root[data-theme=dark][data-atm=b]{
+  --ground:#0B1D20; --paper:#12292D; --ink:#8FDCE6; --ink2:#BDEEF4; --mute:#4F8790; --char:#050C0D;
+  --white:#E6FAFC; --soft:#9CC9CF; --red:#FF5A3A; --blue:#4FB3FF; --ok:#4fb874;
+  --btn-bg:#16363B; --btn-bg2:#1F474D; --btn-fg:#E6FAFC; --btn-on-bg:#8FDCE6; --btn-on-fg:#071214;
+  --on-ink:#071214; --field:#061113; --gridline:rgba(143,220,230,.06); --red-t:#FF7A55; --blue-t:#6FC4FF;
+  --cross:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='128' height='128'%3E%3Cpath d='M64 57v14M57 64h14' stroke='%238FDCE6' stroke-width='1.5'/%3E%3C/svg%3E");
+  color-scheme:dark;
+}
+body{transition:background-color .6s ease,color .6s ease}
+:root[data-atm=b] body{background-image:var(--cross),linear-gradient(var(--gridline) 1px,transparent 1px),linear-gradient(90deg,var(--gridline) 1px,transparent 1px);background-size:128px 128px,32px 32px,32px 32px}
+/* Red activity: scanline overlay, a slow scan band and a short glitch on the phase title */
+:root[data-atm=r] body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:15;background:repeating-linear-gradient(0deg,rgba(0,0,0,.28) 0 1px,transparent 1px 3px)}
+:root[data-atm=r] body::after{content:'';position:fixed;left:0;right:0;top:-30vh;height:30vh;pointer-events:none;z-index:15;background:linear-gradient(transparent,rgba(255,51,85,.07),transparent);animation:atm-scan 7s linear infinite}
+:root[data-atm=r] .phase .who{font-family:var(--f-mono);font-weight:400;letter-spacing:.08em;animation:atm-glitch 5s steps(1) infinite}
+:root[data-atm=r] .zone.cur .zplate,:root[data-atm=r] .pawn{animation:atm-flicker 3.2s steps(1) infinite}
+@keyframes atm-scan{to{transform:translateY(160vh)}}
+@keyframes atm-glitch{0%,90%,100%{transform:none;text-shadow:none}91%{transform:translateX(-3px);text-shadow:3px 0 var(--blue)}93%{transform:translateX(2px) skewX(-8deg);text-shadow:-3px 0 var(--white)}95%{transform:none;text-shadow:2px 0 var(--blue)}}
+@keyframes atm-flicker{0%,100%{opacity:1}47%{opacity:.55}48%{opacity:1}83%{opacity:.7}84%{opacity:1}}
+/* Blue activity: a ticked dial turning slowly in the corner, calm breathing on the detection slots */
+:root[data-atm=b] body::after{content:'';position:fixed;right:-70px;bottom:-70px;width:260px;height:260px;border-radius:50%;pointer-events:none;z-index:0;opacity:.35;
+  background:radial-gradient(circle,var(--ink) 0 18px,transparent 19px 70px,var(--ink) 71px 73px,transparent 74px),repeating-conic-gradient(var(--ink) 0 1.6deg,transparent 1.6deg 6deg);
+  -webkit-mask:radial-gradient(circle,#000 0 74px,transparent 75px 100px,#000 101px 128px,transparent 129px);mask:radial-gradient(circle,#000 0 74px,transparent 75px 100px,#000 101px 128px,transparent 129px);
+  animation:atm-spin 60s linear infinite}
+:root[data-atm=b] .det:not(.on){animation:atm-breathe 4s ease-in-out infinite}
+:root[data-atm=b] .phase .steps span.on{background:var(--btn-on-bg);color:var(--btn-on-fg)}
+:root[data-atm=b] .phase .b,:root[data-atm=b] .top .b,:root[data-atm=b] .end .b{color:#4FB3FF}
+@keyframes atm-spin{to{transform:rotate(360deg)}}
+@keyframes atm-breathe{50%{background:rgba(14,90,160,.22)}}
+.wrap{position:relative;z-index:1}
 *{box-sizing:border-box}
 html,body{min-height:100%}
 body{background-color:var(--ground);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.4;margin:0;
@@ -2140,7 +2187,14 @@ function helpHTML() {
 function langHTML() {
   return `<span class="lang" role="group" aria-label="${L('Nyelv', 'Language')}"><button class="btn" data-a="lang" data-v="hu" aria-pressed="${LANG === 'hu'}" lang="hu">HU</button><button class="btn" data-a="lang" data-v="en" aria-pressed="${LANG === 'en'}" lang="en">EN</button></span><button class="btn theme" data-a="theme" aria-pressed="${DARK}" aria-label="${L('Sötét mód', 'Dark mode')}" title="${L('Sötét mód', 'Dark mode')}">${DARK ? SUN : MOON}</button>`;
 }
+// Which team's atmosphere the game screen shows: the team that acts now (the winner on the end screen).
+function atmOf(st) {
+  if (!st) return '';
+  const by = { atk: 'r', stg: 'r', def: 'b', fort: 'b', cj: 'b', rew: st.rw, trim: st.tr, end: st.w };
+  return by[st.ph] || '';
+}
 function render() {
+  document.documentElement.dataset.atm = SCREEN === 'game' ? atmOf(ST) : '';
   const a = document.activeElement, fid = a && a.id, pos = a && a.selectionStart;
   const tmode = TEAM ? L('SZEREPKÖRÖS', 'ROLE-BASED') + ' · ' + (MY ? SIDE[MY].toUpperCase() + (MYRO.length ? ' · ' + MYRO.map(k => roleKeyName(MY, k).toUpperCase()).join(', ') : '') : L('NÉZŐ', 'SPECTATOR')) : '';
   const mode = SPEC ? L('KÖZVETÍTÉS', 'LIVE BROADCAST') : TEAM ? tmode : { local: L('HELYI JÁTÉK', 'LOCAL GAME'), host: 'ONLINE · ' + (MY ? SIDE[MY].toUpperCase() : ''), guest: 'ONLINE · ' + (MY ? SIDE[MY].toUpperCase() : ST ? L('NÉZŐ', 'SPECTATOR') : L('CSATLAKOZÁS', 'JOINING')) }[MODE] || '';
