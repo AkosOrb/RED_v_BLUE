@@ -3,6 +3,7 @@
 <meta property="og:title" content="Red vs Blue – kiberbiztonsági kártyajáték">
 <meta property="og:description" content="Támadók és védők a támadási lánc öt szakaszán, valós esetekkel. Helyi, online és szerepkörös játék, valamint CTF mód.">
 <meta property="og:type" content="website">
+<script>try{if(localStorage.getItem('rvb-theme')==='dark')document.documentElement.dataset.theme='dark'}catch(e){}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;700;800;900&family=Saira+Stencil+One&family=Share+Tech+Mono&display=swap">
 <style>
@@ -15,12 +16,22 @@
   --f-disp:'Archivo','Helvetica Neue','Arial Black',sans-serif; --f-body:'Archivo','Helvetica Neue',system-ui,sans-serif; --f-mono:'Share Tech Mono',ui-monospace,Menlo,monospace;
   --f-num:'Saira Stencil One','Archivo',sans-serif;
   --stripes:repeating-linear-gradient(-55deg,var(--red) 0 7px,transparent 7px 13px);
+  --on-ink:#F6F3EE; --field:#FBFAF7; --gridline:rgba(35,35,35,.06); --red-t:#C42A05; --blue-t:#1A60A8;
   color-scheme:light;
 }
+/* Dark mode (header toggle, stored per device): ink turns light, paper and panels go dark. */
+:root[data-theme=dark]{
+  --ground:#191919; --paper:#2a2a2a; --ink:#E8E2D8; --ink2:#cfc8bd; --mute:#9a938a; --char:#121212;
+  --white:#F2EEE7; --soft:#bdb6ab; --ok:#4fb874;
+  --btn-bg:#454545; --btn-bg2:#575757;
+  --on-ink:#161616; --field:#111; --gridline:rgba(232,226,216,.05); --red-t:#FF7A55; --blue-t:#6FB0EE;
+  color-scheme:dark;
+}
+.top .theme{min-width:40px;display:inline-flex;align-items:center;justify-content:center}
 *{box-sizing:border-box}
 html,body{min-height:100%}
 body{background-color:var(--ground);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.4;margin:0;
-  background-image:linear-gradient(rgba(35,35,35,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(35,35,35,.06) 1px,transparent 1px);background-size:32px 32px}
+  background-image:linear-gradient(var(--gridline) 1px,transparent 1px),linear-gradient(90deg,var(--gridline) 1px,transparent 1px);background-size:32px 32px}
 button{font:inherit;color:var(--ink);cursor:pointer}
 :focus-visible{outline:3px solid var(--ink);outline-offset:2px}
 /* clip-path cuts off anything outside the box, so chamfered controls draw the ring inside instead */
@@ -44,8 +55,8 @@ h1,h2,h3{margin:0;text-wrap:balance}
 h2{font-family:var(--f-disp);font-weight:900;font-size:21px;letter-spacing:-.005em;text-transform:uppercase}
 h3{font-size:16px;font-weight:800;text-transform:uppercase;letter-spacing:.01em}
 .r{color:var(--red)}.b{color:var(--blue)}
-.tag{display:inline-block;font-family:var(--f-mono);font-size:11px;letter-spacing:.16em;padding:2px 7px;background:var(--ink);color:var(--white);white-space:nowrap}
-.tag.tr{background:var(--red);color:var(--ink)}.tag.tb{background:var(--blue);color:var(--ink)}.tag.tg{background:var(--ground);color:var(--ink);border:1.5px solid var(--ink)}
+.tag{display:inline-block;font-family:var(--f-mono);font-size:11px;letter-spacing:.16em;padding:2px 7px;background:var(--ink);color:var(--on-ink);white-space:nowrap}
+.tag.tr{background:var(--red);color:var(--on-ink)}.tag.tb{background:var(--blue);color:var(--on-ink)}.tag.tg{background:var(--ground);color:var(--on-ink);border:1.5px solid var(--ink)}
 .btn{border:0;background:var(--btn-bg);color:var(--btn-fg);padding:10px 16px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;font-size:13px;-webkit-text-fill-color:var(--btn-fg);opacity:1;clip-path:polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%,0 8px)}
 .btn:hover{background:var(--btn-bg2)}
 .btn.red{box-shadow:inset 6px 0 0 var(--red)}.btn.blue{box-shadow:inset 6px 0 0 var(--blue)}
@@ -69,6 +80,7 @@ h3{font-size:16px;font-weight:800;text-transform:uppercase;letter-spacing:.01em}
 .top .sp{flex:1}
 .top .btn{clip-path:none;padding:6px 10px;font-size:11px;background:#555}
 .top .btn:hover{background:#666}
+.top .btn[aria-pressed=true]{background:var(--btn-on-bg);color:var(--btn-on-fg);-webkit-text-fill-color:var(--btn-on-fg)}
 .top .lang{display:inline-flex;gap:2px}.top .lang .btn{min-width:34px}
 .pill{font-family:var(--f-mono);font-size:12px;letter-spacing:.14em;padding:3px 8px;border:1.5px solid var(--soft)}
 .accent{height:8px;display:flex;background:var(--char)}.accent i{flex:1}.accent i:nth-child(1){background:var(--stripes);max-width:180px}.accent i:nth-child(2){background:linear-gradient(var(--char) 0 3px,var(--red) 3px 5px,var(--char) 5px)}
@@ -100,7 +112,7 @@ button.choice:active .fi,a.choice:active .fi{background:var(--btn-on-bg);color:v
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 /* 09: comfortable touch targets on touch screens */
 @media (pointer:coarse){.btn,.seg button{min-height:44px}.top .btn{min-height:40px;min-width:44px}}
-input[type=text]{font-family:var(--f-mono);font-size:18px;letter-spacing:.2em;text-transform:uppercase;padding:9px 10px;border:2px solid var(--ink);background:#FBFAF7;color:var(--ink);width:100%;min-width:0}
+input[type=text]{font-family:var(--f-mono);font-size:18px;letter-spacing:.2em;text-transform:uppercase;padding:9px 10px;border:2px solid var(--ink);background:var(--field);color:var(--ink);width:100%;min-width:0}
 /* setup */
 .setup{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:16px;margin-top:16px}
 .seg{display:flex;gap:6px}
@@ -127,21 +139,21 @@ input[type=text]{font-family:var(--f-mono);font-size:18px;letter-spacing:.2em;te
 .zplate svg{width:22px;height:22px;flex:none}
 .zplate .zn{font-size:13.5px;font-weight:900;text-transform:uppercase;line-height:1.1}
 .zplate .ze{font-family:var(--f-mono);font-size:10px;letter-spacing:.12em;color:#FF7A55;text-transform:uppercase}
-.zone.cur .zplate{background:var(--red);color:var(--ink)}.zone.cur .zplate .ze{color:var(--ink)}
+.zone.cur .zplate{background:var(--red);color:var(--on-ink)}.zone.cur .zplate .ze{color:var(--on-ink)}
 .pawnslot{width:52px;height:52px;border-radius:50%;border:3px solid var(--ink);background:var(--paper);display:flex;align-items:center;justify-content:center;position:relative;z-index:1}
 .zone.past .pawnslot{border-color:var(--red)}
 .pawnslot:empty::after{content:'';width:10px;height:10px;border-radius:50%;background:var(--ink)}.zone.past .pawnslot:empty::after{background:var(--red)}
-.pawn{width:44px;height:44px;border-radius:50%;background:var(--red);border:3px solid var(--ink);color:var(--ink);font-family:var(--f-disp);font-weight:900;font-size:11px;display:flex;align-items:center;justify-content:center;animation:pop .35s ease-out}
+.pawn{width:44px;height:44px;border-radius:50%;background:var(--red);border:3px solid var(--ink);color:var(--on-ink);font-family:var(--f-disp);font-weight:900;font-size:11px;display:flex;align-items:center;justify-content:center;animation:pop .35s ease-out}
 @keyframes pop{from{transform:scale(.4)}to{transform:scale(1)}}
 .det{height:52px;border:2px dashed var(--blue);background:rgba(47,134,218,.1);display:flex;align-items:center;justify-content:center;font-family:var(--f-num);font-size:26px;color:var(--blue)}
-.det.on{background:var(--blue);border-style:solid;border-color:var(--ink);color:var(--ink)}
+.det.on{background:var(--blue);border-style:solid;border-color:var(--on-ink);color:var(--on-ink)}
 .ctrlrow{grid-column:1/-1;display:flex;gap:4px;flex-wrap:wrap;margin-top:-4px}
-.ctrlrow span{position:relative;z-index:1;font-family:var(--f-mono);font-size:10px;letter-spacing:.08em;background:var(--blue);color:var(--ink);padding:1px 6px}
+.ctrlrow span{position:relative;z-index:1;font-family:var(--f-mono);font-size:10px;letter-spacing:.08em;background:var(--blue);color:var(--on-ink);padding:1px 6px}
 .track{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:4px;margin-top:6px}
 .track div{aspect-ratio:1;border-radius:50%;display:flex;align-items:center;justify-content:center}
 .track div{border:2px solid var(--ink);text-align:center;font-family:var(--f-num);font-size:13px;padding:0}
 .track div.done{background:var(--ink);color:var(--paper)}
-.track div.now{background:var(--red);color:var(--ink);box-shadow:0 0 0 3px var(--paper),0 0 0 5px var(--red)}
+.track div.now{background:var(--red);color:var(--on-ink);box-shadow:0 0 0 3px var(--paper),0 0 0 5px var(--red)}
 .track div.last{color:var(--blue);border-color:var(--blue);border-width:3px}
 .track div.last.now{color:var(--blue)}
 /* phase */
@@ -151,7 +163,7 @@ input[type=text]{font-family:var(--f-mono);font-size:18px;letter-spacing:.2em;te
 @media (max-width:600px){.phase .steps{margin-left:0}.top{gap:8px 10px;padding:8px 12px}.top .sp{flex-basis:100%;height:0}.wrap{padding-inline:12px}h2{font-size:18px}.code{font-size:26px;letter-spacing:.14em}}
 .phase .steps span{font-family:var(--f-mono);font-size:10px;padding:4px 14px 4px 12px;background:#4c4c4c;color:#a9a39b;clip-path:polygon(0 0,calc(100% - 8px) 0,100% 50%,calc(100% - 8px) 100%,0 100%,8px 50%)}
 .phase .steps span:first-child{clip-path:polygon(0 0,calc(100% - 8px) 0,100% 50%,calc(100% - 8px) 100%,0 100%)}
-.phase .steps span.on{color:var(--ink);background:var(--red)}
+.phase .steps span.on{color:var(--on-ink);background:var(--red)}
 .hint{font-size:14px;color:var(--ink2)}
 /* cards */
 .hand{display:flex;gap:10px;flex-wrap:wrap}
@@ -188,7 +200,7 @@ input[type=text]{font-family:var(--f-mono);font-size:18px;letter-spacing:.2em;te
 .clash .vs{font-family:var(--f-num);font-size:26px}
 @media (max-width:600px){.clash{gap:6px}.clash .hc,.clash .back{width:100%;max-width:148px}.clash .ci{min-width:0}.clash .top2{min-width:0;overflow:hidden}.clash .sum{font-size:22px}}
 .result{font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:8px 12px;text-align:center}
-.result.rw{background:var(--red);color:var(--ink)}.result.bw{background:var(--blue);color:var(--ink)}.result.tw{background:var(--char);color:var(--white)}
+.result.rw{background:var(--red);color:var(--on-ink)}.result.bw{background:var(--blue);color:var(--on-ink)}.result.tw{background:var(--char);color:var(--white)}
 /* crypto */
 .kcard{background:var(--char);color:var(--white);display:grid;grid-template-columns:auto minmax(0,1fr);gap:14px;padding:14px;clip-path:polygon(14px 0,100% 0,100% calc(100% - 14px),calc(100% - 14px) 100%,0 100%,0 14px)}
 .kcard.nom{grid-template-columns:minmax(0,1fr)}
@@ -206,7 +218,7 @@ details.ref{margin-top:4px}
 details.ref summary{cursor:pointer;font-weight:700;text-transform:uppercase;font-size:13px;letter-spacing:.06em}
 .reftbl{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:12px;margin-top:8px;font-size:13px}
 .pb{border-collapse:collapse}.pb td,.pb th{border:1.5px solid var(--ink);width:30px;height:28px;text-align:center;font-family:var(--f-disp);font-size:12px}
-.pb th{background:var(--ink);color:var(--white)}
+.pb th{background:var(--ink);color:var(--on-ink)}
 .mrow{display:flex;gap:8px;align-items:center;font-family:var(--f-mono)}
 .mrow i{display:inline-block;height:6px;background:var(--ink);margin-right:3px;border-radius:3px}
 /* log */
@@ -227,7 +239,7 @@ details.ref summary{cursor:pointer;font-weight:700;text-transform:uppercase;font
 .end{background:var(--char);color:var(--white);padding:22px;text-align:center;border-top:10px solid transparent;border-image:var(--stripes) 10}
 .end .disp{font-size:clamp(34px,7vw,64px)}
 .oppbox{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
-.code{font-family:var(--f-num);font-size:38px;letter-spacing:.16em;background:#FBFAF7;padding:4px 12px;display:inline-block;user-select:all}
+.code{font-family:var(--f-num);font-size:38px;letter-spacing:.16em;background:var(--field);padding:4px 12px;display:inline-block;user-select:all}
 /* rules overlay + situational help */
 .rulesov{position:fixed;inset:0;background:rgba(35,35,35,.72);z-index:20;display:flex;align-items:flex-start;justify-content:center;padding:24px 16px;overflow:auto}
 .rulesbox{background:var(--paper);color:var(--ink);width:min(100%,960px);border:2px solid var(--ink)}
@@ -248,11 +260,11 @@ input.nm{text-transform:none;letter-spacing:.06em}
 .modesel .seg button{padding:10px 6px;font-size:13px}
 .res{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
 .res span{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;padding:2px 8px;background:var(--char);color:var(--white)}
-.res span.rr{background:var(--red);color:var(--ink)}
-.res span.bb{background:var(--blue);color:var(--ink)}
+.res span.rr{background:var(--red);color:var(--on-ink)}
+.res span.bb{background:var(--blue);color:var(--on-ink)}
 .zmark{grid-column:1/-1;display:flex;gap:4px;flex-wrap:wrap;margin-top:-4px}
-.zmark span{position:relative;z-index:1;font-family:var(--f-mono);font-size:10px;letter-spacing:.08em;padding:1px 6px;background:var(--ink);color:var(--white)}
-.zmark span.pr{background:var(--red);color:var(--ink)}
+.zmark span{position:relative;z-index:1;font-family:var(--f-mono);font-size:10px;letter-spacing:.08em;padding:1px 6px;background:var(--ink);color:var(--on-ink)}
+.zmark span.pr{background:var(--red);color:var(--on-ink)}
 .zmark span.cj{background:#FFD23F;color:var(--ink)}
 /* label decor (menu hero, panels) */
 .deco{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
@@ -265,7 +277,7 @@ input.nm{text-transform:none;letter-spacing:.06em}
 .hero .sub{font-family:var(--f-disp);font-weight:900;font-size:clamp(18px,2.2vw,26px);line-height:1.05;letter-spacing:-.01em;text-transform:uppercase;margin:14px 0 4px}
 .hero .sub span{color:var(--red)}
 /* small team-coloured text on light surfaces needs darker shades */
-.sumtbl .r,.case .r{color:#C42A05}.sumtbl .b,.case .b{color:#1A60A8}
+.sumtbl .r,.case .r{color:var(--red-t)}.sumtbl .b,.case .b{color:var(--blue-t)}
 .panel,.phase,.kcard,.end{background-image:radial-gradient(rgba(246,243,238,.07) 1.2px,transparent 1.6px);background-size:14px 14px}
 </style>
 <div id="app"></div>
@@ -1063,6 +1075,10 @@ function applyLang() {
   for (let i = 1; i <= 5; i++) LEVELHU[i] = LANG === 'en' ? LV_EN[i] : HU_TXT.lv[i];
   document.documentElement.lang = LANG;
 }
+let DARK = document.documentElement.dataset.theme === 'dark';
+const MOON = '<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M20 15.5A8.5 8.5 0 0 1 8.5 4a8.5 8.5 0 1 0 11.5 11.5z"/></svg>';
+const SUN = '<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="square"><circle cx="12" cy="12" r="4.2" fill="currentColor" stroke="none"/><path d="M12 1.5v3M12 19.5v3M1.5 12h3M19.5 12h3M4.6 4.6l2.1 2.1M17.3 17.3l2.1 2.1M4.6 19.4l2.1-2.1M17.3 6.7l2.1-2.1"/></svg>';
+function setTheme(dark) { DARK = dark; document.documentElement.dataset.theme = dark ? 'dark' : 'light'; try { localStorage.setItem('rvb-theme', dark ? 'dark' : 'light'); } catch (e) { } render(); }
 function setLang(l) { LANG = l; try { localStorage.setItem('rvb-lang', l); } catch (e) { } applyLang(); render(); }
 // messages that arrive as Hungarian text (engine errors, host rejections, toasts)
 const TR_EN = {
@@ -1721,7 +1737,7 @@ function morseHTML(num) {
 function kcardHTML(c) {
   const lv = c.l;
   const frags = c.f.map(f => `<div class="frag"><span class="tag tg" style="border:0">${lv === 5 ? L('FELADAT', 'TASK') : f.i + L(' TÖREDÉK', ' FRAGMENT')}</span><div class="cx" style="${lv === 5 ? 'white-space:pre-line' : ''}">${esc(lv === 5 ? f.x.split(' / ').join('\n') : f.x)}</div></div>`).join('');
-  return `<div class="kcard ${c.m ? '' : 'nom'}">${c.m ? `<div class="morse" aria-label="${L('A töredék: morzejel', 'Fragment A: Morse signal')}"><span class="tag" style="background:var(--ground);color:var(--ink)">A</span>${morseHTML(c.m)}</div>` : ''}
+  return `<div class="kcard ${c.m ? '' : 'nom'}">${c.m ? `<div class="morse" aria-label="${L('A töredék: morzejel', 'Fragment A: Morse signal')}"><span class="tag" style="background:var(--soft);color:#1a1a1a">A</span>${morseHTML(c.m)}</div>` : ''}
    <div style="min-width:0"><div class="row" style="justify-content:space-between"><div><div class="lbl" style="color:var(--soft)">TIE-BREAK // ${L('PÁRBAJ', 'DUEL')}</div><div class="disp" style="font-size:22px">${L('KRIPTOPÁRBAJ', 'CRYPTO DUEL')}</div></div><div class="disp" style="font-size:36px">${ROMAN[lv]}</div></div>
    <div class="lbl" style="margin-top:4px;color:var(--soft)">${L('NEHÉZSÉG', 'DIFFICULTY')}: ${LEVELHU[lv]} // ${c.f.length} ${L('FELADAT', c.f.length > 1 ? 'TASKS' : 'TASK')} // ${esc(c.code)}</div>${frags}
    <p style="font-size:13px;color:var(--soft);margin:10px 0 0">${lv === 5 ? L('Polybius-rács: minden számpár egy betű (sor, oszlop). A sorok a szavak.', 'Polybius square: each number pair is one letter (row, column). Each line is a word.') : L('Sorban: az A morzeszám a B eltolása, a B szava a C kulcsa. A D és az E önálló.', "In order: A's Morse number is B's shift, B's word is C's key. D and E stand alone.")}</p></div></div>`;
@@ -2122,7 +2138,7 @@ function helpHTML() {
 }
 
 function langHTML() {
-  return `<span class="lang" role="group" aria-label="${L('Nyelv', 'Language')}"><button class="btn" data-a="lang" data-v="hu" aria-pressed="${LANG === 'hu'}" lang="hu">HU</button><button class="btn" data-a="lang" data-v="en" aria-pressed="${LANG === 'en'}" lang="en">EN</button></span>`;
+  return `<span class="lang" role="group" aria-label="${L('Nyelv', 'Language')}"><button class="btn" data-a="lang" data-v="hu" aria-pressed="${LANG === 'hu'}" lang="hu">HU</button><button class="btn" data-a="lang" data-v="en" aria-pressed="${LANG === 'en'}" lang="en">EN</button></span><button class="btn theme" data-a="theme" aria-pressed="${DARK}" aria-label="${L('Sötét mód', 'Dark mode')}" title="${L('Sötét mód', 'Dark mode')}">${DARK ? SUN : MOON}</button>`;
 }
 function render() {
   const a = document.activeElement, fid = a && a.id, pos = a && a.selectionStart;
@@ -2186,6 +2202,7 @@ document.addEventListener('click', e => {
     case 'hide': SHOW[side] = false; SEL[side] = []; return render();
     case 'menu': ABORTASK = false; return leave();
     case 'lang': return setLang(t.dataset.v);
+    case 'theme': return setTheme(!DARK);
     case 'gm': GMSEL = +t.dataset.v; store.set('rvb-gm', GMSEL); return render();
     case 'cat': CATSEL = CATSEL === +t.dataset.v ? 0 : +t.dataset.v; return render();
     case 'cref': CREF = true; RULES = false; return render();
