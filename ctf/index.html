@@ -15,11 +15,20 @@
   --f-disp:'Archivo','Helvetica Neue','Arial Black',sans-serif; --f-body:'Archivo','Helvetica Neue',system-ui,sans-serif; --f-mono:'Share Tech Mono',ui-monospace,Menlo,monospace;
   --f-num:'Saira Stencil One','Archivo',sans-serif;
   --stripes:repeating-linear-gradient(-55deg,var(--red) 0 7px,transparent 7px 13px);
+  --on-ink:#F6F3EE; --field:#FBFAF7; --well:#D9D2C8; --zebra:#e2dcd3; --gridline:rgba(35,35,35,.06); --bad:#B32506;
   color-scheme:light;
+}
+/* Dark mode: same switch and stored choice as the main app. */
+:root[data-theme=dark]{
+  --ground:#191919; --paper:#2a2a2a; --ink:#E8E2D8; --mute:#9a938a; --char:#121212;
+  --white:#F2EEE7; --soft:#bdb6ab; --ok:#4fb874;
+  --btn-bg:#454545; --btn-bg2:#575757;
+  --on-ink:#161616; --field:#111; --well:#1f1f1f; --zebra:#242424; --gridline:rgba(232,226,216,.05); --bad:#FF7A55;
+  color-scheme:dark;
 }
 *{box-sizing:border-box}
 body{background-color:var(--ground);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.4;margin:0;
-  background-image:linear-gradient(rgba(35,35,35,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(35,35,35,.06) 1px,transparent 1px);background-size:32px 32px}
+  background-image:linear-gradient(var(--gridline) 1px,transparent 1px),linear-gradient(90deg,var(--gridline) 1px,transparent 1px);background-size:32px 32px}
 button{font:inherit;cursor:pointer}
 button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
 h1,h2,h3{margin:0;text-wrap:balance}
@@ -41,12 +50,12 @@ a{color:inherit}
 .btn:hover{background:var(--btn-bg2)}
 .btn.red{box-shadow:inset 6px 0 0 var(--red)}.btn.blue{box-shadow:inset 6px 0 0 var(--blue)}
 .btn.ghost{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 2px var(--ink)}
-.btn.ghost:hover{background:rgba(35,35,35,.08)}
+.btn.ghost:hover{background:var(--gridline)}
 .panel .btn.ghost{color:var(--white);box-shadow:inset 0 0 0 2px var(--white)}
 .btn.sm{padding:6px 10px;font-size:11px}
 .btn[aria-pressed=true]{background:var(--btn-on-bg);color:var(--btn-on-fg)}
 .btn[disabled]{opacity:.45;cursor:not-allowed}
-input[type=text],input[type=password]{font-family:var(--f-mono);font-size:16px;padding:9px 10px;border:2px solid var(--ink);background:var(--white);color:var(--ink);width:100%;min-width:0}
+input[type=text],input[type=password]{font-family:var(--f-mono);font-size:16px;padding:9px 10px;border:2px solid var(--ink);background:var(--field);color:var(--ink);width:100%;min-width:0}
 .top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px;padding-bottom:10px;border-bottom:3px solid var(--ink);position:relative}
 .top::after{content:'';position:absolute;left:0;bottom:-11px;width:120px;height:8px;background:var(--stripes)}
 .logo{font-family:var(--f-disp);font-weight:900;font-size:22px;letter-spacing:-.02em;text-decoration:none}
@@ -59,28 +68,29 @@ input[type=text],input[type=password]{font-family:var(--f-mono);font-size:16px;p
 .layers{display:flex;flex-direction:column;gap:6px}
 .layer{display:grid;grid-template-columns:34px 1fr auto;gap:8px;align-items:center;text-align:left;border:0;background:var(--char);color:var(--soft);padding:8px 10px;clip-path:polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%,0 8px)}
 .layer .n{font-family:var(--f-num);font-size:22px;color:var(--white)}
-.layer[aria-current=true]{background:var(--btn-on-bg);color:var(--ink)}.layer[aria-current=true] .n{color:var(--ink)}
+.layer[aria-current=true]{background:var(--btn-on-bg);color:var(--on-ink)}.layer[aria-current=true] .n{color:var(--on-ink)}
 .layer[disabled]{opacity:.5;cursor:not-allowed}
 .bar{height:6px;background:#333;margin-top:4px}.bar>i{display:block;height:100%;background:var(--ok)}
 .flag{border-top:2px solid var(--ink);padding:12px 0}
 .flag .q{font-weight:700}
 .ok{color:var(--ok);font-weight:700}
-.bad{color:#B32506;font-weight:700}
-.keybox{border:2px dashed var(--ink);border-left:6px solid var(--red);padding:8px 12px;background:var(--soft)}
+.bad{color:var(--bad);font-weight:700}
+.keybox{border:2px dashed var(--ink);border-left:6px solid var(--red);padding:8px 12px;background:var(--well)}
 .keybox b{font-family:var(--f-mono);font-size:16px}
 .hints li{margin:4px 0}
 table.data{border-collapse:collapse;font-family:var(--f-mono);font-size:12px;width:100%}
 table.data th,table.data td{border:1px solid var(--ink);padding:3px 6px;text-align:left;white-space:nowrap}
 table.data th{background:var(--char);color:var(--white);cursor:pointer;position:sticky;top:0}
-table.data tr:nth-child(even) td{background:#e2dcd3}
-.tablewrap{max-height:420px;overflow:auto;border:2px solid var(--ink);background:var(--soft)}
-pre.txt{white-space:pre-wrap;word-break:break-word;font-family:var(--f-mono);font-size:13px;background:var(--soft);border:2px solid var(--ink);padding:10px;margin:0}
+table.data tr:nth-child(even) td{background:var(--zebra)}
+.tablewrap{max-height:420px;overflow:auto;border:2px solid var(--ink);background:var(--well)}
+pre.txt{white-space:pre-wrap;word-break:break-word;font-family:var(--f-mono);font-size:13px;background:var(--well);border:2px solid var(--ink);padding:10px;margin:0}
 table.lb{border-collapse:collapse;width:100%}
 table.lb th,table.lb td{border-bottom:1px solid var(--mute);padding:6px 8px;text-align:left}
 table.lb th{font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase}
 .tag{display:inline-block;font-family:var(--f-mono);font-size:11px;padding:1px 6px;background:var(--char);color:var(--white)}
+.theme{display:inline-flex;align-items:center;justify-content:center;min-width:34px}
 .tag.r{background:var(--red)}.tag.b{background:var(--blue)}
-.err{color:#B32506;font-weight:700;min-height:1.4em}
+.err{color:var(--bad);font-weight:700;min-height:1.4em}
 /* Instructor view on narrow screens: game rows become cards, event rows stack. */
 .only-narrow{display:none}
 @media (max-width:640px){
@@ -110,17 +120,17 @@ table.lb th{font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-t
 .demo>.fi{height:100%;padding:10px;display:grid;grid-template-columns:62px minmax(0,1fr);gap:8px;overflow:hidden}
 .demo .dl{display:flex;flex-direction:column;gap:4px}
 .demo .dl i{flex:1;display:flex;align-items:center;justify-content:center;font-style:normal;font-family:var(--f-num);font-size:14px;background:var(--char);color:#8a847c;clip-path:polygon(5px 0,100% 0,100% calc(100% - 5px),calc(100% - 5px) 100%,0 100%,0 5px);transition:background .4s,color .4s}
-.demo .dl i.open{color:var(--white)}.demo .dl i.done{background:var(--ok);color:var(--white)}.demo .dl i.cur{background:var(--btn-on-bg);color:var(--ink)}
+.demo .dl i.open{color:var(--white)}.demo .dl i.done{background:var(--ok);color:var(--white)}.demo .dl i.cur{background:var(--btn-on-bg);color:var(--on-ink)}
 .demo .dm{display:flex;flex-direction:column;gap:6px;min-width:0;font-size:12px}
 .demo .dh{display:flex;justify-content:space-between;align-items:baseline;gap:6px}
 .demo .dh b{font-family:var(--f-disp);font-size:12px;text-transform:uppercase;letter-spacing:.04em}
 .demo .dlog{flex:1;background:var(--char);color:#8fd18f;font-family:var(--f-mono);font-size:11px;padding:6px;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;line-height:1.35}
 .demo .dlog div{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.demo .din{font-family:var(--f-mono);font-size:13px;border:2px solid var(--ink);background:var(--white);padding:4px 6px;min-height:28px;white-space:nowrap;overflow:hidden}
+.demo .din{font-family:var(--f-mono);font-size:13px;border:2px solid var(--ink);background:var(--field);padding:4px 6px;min-height:28px;white-space:nowrap;overflow:hidden}
 .demo .din::after{content:'▌';animation:tl-pulse 1s steps(1) infinite}
 .demo .dres{min-height:18px;font-weight:700}
 @media (prefers-reduced-motion:reduce){.demo .din::after{animation:none}}
-svg.tl{width:100%;height:auto;display:block;background:var(--soft);border:2px solid var(--ink);font-family:var(--f-mono)}
+svg.tl{width:100%;height:auto;display:block;background:var(--well);border:2px solid var(--ink);font-family:var(--f-mono)}
 svg.tl text{font-size:12px;fill:var(--ink)}
 svg.tl .grid{stroke:#9a9a9a;stroke-width:1}
 svg.tl .score{fill:none;stroke:var(--blue);stroke-width:3}
@@ -134,6 +144,7 @@ svg.tl .now{stroke:var(--btn-on-bg);stroke-width:2;animation:tl-pulse 1.5s ease-
 .live{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--ok);margin-right:6px;animation:tl-pulse 1.5s ease-in-out infinite}
 @media (prefers-reduced-motion:reduce){svg.tl .draw,svg.tl .pop,svg.tl .now,.live{animation:none;stroke-dashoffset:0}}
 </style>
+<script>try{if(localStorage.getItem('rvb-theme')==='dark')document.documentElement.dataset.theme='dark'}catch(e){}</script>
 <script src="config.js"></script>
 </head>
 <body>
@@ -144,6 +155,9 @@ svg.tl .now{stroke:var(--btn-on-bg);stroke-width:2;animation:tl-pulse 1.5s ease-
 const CFG = window.CTF_CONFIG || {};
 let LANG = (() => { try { return localStorage.getItem('rvb-lang') === 'en' ? 'en' : 'hu'; } catch (e) { return 'hu'; } })();
 const L = (hu, en) => LANG === 'en' ? en : hu;
+let DARK = document.documentElement.dataset.theme === 'dark';
+const MOON = '<svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path fill="currentColor" d="M20 15.5A8.5 8.5 0 0 1 8.5 4a8.5 8.5 0 1 0 11.5 11.5z"/></svg>';
+const SUN = '<svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="square"><circle cx="12" cy="12" r="4.2" fill="currentColor" stroke="none"/><path d="M12 1.5v3M12 19.5v3M1.5 12h3M19.5 12h3M4.6 4.6l2.1 2.1M17.3 17.3l2.1 2.1M4.6 19.4l2.1-2.1M17.3 6.7l2.1-2.1"/></svg>';
 const T = o => o ? (o[LANG] || o.hu || '') : '';
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const store = {
@@ -344,7 +358,7 @@ function topHTML() {
     <button class="btn sm ghost" data-a="home">${L('Kezdőlap', 'Home')}</button><button class="btn sm ghost" data-a="board">${L('Ranglista', 'Leaderboard')}</button>
     ${USER.role === 'instructor' ? `<button class="btn sm ghost" data-a="teach">${L('Oktatói felület', 'Instructor view')}</button>` : ''}
     <button class="btn sm ghost" data-a="logout">${L('Kilépés', 'Log out')}</button>` : ''}
-    <button class="btn sm" data-a="lang">${LANG === 'en' ? 'HU' : 'EN'}</button></div></div>
+    <button class="btn sm" data-a="lang">${LANG === 'en' ? 'HU' : 'EN'}</button><button class="btn sm theme" data-a="theme" aria-pressed="${DARK}" aria-label="${L('Sötét mód', 'Dark mode')}" title="${L('Sötét mód', 'Dark mode')}">${DARK ? SUN : MOON}</button></div></div>
    ${BACK.kind === 'local' ? `<div class="banner">${L('Helyi próbamód: a fiókok és eredmények csak ebben a böngészőben tárolódnak.', 'Local trial mode: accounts and results are stored only in this browser.')}${BUNDLE ? '' : ' ' + L('Az online módhoz a config.js-ben meg kell adni a Supabase adatait.', 'Online mode needs the Supabase settings in config.js.')}</div>` : ''}`;
 }
 
@@ -513,7 +527,7 @@ const EV_NAMES = { start: ['Játék indítása', 'Game started'], open_layer: ['
 const TL_LANES = [
   { kind: e => ['start', 'open_layer', 'unlock', 'finish', 'close'].includes(e.type), hu: 'Rétegek', en: 'Layers', color: 'var(--ink)' },
   { kind: e => e.type === 'submit' && e.data && e.data.ok, hu: 'Helyes', en: 'Correct', color: 'var(--ok)' },
-  { kind: e => e.type === 'submit' && !(e.data && e.data.ok), hu: 'Hibás', en: 'Wrong', color: '#B32506' },
+  { kind: e => e.type === 'submit' && !(e.data && e.data.ok), hu: 'Hibás', en: 'Wrong', color: 'var(--bad)' },
   { kind: e => e.type === 'hint', hu: 'Tipp', en: 'Hint', color: 'var(--btn-on-bg)' },
   { kind: e => e.type === 'view_file' || e.type === 'download', hu: 'Fájl', en: 'File', color: 'var(--btn-bg)' },
 ];
@@ -731,7 +745,8 @@ app.addEventListener('click', async ev => {
   ev.preventDefault();
   BUSY = true;
   try {
-    if (a === 'lang') { LANG = LANG === 'en' ? 'hu' : 'en'; try { localStorage.setItem('rvb-lang', LANG); } catch (e) { } }
+    if (a === 'theme') { DARK = !DARK; document.documentElement.dataset.theme = DARK ? 'dark' : 'light'; try { localStorage.setItem('rvb-theme', DARK ? 'dark' : 'light'); } catch (e) { } }
+    else if (a === 'lang') { LANG = LANG === 'en' ? 'hu' : 'en'; try { localStorage.setItem('rvb-lang', LANG); } catch (e) { } }
     else if (a === 'login' || a === 'register') await credsAction(a);
     else if (a === 'logout') { await BACK.logout(); USER = GAME = null; VIEW = 'login'; }
     else if (a === 'home') VIEW = 'home';
