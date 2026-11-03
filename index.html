@@ -130,6 +130,9 @@ h3{font-size:16px;font-weight:800;text-transform:uppercase;letter-spacing:.01em}
 .top .btn[aria-pressed=true]{background:var(--btn-on-bg);color:var(--btn-on-fg);-webkit-text-fill-color:var(--btn-on-fg)}
 .top .lang{display:inline-flex;gap:2px}.top .lang .btn{min-width:34px}
 .pill{font-family:var(--f-mono);font-size:12px;letter-spacing:.14em;padding:3px 8px;border:1.5px solid var(--soft)}
+.codepill{background:transparent;color:var(--white);border-color:var(--red);cursor:pointer;font-size:13px}.codepill b{color:var(--red);font-weight:700;margin-left:4px}.codepill:hover{background:rgba(255,255,255,.08)}
+.top.stick{position:sticky;top:0;z-index:14}
+.pickteam.on{outline:3px solid var(--red);outline-offset:-3px}
 .accent{height:8px;display:flex;background:var(--char)}.accent i{flex:1}.accent i:nth-child(1){background:var(--stripes);max-width:180px}.accent i:nth-child(2){background:linear-gradient(var(--char) 0 3px,var(--red) 3px 5px,var(--char) 5px)}
 /* menu */
 .hero{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:24px;align-items:center;margin-top:18px}
@@ -1212,7 +1215,7 @@ let SHOW = { r: false, b: false };
 let DRAFT = { r: [], b: [] };
 let TOAST = '', toastT = 0, ABORTASK = false;
 let KEEP = {}, ROOM = null, GROOM = null, CODE = '', GID = (() => { try { let g = sessionStorage.getItem('rvb-gid'); if (!g) { g = Math.random().toString(36).slice(2, 10); sessionStorage.setItem('rvb-gid', g); } return g; } catch (e) { return Math.random().toString(36).slice(2, 10); } })(), ACTN = Date.now(); // ACTN starts from the clock so a reloaded guest keeps its seat and its moves still count
-let lastHostSt = null, SEAT = '', LASTN = {}, PEERS = [], HOSTOFF = 0, PENDING = false, lastPh = '';
+let lastHostSt = null, LASTN = {}, PEERS = [], HOSTOFF = 0, PENDING = false, lastPh = '';
 
 const store = {
   get(k) { try { return JSON.parse(localStorage.getItem(k) || 'null'); } catch (e) { return null; } },
@@ -1243,7 +1246,7 @@ function afterChange() {
 function persist() {
   if (MODE === 'local') store.set('rvb-local', ST);
   if (MODE === 'host' && TEAM) store.set('rvb-team', { code: CODE, st: ST, pl: ROSTER, me: ME, lb: LB });
-  else if (MODE === 'host') store.set('rvb-host', { code: CODE, my: MY, st: ST, seat: SEAT });
+  else if (MODE === 'host') store.set('rvb-host', { code: CODE, my: MY, st: ST });
 }
 
 // ---------- online ----------
@@ -1314,21 +1317,51 @@ function mqttChannel(code, role) {
 const CODECH = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 function newCode() { const r = crypto.getRandomValues(new Uint8Array(6)); return [...r].map(x => CODECH[x % CODECH.length]).join(''); }
 
-// lobby: after the link is up, each side presses "Játék indítása"; the game shows once both have.
-let GO = { h: false, g: false };
-function linked() { return MODE === 'host' ? PEERS.some(p => p.presence && p.presence.gid === SEAT) : !!(HOSTP && HOSTP.seat === GID); }
-let HOSTP = null;
-function inLobby() { return !SPEC && !TEAM && (MODE === 'host' || (MODE === 'guest' && (!ST || MY))) && !(GO.h && GO.g); }
-function lobbyHTML() {
-  const host = MODE === 'host', ok = linked(), me = host ? GO.h : GO.g, them = host ? GO.g : GO.h;
-  const net = NETKIND === 'mqtt' ? (NETUP ? `<span class="tag tb">${L('HÁLÓZAT OK', 'NETWORK OK')} · ${NETUP} ${L('SZERVER', 'SERVER' + (NETUP > 1 ? 'S' : ''))}</span>` : `<span class="tag tr">${L('KAPCSOLÓDÁS A HÁLÓZATHOZ…', 'CONNECTING TO THE NETWORK…')}</span>`) : '';
+// joining: after the code, every guest device picks a team (or stays a spectator), sees which roles are still free, and is in.
+// Works before the start and in the middle of a game too, so anyone can join later with the same code.
+let HOSTP = null, PICK = { sd: '', ro: [], sent: 0 };
+const sess = { get(k) { try { return JSON.parse(sessionStorage.getItem(k) || 'null'); } catch (e) { return null; } }, set(k, v) { try { sessionStorage.setItem(k, JSON.stringify(v)); } catch (e) { } } };
+function needPick() { return MODE === 'guest' && !SPEC && ST && !MY && !(TEAM && ST.ph === 'setup'); }
+function pickSend() {
+  if (!GROOM || !PICK.sd) return;
+  PICK.sent = 1; sess.set('rvb-want', { code: CODE, sd: PICK.sd, ro: PICK.ro });
+  GROOM.set({ nm: myName(), want: { sd: PICK.sd, ro: PICK.ro }, rdy: TEAM ? LB : '', left: 0 }); render();
+}
+function netTag() {
+  return NETKIND === 'mqtt' ? (NETUP ? `<span class="tag tb">${L(`HÁLÓZAT OK · ${NETUP} SZERVER`, `NETWORK OK · ${NETUP} SERVER${NETUP > 1 ? 'S' : ''}`)}</span>` : `<span class="tag tr">${L('KAPCSOLÓDÁS A HÁLÓZATHOZ…', 'CONNECTING TO THE NETWORK…')}</span>`) : '';
+}
+const plName = p => p.nm || (p.host ? L('Házigazda', 'Host') : L('Játékos', 'Player'));
+// one line per role of a team: free, picked, held by someone, or not in play
+function roleStatus(s, i) {
+  const k = ROLE_KEYS[s][i], on = !!ST.cfg[s].ro[i], started = ST.ph !== 'setup';
+  if (TEAM) { if (started && !on) return ['', L('NINCS JÁTÉKBAN', 'NOT IN PLAY'), 0]; const h = holder(s, k); return h ? ['tr', plName(h), 0] : ['tb', L('SZABAD', 'FREE'), 1]; }
+  if (!started) return on ? ['tg', L('KIVÁLASZTVA', 'PICKED'), 0] : ['tb', L('SZABAD', 'FREE'), 1];
+  return on ? ['tg', L('JÁTÉKBAN', 'IN PLAY'), 0] : ['', L('NINCS JÁTÉKBAN', 'NOT IN PLAY'), 0];
+}
+function joinPickHTML() {
+  const started = ST.ph !== 'setup', wait = PICK.sent && !MY;
+  const col = s => {
+    const pl = ROSTER.filter(p => p.sd === s), on = PICK.sd === s;
+    const roles = ROLE_KEYS[s].map((k, i) => {
+      const r = roleOf(s, i), [c, t, free] = roleStatus(s, i);
+      const box = TEAM && free && on ? `<input type="checkbox" data-prole="${k}" ${PICK.ro.includes(k) ? 'checked' : ''} ${wait ? 'disabled' : ''} aria-label="${esc(r.hu)}">` : '';
+      return `<label class="rolechk">${box}<span><b>${esc(r.hu)}</b> <span class="tag ${c}">${esc(t)}</span><small>${esc(r.ab)}</small></span></label>`;
+    }).join('');
+    const nfree = ROLE_KEYS[s].filter((k, i) => roleStatus(s, i)[2]).length;
+    return `<div class="frame cut pickteam${on ? ' on' : ''}"><div class="fi"><div class="row" style="justify-content:space-between"><h2 class="${s}">${SIDE[s]}</h2><span class="lbl">${L(`${pl.length} fő · ${nfree} szabad szerepkör`, `${pl.length} player${pl.length === 1 ? '' : 's'} · ${nfree} free role${nfree === 1 ? '' : 's'}`)}</span></div>
+      <p class="hint" style="margin:4px 0 6px">${pl.length ? pl.map(p => `<b>${esc(plName(p))}</b>${p.host ? ` <span class="tag tg">${L('HÁZIGAZDA', 'HOST')}</span>` : ''}`).join(', ') : L('Még senki sincs ebben a csapatban.', 'Nobody is on this team yet.')}</p>
+      <button class="btn ${s === 'r' ? 'red' : 'blue'}" data-a="pside" data-v="${s}" aria-pressed="${on}" ${wait ? 'disabled' : ''}>${on ? L(`${SIDE[s]} kiválasztva`, `${SIDE[s]} selected`) : L(`A ${SIDE[s]} csapatot választom`, `I pick team ${SIDE[s]}`)}</button>
+      <div class="lbl" style="margin:12px 0 2px">${L('Szerepkörök', 'Roles')}</div>${roles}
+      ${TEAM && on ? `<p class="hint">${nfree ? L('Pipáld be, melyik szabad szerepkört viszed. Szerepkör nélkül is játszhatsz a csapat lapjaival.', 'Tick the free roles you take. You can also play the team cards without a role.') : L('Minden szerepkör foglalt: a csapat lapjaival játszhatsz.', 'Every role is taken: you can play the team cards.')}</p>` : !TEAM && on ? `<p class="hint">${L('A két eszközös játékban a csapat minden eszköze a csapat összes szerepkörét használhatja. A szerepköröket a csapat a beállításnál választja ki.', 'In the two-device game every device of a team can use all of its roles. The team picks its roles during setup.')}</p>` : ''}</div></div>`;
+  };
   return `<div class="panel cut lobby" style="margin-top:16px"><div class="row" style="justify-content:space-between;align-items:flex-start"><div>
-    <div class="lbl">${host ? L('Játékkód · küldd el az ellenfélnek', 'Game code · send it to your opponent') : L('Csatlakozás ehhez a játékhoz', 'Joining this game')}</div><div class="code" style="color:var(--ink);margin-top:6px">${esc(CODE.toUpperCase())}</div></div><div class="stack" style="gap:6px;align-items:flex-end">${net}</div></div>
-    <p style="margin:12px 0 0">${host ? L(`Az ellenfél megnyitja a játékot, a „Csatlakozás kóddal” mezőbe beírja ezt a 6 karaktert, és kész. Te a ${SIDE[MY]} csapat vagy. Nézők ugyanezzel a kóddal a „Közvetítés” gombbal követhetik a játékot.`, `Your opponent opens the game, types these 6 characters into "Join with code", and that's it. You are team ${SIDE[MY]}. Spectators can follow the game with the same code using the "Watch" button.`) : MY ? L(`Te a ${SIDE[MY]} csapat vagy.`, `You are team ${SIDE[MY]}.`) : L('Várakozás a házigazda válaszára…', 'Waiting for the host…')}</p>
-    <div class="row" style="margin-top:14px;align-items:center">
-     ${ok ? `<span class="tag tb">${L('KAPCSOLAT LÉTREJÖTT', 'CONNECTED')}</span>` : `<span class="tag tr">${host ? L('VÁRAKOZÁS AZ ELLENFÉLRE', 'WAITING FOR OPPONENT') : L('VÁRAKOZÁS A HÁZIGAZDÁRA', 'WAITING FOR HOST')}</span>`}
-     <button class="btn ${MY === 'r' ? 'red' : 'blue'}" data-a="go" aria-pressed="${me}" ${ok && !me ? '' : 'disabled'}>${me ? L('Indításra kész', 'Ready to start') : L('Játék indítása', 'Start game')}</button>
-     ${ok ? `<span class="hint" style="color:var(--soft)">${them ? L('Az ellenfél kész.', 'Your opponent is ready.') : L('Az ellenfél még nem nyomott indítást.', 'Your opponent has not pressed start yet.')}</span>` : ''}</div></div>`;
+     <div class="lbl">${TEAM ? L('Szerepkörös játék · csatlakozás', 'Role-based game · joining') : L('Két eszközös játék · csatlakozás', 'Two-device game · joining')}</div><div class="code" style="color:var(--ink);margin-top:6px">${esc(CODE.toUpperCase())}</div></div>${netTag()}</div>
+     <p style="margin:12px 0 0">${started ? L(`A játék már tart (${ST.rd}. kör), most is beszállhatsz. Válassz csapatot!`, `The game is already on (round ${ST.rd}); you can still join. Pick a team!`) : L('A játék még nem indult el. Válassz csapatot, és már bent is vagy.', 'The game has not started yet. Pick a team and you are in.')}</p>
+     <label class="lbl" for="pnm" style="display:block;margin:12px 0 4px">${L('Neved', 'Your name')}</label><input type="text" id="pnm" class="nm" maxlength="24" placeholder="${L('NÉV', 'NAME')}" autocomplete="off" value="${esc(myName())}" ${wait ? 'disabled' : ''}></div>
+   <div class="setup">${col('r')}${col('b')}</div>
+   <div class="row" style="margin-top:14px"><button class="btn ${PICK.sd === 'r' ? 'red' : PICK.sd === 'b' ? 'blue' : ''}" data-a="pgo" ${PICK.sd && !wait ? '' : 'disabled'}>${wait ? L('Csatlakozás…', 'Joining…') : PICK.sd ? L(`Kész, belépek a ${SIDE[PICK.sd]} csapatba`, `Ready, join team ${SIDE[PICK.sd]}`) : L('Előbb válassz csapatot', 'Pick a team first')}</button>
+     <button class="btn ghost" data-a="pspec" ${wait ? 'disabled' : ''}>${L('Csak nézem', 'Just watch')}</button>
+     ${wait ? `<span class="hint">${L('Várakozás a házigazda gépére…', 'Waiting for the host device…')}</span>` : ''}</div>`;
 }
 
 async function openChannel(code, role) {
@@ -1366,14 +1399,14 @@ async function openChannel(code, role) {
 function publishHost() {
   if (MODE !== 'host' || !GROOM) return;
   if (TEAM) return GROOM.set({ ro: 'host', tm: 1, st: ST, pl: ROSTER, lb: LB, now: Date.now(), rej: null });
-  GROOM.set({ ro: 'host', sd: MY, st: ST, now: Date.now(), seat: SEAT, go: GO });
+  GROOM.set({ ro: 'host', sd: MY, st: ST, now: Date.now(), pl: ROSTER, rej: null });
 }
 async function hostGame(side, resume) {
   if (!NETKIND) return toast('Az online mód ebben a nézetben nem érhető el.');
-  MODE = 'host'; MY = side; TEAM = false;
-  if (resume) { CODE = resume.code; ST = resume.st; SEAT = resume.seat || ''; MY = resume.my; }
-  else { CODE = newCode(); if (NETKIND !== 'mqtt') CODE = CODE.toLowerCase(); ST = newGame((Math.random() * 4294967296) >>> 0, GMSEL); SEAT = ''; }
-  GO = { h: false, g: false }; HOSTP = null;
+  MODE = 'host'; MY = side; TEAM = false; PEERS = []; LASTN = {};
+  if (resume) { CODE = resume.code; ST = resume.st; MY = resume.my; }
+  else { CODE = newCode(); if (NETKIND !== 'mqtt') CODE = CODE.toLowerCase(); ST = newGame((Math.random() * 4294967296) >>> 0, GMSEL); }
+  HOSTP = null; duoRoster();
   lastPh = ST.ph; SCREEN = 'game'; render();
   try {
     GROOM = await openChannel(CODE, 'host');
@@ -1381,21 +1414,30 @@ async function hostGame(side, resume) {
     publishHost(); persist();
   } catch (e) { toast('Nem sikerült megnyitni a játékot.'); }
 }
+// two-device game: the host device plays its own team; every guest device picks a team, several devices may share one, and anyone can join later.
+function duoRoster() {
+  const pl = [{ gid: GID, nm: myName(), sd: MY, host: 1 }];
+  PEERS.map(p => p.presence).filter(p => p && p.ro === 'guest' && p.gid && p.gid !== GID && !p.left && p.want && (p.want.sd === 'r' || p.want.sd === 'b'))
+    .sort((a, b) => (a.t || 0) - (b.t || 0))
+    .forEach(p => pl.push({ gid: p.gid, nm: String(p.nm || '').slice(0, 24), sd: p.want.sd }));
+  const fresh = pl.filter(p => !ROSTER.some(q => q.gid === p.gid && q.sd === p.sd) && !p.host);
+  const changed = JSON.stringify(pl) !== JSON.stringify(ROSTER), first = !ROSTER.length;
+  ROSTER = pl;
+  if (!first) fresh.forEach(p => toast(L(`${p.nm || 'Egy játékos'} csatlakozott a ${SIDE[p.sd]} csapathoz.`, `${p.nm || 'A player'} joined team ${SIDE[p.sd]}.`)));
+  return changed;
+}
 function hostPeers() {
   if (TEAM) return teamPeers();
-  const guests = PEERS.filter(p => p.presence.ro === 'guest' && p.presence.gid);
-  const seated = guests.find(p => p.presence.gid === SEAT);
-  if (!seated && guests.length && (NETKIND === 'db' || !SEAT)) { SEAT = guests[0].presence.gid; publishHost(); persist(); }
-  else if (!seated && guests.length) { SEAT = guests[0].presence.gid; publishHost(); persist(); }
-  const sg = guests.find(p => p.presence.gid === SEAT);
-  if (sg && sg.presence.go && !GO.g) { GO = { ...GO, g: true }; publishHost(); }
-  guests.forEach(p => {
-    const pr = p.presence, A = pr.act;
-    if (!A || pr.gid !== SEAT) return;
+  if (duoRoster()) publishHost();
+  PEERS.forEach(p => {
+    const pr = p.presence, A = pr && pr.act;
+    if (!A || pr.ro !== 'guest' || !pr.gid) return;
     if ((LASTN[pr.gid] || 0) >= A.n) return;
     LASTN[pr.gid] = A.n;
-    const r = act(ST, other(MY), A.a);
-    if (r.err) { GROOM.set({ ro: 'host', sd: MY, st: ST, now: Date.now(), seat: SEAT, go: GO, rej: { gid: pr.gid, n: A.n, err: r.err } }); return; }
+    const who = ROSTER.find(q => q.gid === pr.gid && !q.host);
+    const err = !who ? 'Nézőként nem léphetsz.' : A.s && A.s !== who.sd ? 'Ez a másik csapat lépése.' : '';
+    const r = err ? { err } : act(ST, who.sd, A.a);
+    if (r.err) { GROOM.set({ ro: 'host', sd: MY, st: ST, now: Date.now(), pl: ROSTER, rej: { gid: pr.gid, n: A.n, err: r.err } }); return; }
     ST = r.st; afterChange(); persist(); publishHost();
   });
 }
@@ -1405,16 +1447,18 @@ async function joinGame(code, spec) {
   code = (code || '').replace(/\s+/g, '').toUpperCase();
   if (!/^[A-Z0-9]{6}$/.test(code)) return toast('A játékkód 6 karakter.');
   if (NETKIND !== 'mqtt') code = code.toLowerCase();
-  MODE = 'guest'; SPEC = !!spec; MY = null; CODE = code; SCREEN = 'game'; ST = null; GO = { h: false, g: false }; HOSTP = null; TEAM = false; ROSTER = []; MYRO = []; ME = { sd: '', ro: [], rdy: '' }; render();
+  MODE = 'guest'; SPEC = !!spec; MY = null; CODE = code; SCREEN = 'game'; ST = null; HOSTP = null; TEAM = false; PICK = { sd: '', ro: [], sent: 0 }; ROSTER = []; MYRO = []; ME = { sd: '', ro: [], rdy: '' }; render();
   try {
     GROOM = await openChannel(code, SPEC ? 'spec' : 'guest');
-    if (!SPEC) GROOM.set({ ro: 'guest', gid: GID, act: null, go: false, t: JT, j: Date.now(), left: 0, nm: myName(), want: { sd: '', ro: [] }, rdy: '' });
+    const w = sess.get('rvb-want'), again = w && w.code === code && (w.sd === 'r' || w.sd === 'b'); // a reloaded tab keeps its team
+    if (again) PICK = { sd: w.sd, ro: w.ro || [], sent: 1 };
+    if (!SPEC) GROOM.set({ ro: 'guest', gid: GID, act: null, t: JT, j: Date.now(), left: 0, nm: myName(), want: again ? { sd: w.sd, ro: w.ro || [] } : { sd: '', ro: [] }, rdy: '' });
     let lastRej = 0;
     GROOM.watch(list => {
       PEERS = list;
       const h = PEERS.find(p => p.presence.ro === 'host');
       if (h && h.presence.st) {
-        const pr = h.presence; HOSTP = pr; GO = { h: !!(pr.go && pr.go.h), g: GO.g || !!(pr.go && pr.go.g) };
+        const pr = h.presence; HOSTP = pr;
         if (pr.st !== lastHostSt && (!ST || JSON.stringify(pr.st) !== JSON.stringify(ST))) { ST = clone(pr.st); PENDING = false; afterChange(); }
         lastHostSt = pr.st;
         HOSTOFF = (pr.now || Date.now()) - Date.now();
@@ -1428,16 +1472,18 @@ async function joinGame(code, spec) {
           if (pr.rej && pr.rej.gid === GID && pr.rej.n > lastRej && pr.rej.n === ACTN) { lastRej = pr.rej.n; PENDING = false; toast(pr.rej.err); }
           return render();
         }
-        MY = other(pr.sd);
+        ROSTER = pr.pl || [];
+        const me = ROSTER.find(p => p.gid === GID && !p.host);
+        MY = me ? me.sd : null;
         if (pr.rej && pr.rej.gid === GID && pr.rej.n > lastRej && pr.rej.n === ACTN) { lastRej = pr.rej.n; PENDING = false; toast(pr.rej.err); }
-        if (pr.seat && pr.seat !== GID && ST) MY = null; // spectator
       }
       render();
     });
   } catch (e) { toast('Nem sikerült csatlakozni.'); }
 }
 function leave() {
-  if (GROOM && MODE === 'guest' && !SPEC) try { GROOM.set({ left: 1, want: { sd: '', ro: [] }, rdy: '' }); } catch (e) { }
+  if (GROOM && MODE === 'guest') try { GROOM.set({ left: 1, want: { sd: '', ro: [] }, rdy: '' }); } catch (e) { }
+  sess.set('rvb-want', null); PICK = { sd: '', ro: [], sent: 0 };
   if (GROOM) { const g = GROOM; GROOM = null; setTimeout(() => g.close(), 300); }
   TEAM = false; SPEC = false; ROSTER = []; MYRO = [];
   MODE = null; ST = null; SCREEN = 'menu'; PEERS = []; render();
@@ -1522,8 +1568,25 @@ async function hostTeam(resume) {
     publishHost(); persist();
   } catch (e) { toast('Nem sikerült megnyitni a játékot.'); }
 }
+// after the start the roster is frozen, but late joiners are added: they get the roles in play that nobody holds, or play the team cards without a role
+function lateJoin() {
+  let add = 0;
+  PEERS.map(p => p.presence).filter(p => p && p.ro === 'guest' && p.gid && p.gid !== GID && !p.left && p.want && (p.want.sd === 'r' || p.want.sd === 'b') && !((KICK[p.gid] || 0) > (p.j || 0)))
+    .sort((a, b) => (a.t || 0) - (b.t || 0)).forEach(p => {
+      const e = ROSTER.find(q => q.gid === p.gid);
+      if (e && e.sd) return;
+      const sd = p.want.sd, ro = (p.want.ro || []).filter(k => { const i = ROLE_KEYS[sd].indexOf(k); return i >= 0 && ST.cfg[sd].ro[i] && !holder(sd, k); });
+      const ent = { gid: p.gid, nm: String(p.nm || '').slice(0, 24) || L('Játékos', 'Player'), sd, ro, rdy: 1, host: 0 };
+      if (e) Object.assign(e, ent); else ROSTER.push(ent);
+      add++; toast(L(`${ent.nm} csatlakozott a ${SIDE[sd]} csapathoz.`, `${ent.nm} joined team ${SIDE[sd]}.`));
+    });
+  return add;
+}
+// the game starts by itself as soon as every player has pressed "Kész vagyok" and the teams are complete
+function autoStart() { if (MODE === 'host' && TEAM && ST && ST.ph === 'setup' && ROSTER.some(p => p.sd) && teamCheck().ok) teamStart(); }
 function teamPeers() {
-  if (ST.ph === 'setup') { const before = JSON.stringify(ROSTER); rebuildRoster(); if (JSON.stringify(ROSTER) !== before) { publishHost(); persist(); } }
+  if (ST.ph === 'setup') { const before = JSON.stringify(ROSTER); rebuildRoster(); if (JSON.stringify(ROSTER) !== before) { publishHost(); persist(); autoStart(); } }
+  else if (lateJoin()) { meFromRoster(); publishHost(); persist(); }
   PEERS.forEach(p => {
     const pr = p.presence, A = pr && pr.act;
     if (!A || pr.ro !== 'guest' || !pr.gid) return;
@@ -1538,7 +1601,7 @@ function teamPeers() {
   });
 }
 function teamSend() { if (MODE === 'guest' && GROOM) GROOM.set({ nm: myName(), want: { sd: ME.sd, ro: ME.ro }, rdy: ME.rdy }); }
-function teamChanged() { if (MODE === 'host') { rebuildRoster(); publishHost(); persist(); } else teamSend(); render(); }
+function teamChanged() { if (MODE === 'host') { rebuildRoster(); publishHost(); persist(); autoStart(); } else teamSend(); render(); }
 
 function teamLobbyHTML() {
   const host = MODE === 'host';
@@ -1575,8 +1638,8 @@ function teamLobbyHTML() {
    ${watchers.length ? `<p class="hint">${L('Nézők', 'Spectators')}: ${watchers.map(p => esc(p.nm)).join(', ')}</p>` : ''}
    ${host ? `<div class="frame cut" style="margin-top:12px"><div class="fi">
      <label class="rolechk" style="border:0"><input type="checkbox" data-talt="1" ${ST.cfg.alt ? 'checked' : ''}><span><b>${L('Alternatív mód: kiegyensúlyozott kis csapatok', 'Alternative mode: balanced small teams')}</b><small>${L('A 2 fős Blue csapat nem választhatja egyszerre a SOC elemzőt és az Incidenskezelőt.', 'A 2-person Blue team cannot pick both SOC Analyst and Incident Handler.')}</small></span></label>
-     ${chk.msg.length ? `<ul class="hint" style="margin:6px 0">${chk.msg.map(m => `<li>${esc(m)}</li>`).join('')}</ul>` : `<p class="hint b" style="font-weight:700">${L('Minden csapat kész, indulhat a játék.', 'All teams are ready; the game can start.')}</p>`}
-     <button class="btn" data-a="tstart" ${chk.ok ? '' : 'disabled'}>${L('Játék indítása', 'Start game')}</button></div></div>` : `<p class="hint">${L('A játékot a házigazda indítja, amikor mindenki kész.', 'The host starts the game once everyone is ready.')}</p>`}`;
+     ${chk.msg.length ? `<ul class="hint" style="margin:6px 0">${chk.msg.map(m => `<li>${esc(m)}</li>`).join('')}</ul>` : ''}</div></div>` : ''}
+   <p class="hint">${L('A játék magától elindul, amint minden játékos megnyomta a „Kész vagyok” gombot, és a csapatok teljesek. Később érkezők ugyanezzel a kóddal a játék közben is beszállhatnak.', 'The game starts by itself once every player has pressed "I\'m ready" and the teams are complete. Latecomers can join with the same code even during the game.')}</p>`;
 }
 
 // ---------- view helpers ----------
@@ -1887,10 +1950,12 @@ function setupHTML() {
       <div class="lbl" style="margin-bottom:6px">${L('Létszám', 'Team size')}</div><div class="seg">${[2, 3, 4, 5].map(n => `<button data-n="${n}" data-side="${side}" aria-pressed="${c.n === n}" ${!mine || c.ok ? 'disabled' : ''}>${n}</button>`).join('')}</div>
       <p class="hint">${c.n === 2 ? L('Két fő esetén pontosan 3 szerepkört választotok.', 'With two players you pick exactly 3 roles.') : L('Mind az 5 szerepkör játékban van; ha kevesebben vagytok ötnél, valaki több szerepet visz.', 'All 5 roles are in play; with fewer than five players, someone takes more than one.')}</p>
       <div>${roles}</div>${err && mine ? `<p class="hint r" style="font-weight:700">${esc(tr(err))}</p>` : ''}
-      <div class="row" style="margin-top:12px">${c.ok ? `<span class="tag tb">${L('KÉSZ', 'READY')}</span>` : mine ? `<button class="btn ${side === 'r' ? 'red' : 'blue'}" data-act='{"t":"ready"}' data-side="${side}" ${err ? 'disabled' : ''}>${L('Kész vagyunk', 'We are ready')}</button>` : `<span class="lbl">${L('Az ellenfél még beállít…', 'The opponent is still setting up…')}</span>`}</div></div></div>`;
+      ${MODE !== 'local' ? `<p class="hint" style="margin:10px 0 0">${L('Ebben a csapatban', 'On this team')}: ${ROSTER.filter(p => p.sd === side).map(p => `<b>${esc(plName(p))}</b>${p.gid === GID ? ' (' + L('te', 'you') + ')' : ''}`).join(', ') || L('még senki', 'nobody yet')}</p>` : ''}
+      <div class="row" style="margin-top:12px">${c.ok ? `<span class="tag tb">${L('KÉSZ', 'READY')}</span>` : mine ? `<button class="btn ${side === 'r' ? 'red' : 'blue'}" data-act='{"t":"ready"}' data-side="${side}" ${err ? 'disabled' : ''}>${L('Kész vagyunk', 'We are ready')}</button>` : MODE !== 'local' && !ROSTER.some(p => p.sd === side) ? `<span class="tag tr">${L('VÁRAKOZÁS CSATLAKOZÓRA', 'WAITING FOR A PLAYER')}</span>` : `<span class="lbl">${L('Az ellenfél még beállít…', 'The opponent is still setting up…')}</span>`}</div></div></div>`;
   };
-  const opp = MODE === 'host' ? (PEERS.some(p => p.presence && p.presence.gid === SEAT) ? `<span class="tag tb">${L('ELLENFÉL CSATLAKOZOTT', 'OPPONENT JOINED')}</span>` : `<span class="tag tr">${L('VÁRAKOZÁS AZ ELLENFÉLRE', 'WAITING FOR OPPONENT')}</span>`) : '';
-  return `${MODE === 'host' ? `<div class="panel cut" style="margin-top:14px"><div class="row" style="justify-content:space-between"><div><div class="lbl">${L('Játékkód', 'Game code')}</div><div class="code" style="color:var(--ink);margin-top:6px">${CODE.toUpperCase()}</div></div>${opp}</div><p style="margin:10px 0 0;font-size:14px">${L(`Te a ${SIDE[MY]} csapat vagy.`, `You are team ${SIDE[MY]}.`)}</p></div>` : ''}
+  const foe = MY && ROSTER.some(p => p.sd === other(MY));
+  const opp = MODE !== 'local' ? (foe ? `<span class="tag tb">${L('ELLENFÉL CSATLAKOZOTT', 'OPPONENT JOINED')}</span>` : `<span class="tag tr">${L('VÁRAKOZÁS AZ ELLENFÉLRE', 'WAITING FOR OPPONENT')}</span>`) : '';
+  return `${MODE !== 'local' ? `<div class="panel cut" style="margin-top:14px"><div class="row" style="justify-content:space-between"><div><div class="lbl">${MODE === 'host' ? L('Játékkód · küldd el a többieknek', 'Game code · send it to the others') : L('Játékkód', 'Game code')}</div><div class="code" style="color:var(--ink);margin-top:6px">${esc(CODE.toUpperCase())}</div></div><div class="stack" style="gap:6px;align-items:flex-end">${opp}${netTag()}</div></div><p style="margin:10px 0 0;font-size:14px">${MY ? L(`Te a ${SIDE[MY]} csapatban vagy.`, `You are on team ${SIDE[MY]}.`) : ''} ${L('A többiek a „Csatlakozás kóddal” mezőbe írják be ezt a kódot, és kiválasztják a csapatukat. Később, játék közben is be lehet szállni. A játék akkor indul, amikor mindkét csapat megnyomta a „Kész vagyunk” gombot.', 'The others type this code under "Join with code" and pick their team. Joining later, during the game, also works. The game starts once both teams have pressed "We are ready".')}</p></div>` : ''}
    <div class="setup">${panel('r')}${panel('b')}</div>
    <label class="rolechk" style="margin-top:12px"><input type="checkbox" data-alt="1" ${ST.cfg.alt ? 'checked' : ''} ${MODE === 'guest' ? 'disabled' : ''}><span><b>${L('Alternatív mód: kiegyensúlyozott kis csapatok', 'Alternative mode: balanced small teams')}</b><small>${L('A 2 fős Blue csapat nem választhatja egyszerre a SOC elemzőt és az Incidenskezelőt.', 'A 2-person Blue team cannot pick both SOC Analyst and Incident Handler.')}</small></span></label>`;
 }
@@ -1961,7 +2026,7 @@ function roundBrief(gm) {
 
 function gameHTML() {
   if (SPEC) return specHTML();
-  if (inLobby()) return lobbyHTML();
+  if (needPick()) return joinPickHTML();
   return gameInner();
 }
 // ---------- spectator (broadcast) view: score, steps, face-down cards until both sides revealed, duel time + result, end summary ----------
@@ -1991,8 +2056,8 @@ function summaryHTML() {
 }
 function specHTML() {
   if (!ST) return gameInner();
-  if (ST.ph === 'setup' || (!TEAM && !(GO.h && GO.g))) {
-    const team = s => TEAM ? ROSTER.filter(p => p.sd === s).map(p => esc(p.nm)).join(', ') || L('még senki', 'nobody yet') : ST.cfg[s].ok ? L('kész', 'ready') : L('beállít…', 'setting up…');
+  if (ST.ph === 'setup') {
+    const team = s => (ROSTER.filter(p => p.sd === s).map(p => esc(plName(p))).join(', ') || L('még senki', 'nobody yet')) + (TEAM ? '' : ' · ' + (ST.cfg[s].ok ? L('kész', 'ready') : L('beállít…', 'setting up…')));
     return `<div class="panel cut" style="margin-top:16px"><div class="lbl">${L('Közvetítés', 'Live broadcast')} · ${esc(CODE.toUpperCase())}</div><h2 style="color:var(--white);margin-top:6px">${L('A játék még nem kezdődött el', 'The game has not started yet')}</h2>
       <p>${L('A csapatok felkészülnek. Amint elindul a játék, itt követheted az állást és a lépéseket.', 'The teams are getting ready. Once the game starts, you can follow the score and the moves here.')}</p>
       <p><b class="r">Red</b>: ${team('r')}<br><b class="b">Blue</b>: ${team('b')}</p></div>`;
@@ -2195,13 +2260,13 @@ function atmOf(st) {
   return by[st.ph] || '';
 }
 function render() {
-  document.documentElement.dataset.atm = SCREEN === 'game' ? atmOf(ST) : '';
+  document.documentElement.dataset.atm = SCREEN === 'game' && !needPick() ? atmOf(ST) : '';
   const a = document.activeElement, fid = a && a.id, pos = a && a.selectionStart;
   const tmode = TEAM ? L('SZEREPKÖRÖS', 'ROLE-BASED') + ' · ' + (MY ? SIDE[MY].toUpperCase() + (MYRO.length ? ' · ' + MYRO.map(k => roleKeyName(MY, k).toUpperCase()).join(', ') : '') : L('NÉZŐ', 'SPECTATOR')) : '';
-  const mode = SPEC ? L('KÖZVETÍTÉS', 'LIVE BROADCAST') : TEAM ? tmode : { local: L('HELYI JÁTÉK', 'LOCAL GAME'), host: 'ONLINE · ' + (MY ? SIDE[MY].toUpperCase() : ''), guest: 'ONLINE · ' + (MY ? SIDE[MY].toUpperCase() : ST ? L('NÉZŐ', 'SPECTATOR') : L('CSATLAKOZÁS', 'JOINING')) }[MODE] || '';
+  const mode = SPEC ? L('KÖZVETÍTÉS', 'LIVE BROADCAST') : needPick() ? L('CSATLAKOZÁS', 'JOINING') : TEAM ? tmode : { local: L('HELYI JÁTÉK', 'LOCAL GAME'), host: 'ONLINE · ' + (MY ? SIDE[MY].toUpperCase() : ''), guest: 'ONLINE · ' + (MY ? SIDE[MY].toUpperCase() : ST ? L('NÉZŐ', 'SPECTATOR') : L('CSATLAKOZÁS', 'JOINING')) }[MODE] || '';
   document.getElementById('app').innerHTML = `<div class="accent"><i></i><i></i></div>
-   <header class="top"><span class="logo"><span class="r">RED</span><small>VS</small><span class="b">BLUE</span></span>${mode ? `<span class="pill">${mode}</span>` : ''}${SCREEN === 'game' && ST ? `<span class="pill">${gmName(ST.gm)}</span>` : ''}${MODE !== 'local' && CODE && SCREEN === 'game' ? `<span class="pill">${L('KÓD', 'CODE')} ${esc(CODE.toUpperCase())}</span>` : ''}<span class="sp"></span>${SCREEN === 'game' ? rulesBtns() : ''}${langHTML()}
-    ${SCREEN === 'game' && ST && ST.ph !== 'end' && (MODE === 'local' || MY) && !inLobby() && !(TEAM && ST.ph === 'setup') ? '<button class="btn abort" data-a="abortask" aria-expanded="' + ABORTASK + '">Abort</button>' : ''}${SCREEN === 'game' ? `<button class="btn" data-a="menu">${L('Kilépés a menübe', 'Exit to menu')}</button>` : ''}</header>
+   <header class="top${SCREEN === 'game' && MODE && MODE !== 'local' ? ' stick' : ''}"><span class="logo"><span class="r">RED</span><small>VS</small><span class="b">BLUE</span></span>${mode ? `<span class="pill">${mode}</span>` : ''}${SCREEN === 'game' && ST ? `<span class="pill">${gmName(ST.gm)}</span>` : ''}${MODE !== 'local' && CODE && SCREEN === 'game' ? `<button class="pill codepill" data-a="copycode" title="${L('Játékkód · kattints a másoláshoz. Ezzel a kóddal bárki csatlakozhat, játék közben is.', 'Game code · click to copy. Anyone can join with this code, even during the game.')}">${L('KÓD', 'CODE')} <b>${esc(CODE.toUpperCase())}</b></button>` : ''}<span class="sp"></span>${SCREEN === 'game' ? rulesBtns() : ''}${langHTML()}
+    ${SCREEN === 'game' && ST && ST.ph !== 'end' && (MODE === 'local' || MY) && !(TEAM && ST.ph === 'setup') ? '<button class="btn abort" data-a="abortask" aria-expanded="' + ABORTASK + '">Abort</button>' : ''}${SCREEN === 'game' ? `<button class="btn" data-a="menu">${L('Kilépés a menübe', 'Exit to menu')}</button>` : ''}</header>
    ${ABORTASK && SCREEN === 'game' && ST && ST.ph !== 'end' ? `<div class="abortbar" role="alertdialog" aria-label="${L('Játék megszakítása', 'Abort game')}"><b>${L('Biztosan megszakítod a játékot? Nem lesz győztes, és a játszma nem folytatható.', 'Abort the game? There will be no winner and the game cannot be resumed.')}</b><div class="row"><button class="btn abort" data-a="abortyes">${L('Igen, megszakítom', 'Yes, abort')}</button><button class="btn" data-a="abortno">${L('Mégse', 'Cancel')}</button></div></div>` : ''}
    <main class="wrap">${SCREEN === 'menu' ? menuHTML() : gameHTML()}</main>${RULES ? rulesHTML() : ''}${CREF ? crefHTML() : ''}${TOAST ? `<div class="toast" role="status">${esc(tr(TOAST))}</div>` : ''}`;
   if (fid) { const el = document.getElementById(fid); if (el && !el.disabled) { el.focus(); try { if (pos != null) el.setSelectionRange(pos, pos); } catch (e) { } } }
@@ -2249,10 +2314,10 @@ document.addEventListener('click', e => {
     case 'tready': ME = { ...ME, rdy: ME.rdy === LB ? '' : LB }; return teamChanged();
     case 'tstart': return teamStart();
     case 'tkick': KICK[t.dataset.g] = Date.now(); return teamChanged();
-    case 'go':
-      if (MODE === 'host') { GO = { ...GO, h: true }; publishHost(); return render(); }
-      if (MODE === 'guest' && GROOM) { GO = { ...GO, g: true }; GROOM.set({ go: true }); return render(); }
-      return;
+    case 'pside': PICK = { sd: t.dataset.v, ro: [], sent: 0 }; return render();
+    case 'pgo': return pickSend();
+    case 'pspec': SPEC = true; PICK = { sd: '', ro: [], sent: 0 }; sess.set('rvb-want', null); if (GROOM) GROOM.set({ want: { sd: '', ro: [] }, rdy: '' }); return render();
+    case 'copycode': { const c = CODE.toUpperCase(); try { navigator.clipboard.writeText(c).then(() => toast('Kód a vágólapon.'), () => toast(L(`Játékkód: ${c}`, `Game code: ${c}`))); } catch (e) { toast(L(`Játékkód: ${c}`, `Game code: ${c}`)); } return; }
     case 'show': SHOW[side] = true; return render();
     case 'hide': SHOW[side] = false; SEL[side] = []; return render();
     case 'menu': ABORTASK = false; return leave();
@@ -2279,16 +2344,18 @@ document.addEventListener('change', e => {
   if (t.dataset.trole) { const k = t.dataset.trole; ME = { ...ME, ro: t.checked ? [...ME.ro.filter(x => x !== k), k] : ME.ro.filter(x => x !== k) }; return teamChanged(); }
   if (t.dataset.talt) { ST = clone(ST); ST.cfg.alt = t.checked ? 1 : 0; return teamChanged(); }
   if (t.id === 'nm') { KEEP.nm = t.value.trim().slice(0, 24); store.set('rvb-nm', KEEP.nm); return teamChanged(); }
+  if (t.id === 'pnm') { KEEP.nm = t.value.trim().slice(0, 24); store.set('rvb-nm', KEEP.nm); if (GROOM && MODE === 'guest') GROOM.set({ nm: KEEP.nm }); return; }
+  if (t.dataset.prole) { const k = t.dataset.prole; PICK = { ...PICK, ro: t.checked ? [...PICK.ro.filter(x => x !== k), k] : PICK.ro.filter(x => x !== k) }; return render(); }
   if (t.dataset.alt) dispatch(MODE === 'local' ? 'r' : MY, { t: 'alt', v: t.checked });
 });
-document.addEventListener('input', e => { const t = e.target; if (t.id === 'joincode' || t.id === 'nm') KEEP[t.id] = t.id === 'nm' ? t.value.slice(0, 24) : t.value; if (t.dataset.draft) DRAFT[t.dataset.draft][+t.dataset.i] = t.value; });
+document.addEventListener('input', e => { const t = e.target; if (t.id === 'joincode' || t.id === 'nm' || t.id === 'pnm') KEEP[t.id === 'pnm' ? 'nm' : t.id] = t.id === 'joincode' ? t.value : t.value.slice(0, 24); if (t.dataset.draft) DRAFT[t.dataset.draft][+t.dataset.i] = t.value; });
 document.addEventListener('toggle', e => { if (e.target.classList && e.target.classList.contains('help')) HELPOPEN = e.target.open; }, true);
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape' && (RULES || CREF)) { RULES = false; CREF = false; return render(); }
   if (e.key !== 'Enter') return;
   const t = e.target;
   if (t.id === 'joincode') { e.preventDefault(); joinGame(t.value); }
-  else if (t.id === 'nm') { e.preventDefault(); t.blur(); }
+  else if (t.id === 'nm' || t.id === 'pnm') { e.preventDefault(); t.blur(); }
   else if (t.dataset && t.dataset.draft) { const b = document.querySelector(`[data-ans="${t.dataset.draft}"]`); if (b && !b.disabled) b.click(); }
 });
 
