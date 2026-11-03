@@ -306,6 +306,70 @@ ul.roles{list-style:none;padding:0}ul.roles li{border-left:4px solid var(--ink);
 .help ul{margin:8px 0 6px;padding-left:20px;font-size:14px}.help li{margin:4px 0}.help li.oth{color:var(--soft);list-style:circle}
 input.nm{text-transform:none;letter-spacing:.06em}
 .btn.kick{padding:0 8px;font-size:14px;line-height:20px;clip-path:none;margin-left:4px}
+/* "how to start" walkthroughs: a separate button on every game mode card opens an animated step-by-step demo */
+.cw{position:relative}
+.cw .fi>.lbl:first-child{display:block;padding-right:150px;min-height:26px}
+.tutbtn{position:absolute;top:10px;right:10px;z-index:2;font-family:var(--f-mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;background:var(--field);color:var(--ink);border:1.5px solid var(--ink);padding:5px 8px;cursor:pointer;display:inline-flex;gap:6px;align-items:center}
+.tutbtn:hover{background:var(--btn-on-bg);color:var(--btn-on-fg);border-color:var(--btn-on-bg)}
+.tutbtn i{font-style:normal;display:inline-flex;width:15px;height:15px;border-radius:50%;background:var(--ink);color:var(--field);align-items:center;justify-content:center;font-size:10px;font-weight:700}
+.tutbtn:hover i{background:var(--btn-on-fg);color:var(--btn-on-bg)}
+@media (pointer:coarse){.tutbtn{min-height:36px}}
+.tutgrid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:18px;padding:16px 18px 20px}
+@media (max-width:760px){.tutgrid{grid-template-columns:minmax(0,1fr)}.cw .fi>.lbl:first-child{padding-right:0;min-height:0;margin-top:30px}}
+.tstage{position:relative;min-height:300px;border:2px solid var(--ink);background-color:var(--ground);background-image:linear-gradient(var(--gridline) 1px,transparent 1px),linear-gradient(90deg,var(--gridline) 1px,transparent 1px);background-size:16px 16px;padding:16px 12px;display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap;overflow:hidden}
+.tstage .snum{position:absolute;top:6px;left:8px;font-family:var(--f-mono);font-size:10px;letter-spacing:.14em;color:var(--mute)}
+.dev{width:min(100%,232px);background:var(--paper);color:var(--ink);border:2px solid var(--ink);box-shadow:4px 4px 0 var(--ink);font-size:12px;line-height:1.3;animation:tin .45s ease-out both;animation-delay:var(--dd,0s)}
+.dev.sm{width:min(100%,150px)}.dev.sm .dt>span:last-child{display:none}
+.dev .dt{background:var(--char);color:var(--white);padding:4px 8px;font-family:var(--f-mono);font-size:9px;letter-spacing:.14em;display:flex;justify-content:space-between;gap:6px;text-transform:uppercase}
+.dev .dt .r{color:var(--red)}.dev .dt .b{color:#5aa7ee}
+.dev .db{padding:10px;display:flex;flex-direction:column;gap:7px}
+.mrow{display:flex;gap:5px;flex-wrap:wrap;align-items:center}
+.mlbl{font-family:var(--f-mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
+.mb{display:inline-block;background:var(--btn-bg);color:var(--btn-fg);font-weight:700;text-transform:uppercase;font-size:10px;padding:6px 8px;letter-spacing:.03em;position:relative;white-space:nowrap}
+.mb.r{box-shadow:inset 4px 0 0 var(--red)}.mb.b{box-shadow:inset 4px 0 0 var(--blue)}
+.mb.big{display:block;padding:10px;font-size:12px;box-shadow:inset 5px 0 0 var(--red)}.mb.big small{display:block;font-weight:400;text-transform:none;opacity:.8;margin-top:2px}
+.mf{display:inline-block;border:1.5px solid var(--ink);background:var(--field);font-family:var(--f-mono);font-size:11px;padding:4px 6px;letter-spacing:.18em;min-width:70px;min-height:24px;white-space:nowrap}
+.typ{display:inline-block;overflow:hidden;vertical-align:bottom;white-space:nowrap;width:calc(var(--n) * 1.18em);animation:ttype 1.3s steps(var(--n)) both;animation-delay:var(--dl,.2s);border-right:1.5px solid var(--ink)}
+.mcode{font-family:var(--f-num);font-weight:800;font-size:22px;letter-spacing:.18em;background:var(--field);padding:2px 8px;display:inline-block;align-self:flex-start}
+.mpill{display:inline-block;font-family:var(--f-mono);font-size:9px;letter-spacing:.14em;border:1.5px solid var(--red);padding:3px 6px;background:var(--char);color:var(--white)}.mpill b{color:var(--red)}
+.mtag{display:inline-block;font-family:var(--f-mono);font-size:8.5px;letter-spacing:.1em;border:1px solid var(--ink);padding:1px 4px;text-transform:uppercase;background:var(--field)}
+.mtag.ok{background:var(--blue);color:#fff;border-color:var(--blue)}.mtag.no{background:var(--red);color:#fff;border-color:var(--red)}
+.mchk{display:flex;gap:6px;align-items:center;border-bottom:1px dashed var(--mute);padding:3px 0}.mchk s{text-decoration:none;width:12px;height:12px;border:1.5px solid var(--ink);display:inline-block;flex:none;background:var(--field)}.mchk.on s,.mchk.tap s{background:var(--ink)}.mchk.off{opacity:.55}
+.mcol{display:grid;grid-template-columns:1fr 1fr;gap:6px}.mcol>div{border:1.5px solid var(--ink);padding:5px;display:flex;flex-direction:column;gap:3px}
+.mcard{width:38px;height:54px;border:2px solid var(--ink);background:var(--field);display:inline-flex;flex-direction:column;justify-content:space-between;padding:3px;font-weight:800;font-size:16px;position:relative}
+.mcard.r{border-color:var(--red);color:var(--red)}.mcard.b{border-color:var(--blue);color:var(--blue)}
+.mcard small{font-family:var(--f-mono);font-size:7px;letter-spacing:.08em;color:var(--mute);font-weight:400}
+.mcard.flip::after{content:'';position:absolute;inset:-2px;background:repeating-linear-gradient(45deg,var(--char) 0 4px,#555 4px 8px);border:2px solid var(--ink);opacity:0;animation:tunflip 4.4s both;animation-delay:var(--dl,0s)}
+.mflow{font-family:var(--f-mono);font-size:10px;letter-spacing:.12em;background:var(--red);color:#fff;padding:4px 8px;animation:tflow 1.6s ease-in-out infinite alternate}
+.mappear{animation:tappear 4.4s both;animation-delay:var(--dl,0s)}
+.mbig{font-family:var(--f-disp);font-weight:800;font-size:20px;letter-spacing:-.01em;text-transform:uppercase}
+.tap{position:relative}
+.mb.tap{animation:tpress 4.4s both;animation-delay:var(--dl,0s)}
+.mchk.tap s{animation:tcheck 4.4s both;animation-delay:var(--dl,0s)}
+.tap::before{content:'';position:absolute;inset:-5px;border:2px solid var(--btn-on-bg);pointer-events:none;animation:tring 4.4s both;animation-delay:var(--dl,0s);opacity:0}
+.tap::after{content:'';position:absolute;right:-12px;bottom:-16px;width:20px;height:22px;pointer-events:none;z-index:3;background:no-repeat center/contain url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 22'%3E%3Cpath d='M2 1l15 11-6.5 1.2L14 20l-3 1.4-3.6-6.8L2 18z' fill='%23fff' stroke='%23111' stroke-width='1.6' stroke-linejoin='round'/%3E%3C/svg%3E");animation:tcur 4.4s both;animation-delay:var(--dl,0s)}
+@keyframes tin{from{opacity:0;transform:translateY(10px)}}
+@keyframes ttype{from{width:0}}
+@keyframes tcur{0%{opacity:0;transform:translate(70px,60px)}12%{opacity:1}38%{transform:translate(0,0)}45%{transform:scale(.8)}52%{transform:scale(1)}64%{opacity:1}74%,100%{opacity:0}}
+@keyframes tring{0%,44%{opacity:0;transform:scale(1)}50%{opacity:1}75%{opacity:0;transform:scale(1.25)}100%{opacity:0}}
+@keyframes tpress{0%,46%{background:var(--btn-bg);color:var(--btn-fg)}50%,100%{background:var(--btn-on-bg);color:var(--btn-on-fg)}}
+@keyframes tcheck{0%,46%{background:var(--field)}50%,100%{background:var(--ink)}}
+@keyframes tunflip{0%,48%{opacity:1;transform:scaleX(1)}56%,100%{opacity:0;transform:scaleX(0)}}
+@keyframes tappear{0%,50%{opacity:0;transform:scale(.85)}60%,100%{opacity:1;transform:scale(1)}}
+@keyframes tflow{from{transform:translateX(-6px)}to{transform:translateX(6px)}}
+.tsteps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px;counter-reset:ts}
+.tsteps button{all:unset;box-sizing:border-box;cursor:pointer;display:grid;grid-template-columns:26px 1fr;gap:8px;width:100%;padding:7px 8px;border-left:4px solid transparent}
+.tsteps button:hover{background:rgba(0,0,0,.05)}
+.tsteps button:focus-visible{outline:2px solid var(--ink)}
+.tsteps .n{font-family:var(--f-mono);font-size:11px;width:22px;height:22px;border:1.5px solid var(--ink);display:inline-flex;align-items:center;justify-content:center}
+.tsteps b{display:block;font-size:14px}
+.tsteps small{display:none;color:var(--ink2);font-size:13px;margin-top:3px;line-height:1.4}
+.tsteps [aria-current=step]{border-left-color:var(--btn-on-bg);background:var(--field)}
+.tsteps [aria-current=step] .n{background:var(--btn-on-bg);border-color:var(--btn-on-bg);color:var(--btn-on-fg)}
+.tsteps .done .n{background:var(--ink);color:var(--field)}
+.tprog{height:4px;background:var(--mute);margin-top:10px;position:relative;overflow:hidden}.tprog i{position:absolute;inset:0 auto 0 0;width:100%;background:var(--btn-on-bg);animation:tprog 4.4s linear both}.tprog.paused i{animation:none;width:0}
+@keyframes tprog{from{width:0}}
+.tnow{margin:10px 0 0;font-size:15px}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 .modesel{margin-top:16px;max-width:560px}
 .modesel .seg button{padding:10px 6px;font-size:13px}
@@ -1977,9 +2041,9 @@ function endHTML() {
 function menuHTML() {
   const loc = store.get('rvb-local'), host = store.get('rvb-host'), team = store.get('rvb-team');
   const online = !!ROOM, narrow = NARROW.matches;
-  const join = `<div class="choice cut" style="cursor:default"><div class="fi cut"><span class="lbl">${L('Csatlakozás bármelyik online játékhoz', 'Join any online game')}</span><h3>${L('Csatlakozás kóddal', 'Join with code')}</h3>
+  const join = `<div class="cw">${tutBtn('join')}<div class="choice cut" style="cursor:default"><div class="fi cut"><span class="lbl">${L('Csatlakozás bármelyik online játékhoz', 'Join any online game')}</span><h3>${L('Csatlakozás kóddal', 'Join with code')}</h3>
       <div class="row" style="margin-top:8px;flex-wrap:nowrap"><input type="text" id="joincode" maxlength="6" placeholder="${L('KÓD', 'CODE')}" aria-label="${L('Játékkód', 'Game code')}" autocomplete="off" value="${esc(KEEP.joincode || '')}" ${online ? '' : 'disabled'}><button class="btn" data-a="join" ${online ? '' : 'disabled'}>${L('Belépés', 'Join')}</button><button class="btn ghost" data-a="watch" ${online ? '' : 'disabled'} title="${L('Csak nézőként követed a játékot', 'Follow the game as a spectator only')}">${L('Közvetítés', 'Watch')}</button></div>
-      <span class="hint">${L('Közvetítés: ugyanazzal a kóddal, csak nézőként (például kivetítőn). Látod az állást és a lépéseket, a lapokat csak felfedés után.', 'Watch: the same code, as a spectator only (for example on a projector). You see the score and the moves, and cards only once they are revealed.')}</span></div></div>`;
+      <span class="hint">${L('Közvetítés: ugyanazzal a kóddal, csak nézőként (például kivetítőn). Látod az állást és a lépéseket, a lapokat csak felfedés után.', 'Watch: the same code, as a spectator only (for example on a projector). You see the score and the moves, and cards only once they are revealed.')}</span></div></div></div>`;
   return `<div class="hero"><div>
     <div class="deco" aria-hidden="true" style="margin-bottom:14px"><span class="stripes"></span><span class="serial">Serial number<br><b>RVB-0550.HU</b> ID</span><span class="chev"><i></i><i></i></span></div>
     <div class="lbl">${L('Kiberbiztonsági stratégiai kártyajáték', 'Cybersecurity strategy card game')}</div>
@@ -1995,13 +2059,13 @@ function menuHTML() {
     <div class="cats">${[1, 2, 3, 4, 5].map(i => `<button id="cat${i}" data-a="cat" data-v="${i}" aria-expanded="${CATSEL === i}" aria-controls="catinfo" title="${esc(ZN[i][0])}">${icon(i)}<span class="lbl" style="font-size:10px">0${i}</span><b style="font-size:12px">${ZN[i][0]}</b></button>`).join('')}</div>
     <div id="catinfo" class="catinfo" ${CATSEL ? '' : 'hidden'}>${CATSEL ? `<b>0${CATSEL} · ${ZN[CATSEL][0]}:</b> ${L(...STAGE_INFO[CATSEL])}` : ''}</div></div>
    <div class="choices"><h2 class="sr-only">${L('Játék indítása', 'Start playing')}</h2>
-    <button class="choice cut" data-a="local"><div class="fi cut"><span class="lbl">${L('Egy eszközön', 'One device')}</span><b>${L('Helyi játék', 'Local game')}</b><span class="hint">${L('Egy képernyő, két csapat. A lapok rejtve vannak, mindig csak a soron lévő csapat fedi fel a sajátjait.', 'One screen, two teams. Cards stay hidden; only the team whose turn it is reveals its own.')}</span></div></button>
+    <div class="cw">${tutBtn('local')}<button class="choice cut" data-a="local"><div class="fi cut"><span class="lbl">${L('Egy eszközön', 'One device')}</span><b>${L('Helyi játék', 'Local game')}</b><span class="hint">${L('Egy képernyő, két csapat. A lapok rejtve vannak, mindig csak a soron lévő csapat fedi fel a sajátjait.', 'One screen, two teams. Cards stay hidden; only the team whose turn it is reveals its own.')}</span></div></button></div>
     ${loc && loc.ph !== 'end' ? `<button class="choice cut" data-a="resume"><div class="fi cut"><span class="lbl">${L('Mentett helyi játék', 'Saved local game')}</span><b>${L('Folytatás', 'Continue')} · ${loc.rd ? L(loc.rd + '. kör', 'round ' + loc.rd) : L('beállítás', 'setup')}</b></div></button>` : ''}
-    <div class="choice cut" style="cursor:default"><div class="fi cut"><span class="lbl">${L('Két eszközön', 'Two devices')}</span><h3>${L('Online játék indítása', 'Start an online game')}</h3><span class="hint">${L('Kapsz egy 6 karakteres kódot, az ellenfél azzal csatlakozik.', 'You get a 6-character code; your opponent joins with it.')}</span>
-      <div class="row" style="margin-top:8px"><button class="btn red hostred" data-a="host" data-side="r" ${online ? '' : 'disabled'}>${L('Red leszek', 'I play Red')}</button><button class="btn blue" data-a="host" data-side="b" ${online ? '' : 'disabled'}>${L('Blue leszek', 'I play Blue')}</button>${host && host.st && host.st.ph !== 'end' && online ? `<button class="btn ghost" data-a="rehost">${L('Folytatás', 'Continue')} · ${esc(host.code.toUpperCase())}</button>` : ''}</div></div></div>
-    <div class="choice cut" style="cursor:default"><div class="fi cut"><span class="lbl">${L('Mindenki a saját eszközén', 'Everyone on their own device')}</span><h3>${L('Szerepkörös játék', 'Role-based game')}</h3><span class="hint">${L('Minden játékos a saját eszközéről csatlakozik, és ott választja ki a csapatát és a szerepkörét. A házigazda gépe lehet kivetítő is.', "Every player joins from their own device and picks a team and role there. The host's device can serve as a projector.")}</span>
-      <div class="row" style="margin-top:8px"><button class="btn" data-a="hostteam" ${online ? '' : 'disabled'}>${L('Új szerepkörös játék', 'New role-based game')}</button>${team && team.st && team.st.ph !== 'end' && online ? `<button class="btn ghost" data-a="reteam">${L('Folytatás', 'Continue')} · ${esc(team.code.toUpperCase())}</button>` : ''}</div></div></div>
-    <a class="choice cut" href="ctf/" style="text-decoration:none"><div class="fi cut"><span class="lbl">${L('Egyéni játékmód', 'Individual mode')}</span><b>${L('CTF – zászlószerzés', 'CTF – capture the flag')}</b><span class="hint">${L('Incidenskezelés saját fiókkal, saját tempóban: 7 egymásra épülő réteg a riasztástól a helyreállításig, valós incidensek alapján, közös ranglistával.', 'Incident response with your own account, at your own pace: 7 layers built on each other from the alert to recovery, based on real incidents, with a shared leaderboard.')}</span><span class="go" aria-hidden="true">${L('Megnyitás', 'Open')} →</span></div></a>
+    <div class="cw">${tutBtn('online')}<div class="choice cut" style="cursor:default"><div class="fi cut"><span class="lbl">${L('Két eszközön', 'Two devices')}</span><h3>${L('Online játék indítása', 'Start an online game')}</h3><span class="hint">${L('Kapsz egy 6 karakteres kódot, az ellenfél azzal csatlakozik.', 'You get a 6-character code; your opponent joins with it.')}</span>
+      <div class="row" style="margin-top:8px"><button class="btn red hostred" data-a="host" data-side="r" ${online ? '' : 'disabled'}>${L('Red leszek', 'I play Red')}</button><button class="btn blue" data-a="host" data-side="b" ${online ? '' : 'disabled'}>${L('Blue leszek', 'I play Blue')}</button>${host && host.st && host.st.ph !== 'end' && online ? `<button class="btn ghost" data-a="rehost">${L('Folytatás', 'Continue')} · ${esc(host.code.toUpperCase())}</button>` : ''}</div></div></div></div>
+    <div class="cw">${tutBtn('team')}<div class="choice cut" style="cursor:default"><div class="fi cut"><span class="lbl">${L('Mindenki a saját eszközén', 'Everyone on their own device')}</span><h3>${L('Szerepkörös játék', 'Role-based game')}</h3><span class="hint">${L('Minden játékos a saját eszközéről csatlakozik, és ott választja ki a csapatát és a szerepkörét. A házigazda gépe lehet kivetítő is.', "Every player joins from their own device and picks a team and role there. The host's device can serve as a projector.")}</span>
+      <div class="row" style="margin-top:8px"><button class="btn" data-a="hostteam" ${online ? '' : 'disabled'}>${L('Új szerepkörös játék', 'New role-based game')}</button>${team && team.st && team.st.ph !== 'end' && online ? `<button class="btn ghost" data-a="reteam">${L('Folytatás', 'Continue')} · ${esc(team.code.toUpperCase())}</button>` : ''}</div></div></div></div>
+    <div class="cw">${tutBtn('ctf')}<a class="choice cut" href="ctf/" style="text-decoration:none"><div class="fi cut"><span class="lbl">${L('Egyéni játékmód', 'Individual mode')}</span><b>${L('CTF – zászlószerzés', 'CTF – capture the flag')}</b><span class="hint">${L('Incidenskezelés saját fiókkal, saját tempóban: 7 egymásra épülő réteg a riasztástól a helyreállításig, valós incidensek alapján, közös ranglistával.', 'Incident response with your own account, at your own pace: 7 layers built on each other from the alert to recovery, based on real incidents, with a shared leaderboard.')}</span><span class="go" aria-hidden="true">${L('Megnyitás', 'Open')} →</span></div></a></div>
     ${narrow ? '' : join}
     <p class="hint">${!NETREADY ? L('Online kapcsolat ellenőrzése…', 'Checking the online connection…') : online ? (NETKIND === 'mqtt' ? L('Online kapcsolat ingyenes nyilvános közvetítő szervereken át: bármely internetkapcsolattal működik, a két gépnek nem kell egy hálózaton lennie.', 'Online play runs through free public relay servers: it works on any internet connection, and the devices do not need to be on the same network.') : L(`Online kapcsolat: ${NETKIND === 'db' ? 'közös játékadatbázis' : 'élő szoba'}. A két eszköz ugyanezt a linket nyitja meg.`, `Online connection: ${NETKIND === 'db' ? 'shared game database' : 'live room'}. All devices open this same link.`)) : L('Az online módhoz a játékot a Claude felületén, bejelentkezve kell megnyitni, és legalább Közreműködő (Contributor) hozzáférés kell hozzá. A helyi játék mindenhol működik.', 'For online play, open the game in Claude while signed in, with at least Contributor access. Local play works everywhere.')}</p>
    </div></div>
@@ -2131,6 +2195,110 @@ function modesRulesHTML() {
     <li><b>Koronaékszer:</b> a Blue titokban kiválaszt egy szakaszt, ott minden védekezése +1-et kap. Az első ottani védekezéskor felfedődik.</li>
     <li><b>Költséggel járó szerepkörök:</b> a Felderítő körönként egyszer, 2 Erőforrásért néz be (egy Blue lapba vagy a koronaékszerbe). CISO: egyszer +3 Erőforrás a második kontroll helyett. Az Incidenskezelő 1 Erőforrásba kerül. A párbajt megnyerő Kriptográfus +1 Erőforrást hoz a csapatának.</li></ul></section>`;
 }
+// ---------- "how to start" walkthroughs: one per game mode, an animated mock screen per step ----------
+let TUT = '', TSTEP = 0, TPLAY = true, tutT = 0;
+const TUT_MS = 4400;
+const RMOT = matchMedia('(prefers-reduced-motion:reduce)');
+function tutOpen(k) { TUT = k; TSTEP = 0; TPLAY = !RMOT.matches; RULES = false; CREF = false; tutSched(); render(); const b = document.querySelector('.tutov .rulestop .btn'); if (b) b.focus(); }
+function tutClose() { TUT = ''; clearTimeout(tutT); render(); }
+function tutSched() { clearTimeout(tutT); if (TUT && TPLAY) tutT = setTimeout(() => { if (!TUT) return; TSTEP = (TSTEP + 1) % tutSteps(TUT).length; tutSched(); render(); }, TUT_MS); }
+function tutGo(i) { const n = tutSteps(TUT).length; TSTEP = (i + n) % n; tutSched(); render(); }
+const tutBtn = k => `<button class="tutbtn" data-a="tut" data-v="${k}" aria-haspopup="dialog"><i aria-hidden="true">?</i>${L('Hogyan indítsd?', 'How to start')}</button>`;
+// mock UI pieces
+const dv = (lbl, body, o = {}) => `<div class="dev${o.sm ? ' sm' : ''}" style="--dd:${o.dd || 0}s"><div class="dt"><span>${lbl}</span><span><span class="r">RED</span> vs <span class="b">BLUE</span></span></div><div class="db">${body}</div></div>`;
+const mb = (t, c = '', tap, dl) => `<span class="mb ${c}${tap ? ' tap' : ''}"${dl ? ` style="--dl:${dl}s"` : ''}>${t}</span>`;
+const ml = t => `<span class="mlbl">${t}</span>`;
+const mr = h => `<div class="mrow">${h}</div>`;
+const mf = (t, dl) => `<span class="mf"><span class="typ" style="--n:${t.length}${dl ? `;--dl:${dl}s` : ''}">${t}</span></span>`;
+const mt = (t, c = '') => `<span class="mtag ${c}">${t}</span>`;
+const mck = (t, st = '', dl, tag = '') => `<div class="mchk ${st}"${dl ? ` style="--dl:${dl}s"` : ''}><s></s><span>${t}</span>${tag}</div>`;
+const mcard = (s, n, flip, dl) => `<span class="mcard ${s}${flip ? ' flip' : ''}"${dl ? ` style="--dl:${dl}s"` : ''}>${n}<small>${s.toUpperCase()}·${n}</small></span>`;
+const flow = t => `<span class="mflow" aria-hidden="true">${t} →</span>`;
+const appear = (h, dl) => `<div class="mappear" style="--dl:${dl || 0}s">${h}</div>`;
+const CODEX = 'K7Q2PX';
+function tutSteps(k) {
+  const ready = L('Kész vagyunk', 'We are ready'), cdh = `<span class="mcode">${CODEX}</span>`;
+  const pick = (late) => dv(L('2. eszköz', 'Device 2'), `${ml(late ? L('A játék már tart · 4. kör', 'Game on · round 4') : L('Válassz csapatot', 'Pick a team'))}
+    <div class="mcol"><div><b class="r">RED</b>${mt(L('Házigazda', 'Host'))}${mt(L('Kiválasztva', 'Picked'))}</div><div><b class="b">BLUE</b><span class="mlbl">${late ? 'Bea' : L('Még senki', 'Nobody yet')}</span>${mt(L('Szabad', 'Free'), 'ok')}</div></div>
+    ${mr(mb(L('Blue-t választom', 'I pick Blue'), 'b', 1))}${mr(mb(L('Kész, belépek', 'Ready, join'), 'b', 1, 1.6))}`);
+  const S = {
+    local: [
+      [L('Válassz játékmódot', 'Pick a game mode'), L('A menüben válaszd ki: Alapjáték, Haladó vagy Profi. Első játékhoz az Alapjáték ajánlott.', 'On the menu pick Base game, Advanced or Pro. For a first game, Base game is recommended.'),
+        dv(L('Menü', 'Menu'), `${ml(L('Játékmód', 'Game mode'))}${mr(mb(L('Alapjáték', 'Base game'), '', 1) + mb(L('Haladó', 'Advanced')) + mb('Profi'))}`)],
+      [L('Indítsd a helyi játékot', 'Start a local game'), L('Kattints a „Helyi játék” kártyára. Egy képernyőn játszik a két csapat, felváltva.', 'Click the "Local game" card. Both teams play on one screen, taking turns.'),
+        dv(L('Menü', 'Menu'), `<span class="mb big tap">${L('Helyi játék', 'Local game')}<small>${L('Egy eszközön', 'One device')}</small></span>`)],
+      [L('Csapatok beállítása', 'Set up the teams'), L('Mindkét csapat kiválasztja a létszámot és a szerepköröket. 2 főnél pontosan 3 szerepkör kell, 3 főtől mind az 5 játékban van. Utána „Kész vagyunk”.', 'Each team picks its size and roles. With 2 players exactly 3 roles; from 3 players all 5 are in play. Then "We are ready".'),
+        dv('Red', `${ml(L('Létszám', 'Team size'))}${mr(mb('2') + mb('3', '', 1) + mb('4') + mb('5'))}${mck(L('Operációvezető', 'Operations Lead'), 'on')}${mr(mb(ready, 'r', 1, 1.6))}`, { sm: 1 }) + dv('Blue', `${ml(L('Létszám', 'Team size'))}${mr(mb('2', '', 1, .8) + mb('3') + mb('4'))}${mck('CISO', 'on')}${mr(mb(ready, 'b', 1, 2.2))}`, { sm: 1, dd: .3 })],
+      [L('Csak a soron lévő néz', 'Only the team in turn looks'), L('A lapok rejtve vannak. A soron lévő csapat a „kéz megmutatása” gombbal fedi fel a sajátjait, a másik csapat addig elfordul.', 'Cards stay hidden. The team whose turn it is reveals its own with "Show hand"; the other team looks away.'),
+        dv(L('Red köre', "Red's turn"), `${mr(mcard('r', 3, 1, .3) + mcard('r', 5, 1, .3) + mcard('r', 2, 1, .3))}${mr(mb(L('Red kéz megmutatása', 'Show Red hand'), 'r', 1))}`)],
+      [L('Támadás és védekezés', 'Attack and defense'), L('A Red lefordítva kijátszik egy támadólapot, a Blue védekezőlapot tesz rá, majd felfedik őket: a nagyobb erősség nyer, döntetlennél kriptopárbaj jön.', 'Red plays an attack card face down, Blue answers with a defense card, then both are revealed: higher strength wins, a tie leads to a crypto duel.'),
+        dv(L('Ütközés', 'Clash'), `${mr(mcard('r', 4, 1, 0) + '<b>vs</b>' + mcard('b', 3, 1, 0))}${appear(`<span class="mbig r">${L('Red nyer', 'Red wins')}</span>`, 0)}`)]
+    ],
+    online: [
+      [L('Új online játék', 'New online game'), L('Az első eszközön, a „Két eszközön” kártyán válaszd: „Red leszek” vagy „Blue leszek”.', 'On the first device, on the "Two devices" card, pick "I play Red" or "I play Blue".'),
+        dv(L('1. eszköz', 'Device 1'), `${ml(L('Két eszközön', 'Two devices'))}${mr(mb(L('Red leszek', 'I play Red'), 'r', 1) + mb(L('Blue leszek', 'I play Blue'), 'b'))}`)],
+      [L('Küldd el a kódot', 'Send the code'), L('Megkapod a 6 karakteres játékkódot. A fejlécben végig látszik, kattintásra másolódik. Küldd el a többieknek.', 'You get a 6-character game code. It stays visible in the header and copies on click. Send it to the others.'),
+        dv(L('1. eszköz', 'Device 1'), `${ml(L('Játékkód', 'Game code'))}${cdh}<span class="mpill tap">${L('KÓD', 'CODE')} <b>${CODEX}</b></span>`, { sm: 1 }) + flow(L('kód', 'code')) + dv(L('2. eszköz', 'Device 2'), `${ml(L('Üzenet', 'Message'))}${appear(`<b>${CODEX}</b>`, 0)}`, { sm: 1, dd: .4 })],
+      [L('Csatlakozás kóddal', 'Join with the code'), L('A másik eszközön a „Csatlakozás kóddal” mezőbe beírja a kódot, és „Belépés”.', 'On the other device they type the code under "Join with code" and press "Join".'),
+        dv(L('2. eszköz', 'Device 2'), `${ml(L('Csatlakozás kóddal', 'Join with code'))}${mr(mf(CODEX) + mb(L('Belépés', 'Join'), '', 1, 1.2))}`)],
+      [L('Csapatválasztás', 'Pick a team'), L('Látszik, ki melyik csapatban van, és melyik szerepkör szabad még. Válassz csapatot, majd „Kész, belépek”.', 'You see who is on which team and which roles are still free. Pick a team, then "Ready, join".'), pick(0)],
+      [L('Beállítás, indulás', 'Setup and start'), L('Mindkét csapat beállítja a létszámot és a szerepköröket, majd „Kész vagyunk”. Amint mindkettő kész, indul a játék.', 'Both teams set their size and roles, then "We are ready". As soon as both are ready, the game starts.'),
+        dv(L('1. eszköz', 'Device 1'), `${mck(L('Felderítő', 'Recon'), 'on')}${mr(mb(ready, 'r', 1))}`, { sm: 1 }) + dv(L('2. eszköz', 'Device 2'), `${mck('CISO', 'on')}${mr(mb(ready, 'b', 1, 1.2))}`, { sm: 1, dd: .2 }) + appear(`<span class="mbig">${L('Indul a játék', 'Game on')}</span>`, 1.6)],
+      [L('Később is be lehet szállni', 'Join later too'), L('Ugyanazzal a kóddal játék közben is csatlakozhat új játékos csapattársnak, vagy a „Közvetítés” gombbal nézőként követheti.', 'With the same code a new player can join a team mid-game, or follow as a spectator with "Watch".'), pick(1)]
+    ],
+    team: [
+      [L('Új szerepkörös játék', 'New role-based game'), L('A házigazda: „Új szerepkörös játék”. A gépe lehet kivetítő is, ilyenkor nézőként marad.', 'The host clicks "New role-based game". Their device can be a projector and stay a spectator.'),
+        dv(L('Házigazda', 'Host'), `${ml(L('Mindenki a saját eszközén', 'Everyone on their own device'))}${mr(mb(L('Új szerepkörös játék', 'New role-based game'), '', 1))}`)],
+      [L('Kód mindenkinek', 'Code for everyone'), L('Mutasd meg a kódot (akár kivetítőn). Mindenki a saját eszközén a „Csatlakozás kóddal” mezőbe írja be.', 'Show the code (a projector works). Everyone types it under "Join with code" on their own device.'),
+        dv(L('Kivetítő', 'Projector'), `${ml(L('Játékkód', 'Game code'))}${cdh}`, { sm: 1 }) + dv('Anna', mf(CODEX, .3), { sm: 1, dd: .2 }) + dv('Bence', mf(CODEX, 1), { sm: 1, dd: .4 })],
+      [L('Név, csapat, szerepkör', 'Name, team, role'), L('Mindenki megadja a nevét, csapatot választ, és bepipálja a szerepkörét. A foglalt szerepkörnél látszik, kié.', 'Everyone enters a name, picks a team and ticks a role. Taken roles show who holds them.'),
+        dv('Anna', `${ml(L('Neved', 'Your name'))}${mf('Anna')}${mr(mb('Red') + mb('Blue', 'b', 1, .9) + mb(L('Néző', 'Spectator')))}${mck('CISO', 'off', 0, mt('Bence', 'no'))}${mck(L('SOC elemző', 'SOC Analyst'), 'tap', 1.8)}`)],
+      [L('Kész vagyok', "I'm ready"), L('Ha mindenki választott, megnyomja a „Kész vagyok” gombot. 2 fős csapatban pontosan 3, 3 főtől mind az 5 szerepkört el kell vinni.', 'When done, each player presses "I\'m ready". A 2-player team takes exactly 3 roles, 3 or more take all 5.'),
+        dv(L('Váróterem', 'Lobby'), `<div class="mcol"><div><b class="r">RED</b><span>Dóra ${mt(L('Kész', 'Ready'), 'ok')}</span><span>Ede ${mt(L('Kész', 'Ready'), 'ok')}</span></div><div><b class="b">BLUE</b><span>Bence ${mt(L('Kész', 'Ready'), 'ok')}</span><span>Anna ${appear(mt(L('Kész', 'Ready'), 'ok'), 0)}</span></div></div>${mr(mb(L('Kész vagyok', "I'm ready"), 'b', 1))}`)],
+      [L('Magától indul', 'Starts by itself'), L('Amint minden játékos kész és a csapatok teljesek, a játék automatikusan elindul, nincs külön indítógomb.', 'As soon as every player is ready and the teams are complete, the game starts automatically; there is no start button.'),
+        dv(L('Kivetítő', 'Projector'), `${ml(L('Minden csapat kész', 'All teams ready'))}${appear(`<span class="mbig">${L('Indul a játék', 'Game on')}</span>`, 0)}${mr(mcard('r', 3, 1, .4) + mcard('b', 2, 1, .4))}`)],
+      [L('Késők is beszállhatnak', 'Latecomers can join'), L('Játék közben is be lehet lépni ugyanazzal a kóddal: a gazdátlan szerepkört viheted, vagy szerepkör nélkül a csapat lapjaival játszol.', 'Players can join mid-game with the same code: take a role nobody holds, or play the team cards without a role.'), pick(1)]
+    ],
+    join: [
+      [L('Kérd el a kódot', 'Get the code'), L('A játékot indító eszközön látszik a 6 karakteres kód, a fejlécben végig.', 'The device that started the game shows the 6-character code, in the header the whole time.'),
+        dv(L('Házigazda', 'Host'), `<span class="mpill tap">${L('KÓD', 'CODE')} <b>${CODEX}</b></span>${cdh}`)],
+      [L('Belépés vagy közvetítés', 'Join or watch'), L('Írd be a kódot. „Belépés”: játékosként jössz. „Közvetítés”: csak nézed, például kivetítőn, írási jog nélkül.', 'Type the code. "Join": you play. "Watch": you only follow it, for example on a projector, without write access.'),
+        dv(L('Te', 'You'), `${ml(L('Csatlakozás kóddal', 'Join with code'))}${mf(CODEX)}${mr(mb(L('Belépés', 'Join'), '', 1, 1.3) + mb(L('Közvetítés', 'Watch')))}`)],
+      [L('Játékosként: csapat', 'As a player: team'), L('Válassz csapatot, nézd meg, melyik szerepkör szabad, majd „Kész, belépek”. Játék közben is működik.', 'Pick a team, check which roles are free, then "Ready, join". Works mid-game too.'), pick(0)],
+      [L('Nézőként: élő állás', 'As a spectator: live score'), L('Látod az állást és a lépéseket. A lapok csak felfedés után látszanak, a kriptopárbajból csak az idő és az eredmény. A végén lépés-összefoglaló jön.', 'You see the score and the moves. Cards show only once revealed; from the crypto duel only time and result. A move summary comes at the end.'),
+        dv(L('Közvetítés', 'Watch'), `<div class="mcol"><div>${ml(L('Kör', 'Round'))}<b>4/10</b></div><div>${ml(L('Észlelés', 'Detection'))}<b class="b">2/5</b></div></div>${mr(mcard('r', 4, 1, .2) + '<b>vs</b>' + mcard('b', 4, 1, .2))}${appear(mt(L('Kriptopárbaj · 1:42', 'Crypto duel · 1:42'), 'no'), 0)}`)]
+    ],
+    ctf: [
+      [L('Nyisd meg a CTF-et', 'Open CTF'), L('A menüben a „CTF – zászlószerzés” kártya. Egyéni mód, mindenki a saját tempójában játszik.', 'On the menu, the "CTF – capture the flag" card. An individual mode; everyone plays at their own pace.'),
+        dv(L('Menü', 'Menu'), `<span class="mb big tap">${L('CTF – zászlószerzés', 'CTF – capture the flag')}<small>${L('Egyéni játékmód', 'Individual mode')}</small></span>`)],
+      [L('Regisztráció vagy belépés', 'Register or log in'), L('Felhasználónév és jelszó kell. A haladásod a fiókodhoz kötődik, bármelyik gépről folytathatod.', 'You need a username and password. Progress is tied to your account, so you can continue from any device.'),
+        dv('CTF', `${ml(L('Felhasználónév', 'Username'))}${mf('rvb_anna')}${ml(L('Jelszó', 'Password'))}${mf('••••••••', 1.2)}${mr(mb(L('Belépés', 'Log in'), '', 1, 2) + mb(L('Regisztráció', 'Register')))}`)],
+      [L('Válassz nehézséget', 'Pick a difficulty'), L('Könnyű: minden a böngészőben megoldható. Nehéz: letölthető fájlokkal, külső eszközökkel dolgozol.', 'Easy: everything can be solved in the browser. Hard: you work with downloadable files and outside tools.'),
+        dv(L('Új játék', 'New game'), `${ml(L('Incidenskezelés', 'Incident response'))}${mr(mb(L('Könnyű', 'Easy'), 'b', 1) + mb(L('Nehéz', 'Hard'), 'b'))}`)],
+      [L('Hét réteg', 'Seven layers'), L('A riasztástól a helyreállításig 7 egymásra épülő réteg. Egy réteg legalább felét meg kell oldani a továbblépéshez, és minden megoldott réteg segít a következőben.', 'Seven layers built on each other, from the alert to recovery. Solve at least half of a layer to move on; each solved layer helps with the next.'),
+        dv(L('Rétegek', 'Layers'), `${mck('1 · ' + L('Riasztás', 'Alert'), 'on')}${mck('2 · Triage', 'tap', .2)}${mck('3 · ' + L('Naplóelemzés', 'Log analysis'), 'off')}`)],
+      [L('Flag beküldése, tippek', 'Flags and hints'), L('Írd be a választ, és „Beküldés”. Ha elakadsz, kérj tippet, az pontba kerül.', 'Type the answer and press "Submit". If you are stuck, ask for a hint; it costs points.'),
+        dv('Triage', `${ml(L('Válasz', 'Answer'))}${mr(mf('NOTPETYA') + mb(L('Beküldés', 'Submit'), '', 1, 1.5))}${appear(mt('+25', 'ok'), 0)}${mr(mb(L('Tipp kérése', 'Ask for a hint')))}`)],
+      [L('Ranglista', 'Leaderboard'), L('A „Ranglista” gombbal látod, hogyan állsz a többiekhez képest.', 'The "Leaderboard" button shows how you compare to the others.'),
+        dv(L('Ranglista', 'Leaderboard'), `${mr(mb(L('Ranglista', 'Leaderboard'), '', 1))}${appear(`<div class="mcol"><div>1. rvb_anna</div><div><b>1250</b></div><div>2. bence</div><div><b>975</b></div></div>`, 0)}`)]
+    ]
+  };
+  return S[k] || [];
+}
+const TUT_NAME = k => ({ local: L('Helyi játék', 'Local game'), online: L('Online játék két eszközön', 'Online game on two devices'), team: L('Szerepkörös játék', 'Role-based game'), join: L('Csatlakozás kóddal és közvetítés', 'Join with code and watch'), ctf: L('CTF – zászlószerzés', 'CTF – capture the flag') }[k] || '');
+function tutHTML() {
+  const st = tutSteps(TUT), cur = st[TSTEP] || st[0], online = !!ROOM;
+  const go = { local: `<button class="btn" data-a="local">${L('Indítás most', 'Start now')}</button>`, online: `<button class="btn red" data-a="host" data-side="r" ${online ? '' : 'disabled'}>${L('Red leszek', 'I play Red')}</button><button class="btn blue" data-a="host" data-side="b" ${online ? '' : 'disabled'}>${L('Blue leszek', 'I play Blue')}</button>`, team: `<button class="btn" data-a="hostteam" ${online ? '' : 'disabled'}>${L('Új szerepkörös játék', 'New role-based game')}</button>`, join: `<button class="btn" data-a="tutjoin">${L('Kód beírása', 'Enter the code')}</button>`, ctf: `<a class="btn" href="ctf/">${L('CTF megnyitása', 'Open CTF')}</a>` }[TUT] || '';
+  return `<div class="rulesov tutov" role="dialog" aria-modal="true" aria-label="${esc(L('Hogyan indítsd?', 'How to start') + ' · ' + TUT_NAME(TUT))}"><div class="rulesbox cut">
+   <div class="rulestop"><h2>${L('Hogyan indítsd?', 'How to start')} · ${esc(TUT_NAME(TUT))}</h2><button class="btn" data-a="tutclose">${L('Bezárás', 'Close')}</button></div>
+   <div class="tutgrid"><div><div class="tstage" aria-hidden="true"><span class="snum">${String(TSTEP + 1).padStart(2, '0')} / ${String(st.length).padStart(2, '0')}</span>${cur[2]}</div>
+     <div class="tprog${TPLAY ? '' : ' paused'}"><i></i></div>
+     <p class="tnow" aria-live="polite"><b>${TSTEP + 1}. ${esc(cur[0])}.</b> ${esc(cur[1])}</p>
+     <div class="row" style="margin-top:10px"><button class="btn ghost" data-a="tutprev">‹ ${L('Előző', 'Back')}</button><button class="btn ghost" data-a="tutplay" aria-pressed="${!TPLAY}">${TPLAY ? L('Szünet', 'Pause') : L('Lejátszás', 'Play')}</button><button class="btn ghost" data-a="tutnext">${L('Következő', 'Next')} ›</button></div></div>
+    <div><div class="lbl" style="margin-bottom:6px">${L('Lépések', 'Steps')}</div><ol class="tsteps">${st.map((s, i) => `<li><button data-a="tstep" data-v="${i}" class="${i < TSTEP ? 'done' : ''}" ${i === TSTEP ? 'aria-current="step"' : ''}><span class="n">${i + 1}</span><span><b>${esc(s[0])}</b><small>${esc(s[1])}</small></span></button></li>`).join('')}</ol>
+     <div class="row" style="margin-top:14px">${go}</div></div></div></div></div>`;
+}
+
 function rulesHTML() {
   const roleRow = s => DATA.roles.filter(r => r.s === s).sort((a, b) => a.n - b.n).map(r => `<li><b>${esc(r.hu)}</b> <span class="tag tg">${esc(r.tm || { always: L('MINDIG', 'ALWAYS'), duel: L('PÁRBAJKOR', 'IN DUEL') }[r.u] || '')}</span><br>${esc(r.ab)}</li>`).join('');
   return `<div class="rulesov" role="dialog" aria-modal="true" aria-label="${L('Játékszabályok', 'Game rules')}"><div class="rulesbox cut">
@@ -2268,7 +2436,7 @@ function render() {
    <header class="top${SCREEN === 'game' && MODE && MODE !== 'local' ? ' stick' : ''}"><span class="logo"><span class="r">RED</span><small>VS</small><span class="b">BLUE</span></span>${mode ? `<span class="pill">${mode}</span>` : ''}${SCREEN === 'game' && ST ? `<span class="pill">${gmName(ST.gm)}</span>` : ''}${MODE !== 'local' && CODE && SCREEN === 'game' ? `<button class="pill codepill" data-a="copycode" title="${L('Játékkód · kattints a másoláshoz. Ezzel a kóddal bárki csatlakozhat, játék közben is.', 'Game code · click to copy. Anyone can join with this code, even during the game.')}">${L('KÓD', 'CODE')} <b>${esc(CODE.toUpperCase())}</b></button>` : ''}<span class="sp"></span>${SCREEN === 'game' ? rulesBtns() : ''}${langHTML()}
     ${SCREEN === 'game' && ST && ST.ph !== 'end' && (MODE === 'local' || MY) && !(TEAM && ST.ph === 'setup') ? '<button class="btn abort" data-a="abortask" aria-expanded="' + ABORTASK + '">Abort</button>' : ''}${SCREEN === 'game' ? `<button class="btn" data-a="menu">${L('Kilépés a menübe', 'Exit to menu')}</button>` : ''}</header>
    ${ABORTASK && SCREEN === 'game' && ST && ST.ph !== 'end' ? `<div class="abortbar" role="alertdialog" aria-label="${L('Játék megszakítása', 'Abort game')}"><b>${L('Biztosan megszakítod a játékot? Nem lesz győztes, és a játszma nem folytatható.', 'Abort the game? There will be no winner and the game cannot be resumed.')}</b><div class="row"><button class="btn abort" data-a="abortyes">${L('Igen, megszakítom', 'Yes, abort')}</button><button class="btn" data-a="abortno">${L('Mégse', 'Cancel')}</button></div></div>` : ''}
-   <main class="wrap">${SCREEN === 'menu' ? menuHTML() : gameHTML()}</main>${RULES ? rulesHTML() : ''}${CREF ? crefHTML() : ''}${TOAST ? `<div class="toast" role="status">${esc(tr(TOAST))}</div>` : ''}`;
+   <main class="wrap">${SCREEN === 'menu' ? menuHTML() : gameHTML()}</main>${RULES ? rulesHTML() : ''}${TUT && SCREEN === 'menu' ? tutHTML() : ''}${CREF ? crefHTML() : ''}${TOAST ? `<div class="toast" role="status">${esc(tr(TOAST))}</div>` : ''}`;
   if (fid) { const el = document.getElementById(fid); if (el && !el.disabled) { el.focus(); try { if (pos != null) el.setSelectionRange(pos, pos); } catch (e) { } } }
   tick();
 }
@@ -2301,7 +2469,15 @@ document.addEventListener('click', e => {
   if (t.dataset.n) { dispatch(side, { t: 'cfg', n: +t.dataset.n, ro: ST.cfg[side].ro }); return; }
   if (t.dataset.act) { dispatch(side, JSON.parse(t.dataset.act)); return; }
   if (t.dataset.ans) { const s = t.dataset.ans; dispatch(s, { t: 'ans', a: DATA.crypto[dec(ST.du.c)].f.map((f, i) => DRAFT[s][i] || '') }); return; }
+  if (TUT && ['local', 'host', 'hostteam'].includes(t.dataset.a)) { TUT = ''; clearTimeout(tutT); }
   switch (t.dataset.a) {
+    case 'tut': return tutOpen(t.dataset.v);
+    case 'tutclose': return tutClose();
+    case 'tutprev': return tutGo(TSTEP - 1);
+    case 'tutnext': return tutGo(TSTEP + 1);
+    case 'tstep': return tutGo(+t.dataset.v);
+    case 'tutplay': TPLAY = !TPLAY; tutSched(); return render();
+    case 'tutjoin': { tutClose(); const j = document.getElementById('joincode'); if (j) { j.scrollIntoView({ block: 'center' }); j.focus(); } return; }
     case 'local': MODE = 'local'; ST = newGame((Math.random() * 4294967296) >>> 0, GMSEL); lastPh = 'setup'; SCREEN = 'game'; persist(); return render();
     case 'resume': MODE = 'local'; ST = store.get('rvb-local'); lastPh = ST.ph; SCREEN = 'game'; return render();
     case 'host': return hostGame(side);
@@ -2351,6 +2527,7 @@ document.addEventListener('change', e => {
 document.addEventListener('input', e => { const t = e.target; if (t.id === 'joincode' || t.id === 'nm' || t.id === 'pnm') KEEP[t.id === 'pnm' ? 'nm' : t.id] = t.id === 'joincode' ? t.value : t.value.slice(0, 24); if (t.dataset.draft) DRAFT[t.dataset.draft][+t.dataset.i] = t.value; });
 document.addEventListener('toggle', e => { if (e.target.classList && e.target.classList.contains('help')) HELPOPEN = e.target.open; }, true);
 document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && TUT) return tutClose();
   if (e.key === 'Escape' && (RULES || CREF)) { RULES = false; CREF = false; return render(); }
   if (e.key !== 'Enter') return;
   const t = e.target;
