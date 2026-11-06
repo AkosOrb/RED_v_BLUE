@@ -1,4 +1,4 @@
-<!doctype html><html lang="hu"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Red vs Blue</title>
+<!doctype html><html lang="hu"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob:; connect-src 'self' wss://broker.emqx.io:8084 wss://broker.hivemq.com:8884 wss://mqtt.eclipseprojects.io wss://test.mosquitto.org:8081; object-src 'none'; base-uri 'none'; form-action 'none'"><meta name="referrer" content="strict-origin-when-cross-origin"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Red vs Blue</title>
 <meta name="description" content="Red vs Blue: kiberbiztonsági stratégiai kártyajáték. A Red végig akar jutni a támadási lánc öt szakaszán, a Blue észlelni és megállítani akarja. Minden lap egy valós támadás vagy védekezés.">
 <meta property="og:title" content="Red vs Blue – kiberbiztonsági kártyajáték">
 <meta property="og:description" content="Támadók és védők a támadási lánc öt szakaszán, valós esetekkel. Helyi, online és szerepkörös játék, valamint CTF mód.">
@@ -1153,7 +1153,8 @@ function apply(st, side, a) {
   return 'Ismeretlen állapot.';
 }
 function act(st, side, a) {
-  const n = clone(st); const err = apply(n, side, a);
+  const n = clone(st); let err;
+  try { err = apply(n, side, a); } catch (e) { err = 'Érvénytelen lépés.'; } // a malformed action from the network must not break the host
   if (err) return { st, err };
   n.sq++; return { st: n, err: '' };
 }
@@ -1224,6 +1225,7 @@ const TR_EN = {
   'Legalább 3 fő esetén mind az 5 szerepkör játékban van.': 'With 3 or more players, all 5 roles are in play.',
   'Alternatív mód: a 2 fős Blue nem választhatja egyszerre a SOC elemzőt és az Incidenskezelőt.': 'Alternative mode: a 2-person Blue team cannot pick both SOC Analyst and Incident Handler.',
   'A játék véget ért.': 'The game is over.',
+  'Érvénytelen lépés.': 'Invalid move.',
   'Most a beállítás jön.': 'Setup comes first.',
   'Most a Red támad.': 'Red is attacking now.',
   'Már kijátszottál lapot.': 'You have already played a card.',

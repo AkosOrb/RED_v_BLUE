@@ -1,0 +1,7 @@
+# A repóban nincs npm/pip függőség; a GitHub Actions verzióit tartja naprakészen.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly

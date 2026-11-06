@@ -1,0 +1,8 @@
+# Titkok és helyi fájlok soha ne kerüljenek a repóba (a GitHub Pages mindent kiszolgál, ami itt van).
+.env
+.env.*
+*.pem
+*.key
+megoldokulcs*.json
+__pycache__/
+.DS_Store

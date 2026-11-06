@@ -61,7 +61,9 @@ listában szereplő felhasználónevek látják (alapból: `oktato`).
 2. Authentication → Sign In / Providers → Email: kapcsold ki a „Confirm email” opciót.
 3. SQL Editor: futtasd le a `ctf/supabase/schema.sql` teljes tartalmát.
 4. Project Settings → API: másold a Project URL-t és az `anon` kulcsot a `ctf/config.js`-be.
-5. Oktatói jog: regisztrálj a játékban, majd az SQL Editorban:
+5. Authentication → Policies / Rate Limits: a jelszó minimális hossza legyen 8 (a játék is ennyit kér),
+   a regisztráció és a belépés rate limitjét hagyd bekapcsolva (alapértelmezett).
+6. Oktatói jog: regisztrálj a játékban, majd az SQL Editorban:
    `update public.profiles set role = 'instructor' where username = '<név>';`
 
 A játékosok regisztrációkor mindig `player` szerepkört kapnak; oktatóvá csak az adatbázisban lehet valakit tenni.
