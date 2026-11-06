@@ -2,6 +2,7 @@
 <html lang="hu">
 <head>
 <meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob:; connect-src 'self' https://dpcemoeocpcvjwjutqfn.supabase.co; object-src 'none'; base-uri 'none'; form-action 'none'"><meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Red vs Blue CTF</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -705,11 +706,13 @@ async function viewFile(name, raw) {
   log(raw ? 'download' : 'view_file', { layer: CUR, file: name });
 }
 
+// CSV cell: quoted, and a leading = + - @ (or tab / CR) is neutralised so Excel never runs player-typed text as a formula.
+const csvCell = x => { let v = String(x ?? ''); if (/^[=+\-@\t\r]/.test(v)) v = "'" + v; return `"${v.replace(/"/g, '""')}"`; };
 async function exportCSV() {
   const games = TEACH.games || await BACK.allGames();
   const lines = [['jatekos', 'jatek_id', 'mod', 'ido', 'esemeny', 'reszletek'].join(',')];
   for (const g of games) for (const e of await BACK.events(g.id))
-    lines.push([g.username, g.id, g.mode, e.at, e.type, JSON.stringify(e.data || {})].map(x => `"${String(x).replace(/"/g, '""')}"`).join(','));
+    lines.push([g.username, g.id, g.mode, e.at, e.type, JSON.stringify(e.data || {})].map(csvCell).join(','));
   const a = document.createElement('a');
   a.href = URL.createObjectURL(new Blob(['﻿' + lines.join('\n')], { type: 'text/csv' }));
   a.download = 'rvb_ctf_esemenyek.csv'; a.click();

@@ -91,3 +91,54 @@ revoke all on public.leaderboard from anon, public;
 
 -- Oktatói jog megadása (csak itt, az SQL Editorban):
 -- update public.profiles set role = 'instructor' where username = 'oktato';
+
+-- ---------------------------------------------------------------------------
+-- Biztonsági megerősítés (2026-11, SECURITY_CHECKLIST.md). Újrafuttatható.
+-- A pontszámot a böngésző számolja, ezért a szerver legalább a lehetetlen értékeket elutasítja.
+-- ---------------------------------------------------------------------------
+
+-- A be nem jelentkezett (anon) szerepkör semmit se érjen el közvetlenül a táblákból.
+revoke all on public.profiles, public.games, public.events from anon;
+
+-- Játszmák: elérhető maximum (könnyű 2800, nehéz 4208 pont), réteg 1–7, állapot legfeljebb 64 KB.
+-- Frissítéskor a tulajdonos, oldal, mód és kezdési idő nem változhat, a pontszám nem csökkenhet.
+create or replace function public.games_guard() returns trigger
+language plpgsql set search_path = public as $$
+begin
+  if new.score < 0 or new.score > (case new.mode when 'hard' then 4208 else 2800 end) then
+    raise exception 'invalid score';
+  end if;
+  if new.layer < 1 or new.layer > 7 then raise exception 'invalid layer'; end if;
+  if pg_column_size(new.state) > 65536 then raise exception 'state too large'; end if;
+  if tg_op = 'UPDATE' then
+    if new.user_id <> old.user_id or new.side <> old.side or new.mode <> old.mode
+       or new.started_at <> old.started_at then
+      raise exception 'immutable column changed';
+    end if;
+    if new.score < old.score then raise exception 'score cannot decrease'; end if;
+  end if;
+  return new;
+end $$;
+drop trigger if exists games_guard on public.games;
+create trigger games_guard before insert or update on public.games
+  for each row execute function public.games_guard();
+
+-- Eseménynapló: csak ismert típus, legfeljebb 2 KB adat, és csak a saját játszmához.
+create or replace function public.events_guard() returns trigger
+language plpgsql set search_path = public as $$
+begin
+  if new.type not in ('start', 'open_layer', 'view_file', 'download', 'submit', 'hint', 'unlock', 'finish', 'close') then
+    raise exception 'invalid event type';
+  end if;
+  if pg_column_size(new.data) > 2048 then raise exception 'event data too large'; end if;
+  new.at := now();  -- az időbélyeget a szerver adja
+  return new;
+end $$;
+drop trigger if exists events_guard on public.events;
+create trigger events_guard before insert on public.events
+  for each row execute function public.events_guard();
+
+drop policy if exists events_insert on public.events;
+create policy events_insert on public.events for insert to authenticated
+  with check (user_id = auth.uid() and (game_id is null or exists (
+    select 1 from public.games g where g.id = game_id and g.user_id = auth.uid())));
