@@ -1444,7 +1444,10 @@ function roleStatus(s, i) {
   return on ? ['tg', L('JÁTÉKBAN', 'IN PLAY'), 0] : ['', L('NINCS JÁTÉKBAN', 'NOT IN PLAY'), 0];
 }
 function joinPickHTML() {
-  const started = ST.ph !== 'setup', wait = PICK.sent && !MY;
+  const started = ST.ph !== 'setup', wait = PICK.sent && !MY, closed = TEAM && !joinOpen();
+  if (closed) return `<div class="panel cut lobby" style="margin-top:16px"><div class="lbl">${L('Szerepkörös játék · csatlakozás', 'Role-based game · joining')}</div><div class="code" style="color:var(--ink);margin-top:6px">${esc(CODE.toUpperCase())}</div>
+     <p style="margin:12px 0 0">${L(`A játék már a ${ST.rd}. körnél tart. Csapattagként csak az 1. kör végéig lehetett csatlakozni, de nézőként követheted a játékot.`, `The game is already in round ${ST.rd}. Players could join a team only until the end of round 1, but you can follow the game as a spectator.`)}</p>
+     <div class="row" style="margin-top:14px"><button class="btn" data-a="pspec">${L('Nézőként követem', 'Watch as a spectator')}</button></div></div>`;
   const col = s => {
     const pl = ROSTER.filter(p => p.sd === s), on = PICK.sd === s;
     const roles = ROLE_KEYS[s].map((k, i) => {
@@ -1461,7 +1464,7 @@ function joinPickHTML() {
   };
   return `<div class="panel cut lobby" style="margin-top:16px"><div class="row" style="justify-content:space-between;align-items:flex-start"><div>
      <div class="lbl">${TEAM ? L('Szerepkörös játék · csatlakozás', 'Role-based game · joining') : L('Két eszközös játék · csatlakozás', 'Two-device game · joining')}</div><div class="code" style="color:var(--ink);margin-top:6px">${esc(CODE.toUpperCase())}</div></div>${netTag()}</div>
-     <p style="margin:12px 0 0">${started ? L(`A játék már tart (${ST.rd}. kör), most is beszállhatsz. Válassz csapatot!`, `The game is already on (round ${ST.rd}); you can still join. Pick a team!`) : L('A játék még nem indult el. Válassz csapatot, és már bent is vagy.', 'The game has not started yet. Pick a team and you are in.')}</p>
+     <p style="margin:12px 0 0">${started ? (TEAM ? L(`A játék már tart (${ST.rd}. kör). Az 1. kör végéig még beszállhatsz, válassz csapatot!`, `The game is already on (round ${ST.rd}). You can still join until the end of round 1. Pick a team!`) : L(`A játék már tart (${ST.rd}. kör), most is beszállhatsz. Válassz csapatot!`, `The game is already on (round ${ST.rd}); you can still join. Pick a team!`)) : L('A játék még nem indult el. Válassz csapatot, és már bent is vagy.', 'The game has not started yet. Pick a team and you are in.')}</p>
      <label class="lbl" for="pnm" style="display:block;margin:12px 0 4px">${L('Neved', 'Your name')}</label><input type="text" id="pnm" class="nm" maxlength="24" placeholder="${L('NÉV', 'NAME')}" autocomplete="off" value="${esc(myName())}" ${wait ? 'disabled' : ''}></div>
    <div class="setup">${col('r')}${col('b')}</div>
    <div class="row" style="margin-top:14px"><button class="btn ${PICK.sd === 'r' ? 'red' : PICK.sd === 'b' ? 'blue' : ''}" data-a="pgo" ${PICK.sd && !wait ? '' : 'disabled'}>${wait ? L('Csatlakozás…', 'Joining…') : PICK.sd ? L(`Kész, belépek a ${SIDE[PICK.sd]} csapatba`, `Ready, join team ${SIDE[PICK.sd]}`) : L('Előbb válassz csapatot', 'Pick a team first')}</button>
@@ -1601,7 +1604,8 @@ const JT = (() => { try { let t = +sessionStorage.getItem('rvb-t'); if (!t) { t 
 function myName() { if (KEEP.nm == null) KEEP.nm = store.get('rvb-nm') || ''; return KEEP.nm; }
 const roleKeyName = (side, k) => roleOf(side, ROLE_KEYS[side].indexOf(k)).hu;
 const holder = (side, k) => ROSTER.find(p => p.sd === side && p.ro.includes(k));
-function myRole(k) { return !TEAM || MYRO.includes(k); }
+// a role nobody holds (team started before it was full) can be used by any member of that team
+function myRole(k) { return !TEAM || MYRO.includes(k) || (!!MY && !holder(MY, k)); }
 function cryptoMe(s) { return !TEAM || MYRO.includes('crypto') || (MY === s && !holder(s, 'crypto')); }
 
 function rebuildRoster() {
@@ -1640,19 +1644,36 @@ function teamCheck() {
   if (wait.length) msg.push(L('Még nem jelezte, hogy kész: ', 'Not ready yet: ') + wait.join(', ') + '.');
   return { ok: !msg.length, msg, cfg };
 }
-function teamStart() {
-  const c = teamCheck(); if (!c.ok) return toast(c.msg[0]);
+// Blue's "Start game" button may start with incomplete teams: each team then plays with all 5 roles,
+// the roles nobody holds are shared by the team, and the rest of the players can join until the end of round 1.
+function earlyCheck() {
+  for (const s of ['r', 'b']) {
+    const n = ROSTER.filter(p => p.sd === s).length;
+    if (!n) return L(`A ${SIDE[s]} csapatban még nincs játékos.`, `Team ${SIDE[s]} has no players yet.`);
+    if (n > 5) return L(`${SIDE[s]}: legfeljebb 5 fő lehet egy csapatban.`, `${SIDE[s]}: a team can have at most 5 players.`);
+  }
+  return '';
+}
+function teamStart(early) {
+  const c = teamCheck();
+  if (!c.ok) {
+    if (!early) return c.msg[0];
+    const e = earlyCheck(); if (e) return e;
+    ['r', 'b'].forEach(s => { c.cfg[s] = { n: Math.max(3, ROSTER.filter(p => p.sd === s).length), ro: [1, 1, 1, 1, 1], ok: 0 }; });
+  }
   let st = clone(ST); st.cfg.r = c.cfg.r; st.cfg.b = c.cfg.b;
   let r = act(st, 'r', { t: 'ready' }); if (!r.err) r = act(r.st, 'b', { t: 'ready' });
-  if (r.err) return toast(r.err);
+  if (r.err) return r.err;
   ST = r.st; afterChange(); persist(); publishHost(); render();
+  return '';
 }
+const joinOpen = () => !ST || ST.ph === 'setup' || ST.rd <= 1; // role-based game: joining closes at the end of round 1
 function teamPerm(p, side, a) {
   if (!p || !p.sd) return 'Nézőként nem léphetsz.';
   if (a.t === 'abort') return '';
   if (ST.ph === 'setup') return 'A csapatokat a váróteremben állítjátok össze.';
   if (p.sd !== side) return 'Ez a másik csapat lépése.';
-  const holds = k => p.ro.includes(k);
+  const holds = k => p.ro.includes(k) || !holder(side, k);
   if ((a.t === 'peek' || a.t === 'peekcj') && !holds('recon')) return 'Ezt csak a Felderítő használhatja.';
   if (a.t === 'cisob' && !holds('ciso')) return 'Ezt csak a CISO használhatja.';
   if (a.t === 'ov' && !holds('lead')) return 'Ezt csak az Operációvezető használhatja.';
@@ -1674,9 +1695,10 @@ async function hostTeam(resume) {
     publishHost(); persist();
   } catch (e) { toast('Nem sikerült megnyitni a játékot.'); }
 }
-// after the start the roster is frozen, but late joiners are added: they get the roles in play that nobody holds, or play the team cards without a role
+// after the start the roster is frozen, but late joiners are added until the end of round 1: they get the roles in play that nobody holds, or play the team cards without a role
 function lateJoin() {
   let add = 0;
+  if (!joinOpen()) return 0;
   PEERS.map(p => p.presence).filter(p => p && p.ro === 'guest' && p.gid && p.gid !== GID && !p.left && p.want && (p.want.sd === 'r' || p.want.sd === 'b') && !((KICK[p.gid] || 0) > (p.j || 0)))
     .sort((a, b) => (a.t || 0) - (b.t || 0)).forEach(p => {
       const e = ROSTER.find(q => q.gid === p.gid);
@@ -1689,7 +1711,7 @@ function lateJoin() {
   return add;
 }
 // the game starts by itself as soon as every player has pressed "Kész vagyok" and the teams are complete
-function autoStart() { if (MODE === 'host' && TEAM && ST && ST.ph === 'setup' && ROSTER.some(p => p.sd) && teamCheck().ok) teamStart(); }
+function autoStart() { if (MODE === 'host' && TEAM && ST && ST.ph === 'setup' && ROSTER.some(p => p.sd) && teamCheck().ok) { const e = teamStart(); if (e) toast(e); } }
 function teamPeers() {
   if (ST.ph === 'setup') { const before = JSON.stringify(ROSTER); rebuildRoster(); if (JSON.stringify(ROSTER) !== before) { publishHost(); persist(); autoStart(); } }
   else if (lateJoin()) { meFromRoster(); publishHost(); persist(); }
@@ -1699,6 +1721,11 @@ function teamPeers() {
     if ((LASTN[pr.gid] || 0) >= A.n) return;
     LASTN[pr.gid] = A.n;
     const who = ROSTER.find(q => q.gid === pr.gid);
+    if (A.a && A.a.t === 'tstart') {
+      const err = ST.ph !== 'setup' ? '' : who && who.sd === 'b' ? teamStart(true) : 'A játékot a Blue csapat indíthatja el.';
+      if (err) GROOM.set({ ro: 'host', tm: 1, st: ST, pl: ROSTER, lb: LB, now: Date.now(), rej: { gid: pr.gid, n: A.n, err } });
+      return;
+    }
     const side = A.s || (who && who.sd);
     let err = teamPerm(who, side, A.a), r = null;
     if (!err) { r = act(ST, side, A.a); err = r.err; }
@@ -1724,7 +1751,12 @@ function teamLobbyHTML() {
     const cov = ROLE_KEYS[s].filter(k => holder(s, k)).length;
     return `<div class="frame cut"><div class="fi"><div class="row" style="justify-content:space-between"><h2 class="${s}">${SIDE[s]}</h2><span class="lbl">${L(`${pl.length} fő · ${cov}/5 szerepkör`, `${pl.length} player${pl.length === 1 ? '' : 's'} · ${cov}/5 roles`)}</span></div>
       ${pl.length ? pl.map(p => `<div class="rolechk" style="display:block"><b>${esc(p.nm)}</b>${p.host ? ` <span class="tag tg">${L('HÁZIGAZDA', 'HOST')}</span>` : ''}${host && !p.host ? ` <button class="btn ghost kick" data-a="tkick" data-g="${esc(p.gid)}" title="${L('Eltávolítás a váróteremből', 'Remove from lobby')}">×</button>` : ''} ${p.rdy ? `<span class="tag tb">${L('KÉSZ', 'READY')}</span>` : `<span class="tag tr">${L('VÁLASZT…', 'CHOOSING…')}</span>`}<small>${p.ro.length ? p.ro.map(k => esc(roleKeyName(s, k))).join(', ') : L('nincs még szerepköre', 'no role yet')}</small></div>`).join('') : `<p class="hint">${L('Még senki.', 'Nobody yet.')}</p>`}
-      <div class="lbl" style="margin-top:8px">${L('Szabad', 'Free')}: ${ROLE_KEYS[s].filter(k => !holder(s, k)).map(k => esc(roleKeyName(s, k))).join(', ') || '–'}</div></div></div>`;
+      <div class="lbl" style="margin-top:8px">${L('Szabad', 'Free')}: ${ROLE_KEYS[s].filter(k => !holder(s, k)).map(k => esc(roleKeyName(s, k))).join(', ') || '–'}</div>${s === 'b' ? startBox() : ''}</div></div>`;
+  };
+  const startBox = () => {
+    const blue = !!meR && meR.sd === 'b', e = earlyCheck();
+    return `<div style="margin-top:12px"><button class="btn blue" data-a="tstart" ${blue && !e && !PENDING ? '' : 'disabled'}>${L('Játék indítása', 'Start game')}</button>
+      <span class="hint" style="display:block;margin-top:6px">${!blue ? L('A játékot a Blue csapat egyik tagja indítja el.', 'A member of team Blue starts the game.') : e ? esc(e) : L('Hiányos csapatokkal is indíthatsz: ilyenkor mindkét csapatnál mind az 5 szerepkör játékban van, a gazdátlan szerepköröket a csapat bármelyik tagja használhatja, és a többiek az 1. kör végéig még csatlakozhatnak a kóddal.', 'You can start with incomplete teams: then all 5 roles are in play for both teams, any team member can use a role nobody holds, and the others can still join with the code until the end of round 1.')}</span></div>`;
   };
   const watchers = ROSTER.filter(p => !p.sd);
   const chk = host ? teamCheck() : null;
@@ -1745,7 +1777,7 @@ function teamLobbyHTML() {
    ${host ? `<div class="frame cut" style="margin-top:12px"><div class="fi">
      <label class="rolechk" style="border:0"><input type="checkbox" data-talt="1" ${ST.cfg.alt ? 'checked' : ''}><span><b>${L('Alternatív mód: kiegyensúlyozott kis csapatok', 'Alternative mode: balanced small teams')}</b><small>${L('A 2 fős Blue csapat nem választhatja egyszerre a SOC elemzőt és az Incidenskezelőt.', 'A 2-person Blue team cannot pick both SOC Analyst and Incident Handler.')}</small></span></label>
      ${chk.msg.length ? `<ul class="hint" style="margin:6px 0">${chk.msg.map(m => `<li>${esc(m)}</li>`).join('')}</ul>` : ''}</div></div>` : ''}
-   <p class="hint">${L('A játék magától elindul, amint minden játékos megnyomta a „Kész vagyok” gombot, és a csapatok teljesek. Később érkezők ugyanezzel a kóddal a játék közben is beszállhatnak.', 'The game starts by itself once every player has pressed "I\'m ready" and the teams are complete. Latecomers can join with the same code even during the game.')}</p>`;
+   <p class="hint">${L('A játék magától elindul, amint minden játékos megnyomta a „Kész vagyok” gombot, és a csapatok teljesek. A Blue csapat a „Játék indítása” gombbal korábban is elindíthatja. Később érkezők ugyanezzel a kóddal az 1. kör végéig szállhatnak be.', 'The game starts by itself once every player has pressed "I\'m ready" and the teams are complete. Team Blue can also start it earlier with "Start game". Latecomers can join with the same code until the end of round 1.')}</p>`;
 }
 
 // ---------- view helpers ----------
@@ -2315,9 +2347,9 @@ function tutSteps(k) {
         dv('Anna', `${ml(L('Neved', 'Your name'))}${mf('Anna')}${mr(mb('Red') + mb('Blue', 'b', 1, .9) + mb(L('Néző', 'Spectator')))}${mck('CISO', 'off', 0, mt('Bence', 'no'))}${mck(L('SOC elemző', 'SOC Analyst'), 'tap', 1.8)}`)],
       [L('Kész vagyok', "I'm ready"), L('Ha mindenki választott, megnyomja a „Kész vagyok” gombot. 2 fős csapatban pontosan 3, 3 főtől mind az 5 szerepkört el kell vinni.', 'When done, each player presses "I\'m ready". A 2-player team takes exactly 3 roles, 3 or more take all 5.'),
         dv(L('Váróterem', 'Lobby'), `<div class="mcol"><div><b class="r">RED</b><span>Dóra ${mt(L('Kész', 'Ready'), 'ok')}</span><span>Ede ${mt(L('Kész', 'Ready'), 'ok')}</span></div><div><b class="b">BLUE</b><span>Bence ${mt(L('Kész', 'Ready'), 'ok')}</span><span>Anna ${appear(mt(L('Kész', 'Ready'), 'ok'), 0)}</span></div></div>${mr(mb(L('Kész vagyok', "I'm ready"), 'b', 1))}`)],
-      [L('Magától indul', 'Starts by itself'), L('Amint minden játékos kész és a csapatok teljesek, a játék automatikusan elindul, nincs külön indítógomb.', 'As soon as every player is ready and the teams are complete, the game starts automatically; there is no start button.'),
+      [L('Indítás', 'Start'), L('Amint minden játékos kész és a csapatok teljesek, a játék magától elindul. A Blue csapat a „Játék indítása” gombbal hiányos csapatokkal is elindíthatja.', 'As soon as every player is ready and the teams are complete, the game starts by itself. Team Blue can also start it with incomplete teams using "Start game".'),
         dv(L('Kivetítő', 'Projector'), `${ml(L('Minden csapat kész', 'All teams ready'))}${appear(`<span class="mbig">${L('Indul a játék', 'Game on')}</span>`, 0)}${mr(mcard('r', 3, 1, .4) + mcard('b', 2, 1, .4))}`)],
-      [L('Késők is beszállhatnak', 'Latecomers can join'), L('Játék közben is be lehet lépni ugyanazzal a kóddal: a gazdátlan szerepkört viheted, vagy szerepkör nélkül a csapat lapjaival játszol.', 'Players can join mid-game with the same code: take a role nobody holds, or play the team cards without a role.'), pick(1)]
+      [L('Késők is beszállhatnak', 'Latecomers can join'), L('Az 1. kör végéig ugyanazzal a kóddal még be lehet lépni: a gazdátlan szerepkört viheted, vagy szerepkör nélkül a csapat lapjaival játszol. Utána már csak nézőként lehet követni a játékot.', 'Until the end of round 1 players can still join with the same code: take a role nobody holds, or play the team cards without a role. After that, you can only follow as a spectator.'), pick(1)]
     ],
     join: [
       [L('Kérd el a kódot', 'Get the code'), L('A játékot indító eszközön látszik a 6 karakteres kód, a fejlécben végig.', 'The device that started the game shows the 6-character code, in the header the whole time.'),
@@ -2567,7 +2599,7 @@ document.addEventListener('click', e => {
     case 'reteam': return hostTeam(store.get('rvb-team'));
     case 'tside': ME = { sd: t.dataset.v, ro: [], rdy: '' }; return teamChanged();
     case 'tready': ME = { ...ME, rdy: ME.rdy === LB ? '' : LB }; return teamChanged();
-    case 'tstart': return teamStart();
+    case 'tstart': { if (MODE === 'host') { const me = ROSTER.find(p => p.gid === GID); const e = me && me.sd === 'b' ? teamStart(true) : 'A játékot a Blue csapat indíthatja el.'; return e ? toast(e) : undefined; } return dispatch('b', { t: 'tstart' }); }
     case 'tkick': KICK[t.dataset.g] = Date.now(); return teamChanged();
     case 'pside': PICK = { sd: t.dataset.v, ro: [], sent: 0 }; return render();
     case 'pgo': return pickSend();
