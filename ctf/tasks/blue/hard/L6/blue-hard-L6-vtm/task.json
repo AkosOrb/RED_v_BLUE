@@ -12,7 +12,7 @@
     "en": "Clean-up"
   },
   "story": {
-    "hu": "A leválasztott alhálózatban fel kell számolni a támadó jelenlétét. A fiók- és perzisztencia-listából döntsd el, mit kell törölni és melyik fiókokat kell lecserélni.",
+    "hu": "A leválasztott alhálózatban fel kell számolni a támadó jelenlétét. A fiók- és perzisztencialistából döntsd el, mit kell törölni és melyik fiókokat kell lecserélni.",
     "en": "In the isolated subnet you must remove the attacker's foothold. Use the account and persistence lists to decide what to delete and which credentials to reset."
   },
   "keyIn": {
@@ -81,7 +81,7 @@
           "tier": 1,
           "cost": 10,
           "text": {
-            "hu": "Keresd azt a bejegyzést, ami csak a fertőzött gépeken van.",
+            "hu": "Keresd azt a bejegyzést, amely csak a fertőzött gépeken van.",
             "en": "Find the entry that only exists on infected hosts."
           }
         },
@@ -106,7 +106,7 @@
     {
       "id": "f3",
       "q": {
-        "hu": "Hány gépen kell eltávolítani az alhálózatban?",
+        "hu": "Hány gépről kell eltávolítani a szolgáltatást az alhálózatban?",
         "en": "On how many hosts in the subnet must it be removed?"
       },
       "hash": "9b46f4af1ee722c69f2cf3dd51a1eb581b01b1dad9a20c5e3cd9d4333c296b3c",

@@ -1,16 +1,16 @@
 ido,sulyossag,szabaly,gep,leiras
-2026-03-16 06:00:47,MEDIUM,R-2210,CSK-LOG-03,Ritka böngésző-bővítmény telepítése
+2026-03-16 06:00:47,MEDIUM,R-2210,CSK-LOG-03,Ritka böngészőbővítmény telepítése
 2026-03-16 06:01:23,MEDIUM,R-3001,CSK-LOG-08,Nagy kimenő levélforgalom
 2026-03-16 06:01:28,LOW,R-1307,CSK-MAIL-01,USB-tároló csatlakoztatva
-2026-03-16 06:01:35,MEDIUM,R-2210,CSK-ERP-01,Ritka böngésző-bővítmény telepítése
+2026-03-16 06:01:35,MEDIUM,R-2210,CSK-ERP-01,Ritka böngészőbővítmény telepítése
 2026-03-16 06:01:38,LOW,R-1102,CSK-ERP-01,Sikertelen bejelentkezés (1x)
 2026-03-16 06:02:27,LOW,R-1307,CSK-ERP-01,USB-tároló csatlakoztatva
-2026-03-16 06:03:58,MEDIUM,R-2210,CSK-LOG-03,Ritka böngésző-bővítmény telepítése
+2026-03-16 06:03:58,MEDIUM,R-2210,CSK-LOG-03,Ritka böngészőbővítmény telepítése
 2026-03-16 06:04:08,MEDIUM,R-3001,CSK-FIN-02,Nagy kimenő levélforgalom
 2026-03-16 06:04:19,LOW,R-1102,CSK-MAIL-01,Sikertelen bejelentkezés (1x)
-2026-03-16 06:04:34,MEDIUM,R-2210,CSK-LOG-08,Ritka böngésző-bővítmény telepítése
+2026-03-16 06:04:34,MEDIUM,R-2210,CSK-LOG-08,Ritka böngészőbővítmény telepítése
 2026-03-16 06:05:29,LOW,R-1102,CSK-FIN-09,Sikertelen bejelentkezés (1x)
-2026-03-16 06:05:37,MEDIUM,R-2210,CSK-ERP-01,Ritka böngésző-bővítmény telepítése
+2026-03-16 06:05:37,MEDIUM,R-2210,CSK-ERP-01,Ritka böngészőbővítmény telepítése
 2026-03-16 06:06:27,MEDIUM,R-3001,CSK-LOG-03,Nagy kimenő levélforgalom
 2026-03-16 06:07:13,MEDIUM,R-3001,CSK-FIN-02,Nagy kimenő levélforgalom
 2026-03-16 06:07:27,LOW,R-1102,CSK-MAIL-01,Sikertelen bejelentkezés (1x)
@@ -20,23 +20,23 @@ ido,sulyossag,szabaly,gep,leiras
 2026-03-16 06:10:31,LOW,R-1102,CSK-ERP-01,Sikertelen bejelentkezés (1x)
 2026-03-16 06:11:05,LOW,R-1102,CSK-ERP-01,Sikertelen bejelentkezés (1x)
 2026-03-16 06:11:08,LOW,R-1102,CSK-FIN-02,Sikertelen bejelentkezés (1x)
-2026-03-16 06:11:11,MEDIUM,R-2210,CSK-FIN-02,Ritka böngésző-bővítmény telepítése
-2026-03-16 06:12:21,MEDIUM,R-2210,CSK-LOG-08,Ritka böngésző-bővítmény telepítése
-2026-03-16 06:12:25,MEDIUM,R-2210,CSK-MAIL-01,Ritka böngésző-bővítmény telepítése
-2026-03-16 06:13:02,MEDIUM,R-2210,CSK-FIN-02,Ritka böngésző-bővítmény telepítése
+2026-03-16 06:11:11,MEDIUM,R-2210,CSK-FIN-02,Ritka böngészőbővítmény telepítése
+2026-03-16 06:12:21,MEDIUM,R-2210,CSK-LOG-08,Ritka böngészőbővítmény telepítése
+2026-03-16 06:12:25,MEDIUM,R-2210,CSK-MAIL-01,Ritka böngészőbővítmény telepítése
+2026-03-16 06:13:02,MEDIUM,R-2210,CSK-FIN-02,Ritka böngészőbővítmény telepítése
 2026-03-16 06:13:38,LOW,R-1307,CSK-ERP-01,USB-tároló csatlakoztatva
 2026-03-16 06:14:02,MEDIUM,R-3001,CSK-FIN-09,Nagy kimenő levélforgalom
 2026-03-16 06:15:19,LOW,R-1102,CSK-ERP-01,Sikertelen bejelentkezés (1x)
 2026-03-16 06:16:20,MEDIUM,R-3001,CSK-LOG-08,Nagy kimenő levélforgalom
-2026-03-16 06:17:25,MEDIUM,R-2210,CSK-ERP-01,Ritka böngésző-bővítmény telepítése
+2026-03-16 06:17:25,MEDIUM,R-2210,CSK-ERP-01,Ritka böngészőbővítmény telepítése
 2026-03-16 06:17:52,LOW,R-1307,CSK-MAIL-01,USB-tároló csatlakoztatva
-2026-03-16 06:18:10,MEDIUM,R-2210,CSK-MAIL-01,Ritka böngésző-bővítmény telepítése
+2026-03-16 06:18:10,MEDIUM,R-2210,CSK-MAIL-01,Ritka böngészőbővítmény telepítése
 2026-03-16 06:18:52,LOW,R-1307,CSK-ERP-01,USB-tároló csatlakoztatva
 2026-03-16 06:19:10,LOW,R-1307,CSK-ERP-01,USB-tároló csatlakoztatva
-2026-03-16 06:19:11,MEDIUM,R-2210,CSK-MAIL-01,Ritka böngésző-bővítmény telepítése
+2026-03-16 06:19:11,MEDIUM,R-2210,CSK-MAIL-01,Ritka böngészőbővítmény telepítése
 2026-03-16 06:19:40,MEDIUM,R-3001,CSK-MAIL-01,Nagy kimenő levélforgalom
 2026-03-16 06:20:04,MEDIUM,R-3001,CSK-FIN-02,Nagy kimenő levélforgalom
-2026-03-16 06:20:51,MEDIUM,R-2210,CSK-FIN-02,Ritka böngésző-bővítmény telepítése
+2026-03-16 06:20:51,MEDIUM,R-2210,CSK-FIN-02,Ritka böngészőbővítmény telepítése
 2026-03-16 06:21:35,LOW,R-1307,CSK-MAIL-01,USB-tároló csatlakoztatva
 2026-03-16 06:21:37,LOW,R-1307,CSK-ERP-01,USB-tároló csatlakoztatva
 2026-03-16 06:21:44,MEDIUM,R-3001,CSK-LOG-08,Nagy kimenő levélforgalom
@@ -48,7 +48,7 @@ ido,sulyossag,szabaly,gep,leiras
 2026-03-16 06:28:17,LOW,R-1102,CSK-FIN-02,Sikertelen bejelentkezés (1x)
 2026-03-16 06:28:20,LOW,R-1307,CSK-ERP-01,USB-tároló csatlakoztatva
 2026-03-16 06:28:24,LOW,R-1307,CSK-FIN-02,USB-tároló csatlakoztatva
-2026-03-16 06:28:30,MEDIUM,R-2210,CSK-MAIL-01,Ritka böngésző-bővítmény telepítése
+2026-03-16 06:28:30,MEDIUM,R-2210,CSK-MAIL-01,Ritka böngészőbővítmény telepítése
 2026-03-16 06:28:41,LOW,R-1102,CSK-LOG-03,Sikertelen bejelentkezés (1x)
 2026-03-16 06:29:18,MEDIUM,R-3001,CSK-FIN-02,Nagy kimenő levélforgalom
 2026-03-16 06:30:50,LOW,R-1102,CSK-FIN-09,Sikertelen bejelentkezés (1x)
@@ -64,27 +64,27 @@ ido,sulyossag,szabaly,gep,leiras
 2026-03-16 06:40:30,LOW,R-1102,CSK-FIN-09,Sikertelen bejelentkezés (1x)
 2026-03-16 06:41:44,LOW,R-1102,CSK-MAIL-01,Sikertelen bejelentkezés (1x)
 2026-03-16 06:42:40,LOW,R-1102,CSK-FIN-02,Sikertelen bejelentkezés (1x)
-2026-03-16 06:43:04,MEDIUM,R-2210,CSK-FIN-09,Ritka böngésző-bővítmény telepítése
+2026-03-16 06:43:04,MEDIUM,R-2210,CSK-FIN-09,Ritka böngészőbővítmény telepítése
 2026-03-16 06:43:21,MEDIUM,R-3001,CSK-LOG-08,Nagy kimenő levélforgalom
-2026-03-16 06:43:34,MEDIUM,R-2210,CSK-FIN-09,Ritka böngésző-bővítmény telepítése
-2026-03-16 06:44:17,MEDIUM,R-2210,CSK-LOG-03,Ritka böngésző-bővítmény telepítése
+2026-03-16 06:43:34,MEDIUM,R-2210,CSK-FIN-09,Ritka böngészőbővítmény telepítése
+2026-03-16 06:44:17,MEDIUM,R-2210,CSK-LOG-03,Ritka böngészőbővítmény telepítése
 2026-03-16 06:44:45,MEDIUM,R-3001,CSK-LOG-08,Nagy kimenő levélforgalom
 2026-03-16 06:45:54,LOW,R-1307,CSK-FIN-09,USB-tároló csatlakoztatva
-2026-03-16 06:48:14,MEDIUM,R-2210,CSK-ERP-01,Ritka böngésző-bővítmény telepítése
-2026-03-16 06:49:01,MEDIUM,R-2210,CSK-FIN-09,Ritka böngésző-bővítmény telepítése
+2026-03-16 06:48:14,MEDIUM,R-2210,CSK-ERP-01,Ritka böngészőbővítmény telepítése
+2026-03-16 06:49:01,MEDIUM,R-2210,CSK-FIN-09,Ritka böngészőbővítmény telepítése
 2026-03-16 06:49:12,LOW,R-1307,CSK-FIN-09,USB-tároló csatlakoztatva
 2026-03-16 06:49:14,LOW,R-1307,CSK-LOG-03,USB-tároló csatlakoztatva
 2026-03-16 06:50:00,MEDIUM,R-3001,CSK-FIN-02,Nagy kimenő levélforgalom
-2026-03-16 06:50:36,MEDIUM,R-2210,CSK-LOG-08,Ritka böngésző-bővítmény telepítése
+2026-03-16 06:50:36,MEDIUM,R-2210,CSK-LOG-08,Ritka böngészőbővítmény telepítése
 2026-03-16 06:51:22,LOW,R-1102,CSK-FIN-02,Sikertelen bejelentkezés (1x)
 2026-03-16 06:52:56,LOW,R-1307,CSK-FIN-09,USB-tároló csatlakoztatva
-2026-03-16 06:53:02,MEDIUM,R-2210,CSK-FIN-02,Ritka böngésző-bővítmény telepítése
+2026-03-16 06:53:02,MEDIUM,R-2210,CSK-FIN-02,Ritka böngészőbővítmény telepítése
 2026-03-16 06:53:19,LOW,R-1102,CSK-ERP-01,Sikertelen bejelentkezés (1x)
 2026-03-16 06:56:01,MEDIUM,R-3001,CSK-FIN-09,Nagy kimenő levélforgalom
 2026-03-16 06:56:06,LOW,R-1102,CSK-FIN-09,Sikertelen bejelentkezés (1x)
-2026-03-16 06:57:19,MEDIUM,R-2210,CSK-LOG-08,Ritka böngésző-bővítmény telepítése
+2026-03-16 06:57:19,MEDIUM,R-2210,CSK-LOG-08,Ritka böngészőbővítmény telepítése
 2026-03-16 06:57:53,MEDIUM,R-3001,CSK-ERP-01,Nagy kimenő levélforgalom
-2026-03-16 06:59:09,MEDIUM,R-2210,CSK-LOG-03,Ritka böngésző-bővítmény telepítése
+2026-03-16 06:59:09,MEDIUM,R-2210,CSK-LOG-03,Ritka böngészőbővítmény telepítése
 2026-03-16 06:59:23,LOW,R-1307,CSK-ERP-01,USB-tároló csatlakoztatva
 2026-03-16 07:00:20,MEDIUM,R-3001,CSK-MAIL-01,Nagy kimenő levélforgalom
 2026-03-16 07:00:38,LOW,R-1307,CSK-LOG-03,USB-tároló csatlakoztatva
@@ -102,7 +102,7 @@ ido,sulyossag,szabaly,gep,leiras
 2026-03-16 07:09:31,LOW,R-1102,CSK-FIN-09,Sikertelen bejelentkezés (1x)
 2026-03-16 07:10:24,LOW,R-1307,CSK-LOG-03,USB-tároló csatlakoztatva
 2026-03-16 07:10:32,LOW,R-1102,CSK-MAIL-01,Sikertelen bejelentkezés (1x)
-2026-03-16 07:11:01,MEDIUM,R-2210,CSK-LOG-03,Ritka böngésző-bővítmény telepítése
+2026-03-16 07:11:01,MEDIUM,R-2210,CSK-LOG-03,Ritka böngészőbővítmény telepítése
 2026-03-16 07:11:04,LOW,R-1102,CSK-ERP-01,Sikertelen bejelentkezés (1x)
 2026-03-16 07:11:33,MEDIUM,R-3001,CSK-LOG-03,Nagy kimenő levélforgalom
 2026-03-16 07:12:04,MEDIUM,R-3001,CSK-LOG-03,Nagy kimenő levélforgalom
@@ -119,30 +119,30 @@ ido,sulyossag,szabaly,gep,leiras
 2026-03-16 07:18:46,MEDIUM,R-3001,CSK-LOG-08,Nagy kimenő levélforgalom
 2026-03-16 07:20:14,LOW,R-1307,CSK-FIN-09,USB-tároló csatlakoztatva
 2026-03-16 07:20:16,LOW,R-1102,CSK-MAIL-01,Sikertelen bejelentkezés (1x)
-2026-03-16 07:20:31,MEDIUM,R-2210,CSK-LOG-03,Ritka böngésző-bővítmény telepítése
+2026-03-16 07:20:31,MEDIUM,R-2210,CSK-LOG-03,Ritka böngészőbővítmény telepítése
 2026-03-16 07:23:05,MEDIUM,R-3001,CSK-FIN-02,Nagy kimenő levélforgalom
 2026-03-16 07:23:12,LOW,R-1102,CSK-MAIL-01,Sikertelen bejelentkezés (1x)
 2026-03-16 07:23:19,LOW,R-1102,CSK-LOG-08,Sikertelen bejelentkezés (1x)
 2026-03-16 07:24:33,MEDIUM,R-3001,CSK-FIN-09,Nagy kimenő levélforgalom
 2026-03-16 07:24:38,MEDIUM,R-3001,CSK-LOG-03,Nagy kimenő levélforgalom
-2026-03-16 07:24:53,MEDIUM,R-2210,CSK-ERP-01,Ritka böngésző-bővítmény telepítése
-2026-03-16 07:25:18,MEDIUM,R-2210,CSK-LOG-03,Ritka böngésző-bővítmény telepítése
-2026-03-16 07:27:09,MEDIUM,R-2210,CSK-LOG-03,Ritka böngésző-bővítmény telepítése
+2026-03-16 07:24:53,MEDIUM,R-2210,CSK-ERP-01,Ritka böngészőbővítmény telepítése
+2026-03-16 07:25:18,MEDIUM,R-2210,CSK-LOG-03,Ritka böngészőbővítmény telepítése
+2026-03-16 07:27:09,MEDIUM,R-2210,CSK-LOG-03,Ritka böngészőbővítmény telepítése
 2026-03-16 07:27:31,MEDIUM,R-3001,CSK-FIN-09,Nagy kimenő levélforgalom
 2026-03-16 07:27:39,LOW,R-1102,CSK-LOG-08,Sikertelen bejelentkezés (1x)
 2026-03-16 07:30:16,LOW,R-1307,CSK-ERP-01,USB-tároló csatlakoztatva
 2026-03-16 07:32:13,LOW,R-1102,CSK-LOG-08,Sikertelen bejelentkezés (1x)
-2026-03-16 07:32:14,MEDIUM,R-2210,CSK-LOG-08,Ritka böngésző-bővítmény telepítése
+2026-03-16 07:32:14,MEDIUM,R-2210,CSK-LOG-08,Ritka böngészőbővítmény telepítése
 2026-03-16 07:33:24,LOW,R-1307,CSK-LOG-03,USB-tároló csatlakoztatva
 2026-03-16 07:34:21,LOW,R-1102,CSK-FIN-09,Sikertelen bejelentkezés (1x)
 2026-03-16 07:34:28,LOW,R-1102,CSK-FIN-09,Sikertelen bejelentkezés (1x)
 2026-03-16 07:35:02,MEDIUM,R-3001,CSK-FIN-02,Nagy kimenő levélforgalom
-2026-03-16 07:36:06,MEDIUM,R-2210,CSK-FIN-09,Ritka böngésző-bővítmény telepítése
-2026-03-16 07:36:16,MEDIUM,R-2210,CSK-ERP-01,Ritka böngésző-bővítmény telepítése
-2026-03-16 07:37:12,MEDIUM,R-2210,CSK-LOG-03,Ritka böngésző-bővítmény telepítése
-2026-03-16 07:38:37,MEDIUM,R-2210,CSK-ERP-01,Ritka böngésző-bővítmény telepítése
-2026-03-16 07:40:11,MEDIUM,R-2210,CSK-FIN-09,Ritka böngésző-bővítmény telepítése
-2026-03-16 07:41:03,MEDIUM,R-2210,CSK-LOG-08,Ritka böngésző-bővítmény telepítése
+2026-03-16 07:36:06,MEDIUM,R-2210,CSK-FIN-09,Ritka böngészőbővítmény telepítése
+2026-03-16 07:36:16,MEDIUM,R-2210,CSK-ERP-01,Ritka böngészőbővítmény telepítése
+2026-03-16 07:37:12,MEDIUM,R-2210,CSK-LOG-03,Ritka böngészőbővítmény telepítése
+2026-03-16 07:38:37,MEDIUM,R-2210,CSK-ERP-01,Ritka böngészőbővítmény telepítése
+2026-03-16 07:40:11,MEDIUM,R-2210,CSK-FIN-09,Ritka böngészőbővítmény telepítése
+2026-03-16 07:41:03,MEDIUM,R-2210,CSK-LOG-08,Ritka böngészőbővítmény telepítése
 2026-03-16 07:42:09,LOW,R-1102,CSK-LOG-08,Sikertelen bejelentkezés (1x)
 2026-03-16 07:47:38,LOW,R-1307,CSK-FIN-02,USB-tároló csatlakoztatva
 2026-03-16 07:47:50,LOW,R-1102,CSK-MAIL-01,Sikertelen bejelentkezés (1x)
@@ -157,26 +157,26 @@ ido,sulyossag,szabaly,gep,leiras
 2026-03-16 07:52:00,LOW,R-1307,CSK-LOG-03,USB-tároló csatlakoztatva
 2026-03-16 07:52:29,LOW,R-1102,CSK-ERP-01,Sikertelen bejelentkezés (1x)
 2026-03-16 07:53:05,LOW,R-1307,CSK-LOG-08,USB-tároló csatlakoztatva
-2026-03-16 07:54:21,MEDIUM,R-2210,CSK-LOG-03,Ritka böngésző-bővítmény telepítése
+2026-03-16 07:54:21,MEDIUM,R-2210,CSK-LOG-03,Ritka böngészőbővítmény telepítése
 2026-03-16 07:54:32,LOW,R-1307,CSK-LOG-03,USB-tároló csatlakoztatva
 2026-03-16 07:55:16,LOW,R-1307,CSK-MAIL-01,USB-tároló csatlakoztatva
 2026-03-16 07:56:25,LOW,R-1102,CSK-FIN-02,Sikertelen bejelentkezés (1x)
-2026-03-16 07:57:10,MEDIUM,R-2210,CSK-ERP-01,Ritka böngésző-bővítmény telepítése
+2026-03-16 07:57:10,MEDIUM,R-2210,CSK-ERP-01,Ritka böngészőbővítmény telepítése
 2026-03-16 07:57:46,LOW,R-1307,CSK-LOG-03,USB-tároló csatlakoztatva
-2026-03-16 07:58:51,MEDIUM,R-2210,CSK-MAIL-01,Ritka böngésző-bővítmény telepítése
+2026-03-16 07:58:51,MEDIUM,R-2210,CSK-MAIL-01,Ritka böngészőbővítmény telepítése
 2026-03-16 07:59:04,MEDIUM,R-3001,CSK-MAIL-01,Nagy kimenő levélforgalom
 2026-03-16 08:00:27,LOW,R-1102,CSK-LOG-03,Sikertelen bejelentkezés (1x)
-2026-03-16 08:00:48,MEDIUM,R-2210,CSK-FIN-09,Ritka böngésző-bővítmény telepítése
-2026-03-16 08:00:50,MEDIUM,R-2210,CSK-FIN-09,Ritka böngésző-bővítmény telepítése
-2026-03-16 08:01:05,MEDIUM,R-2210,CSK-ERP-01,Ritka böngésző-bővítmény telepítése
-2026-03-16 08:04:24,MEDIUM,R-2210,CSK-FIN-02,Ritka böngésző-bővítmény telepítése
+2026-03-16 08:00:48,MEDIUM,R-2210,CSK-FIN-09,Ritka böngészőbővítmény telepítése
+2026-03-16 08:00:50,MEDIUM,R-2210,CSK-FIN-09,Ritka böngészőbővítmény telepítése
+2026-03-16 08:01:05,MEDIUM,R-2210,CSK-ERP-01,Ritka böngészőbővítmény telepítése
+2026-03-16 08:04:24,MEDIUM,R-2210,CSK-FIN-02,Ritka böngészőbővítmény telepítése
 2026-03-16 08:04:44,MEDIUM,R-3001,CSK-LOG-08,Nagy kimenő levélforgalom
-2026-03-16 08:05:55,MEDIUM,R-2210,CSK-MAIL-01,Ritka böngésző-bővítmény telepítése
-2026-03-16 08:06:48,MEDIUM,R-2210,CSK-FIN-02,Ritka böngésző-bővítmény telepítése
+2026-03-16 08:05:55,MEDIUM,R-2210,CSK-MAIL-01,Ritka böngészőbővítmény telepítése
+2026-03-16 08:06:48,MEDIUM,R-2210,CSK-FIN-02,Ritka böngészőbővítmény telepítése
 2026-03-16 08:07:16,LOW,R-1307,CSK-FIN-02,USB-tároló csatlakoztatva
 2026-03-16 08:07:41,LOW,R-1102,CSK-LOG-08,Sikertelen bejelentkezés (1x)
 2026-03-16 08:08:28,LOW,R-1307,CSK-MAIL-01,USB-tároló csatlakoztatva
-2026-03-16 08:09:30,MEDIUM,R-2210,CSK-LOG-03,Ritka böngésző-bővítmény telepítése
+2026-03-16 08:09:30,MEDIUM,R-2210,CSK-LOG-03,Ritka böngészőbővítmény telepítése
 2026-03-16 08:10:18,LOW,R-1102,CSK-FIN-02,Sikertelen bejelentkezés (1x)
 2026-03-16 08:10:57,LOW,R-1307,CSK-MAIL-01,USB-tároló csatlakoztatva
 2026-03-16 08:11:16,MEDIUM,R-3001,CSK-FIN-09,Nagy kimenő levélforgalom
@@ -187,28 +187,28 @@ ido,sulyossag,szabaly,gep,leiras
 2026-03-16 08:15:54,MEDIUM,R-3001,CSK-LOG-08,Nagy kimenő levélforgalom
 2026-03-16 08:18:02,MEDIUM,R-3001,CSK-FIN-09,Nagy kimenő levélforgalom
 2026-03-16 08:18:19,MEDIUM,R-3001,CSK-FIN-02,Nagy kimenő levélforgalom
-2026-03-16 08:19:22,MEDIUM,R-2210,CSK-LOG-03,Ritka böngésző-bővítmény telepítése
+2026-03-16 08:19:22,MEDIUM,R-2210,CSK-LOG-03,Ritka böngészőbővítmény telepítése
 2026-03-16 08:21:59,LOW,R-1307,CSK-ERP-01,USB-tároló csatlakoztatva
-2026-03-16 08:22:04,MEDIUM,R-2210,CSK-MAIL-01,Ritka böngésző-bővítmény telepítése
+2026-03-16 08:22:04,MEDIUM,R-2210,CSK-MAIL-01,Ritka böngészőbővítmény telepítése
 2026-03-16 08:22:12,MEDIUM,R-3001,CSK-LOG-03,Nagy kimenő levélforgalom
 2026-03-16 08:23:04,LOW,R-1307,CSK-LOG-03,USB-tároló csatlakoztatva
 2026-03-16 08:23:57,LOW,R-1307,CSK-MAIL-01,USB-tároló csatlakoztatva
 2026-03-16 08:24:37,MEDIUM,R-3001,CSK-LOG-08,Nagy kimenő levélforgalom
-2026-03-16 08:25:06,MEDIUM,R-2210,CSK-LOG-08,Ritka böngésző-bővítmény telepítése
+2026-03-16 08:25:06,MEDIUM,R-2210,CSK-LOG-08,Ritka böngészőbővítmény telepítése
 2026-03-16 08:25:07,MEDIUM,R-3001,CSK-LOG-08,Nagy kimenő levélforgalom
 2026-03-16 08:25:59,MEDIUM,R-3001,CSK-ERP-01,Nagy kimenő levélforgalom
-2026-03-16 08:27:49,MEDIUM,R-2210,CSK-LOG-08,Ritka böngésző-bővítmény telepítése
+2026-03-16 08:27:49,MEDIUM,R-2210,CSK-LOG-08,Ritka böngészőbővítmény telepítése
 2026-03-16 08:29:14,LOW,R-1307,CSK-LOG-03,USB-tároló csatlakoztatva
 2026-03-16 08:33:01,LOW,R-1102,CSK-FIN-02,Sikertelen bejelentkezés (1x)
 2026-03-16 08:33:11,LOW,R-1102,CSK-FIN-09,Sikertelen bejelentkezés (1x)
 2026-03-16 08:33:41,MEDIUM,R-3001,CSK-FIN-09,Nagy kimenő levélforgalom
 2026-03-16 08:33:46,LOW,R-1102,CSK-LOG-03,Sikertelen bejelentkezés (1x)
-2026-03-16 08:34:28,MEDIUM,R-2210,CSK-FIN-09,Ritka böngésző-bővítmény telepítése
-2026-03-16 08:36:15,MEDIUM,R-2210,CSK-MAIL-01,Ritka böngésző-bővítmény telepítése
+2026-03-16 08:34:28,MEDIUM,R-2210,CSK-FIN-09,Ritka böngészőbővítmény telepítése
+2026-03-16 08:36:15,MEDIUM,R-2210,CSK-MAIL-01,Ritka böngészőbővítmény telepítése
 2026-03-16 08:36:30,LOW,R-1307,CSK-LOG-08,USB-tároló csatlakoztatva
 2026-03-16 08:38:34,LOW,R-1307,CSK-FIN-09,USB-tároló csatlakoztatva
-2026-03-16 08:40:34,MEDIUM,R-2210,CSK-FIN-02,Ritka böngésző-bővítmény telepítése
-2026-03-16 08:43:14,MEDIUM,R-2210,CSK-ERP-01,Ritka böngésző-bővítmény telepítése
+2026-03-16 08:40:34,MEDIUM,R-2210,CSK-FIN-02,Ritka böngészőbővítmény telepítése
+2026-03-16 08:43:14,MEDIUM,R-2210,CSK-ERP-01,Ritka böngészőbővítmény telepítése
 2026-03-16 08:43:48,LOW,R-1102,CSK-FIN-02,Sikertelen bejelentkezés (1x)
 2026-03-16 08:43:57,LOW,R-1102,CSK-FIN-02,Sikertelen bejelentkezés (1x)
 2026-03-16 08:44:04,LOW,R-1307,CSK-LOG-08,USB-tároló csatlakoztatva
@@ -224,9 +224,9 @@ ido,sulyossag,szabaly,gep,leiras
 2026-03-16 08:50:39,LOW,R-1102,CSK-FIN-09,Sikertelen bejelentkezés (1x)
 2026-03-16 08:51:11,LOW,R-1307,CSK-MAIL-01,USB-tároló csatlakoztatva
 2026-03-16 08:51:12,LOW,R-1307,CSK-FIN-10,USB-tároló csatlakoztatva
-2026-03-16 08:52:14,MEDIUM,R-2210,CSK-MAIL-01,Ritka böngésző-bővítmény telepítése
+2026-03-16 08:52:14,MEDIUM,R-2210,CSK-MAIL-01,Ritka böngészőbővítmény telepítése
 2026-03-16 08:52:33,LOW,R-1102,CSK-LOG-03,Sikertelen bejelentkezés (1x)
-2026-03-16 08:52:59,MEDIUM,R-2210,CSK-LOG-03,Ritka böngésző-bővítmény telepítése
+2026-03-16 08:52:59,MEDIUM,R-2210,CSK-LOG-03,Ritka böngészőbővítmény telepítése
 2026-03-16 08:54:07,LOW,R-1102,CSK-FIN-09,Sikertelen bejelentkezés (1x)
 2026-03-16 08:55:14,LOW,R-1307,CSK-ERP-01,USB-tároló csatlakoztatva
 2026-03-16 08:55:23,MEDIUM,R-3001,CSK-LOG-08,Nagy kimenő levélforgalom

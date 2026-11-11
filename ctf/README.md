@@ -12,7 +12,7 @@ ctf/
     task.json   leírás, kulcsok, 4 részzászló hash-sel, 3 fokozatú tippek (HU/EN)
     files/      a feladat szintetikus anyagai
   index.json    automatikusan generált lista (ne kézzel szerkeszd)
-  tools/build_index.py   ellenőrzés + index generálás
+  tools/build_index.py   ellenőrzés + indexgenerálás
 ```
 
 - `side`: mindig `blue` (incidenskezelés), `mode`: `easy` | `hard`, réteg: 1–7.
@@ -22,7 +22,7 @@ ctf/
   pl. `blue-easy-L1-kfl` … `blue-easy-L7-kfl`); ha nincs teljes lánc, rétegenként sorsol.
 - Nyílt válasz soha nem kerül a repóba. A megoldókulcs az oktatónál van.
 
-## Zászló-ellenőrzés
+## Zászlóellenőrzés
 
 A böngésző ellenőriz: `sha256("<feladat-id>:<zászló-id>:" + norm(válasz))`, ahol
 
