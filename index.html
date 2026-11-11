@@ -2111,11 +2111,11 @@ function menuHTML() {
     <div class="sub" aria-hidden="true">${L('Támadási lánc.', 'Attack chain.')}<br><span>${L('Valós incidensek.', 'Real incidents.')}</span></div>
     <div class="deco" aria-hidden="true" style="max-width:420px;flex-wrap:nowrap"><div class="rules4"><i></i><i></i><i></i><i></i></div><span class="barcode"></span></div>
     ${narrow ? `<div style="margin-top:14px">${join}</div>` : ''}
-    <p style="font-size:17px;max-width:56ch">${L('A Red végig akar jutni egy kitalált cég hálózatán a támadási lánc öt szakaszán, a Blue pedig észlelni és megállítani akarja, mielőtt célba ér. Minden lap egy valós támadás vagy védekezés, egy megtörtént esettel.', "Red wants to get through a fictional company's network along the five stages of the attack chain; Blue wants to detect and stop them before they reach the objective. Every card is a real attack or defense, with a real incident behind it.")}</p>
+    <p style="font-size:17px;max-width:56ch">${L('A Red a támadási lánc öt szakaszán át akar végigjutni egy kitalált cég hálózatán, a Blue pedig észlelni és megállítani akarja, mielőtt célba ér. Minden lap egy valós támadást vagy védekezést mutat be, mindegyik mögött egy megtörtént esettel.', "Red wants to get through a fictional company's network along the five stages of the attack chain; Blue wants to detect and stop them before they reach the objective. Every card is a real attack or defense, with a real incident behind it.")}</p>
     <div class="row" style="margin-top:14px">${rulesBtns()}</div>
     <div class="modesel"><div class="lbl" style="margin-bottom:6px">${L('Játékmód', 'Game mode')}</div><div class="seg" role="group" aria-label="${L('Játékmód', 'Game mode')}">${GM_NAMES.map((n, i) => `<button data-a="gm" data-v="${i}" aria-pressed="${GMSEL === i}">${L(n[0], n[1])}</button>`).join('')}</div>
-     <p class="hint" style="margin:6px 0 0">${[L('Az eredeti szabályok.', 'The original rules.'), L('Erőforrás-gazdálkodás, lassabb húzás (2 lap, kézlimit 7) és jutalomválasztás minden megnyert ütközés után.', 'Resource management, slower draw (2 cards, hand limit 7) and a reward choice after every won clash.'), L('A Haladó mód, plusz előkészített lapok, Zaj, titkos Red küldetés, Blue koronaékszer (egy titokban kiválasztott, kiemelten védett szakasz) és költséggel járó szerepkör-képességek.', 'Advanced mode plus staged cards, noise, a secret Red mission, a Blue crown jewel (a secretly chosen, extra-protected stage) and role abilities that cost Resources.')][GMSEL]} ${L('Online játékban a házigazda által választott mód érvényes.', 'In online games the host\'s mode applies.')}</p></div>
-    <div class="lbl" style="margin-top:16px">${L('A támadási lánc öt szakasza · kattints rá a magyarázatért', 'The five stages of the attack chain · click one for an explanation')}</div>
+     <p class="hint" style="margin:6px 0 0">${[L('Az eredeti szabályok.', 'The original rules.'), L('Erőforrás-gazdálkodás, lassabb húzás (2 lap, kézlimit 7) és jutalomválasztás minden megnyert ütközés után.', 'Resource management, slower draw (2 cards, hand limit 7) and a reward choice after every won clash.'), L('A Haladó mód szabályai, továbbá előkészített lapok, Zaj, titkos Red küldetés, Blue koronaékszer (egy titokban kiválasztott, kiemelten védett szakasz) és költséggel járó szerepkör-képességek.', 'Advanced mode plus staged cards, noise, a secret Red mission, a Blue crown jewel (a secretly chosen, extra-protected stage) and role abilities that cost Resources.')][GMSEL]} ${L('Online játékban a házigazda által választott mód érvényes.', 'In online games the host\'s mode applies.')}</p></div>
+    <div class="lbl" style="margin-top:16px">${L('A támadási lánc öt szakasza · kattints egyre a magyarázatért', 'The five stages of the attack chain · click one for an explanation')}</div>
     <div class="cats">${[1, 2, 3, 4, 5].map(i => `<button id="cat${i}" data-a="cat" data-v="${i}" aria-expanded="${CATSEL === i}" aria-controls="catinfo" title="${esc(ZN[i][0])}">${icon(i)}<span class="lbl" style="font-size:10px">0${i}</span><b style="font-size:12px">${ZN[i][0]}</b></button>`).join('')}</div>
     <div id="catinfo" class="catinfo" ${CATSEL ? '' : 'hidden'}>${CATSEL ? `<b>0${CATSEL} · ${ZN[CATSEL][0]}:</b> ${L(...STAGE_INFO[CATSEL])}` : ''}</div></div>
    <div class="choices"><h2 class="sr-only">${L('Játék indítása', 'Start playing')}</h2>
@@ -2131,20 +2131,20 @@ function menuHTML() {
    </div></div>
    <div class="frame cut" style="margin-top:20px"><div class="fi"><h2>${L('Egy kör röviden', 'A round in brief')} · ${L(...GM_NAMES[GMSEL])}</h2>
    <ol style="margin:8px 0 0;padding-left:20px;columns:2 260px;column-gap:28px">${roundBrief(GMSEL).map(([h, t]) => `<li><b>${h}:</b> ${t}</li>`).join('')}</ol>
-   ${GMSEL ? `<p class="hint" style="margin:8px 0 0">${L('A részletek a Játékszabályok között vannak.', 'The details are in the Game rules.')}</p>` : ''}</div></div>`;
+   ${GMSEL ? `<p class="hint" style="margin:8px 0 0">${L('A részleteket a Játékszabályokban találjátok.', 'You will find the details in the Game rules.')}</p>` : ''}</div></div>`;
 }
 // Steps of one round for the menu summary, in the mode picked on the menu.
 function roundBrief(gm) {
   const S = [];
   S.push(gm ? [L('Húzás', 'Draw'), L('mindkét csapat 2 lapot húz (kézlimit 7). A Red +4, a Blue +3 Erőforrást kap.', 'both teams draw 2 cards (hand limit 7). Red gains +4 Resources, Blue +3.')]
-    : [L('Húzás', 'Draw'), L('mindkét csapat 5 lapra egészít ki.', 'both teams fill their hands to 5 cards.')]);
-  S.push([L('Támadás', 'Attack'), L('a Red lefordítva kijátszik egy lapot a bábu szakaszának kategóriájából, és egy szerepkörrel +1 laperősítést tehet mellé.', "Red plays a card face down from the category of the pawn's stage, and may add a +1 card boost from one role.") + (gm === 2 ? L(' Erős (4–5) lap Zajt kelt.', ' A strong (4–5) card makes noise.') : '')]);
-  S.push([L('Védekezés', 'Defense'), L('a Blue azonos kategóriájú lappal védekezik, vagy passzol.', 'Blue defends with a card of the same category, or passes.') + (gm === 2 ? L(' A koronaékszer szakaszán +1.', ' +1 at the crown jewel stage.') : '')]);
-  S.push([L('Felfedés és eredmény', 'Reveal and result'), L('erősség + szerepkör-bónusz + laperősítés + tartós kontrollok. A nagyobb nyer, döntetlennél kriptopárbaj.', 'strength + role bonus + card boost + persistent controls. Higher wins; a tie means a crypto duel.') + (gm ? L(' A lapok árát (az erősségüket) Erőforrásból fizetitek.', ' Each card costs its strength in Resources.') : '')]);
-  if (gm) S.push([L('Jutalom', 'Reward'), L('az ütközés nyertese jutalmat választ (például előrelépés, Perzisztencia vagy Észlelés jelző).', 'the winner of the clash picks a reward (for example advance, Persistence or a Detection token).')]);
+    : [L('Húzás', 'Draw'), L('mindkét csapat 5 lapra egészíti ki a kezét.', 'both teams fill their hands to 5 cards.')]);
+  S.push([L('Támadás', 'Attack'), L('a Red lefordítva kijátszik egy lapot a bábu szakaszának kategóriájából, és egyik szerepkörével +1 laperősítést tehet mellé.', "Red plays a card face down from the category of the pawn's stage, and may add a +1 card boost from one role.") + (gm === 2 ? L(' Erős (4–5) lap Zajt kelt.', ' A strong (4–5) card makes noise.') : '')]);
+  S.push([L('Védekezés', 'Defense'), L('a Blue azonos kategóriájú lappal védekezik (egyik szerepkörével szintén +1 laperősítést tehet mellé), vagy passzol.', 'Blue defends with a card of the same category (and may also add a +1 card boost from one role), or passes.') + (gm === 2 ? L(' A koronaékszer szakaszán +1.', ' +1 at the crown jewel stage.') : '')]);
+  S.push([L('Felfedés és eredmény', 'Reveal and result'), L('erősség + szerepkör-bónusz + laperősítés + tartós kontrollok. A nagyobb összérték nyer, döntetlennél kriptopárbaj dönt.', 'strength + role bonus + card boost + persistent controls. The higher total wins; a tie means a crypto duel.') + (gm ? L(' A lapok ára az erősségük, ezt Erőforrásból fizetitek.', ' Each card costs its strength in Resources.') : '')]);
+  if (gm) S.push([L('Jutalom', 'Reward'), L('az ütközés nyertese jutalmat választ (például előrelépés, Perzisztencia-jelző vagy Észlelés jelző).', 'the winner of the clash picks a reward (for example advance, Persistence or a Detection token).')]);
   S.push([L('Megerősítés', 'Fortify'), L('a Blue lerakhat egy „Tartós” lapot kontrollként.', 'Blue may place a "Persistent" card as a control.')]);
   if (gm === 2) S.push([L('Előkészítés', 'Staging'), L('a Red 1 Erőforrásért lefordítva letehet egy lapot egy későbbi szakaszhoz.', 'for 1 Resource Red may stage a card face down at a later stage.')]);
-  S.push([L('Takarítás', 'Cleanup'), L('a körjelző lép. A 10. kör végén a Blue nyer.', 'the round marker advances. At the end of round 10, Blue wins.')]);
+  S.push([L('Takarítás', 'Cleanup'), L('a körjelző továbblép. Ha a Red a 10. kör végéig nem ér célba, a Blue nyer.', 'the round marker advances. If Red has not reached the objective by the end of round 10, Blue wins.')]);
   return S;
 }
 
@@ -2212,10 +2212,10 @@ let CATSEL = 0; // stage tile opened on the menu
 const NARROW = matchMedia('(max-width:900px)');
 NARROW.addEventListener('change', () => { if (SCREEN === 'menu') render(); });
 const STAGE_INFO = [null,
-  ['a támadó információt gyűjt a célpontról: nyilvános adatok, munkatársak, elérhető szolgáltatások és nyitott portok.', 'the attacker gathers information about the target: public data, staff, exposed services and open ports.'],
-  ['az első lábnyom a hálózatban, például adathalász levéllel, kiszivárgott jelszóval vagy egy sérülékeny szolgáltatáson át.', 'the first foothold in the network, for example through a phishing email, a leaked password or a vulnerable service.'],
-  ['a támadó tartósan bent marad: ütemezett feladatot, új fiókot vagy hátsó kaput hagy maga után.', 'the attacker makes sure to stay in: a scheduled task, a new account or a backdoor.'],
-  ['gépről gépre halad, jogosultságot emel, és a fontos rendszerek felé tart.', 'moving from host to host, escalating privileges and heading for the important systems.'],
+  ['a támadó információt gyűjt a célpontról: nyilvános adatokról, munkatársakról, elérhető szolgáltatásokról és nyitott portokról.', 'the attacker gathers information about the target: public data, staff, exposed services and open ports.'],
+  ['a támadó megveti a lábát a hálózatban, például adathalász levéllel, kiszivárgott jelszóval vagy egy sérülékeny szolgáltatáson át.', 'the first foothold in the network, for example through a phishing email, a leaked password or a vulnerable service.'],
+  ['a támadó gondoskodik róla, hogy bent maradhasson: ütemezett feladatot, új fiókot vagy hátsó kaput hoz létre.', 'the attacker makes sure to stay in: a scheduled task, a new account or a backdoor.'],
+  ['a támadó gépről gépre halad, jogosultságot emel, és a fontos rendszerek felé tart.', 'the attacker moves from host to host, escalates privileges and heads for the important systems.'],
   ['amiért a támadó jött: adatlopás, zsarolóvírusos titkosítás vagy rombolás. Ide kell eljutnia a Rednek.', 'what the attacker came for: data theft, ransomware encryption or destruction. This is where Red has to get.'],
 ];
 function crefHTML() {
