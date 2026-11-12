@@ -791,7 +791,12 @@ function summ(st) { const c = st.cl; (st.sm = st.sm || []).push([st.rd, c.z, c.r
 
 // Game modes: 0 = base game, 1 = Haladó (budget, slow draw, reward choice), 2 = Profi (+ staging, noise, missions, crown jewel, priced roles)
 const GM_NAMES = [['ALAPJÁTÉK', 'BASE GAME'], ['HALADÓ', 'ADVANCED'], ['PROFI', 'PRO']];
-const INCOME = { r: 4, b: 3 }, RES_CAP = 10, HAND_MAX = 7, NOISE_MAX = 4;
+const RES_CAP = 10, HAND_MAX = 7, NOISE_MAX = 4;
+// Supply (Advanced and Pro): no automatic income or draw. At the start of every round each team splits its supply points
+// (Red 6, Blue 5; picked by simulation as the most balanced split between two strategic teams):
+// a card costs SUP_CARD points, every point left is +1 Resource. Options: 3 cards / 2 cards + 2 / 1 card + 4 / 6 Resources.
+const SUP_PTS = { r: 6, b: 5 }, SUP_CARD = 2, supMax = s => Math.floor(SUP_PTS[s] / SUP_CARD);
+const supRes = (s, c) => SUP_PTS[s] - c * SUP_CARD;
 const MISSIONS = ['ransom', 'esp', 'wiper', 'se'];
 const adv = st => (st.gm | 0) >= 1, pro = st => (st.gm | 0) >= 2;
 const costOf = (st, ch) => (adv(st) ? cardOf(ch).p : 0);
@@ -878,10 +883,10 @@ function startGame(st) {
 function beginRound(st) {
   st.rd++; st.ov = 0; st.fc = 0; st.rp = 0; st.pkr = 0; st.pk = ''; st.pl = { r: '', b: '' }; st.du = null;
   st.ik = ''; st.sgd = 0; st.pls = 0; st.hu = 0;
-  if (adv(st)) {
-    ['r', 'b'].forEach(s => { st.rs[s] = Math.min(RES_CAP, st.rs[s] + INCOME[s]); draw(st, s, 2); });
-  } else { refill(st, 'r'); refill(st, 'b'); }
-  st.ph = 'atk'; log(st, ['rd', st.rd]);
+  log(st, ['rd', st.rd]);
+  if (adv(st)) { st.su = { r: -1, b: -1 }; st.ph = 'sup'; return; } // both teams pick their supply first
+  refill(st, 'r'); refill(st, 'b');
+  st.ph = 'atk';
 }
 
 function ctrlBonus(st, z) { return st.ct[z - 1].length; }
@@ -1011,6 +1016,18 @@ function apply(st, side, a) {
       return '';
     }
     return 'Most a beállítás jön.';
+  }
+  if (st.ph === 'sup') {
+    if (a.t !== 'sup') return 'Most az utánpótlást választjátok.';
+    const c = a.c | 0;
+    if (!(c >= 0 && c <= supMax(side))) return 'Érvénytelen utánpótlás.';
+    if (st.su[side] >= 0) return 'Ebben a körben már választottatok utánpótlást.';
+    st.su[side] = c;
+    if (st.su.r >= 0 && st.su.b >= 0) { // both picked: the picks are applied together, so neither team can react to the other
+      ['r', 'b'].forEach(x => { const n = st.su[x]; st.rs[x] = Math.min(RES_CAP, st.rs[x] + supRes(x, n)); draw(st, x, n); log(st, ['sup', x, n, supRes(x, n)]); });
+      st.ph = 'atk';
+    }
+    return '';
   }
   if (st.ph === 'cj') {
     if (side !== 'b') return 'Most a Blue választ koronaékszert.';
@@ -1305,7 +1322,10 @@ const TR_EN = {
   'Ezt csak az Incidenskezelő használhatja.': 'Only the Incident Handler can use this.',
   'A második kontrollt csak a CISO rakhatja le.': 'Only the CISO can place the second control.',
   'A párbajban a Kriptográfus fejt.': 'In the duel, the Cryptographer solves.',
-  'Kód a vágólapon.': 'Code copied.'
+  'Kód a vágólapon.': 'Code copied.',
+  'Most az utánpótlást választjátok.': 'Pick your supply now.',
+  'Érvénytelen utánpótlás.': 'Invalid supply choice.',
+  'Ebben a körben már választottatok utánpótlást.': 'You have already picked your supply this round.'
 };
 const tr = m => (LANG === 'en' && TR_EN[m]) || m;
 
@@ -1808,6 +1828,7 @@ function boardHTML() {
 const PHASES = [['atk', 'Támadás', 'Attack'], ['def', 'Védekezés', 'Defense'], ['duel', 'Párbaj', 'Duel'], ['fort', 'Megerősítés', 'Fortify']];
 function phaseHTML() {
   const map = {
+    sup: [L('UTÁNPÓTLÁS', 'SUPPLY'), L(`Mindkét csapat titokban eloszt utánpótlás-pontokat (Red ${SUP_PTS.r}, Blue ${SUP_PTS.b}): egy lap ${SUP_CARD} pont, minden megmaradó pont +1 Erőforrás. A választások egyszerre lépnek életbe.`, `Both teams secretly split supply points (Red ${SUP_PTS.r}, Blue ${SUP_PTS.b}): a card costs ${SUP_CARD}, every point left is +1 Resource. The picks take effect together.`) + (ST.su ? ` ${['r', 'b'].map(x => `${SIDE[x]}: ${ST.su[x] >= 0 ? L('választott', 'picked') : L('dönt…', 'deciding…')}`).join(' · ')}` : '')],
     setup: [L('BEÁLLÍTÁS', 'SETUP'), L('Mindkét csapat beállítja a létszámát és a szerepköreit.', 'Both teams set their size and roles.') + ` ${L('Játékmód', 'Game mode')}: ${gmName(ST.gm)}.`],
     atk: [`<span class="r">RED</span> ${L('TÁMAD', 'ATTACKS')}`, L(`A Red lefordítva kijátszik egy lapot ${az(ZN[ST.z][0])} kategóriából.`, `Red plays a card face down from the ${ZN[ST.z][0]} category.`) + (ST.ov === 2 ? L(' Ez az Operációvezető második támadása.', " This is the Operations Lead's second attack.") : '')],
     def: [`<span class="b">BLUE</span> ${L('VÉDEKEZIK', 'DEFENDS')}`, L('A Blue azonos kategóriájú lappal védekezik, vagy passzol.', 'Blue defends with a card of the same category, or passes.')],
@@ -1821,7 +1842,7 @@ function phaseHTML() {
   };
   const m = map[ST.ph];
   return `<div class="phase cut"><div><div class="lbl" style="color:var(--soft)">${ST.rd ? L(ST.rd + '. kör / 10', 'Round ' + ST.rd + ' / 10') : L('Előkészítés', 'Setup')}</div><div class="who">${m[0]}</div></div>
-   <div class="steps" aria-hidden="true">${[L('Húzás', 'Draw'), ...PHASES.map(p => L(p[1], p[2])), L('Takarítás', 'Cleanup')].map((n, i) => `<span class="${(PHASES[i - 1] || [])[0] === ST.ph ? 'on' : ''}">${n.toUpperCase()}</span>`).join('')}</div>
+   <div class="steps" aria-hidden="true">${[adv(ST) ? L('Utánpótlás', 'Supply') : L('Húzás', 'Draw'), ...PHASES.map(p => L(p[1], p[2])), L('Takarítás', 'Cleanup')].map((n, i) => `<span class="${(i === 0 ? ST.ph === 'sup' : (PHASES[i - 1] || [])[0] === ST.ph) ? 'on' : ''}">${n.toUpperCase()}</span>`).join('')}</div>
    <div style="flex-basis:100%;font-size:14px;color:var(--soft)">${m[1]}</div></div>`;
 }
 
@@ -1858,7 +1879,7 @@ function handPanel(side) {
   let body;
   if (hidden) {
     body = `<div class="row" style="margin-top:8px">${h.map(() => backHTML(side, true)).join('')}</div>
-     <p class="hint">${myTurn ? L(`A ${SIDE[side]} csapat következik. A másik csapat ne nézzen ide.`, `Team ${SIDE[side]} is up. The other team should look away.`) : L('A lapok rejtve vannak.', 'The cards are hidden.')}</p>
+     <p class="hint">${myTurn || supOpen(side) ? L(`A ${SIDE[side]} csapat következik. A másik csapat ne nézzen ide.`, `Team ${SIDE[side]} is up. The other team should look away.`) : L('A lapok rejtve vannak.', 'The cards are hidden.')}</p>
      <button class="btn ${side === 'r' ? 'red' : 'blue'}" data-a="show" data-side="${side}">${L(`${SIDE[side]} kéz megmutatása`, `Show ${SIDE[side]} hand`)}</button>`;
   } else {
     const noMatch = !h.some(ch => cardOf(ch).c === z);
@@ -1895,7 +1916,24 @@ function boostRow(side) {
   }).join('');
   return `<div><div class="lbl" style="margin-bottom:4px">${L('Laperősítés', 'Card boost')} · ${L('lefordítva, a felfedéskor derül ki', 'face down, revealed with the card')}</div><div class="row">${btns}</div></div>`;
 }
+const supOpen = side => !!(ST && ST.ph === 'sup' && ST.su && ST.su[side] < 0);
+// supply: pick how to split the points between cards and Resources
+function supplyHTML(side, hidden) {
+  const done = ST.su[side] >= 0;
+  if (done) return `<p class="hint" style="margin-top:12px">${L(`Választottatok: ${ST.su[side]} lap, +${supRes(side, ST.su[side])} Erőforrás. Várakozás a másik csapatra…`, `You picked ${ST.su[side]} card(s), +${supRes(side, ST.su[side])} Resources. Waiting for the other team…`)}</p>`;
+  if (hidden) return '';
+  if (!canAct(side)) return `<p class="hint" style="margin-top:10px">${PENDING ? L('Lépés elküldve, várakozás…', 'Move sent, waiting…') : ''}</p>`;
+  const h = ST.h[side].length, rs = ST.rs[side], left = ST.dk[side].length + ST.ds[side].length;
+  const opts = [];
+  for (let c = supMax(side); c >= 0; c--) {
+    const r = supRes(side, c), lost = Math.max(0, rs + r - RES_CAP), over = Math.max(0, h + c - HAND_MAX);
+    const note = [lost ? L(`${lost} Erőforrás elvész (max ${RES_CAP})`, `${lost} Resource${lost > 1 ? 's' : ''} lost (max ${RES_CAP})`) : '', over ? L(`a kör végén ${over} lapot el kell dobni`, `discard ${over} at the end of the round`) : '', c > left ? L('nincs ennyi lap a pakliban', 'not that many cards left') : ''].filter(Boolean).join(', ');
+    opts.push(`<button class="btn ${side === 'r' ? 'red' : 'blue'}" data-act='${JSON.stringify({ t: 'sup', c })}' data-side="${side}" title="${esc(note)}">${c ? L(`${c} lap`, `${c} card${c > 1 ? 's' : ''}`) : ''}${c && r ? ' + ' : ''}${r ? L(`${r} Erőforrás`, `${r} Resources`) : ''}</button>`);
+  }
+  return `<div class="stack" style="margin-top:12px"><p class="hint" style="margin:0">${L(`Utánpótlás: ${SUP_PTS[side]} pontot osztotok el. Egy lap ${SUP_CARD} pont, minden megmaradó pont +1 Erőforrás. Jelenleg: ${h} lap a kézben, ${rs} Erőforrás (legfeljebb ${RES_CAP}; a kör végén a kézlimit ${HAND_MAX}).`, `Supply: split ${SUP_PTS[side]} points. A card costs ${SUP_CARD}, every point left is +1 Resource. You have ${h} cards and ${rs} Resources (max ${RES_CAP}; hand limit ${HAND_MAX} at the end of the round).`)}</p><div class="row">${opts.join('')}</div></div>`;
+}
 function actionsHTML(side, hidden) {
+  if (ST.ph === 'sup') return supplyHTML(side, hidden);
   if (activeSide() !== side || (hidden && ST.ph !== 'rew')) return '';
   if (!canAct(side)) return `<p class="hint" style="margin-top:10px">${PENDING ? L('Lépés elküldve, várakozás…', 'Move sent, waiting…') : ''}</p>`;
   const z = ST.z, h = ST.h[side], sel = SEL[side];
@@ -2006,6 +2044,7 @@ function duelHTML() {
 const LOGTXT = {
   start: () => L('A játék elkezdődött. A Red kezd.', 'The game has started. Red goes first.'),
   rd: n => L(`${n}. KÖR`, `ROUND ${n}`),
+  sup: (s, c, r) => L(`${SIDE[s]} utánpótlás: ${c} lap, +${r} Erőforrás.`, `${SIDE[s]} supply: ${c} card${c === 1 ? '' : 's'}, +${r} Resources.`),
   shuf: s => L(`A ${SIDE[s]} pakli elfogyott, a dobópaklit megkevertétek.`, `The ${SIDE[s]} deck ran out; the discard pile was shuffled.`),
   peek: () => L('Red Felderítő belenézett a Blue kezébe.', "Red Recon peeked into Blue's hand."),
   ov: () => L('Red Operációvezető: ebben a körben két támadás jön.', 'Red Operations Lead: two attacks this round.'),
@@ -2115,7 +2154,7 @@ function menuHTML() {
     <p style="font-size:17px;max-width:56ch">${L('A Red a támadási lánc öt szakaszán át akar végigjutni egy kitalált cég hálózatán, a Blue pedig észlelni és megállítani akarja, mielőtt célba ér. Minden lap egy valós támadást vagy védekezést mutat be, mindegyik mögött egy megtörtént esettel.', "Red wants to get through a fictional company's network along the five stages of the attack chain; Blue wants to detect and stop them before they reach the objective. Every card is a real attack or defense, with a real incident behind it.")}</p>
     <div class="row" style="margin-top:14px">${rulesBtns()}</div>
     <div class="modesel"><div class="lbl" style="margin-bottom:6px">${L('Játékmód', 'Game mode')}</div><div class="seg" role="group" aria-label="${L('Játékmód', 'Game mode')}">${GM_NAMES.map((n, i) => `<button data-a="gm" data-v="${i}" aria-pressed="${GMSEL === i}">${L(n[0], n[1])}</button>`).join('')}</div>
-     <p class="hint" style="margin:6px 0 0">${[L('Az eredeti szabályok.', 'The original rules.'), L('Erőforrás-gazdálkodás, lassabb húzás (2 lap, kézlimit 7) és jutalomválasztás minden megnyert ütközés után.', 'Resource management, slower draw (2 cards, hand limit 7) and a reward choice after every won clash.'), L('A Haladó mód szabályai, továbbá előkészített lapok, Zaj, titkos Red küldetés, Blue koronaékszer (egy titokban kiválasztott, kiemelten védett szakasz) és költséggel járó szerepkör-képességek.', 'Advanced mode plus staged cards, noise, a secret Red mission, a Blue crown jewel (a secretly chosen, extra-protected stage) and role abilities that cost Resources.')][GMSEL]} ${L('Online játékban a házigazda által választott mód érvényes.', 'In online games the host\'s mode applies.')}</p></div>
+     <p class="hint" style="margin:6px 0 0">${[L('Az eredeti szabályok.', 'The original rules.'), L('Erőforrás-gazdálkodás, körönkénti utánpótlás-választás (lap vagy Erőforrás), kézlimit 7 és jutalomválasztás minden megnyert ütközés után.', 'Resource management, a supply choice every round (cards or Resources), hand limit 7 and a reward choice after every won clash.'), L('A Haladó mód szabályai, továbbá előkészített lapok, Zaj, titkos Red küldetés, Blue koronaékszer (egy titokban kiválasztott, kiemelten védett szakasz) és költséggel járó szerepkör-képességek.', 'Advanced mode plus staged cards, noise, a secret Red mission, a Blue crown jewel (a secretly chosen, extra-protected stage) and role abilities that cost Resources.')][GMSEL]} ${L('Online játékban a házigazda által választott mód érvényes.', 'In online games the host\'s mode applies.')}</p></div>
     <div class="lbl" style="margin-top:16px">${L('A támadási lánc öt szakasza · kattints egyre a magyarázatért', 'The five stages of the attack chain · click one for an explanation')}</div>
     <div class="cats">${[1, 2, 3, 4, 5].map(i => `<button id="cat${i}" data-a="cat" data-v="${i}" aria-expanded="${CATSEL === i}" aria-controls="catinfo" title="${esc(ZN[i][0])}">${icon(i)}<span class="lbl" style="font-size:10px">0${i}</span><b style="font-size:12px">${ZN[i][0]}</b></button>`).join('')}</div>
     <div id="catinfo" class="catinfo" ${CATSEL ? '' : 'hidden'}>${CATSEL ? `<b>0${CATSEL} · ${ZN[CATSEL][0]}:</b> ${L(...STAGE_INFO[CATSEL])}` : ''}</div></div>
@@ -2137,7 +2176,7 @@ function menuHTML() {
 // Steps of one round for the menu summary, in the mode picked on the menu.
 function roundBrief(gm) {
   const S = [];
-  S.push(gm ? [L('Húzás', 'Draw'), L('mindkét csapat 2 lapot húz (kézlimit 7). A Red +4, a Blue +3 Erőforrást kap.', 'both teams draw 2 cards (hand limit 7). Red gains +4 Resources, Blue +3.')]
+  S.push(gm ? [L('Utánpótlás', 'Supply'), L(`mindkét csapat titokban eloszt utánpótlás-pontokat (Red ${SUP_PTS.r}, Blue ${SUP_PTS.b}): egy lap ${SUP_CARD} pont, minden megmaradó pont +1 Erőforrás. Nincs automatikus húzás vagy jövedelem.`, `both teams secretly split supply points (Red ${SUP_PTS.r}, Blue ${SUP_PTS.b}): a card costs ${SUP_CARD}, every point left is +1 Resource. There is no automatic draw or income.`)]
     : [L('Húzás', 'Draw'), L('mindkét csapat 5 lapra egészíti ki a kezét.', 'both teams fill their hands to 5 cards.')]);
   S.push([L('Támadás', 'Attack'), L('a Red lefordítva kijátszik egy lapot a bábu szakaszának kategóriájából, és egyik szerepkörével +1 laperősítést tehet mellé.', "Red plays a card face down from the category of the pawn's stage, and may add a +1 card boost from one role.") + (gm === 2 ? L(' Erős (4–5) lap Zajt kelt.', ' A strong (4–5) card makes noise.') : '')]);
   S.push([L('Védekezés', 'Defense'), L('a Blue azonos kategóriájú lappal védekezik (egyik szerepkörével szintén +1 laperősítést tehet mellé), vagy passzol.', 'Blue defends with a card of the same category (and may also add a +1 card boost from one role), or passes.') + (gm === 2 ? L(' A koronaékszer szakaszán +1.', ' +1 at the crown jewel stage.') : '')]);
@@ -2234,8 +2273,8 @@ function modesRulesHTML() {
   const g = ST ? ST.gm | 0 : -1;
   return LANG === 'en' ? `
    <section><h3>Advanced mode${g === 1 ? cur : ''}</h3><ul>
-    <li><b>Resources:</b> Red and Blue start with 2. At each draw Red gains +4, Blue +3 (max 10). A card costs its strength, paid at the reveal, so you may only play a card you can afford. Passing is free; role and control bonuses and the card boost are free. A control costs strength − 2, a replan costs 1.</li>
-    <li><b>Slower draw:</b> start with 5 cards, then each round both teams draw 2 (no refill to 5). Hand limit 7 at the end of the round; the excess goes to the open discard pile. Every strength 1–5 exists once per category and side, so card counting works.</li>
+    <li><b>Resources:</b> Red and Blue start with 2. Resources only come from supply (max 10). A card costs its strength, paid at the reveal, so you may only play a card you can afford. Passing is free; role and control bonuses and the card boost are free. A control costs strength − 2, a replan costs 1.</li>
+    <li><b>Supply instead of income:</b> start with 5 cards. There is no automatic draw or income. At the start of every round both teams secretly split their supply points (Red ${SUP_PTS.r}, Blue ${SUP_PTS.b}) between cards and Resources: a card costs ${SUP_CARD} points, every point left is +1 Resource. Red: 3 cards / 2 cards + 2 / 1 card + 4 / 6 Resources. Blue: 2 cards + 1 / 1 card + 3 / 5 Resources. The picks are revealed together. Hand limit 7 at the end of the round; the excess goes to the open discard pile. Every strength 1–5 exists once per category and side, so card counting works.</li>
     <li><b>Reward choice:</b> the winner of a clash (or of the duel) picks one. Red: <i>advance</i>, or <i>Persistence</i> (stay, place a token: +1 to attacks at that stage, and the pawn can never be pushed back from a token stage). Blue: <i>Detection token</i>, <i>threat intel</i> (look at 2 random Red cards) or <i>eviction</i> (remove a Persistence token). The SOC Analyst bonus comes on top.</li></ul></section>
    <section><h3>Pro mode${g === 2 ? cur : ''}</h3><ul>
     <li>Everything from Advanced, but Red starts with 4 Resources.</li>
@@ -2245,8 +2284,8 @@ function modesRulesHTML() {
     <li><b>Crown jewel:</b> Blue secretly picks a stage; every defense there gets +1. It is revealed the first time Blue defends there.</li>
     <li><b>Roles that cost Resources:</b> Recon peeks once per round for 2 Resources (at a Blue card or the crown jewel). CISO: once, +3 Resources instead of a second control. Incident Handler costs 1. A Cryptographer who wins a duel gains +1 Resource for the team.</li></ul></section>` : `
    <section><h3>Haladó mód${g === 1 ? cur : ''}</h3><ul>
-    <li><b>Erőforrás:</b> mindkét csapat 2-vel kezd. Minden húzáskor a Red +4, a Blue +3 Erőforrást kap (legfeljebb 10). A lap ára az erőssége, a felfedéskor fizetitek, ezért csak kifizethető lapot tehettek le. A passz ingyenes, a szerepkör- és kontrollbónusz, valamint a laperősítés ingyen jár. Kontroll lerakása: erősség − 2, újratervezés: 1.</li>
-    <li><b>Lassabb húzás:</b> a kezdő kéz 5 lap, utána minden körben 2 lapot húztok (nincs feltöltés 5-re). A kézlimit 7: a kör végén a többlet a nyílt dobópaklira kerül. Kategóriánként és oldalanként minden erősség (1–5) egyszer van meg, így a lapszámolás működik.</li>
+    <li><b>Erőforrás:</b> mindkét csapat 2-vel kezd. Erőforrást csak az utánpótlásból kaptok (legfeljebb 10). A lap ára az erőssége, a felfedéskor fizetitek, ezért csak kifizethető lapot tehettek le. A passz ingyenes, a szerepkör- és kontrollbónusz, valamint a laperősítés ingyen jár. Kontroll lerakása: erősség − 2, újratervezés: 1.</li>
+    <li><b>Utánpótlás jövedelem helyett:</b> a kezdő kéz 5 lap. Nincs automatikus húzás és jövedelem. Minden kör elején mindkét csapat titokban elosztja az utánpótlás-pontjait (Red ${SUP_PTS.r}, Blue ${SUP_PTS.b}) lapok és Erőforrás között: egy lap ${SUP_CARD} pont, minden megmaradó pont +1 Erőforrás. Red: 3 lap / 2 lap + 2 / 1 lap + 4 / 6 Erőforrás. Blue: 2 lap + 1 / 1 lap + 3 / 5 Erőforrás. A választásokat egyszerre feditek fel. A kézlimit 7: a kör végén a többlet a nyílt dobópaklira kerül. Kategóriánként és oldalanként minden erősség (1–5) egyszer van meg, így a lapszámolás működik.</li>
     <li><b>Jutalomválasztás:</b> az ütközés (vagy a párbaj) nyertese egyet választ. Red: <i>előrelépés</i>, vagy <i>Perzisztencia</i> (helyben marad, jelzőt tesz le: +1 a támadásra azon a szakaszon, és jelzős szakaszról a bábu soha nem léptethető vissza). Blue: <i>Észlelés-jelző</i>, <i>Fenyegetés-felderítés</i> (2 véletlen Red lap megtekintése) vagy <i>Kiűzés</i> (egy Perzisztencia-jelző levétele). A SOC-elemző bónusza ezen felül jár.</li></ul></section>
    <section><h3>Profi mód${g === 2 ? cur : ''}</h3><ul>
     <li>A Haladó mód minden szabálya, de a Red 4 Erőforrással kezd.</li>
@@ -2481,7 +2520,7 @@ function helpHTML() {
   if (ST.ph === 'rew') A.push(ST.rw === 'r' ? L('A Red választ: előrelép a következő szakaszra, vagy helyben marad, és Perzisztencia-jelzőt tesz le (+1 itt, és innen nem léptethető vissza).', 'Red picks: advance to the next stage, or stay and place a Persistence token (+1 here, and the pawn cannot be pushed back from here).') : L('A Blue választ: Észlelés-jelző, Fenyegetés-felderítés (2 Red lap megtekintése) vagy Kiűzés (egy Perzisztencia-jelző levétele).', 'Blue picks: a Detection token, threat intel (look at 2 Red cards) or eviction (remove a Persistence token).'));
   if (ST.ph === 'stg') A.push(L('A Red 1 Erőforrásért lefordítva letehet egy lapot egy későbbi szakasz mellé (körönként egyet, szakaszonként legfeljebb egyet), majd lezárja a kört.', 'For 1 Resource Red may stage one card face down at a later stage (one per round, at most one per stage), then ends the round.'));
   if (ST.ph === 'trim') A.push(L(`A ${SIDE[ST.tr]} kezében 7-nél több lap van, a többletet el kell dobni.`, `${SIDE[ST.tr]} has more than 7 cards and must discard the excess.`));
-  if (adv(ST) && ['atk', 'def', 'fort'].includes(ST.ph)) A.push(L(`Erőforrás: Red ${ST.rs.r}, Blue ${ST.rs.b}. Minden kör elején a Red +4, a Blue +3 jár (legfeljebb 10). A lap ára az erőssége, a kontrollé erősség − 2.`, `Resources: Red ${ST.rs.r}, Blue ${ST.rs.b}. Each round Red gains +4 and Blue +3 (max 10). A card costs its strength; a control costs strength − 2.`));
+  if (adv(ST) && ['atk', 'def', 'fort'].includes(ST.ph)) A.push(L(`Erőforrás: Red ${ST.rs.r}, Blue ${ST.rs.b}. Erőforrás csak az utánpótlásból jön (legfeljebb 10). A lap ára az erőssége, a kontrollé erősség − 2.`, `Resources: Red ${ST.rs.r}, Blue ${ST.rs.b}. Resources only come from supply (max 10). A card costs its strength; a control costs strength − 2.`));
   if (ST.ph === 'fort') {
     const tn = cnt('b', c => c.t);
     const canSecond = has(ST, 'b', 'ciso') && !ST.u.ciso && ST.fc === 1;
@@ -2489,7 +2528,7 @@ function helpHTML() {
     else if (canSecond) A.push(L('CISO: egyszer a játék során lerakhattok egy második kontrollt is ebben a körben.', 'CISO: once per game you may place a second control this round.'));
     else A.push(L('Ebben a körben már leraktatok kontrollt.', 'You have already placed a control this round.'));
     if (has(ST, 'b', 'ir') && !ST.u.ir && z > 1) A.push(L(`Incidenskezelő: egyszer a játék során visszaléptethetitek a Red bábut ${az(zn)} szakaszról az előzőre.`, `Incident Handler: once per game you may push the Red pawn back from ${zn} to the previous stage.`));
-    A.push(ST.rd >= 10 ? L('Ez az utolsó kör. Ha lezárjátok, és a Red nem ért célba, a Blue nyer.', 'This is the last round. If you end it and Red has not reached the objective, Blue wins.') : (adv(ST) ? L('Ha végeztetek, lépjetek tovább. A következő körben mindkét csapat 2 lapot húz és Erőforrást kap.', 'When done, move on. Next round both teams draw 2 cards and gain Resources.') : L('Ha végeztetek, nyomjátok meg a „Kör vége” gombot. Utána mindkét csapat 5 lapra húz, és a Red támad.', 'When done, press "End round". Then both teams draw up to 5 cards and Red attacks.')));
+    A.push(ST.rd >= 10 ? L('Ez az utolsó kör. Ha lezárjátok, és a Red nem ért célba, a Blue nyer.', 'This is the last round. If you end it and Red has not reached the objective, Blue wins.') : (adv(ST) ? L('Ha végeztetek, lépjetek tovább. A következő kör elején mindkét csapat utánpótlást választ (lap vagy Erőforrás).', 'When done, move on. Next round starts with both teams picking their supply (cards or Resources).') : L('Ha végeztetek, nyomjátok meg a „Kör vége” gombot. Utána mindkét csapat 5 lapra húz, és a Red támad.', 'When done, press "End round". Then both teams draw up to 5 cards and Red attacks.')));
     O.push(L('A Red most vár a következő körre.', 'Red is waiting for the next round.'));
   }
   if (!A.length) return '';
