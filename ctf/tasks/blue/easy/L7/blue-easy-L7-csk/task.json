@@ -106,7 +106,7 @@
     {
       "id": "f3",
       "q": {
-        "hu": "Melyik mentésből kell visszaállítani (mentés-azonosító)?",
+        "hu": "Melyik mentésből kell visszaállítani (mentésazonosító)?",
         "en": "Which backup must it be restored from (backup ID)?"
       },
       "hash": "22cf875a7954f458feb1a661daf4a03487d6956f8739ce5e3f3bba1545a5f3b6",

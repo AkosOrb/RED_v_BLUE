@@ -69,7 +69,7 @@
     {
       "id": "f2",
       "q": {
-        "hu": "Melyik szabály (szabály-azonosító) váltotta ki?",
+        "hu": "Melyik szabály (szabályazonosító) váltotta ki?",
         "en": "Which rule (rule ID) triggered it?"
       },
       "hash": "72d006567742568a0fba5b2d2536010c5bd3993392c449cbe4a31994c40ca80d",
