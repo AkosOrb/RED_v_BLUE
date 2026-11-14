@@ -1,0 +1,185 @@
+{
+  "id": "osint-easy-L2-tlg",
+  "side": "osint",
+  "mode": "easy",
+  "layer": 2,
+  "incident": {
+    "name": "Nyilvános digitális lábnyom felmérése (szintetikus gyakorlat)",
+    "url": "https://owasp.org/www-project-web-security-testing-guide/"
+  },
+  "title": {
+    "hu": "Munkatársak és közösségi média",
+    "en": "People and social media"
+  },
+  "story": {
+    "hu": "Megvan az elfelejtett gép. Ki beszélt róla nyilvánosan? A kitalált közösségi posztokból és az álláshirdetésekből állapítsd meg, mennyi derül ki egy munkatársról, és hogyan áll össze a céges fiókneve – ezt a cégnek is látnia kell a kockázatértékeléshez.",
+    "en": "You have the forgotten host. Who talked about it in public? From the fictional social posts and the job ads, work out how much can be inferred about an employee and how their company account name is formed – the company needs to see this for its risk assessment."
+  },
+  "keyIn": {
+    "type": "hostname",
+    "from": "L1"
+  },
+  "keyOut": {
+    "type": "account",
+    "text": {
+      "hu": "A munkatárs céges fiókneve",
+      "en": "The employee's company account name"
+    },
+    "enc": {
+      "f1+f2": "dc9a1f05ed0a2dba0580e7",
+      "f1+f3": "cd016e49fa0d10d952061e",
+      "f1+f4": "980ce8612c611c357445f6",
+      "f2+f3": "88e4b07f531b4c4d9f6d1b",
+      "f2+f4": "ea3e5aa43bce518e224aac",
+      "f3+f4": "c97a5a45959c2205a2f00c"
+    }
+  },
+  "flags": [
+    {
+      "id": "f1",
+      "q": {
+        "hu": "Melyik közösségi fiók említette a gépet?",
+        "en": "Which social account mentioned the host?"
+      },
+      "hash": "1d7607299f3fc31b66f69db60a284effbf1e71841d93ef1982d86deff445196e",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "Keresd a gép rövid nevét a szövegekben.",
+            "en": "Search the posts for the host's short name."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "Az előző réteg kulcsának első tagja.",
+            "en": "The first label of the previous layer's key."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "A fiok oszlop, @ jellel kezdődik.",
+            "en": "The account column, starting with @."
+          }
+        }
+      ]
+    },
+    {
+      "id": "f2",
+      "q": {
+        "hu": "Melyik csapatban dolgozik ez a munkatárs?",
+        "en": "Which team does this employee work in?"
+      },
+      "hash": "5673256c281e854b1508bd2d49e422104647cd9f2fe36fd1c48f0a136988ba5f",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "A poszt hashtagjei árulkodók.",
+            "en": "The post's hashtags give it away."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "Vesd össze az álláshirdetés csapatneveivel.",
+            "en": "Compare with the team names in the job ads."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "Egy szó, ahogy az álláshirdetésben áll.",
+            "en": "One word, as written in the job ad."
+          }
+        }
+      ]
+    },
+    {
+      "id": "f3",
+      "q": {
+        "hu": "Mi a munkatárs céges e-mail-címe?",
+        "en": "What is the employee's company email address?"
+      },
+      "hash": "452286e7879dbd6d121737874f14ea0167195699484090d9026b759dd55f1ce7",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "Az álláshirdetés megadja a címek formáját.",
+            "en": "The job ad gives the address format."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "vezeteknev.keresztnev, ékezet nélkül, kisbetűvel.",
+            "en": "lastname.firstname, no accents, lower case."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "A megjelenített név adja a két tagot.",
+            "en": "The display name gives both parts."
+          }
+        }
+      ]
+    },
+    {
+      "id": "f4",
+      "q": {
+        "hu": "Mi a munkatárs céges fiókneve (az e-mail-cím @ előtti része)?",
+        "en": "What is the employee's company account name (the part before @)?"
+      },
+      "hash": "0b22a3cab3673d2ce53fba6ffa8cd479c9657e8521d4904f9189727f09fb5d00",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "Az előző kérdés válaszából jön.",
+            "en": "It comes from the previous answer."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "A @ előtti rész.",
+            "en": "The part before the @."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "Formátum: vezeteknev.keresztnev",
+            "en": "Format: lastname.firstname"
+          }
+        }
+      ]
+    }
+  ],
+  "files": [
+    {
+      "name": "kozossegi_posztok.csv",
+      "view": "table"
+    },
+    {
+      "name": "allashirdetesek.txt",
+      "view": "text"
+    }
+  ]
+}

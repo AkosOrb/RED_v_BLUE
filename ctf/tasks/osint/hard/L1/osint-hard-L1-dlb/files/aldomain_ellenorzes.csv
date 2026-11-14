@@ -1,0 +1,18 @@
+nev,ip,valasz,oldalcim
+hr.delibab.example,198.51.100.79,200,Állapot
+teszt.delibab.example,,NXDOMAIN,
+www.delibab.example,198.51.100.84,200,Állapot
+intranet-old.delibab.example,,NXDOMAIN,
+staging-portal.delibab.example,198.51.100.48,200,Ügyfélportál – TESZT
+uat.delibab.example,,NXDOMAIN,
+api.delibab.example,198.51.100.119,200,Állapot
+mail.delibab.example,198.51.100.99,200,Bejelentkezés
+demo.delibab.example,,NXDOMAIN,
+legacy.delibab.example,,NXDOMAIN,
+vpn.delibab.example,198.51.100.101,200,Kezdőlap
+cdn.delibab.example,198.51.100.86,200,Bejelentkezés
+status.delibab.example,198.51.100.117,200,Kezdőlap
+shop.delibab.example,198.51.100.91,200,Karrier
+sso.delibab.example,198.51.100.71,200,Állapot
+karrier.delibab.example,198.51.100.72,200,Karrier
+webmail2.delibab.example,,NXDOMAIN,

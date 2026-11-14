@@ -1,0 +1,181 @@
+{
+  "id": "osint-easy-L4-dlb",
+  "side": "osint",
+  "mode": "easy",
+  "layer": 4,
+  "incident": {
+    "name": "Nyilvános digitális lábnyom felmérése (szintetikus gyakorlat)",
+    "url": "https://owasp.org/www-project-web-security-testing-guide/"
+  },
+  "title": {
+    "hu": "A cég saját domainjei",
+    "en": "The company's own domains"
+  },
+  "story": {
+    "hu": "Egy OSINT-felmérés a cég ÖSSZES nyilvántartott domainjét feltárja. A WHOIS-rekordokból szűrd ki a céghez tartozó domaineket, és keresd meg azt a régi, elfeledett domaint, amely hamarosan lejár (ez értékes kockázat, mert mások is regisztrálhatnák).",
+    "en": "An OSINT review surfaces ALL of the company's registered domains. From the WHOIS records, filter the company's domains and find the old, forgotten one that expires soon (a real risk, since someone else could then register it)."
+  },
+  "keyIn": {
+    "type": "time",
+    "from": "L3"
+  },
+  "keyOut": {
+    "type": "domain",
+    "text": {
+      "hu": "A cég hamarosan lejáró, elfeledett domainje",
+      "en": "The company's soon-to-expire, forgotten domain"
+    },
+    "enc": {
+      "f1+f2": "267799279de6acd905428bc63a2bbd781b0cddae",
+      "f1+f3": "1af1784ed8d35911330416f03046eedd6cd3e758",
+      "f1+f4": "6a501888ce087d88e28638342210a4a52a7d251a",
+      "f2+f3": "f8d7950ab86fbc18069c4060e866286f64ad3da4",
+      "f2+f4": "dc72adead46db4968e432c0c4847afdcdd9380d5",
+      "f3+f4": "f89ae342d23c2fcb4f1f4a4cf08cf05b180cfb7f"
+    }
+  },
+  "flags": [
+    {
+      "id": "f1",
+      "q": {
+        "hu": "Melyik névszerver azonosítja a céghez tartozó domaineket?",
+        "en": "Which name server identifies the company's domains?"
+      },
+      "hash": "424fc12fd6ee92cdd846c93b5c11627a6b2d42e5b40a0da89c0f318819a89de8",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "A cég domainjei közös névszervert használnak.",
+            "en": "The company's domains share a name server."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "A nevszerver oszlop.",
+            "en": "The name server column."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "A fő domain (delibab.example) névszervere.",
+            "en": "The main domain (delibab.example) name server."
+          }
+        }
+      ]
+    },
+    {
+      "id": "f2",
+      "q": {
+        "hu": "Hány domaint birtokol a cég (ezzel a névszerverrel)?",
+        "en": "How many domains does the company own (with this name server)?"
+      },
+      "hash": "773cbac96d95da78b2d13c44ae41c541bd75e48be927a005934be0307fa773f0",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "Szűrj a céges névszerverre.",
+            "en": "Filter on the company name server."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "A többi domain idegen zaj.",
+            "en": "The other domains are unrelated noise."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "Számold a sorokat.",
+            "en": "Count the rows."
+          }
+        }
+      ]
+    },
+    {
+      "id": "f3",
+      "q": {
+        "hu": "A cég domainjei közül melyik jár le leghamarabb (elfeledett)?",
+        "en": "Which of the company's domains expires soonest (forgotten)?"
+      },
+      "hash": "304da44188c0f9c3e3d71ec58bcbcb32c0ba9e4b5b660c901d9726d399769337",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "A lejar oszlopot nézd a céges domaineknél.",
+            "en": "Look at the expiry column for the company domains."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "A legkorábbi lejárati dátum.",
+            "en": "The earliest expiry date."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "Az allapot oszlop is jelzi.",
+            "en": "The status column flags it too."
+          }
+        }
+      ]
+    },
+    {
+      "id": "f4",
+      "q": {
+        "hu": "Mikor jár le ez a domain (ÉÉÉÉ-HH-NN)?",
+        "en": "When does this domain expire (YYYY-MM-DD)?"
+      },
+      "hash": "79ddfb3d815c6c1154a8738142e6ad768bd4defaaf95917b69560f4d2ac7e03a",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "Ugyanaz a sor.",
+            "en": "Same row."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "A lejar oszlop.",
+            "en": "The expiry column."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "Formátum: ÉÉÉÉ-HH-NN",
+            "en": "Format: YYYY-MM-DD"
+          }
+        }
+      ]
+    }
+  ],
+  "files": [
+    {
+      "name": "whois_rekordok.csv",
+      "view": "table"
+    }
+  ]
+}

@@ -1,0 +1,182 @@
+{
+  "id": "osint-easy-L1-tlg",
+  "side": "osint",
+  "mode": "easy",
+  "layer": 1,
+  "incident": {
+    "name": "Nyilvános digitális lábnyom felmérése (szintetikus gyakorlat)",
+    "url": "https://owasp.org/www-project-web-security-testing-guide/"
+  },
+  "title": {
+    "hu": "Webes lábnyom",
+    "en": "Web footprint"
+  },
+  "story": {
+    "hu": "2026. 10. 05. A(z) Tölgyfa Egyetem megbízásából OSINT-elemzőként felméred, mit lát kívülről a cég nyilvános digitális lábnyomából, hogy csökkenthető legyen a támadási felület. Kezdd a tanúsítvány-átláthatósági (CT) naplóval és az aldomainek ellenőrzésével: keresd meg a cég elfelejtett, de még elérhető, gazdátlan gépét.",
+    "en": "05 October 2026. Tölgyfa Egyetem hired you as an OSINT analyst to see what an outsider can find in the company's public digital footprint, so the attack surface can be reduced. Start with the certificate transparency (CT) log and the subdomain check: find the company's forgotten but still reachable, unmaintained host."
+  },
+  "keyIn": null,
+  "keyOut": {
+    "type": "hostname",
+    "text": {
+      "hu": "A cég elfelejtett, nyilvánosan elérhető gépe",
+      "en": "The company's forgotten, publicly reachable host"
+    },
+    "enc": {
+      "f1+f2": "30832de87580efeeae879a8402cb8bb4463cc7e7688c7207c3eca2",
+      "f1+f3": "fb8fe23032f1744bee13d23f70cb9c8922296707eda46aae6f14b3",
+      "f1+f4": "e4e490a44aa66322c151d91997efd775f5e146d384e6326f7420ed",
+      "f2+f3": "b7e08a23fa7eb645126420e03b8776095075a651c323ec3c8c3dd9",
+      "f2+f4": "775fa1e429f163483cad2c8cb495af5094220f63dcfafa68bba249",
+      "f3+f4": "5c2844f84be81ea5597ba8caf17a85ed4a73af02835538c2eca407"
+    }
+  },
+  "flags": [
+    {
+      "id": "f1",
+      "q": {
+        "hu": "Hány különböző gépnév szerepel a CT-naplóban?",
+        "en": "How many distinct host names appear in the CT log?"
+      },
+      "hash": "1618933533642a7d1a75473109d7cb8f2491fbcb4a3473e00110276d6a0038d3",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "Egy név többször is szerepelhet (megújítások).",
+            "en": "A name can appear several times (renewals)."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "A nev oszlop egyedi értékeit számold.",
+            "en": "Count the distinct values of the name column."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "Az aldomain-ellenőrzés sorai is ugyanezek a nevek.",
+            "en": "The subdomain check rows are the same names."
+          }
+        }
+      ]
+    },
+    {
+      "id": "f2",
+      "q": {
+        "hu": "Melyik gép tanúsítványa járt le régen, mégis válaszol (200)?",
+        "en": "Which host has a long-expired certificate yet still answers (200)?"
+      },
+      "hash": "9298447ea7955ca123f2099d0b61d8a7eb916b49a3dbd09de1641a4d43949170",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "Vesd össze a két fájlt.",
+            "en": "Compare the two files."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "Azokat keresd, amelyekhez nincs friss tanúsítvány.",
+            "en": "Look for names with no recent certificate."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "A legtöbb régi név már NXDOMAIN; egy kivétel van.",
+            "en": "Most old names are NXDOMAIN; there is one exception."
+          }
+        }
+      ]
+    },
+    {
+      "id": "f3",
+      "q": {
+        "hu": "Melyik kiadó (CA) állította ki ennek a gépnek a tanúsítványát?",
+        "en": "Which issuer (CA) issued this host's certificate?"
+      },
+      "hash": "66f7e0142f85f0d7614d60905dd3af9cb655c8a37dfd1c6c54decb7490d0fae3",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "Keresd a gép sorát a CT-naplóban.",
+            "en": "Find the host row in the CT log."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "A kiado oszlop.",
+            "en": "The issuer column."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "Ez a kiadó csak ennél a gépnél fordul elő.",
+            "en": "This issuer appears only for this host."
+          }
+        }
+      ]
+    },
+    {
+      "id": "f4",
+      "q": {
+        "hu": "Milyen IP-címen válaszol ma ez a gép?",
+        "en": "At which IP address does this host answer today?"
+      },
+      "hash": "d14ea98944892da6c1b2d3311cc38e6e2f5d30c2867be0fb5b6069f846af2f93",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "Az aldomain-ellenőrzés fájlja.",
+            "en": "The subdomain check file."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "Az ip oszlop.",
+            "en": "The ip column."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "Négy számcsoport, pontokkal.",
+            "en": "Four dotted number groups."
+          }
+        }
+      ]
+    }
+  ],
+  "files": [
+    {
+      "name": "ct_naplo.csv",
+      "view": "table"
+    },
+    {
+      "name": "aldomain_ellenorzes.csv",
+      "view": "table"
+    }
+  ]
+}

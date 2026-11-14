@@ -1,0 +1,14 @@
+ÁLLÁSHIRDETÉS – Szélrózsa Logisztika Kft.
+
+Pozíció: Hálózat-mérnök
+Csapat: Hálózat
+Elvárás: Linux, konténerek, CI/CD, felhőalapú szolgáltatások
+Jelentkezés: a leendő csapatvezetőnél, a szokásos céges címen (toth.<keresztnév>@szelrozsa.example formában)
+
+ÁLLÁSHIRDETÉS – Szélrózsa Logisztika Kft.
+
+Pozíció: Ügyfélszolgálati munkatárs
+Csapat: Ügyfélkapcsolat
+Jelentkezés: karrier@szelrozsa.example
+
+Megjegyzés: a céges e-mail-címek formája: vezeteknev.keresztnev@szelrozsa.example (ékezet nélkül)

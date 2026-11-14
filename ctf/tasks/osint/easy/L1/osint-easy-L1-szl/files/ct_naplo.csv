@@ -1,0 +1,58 @@
+naplozva,nev,kiado,ervenyes_tol,ervenyes_ig
+2023-01-20 00:00:00,webmail2.szelrozsa.example,Gyakorlati TLS CA,2023-01-20,2024-02-21
+2023-03-11 00:00:00,intranet-old.szelrozsa.example,Minta Hitelesito,2023-03-11,2024-04-11
+2023-07-23 00:00:00,uat.szelrozsa.example,Gyakorlati TLS CA,2023-07-23,2024-08-23
+2023-08-19 00:00:00,legacy.szelrozsa.example,Pelda Kereskedelmi CA,2023-08-19,2024-09-19
+2024-01-29 00:00:00,demo.szelrozsa.example,Minta Hitelesito,2024-01-29,2025-03-01
+2024-01-30 01:09:01,api.szelrozsa.example,Gyakorlati TLS CA,2024-01-30,2025-03-02
+2024-05-26 14:12:57,shop.szelrozsa.example,Gyakorlati TLS CA,2024-05-26,2025-06-27
+2024-06-20 00:00:00,teszt.szelrozsa.example,Gyakorlati TLS CA,2024-06-20,2025-07-22
+2024-07-03 00:00:00,mail.szelrozsa.example,Pelda Kereskedelmi CA,2024-07-03,2025-08-04
+2024-07-26 20:39:13,mail.szelrozsa.example,Pelda Kereskedelmi CA,2024-07-26,2025-08-27
+2024-09-01 08:53:37,status.szelrozsa.example,Minta Hitelesito,2024-09-01,2025-10-03
+2024-09-05 16:51:45,cdn.szelrozsa.example,Gyakorlati TLS CA,2024-09-05,2025-10-07
+2024-10-01 00:00:00,mail.szelrozsa.example,Gyakorlati TLS CA,2024-10-01,2025-11-02
+2024-10-12 00:00:00,cdn.szelrozsa.example,Minta Hitelesito,2024-10-12,2025-11-13
+2024-10-23 19:15:05,shop.szelrozsa.example,Gyakorlati TLS CA,2024-10-23,2025-11-24
+2024-11-12 00:00:00,karrier.szelrozsa.example,Pelda Kereskedelmi CA,2024-11-12,2025-12-14
+2024-12-24 00:00:00,vpn.szelrozsa.example,Pelda Kereskedelmi CA,2024-12-24,2026-01-25
+2024-12-30 00:00:00,mail.szelrozsa.example,Minta Hitelesito,2024-12-30,2026-01-31
+2025-01-19 00:00:00,api.szelrozsa.example,Pelda Kereskedelmi CA,2025-01-19,2026-02-20
+2025-01-22 10:04:45,shop.szelrozsa.example,Pelda Kereskedelmi CA,2025-01-22,2026-02-23
+2025-02-04 00:25:40,shop.szelrozsa.example,Gyakorlati TLS CA,2025-02-04,2026-03-08
+2025-02-20 12:22:13,www.szelrozsa.example,Minta Hitelesito,2025-02-20,2026-03-24
+2025-03-02 00:00:00,shop.szelrozsa.example,Minta Hitelesito,2025-03-02,2026-04-03
+2025-03-24 00:00:00,vpn.szelrozsa.example,Minta Hitelesito,2025-03-24,2026-04-25
+2025-04-19 00:00:00,api.szelrozsa.example,Gyakorlati TLS CA,2025-04-19,2026-05-21
+2025-04-23 00:00:00,old-vpn.szelrozsa.example,Probapeldany Root CA,2025-04-23,2026-05-25
+2025-04-28 05:42:18,cdn.szelrozsa.example,Gyakorlati TLS CA,2025-04-28,2026-05-30
+2025-05-26 01:40:50,karrier.szelrozsa.example,Minta Hitelesito,2025-05-26,2026-06-27
+2025-05-31 00:00:00,shop.szelrozsa.example,Pelda Kereskedelmi CA,2025-05-31,2026-07-02
+2025-06-28 07:16:10,cdn.szelrozsa.example,Pelda Kereskedelmi CA,2025-06-28,2026-07-30
+2025-07-18 00:00:00,api.szelrozsa.example,Minta Hitelesito,2025-07-18,2026-08-19
+2025-07-18 14:04:07,cdn.szelrozsa.example,Gyakorlati TLS CA,2025-07-18,2026-08-19
+2025-08-01 00:00:00,www.szelrozsa.example,Minta Hitelesito,2025-08-01,2026-09-02
+2025-08-01 20:49:10,sso.szelrozsa.example,Pelda Kereskedelmi CA,2025-08-01,2026-09-02
+2025-08-25 22:19:05,cdn.szelrozsa.example,Gyakorlati TLS CA,2025-08-25,2026-09-26
+2025-08-29 00:00:00,shop.szelrozsa.example,Pelda Kereskedelmi CA,2025-08-29,2026-09-30
+2025-09-27 08:14:39,api.szelrozsa.example,Minta Hitelesito,2025-09-27,2026-10-29
+2025-10-12 17:14:20,sso.szelrozsa.example,Pelda Kereskedelmi CA,2025-10-12,2026-11-13
+2025-10-26 00:00:00,status.szelrozsa.example,Minta Hitelesito,2025-10-26,2026-11-27
+2025-10-30 00:00:00,www.szelrozsa.example,Pelda Kereskedelmi CA,2025-10-30,2026-12-01
+2025-11-02 00:00:00,hr.szelrozsa.example,Minta Hitelesito,2025-11-02,2026-12-04
+2025-12-19 13:03:13,www.szelrozsa.example,Pelda Kereskedelmi CA,2025-12-19,2027-01-20
+2025-12-25 18:37:22,sso.szelrozsa.example,Gyakorlati TLS CA,2025-12-25,2027-01-26
+2026-01-24 00:00:00,status.szelrozsa.example,Minta Hitelesito,2026-01-24,2027-02-25
+2026-01-28 00:00:00,www.szelrozsa.example,Pelda Kereskedelmi CA,2026-01-28,2027-03-01
+2026-01-31 00:00:00,hr.szelrozsa.example,Minta Hitelesito,2026-01-31,2027-03-04
+2026-02-06 00:00:00,sso.szelrozsa.example,Pelda Kereskedelmi CA,2026-02-06,2027-03-10
+2026-02-19 00:37:08,status.szelrozsa.example,Gyakorlati TLS CA,2026-02-19,2027-03-23
+2026-04-24 00:00:00,status.szelrozsa.example,Gyakorlati TLS CA,2026-04-24,2027-05-26
+2026-04-30 15:51:26,hr.szelrozsa.example,Pelda Kereskedelmi CA,2026-04-30,2027-06-01
+2026-05-01 00:00:00,hr.szelrozsa.example,Pelda Kereskedelmi CA,2026-05-01,2027-06-02
+2026-05-07 00:00:00,sso.szelrozsa.example,Minta Hitelesito,2026-05-07,2027-06-08
+2026-06-11 08:19:25,cdn.szelrozsa.example,Minta Hitelesito,2026-06-11,2027-07-13
+2026-07-03 03:26:22,mail.szelrozsa.example,Pelda Kereskedelmi CA,2026-07-03,2027-08-04
+2026-08-01 14:26:56,status.szelrozsa.example,Gyakorlati TLS CA,2026-08-01,2027-09-02
+2026-08-05 00:00:00,sso.szelrozsa.example,Minta Hitelesito,2026-08-05,2027-09-06
+2026-08-26 20:59:42,vpn.szelrozsa.example,Pelda Kereskedelmi CA,2026-08-26,2027-09-27

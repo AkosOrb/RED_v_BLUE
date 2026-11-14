@@ -587,6 +587,300 @@
    "mode": "hard",
    "layer": 7,
    "path": "tasks/red/hard/L7/red-hard-L7-orv"
+  },
+  {
+   "id": "osint-easy-L1-dlb",
+   "side": "osint",
+   "mode": "easy",
+   "layer": 1,
+   "path": "tasks/osint/easy/L1/osint-easy-L1-dlb"
+  },
+  {
+   "id": "osint-easy-L1-szl",
+   "side": "osint",
+   "mode": "easy",
+   "layer": 1,
+   "path": "tasks/osint/easy/L1/osint-easy-L1-szl"
+  },
+  {
+   "id": "osint-easy-L1-tlg",
+   "side": "osint",
+   "mode": "easy",
+   "layer": 1,
+   "path": "tasks/osint/easy/L1/osint-easy-L1-tlg"
+  },
+  {
+   "id": "osint-easy-L2-dlb",
+   "side": "osint",
+   "mode": "easy",
+   "layer": 2,
+   "path": "tasks/osint/easy/L2/osint-easy-L2-dlb"
+  },
+  {
+   "id": "osint-easy-L2-szl",
+   "side": "osint",
+   "mode": "easy",
+   "layer": 2,
+   "path": "tasks/osint/easy/L2/osint-easy-L2-szl"
+  },
+  {
+   "id": "osint-easy-L2-tlg",
+   "side": "osint",
+   "mode": "easy",
+   "layer": 2,
+   "path": "tasks/osint/easy/L2/osint-easy-L2-tlg"
+  },
+  {
+   "id": "osint-easy-L3-dlb",
+   "side": "osint",
+   "mode": "easy",
+   "layer": 3,
+   "path": "tasks/osint/easy/L3/osint-easy-L3-dlb"
+  },
+  {
+   "id": "osint-easy-L3-szl",
+   "side": "osint",
+   "mode": "easy",
+   "layer": 3,
+   "path": "tasks/osint/easy/L3/osint-easy-L3-szl"
+  },
+  {
+   "id": "osint-easy-L3-tlg",
+   "side": "osint",
+   "mode": "easy",
+   "layer": 3,
+   "path": "tasks/osint/easy/L3/osint-easy-L3-tlg"
+  },
+  {
+   "id": "osint-easy-L4-dlb",
+   "side": "osint",
+   "mode": "easy",
+   "layer": 4,
+   "path": "tasks/osint/easy/L4/osint-easy-L4-dlb"
+  },
+  {
+   "id": "osint-easy-L4-szl",
+   "side": "osint",
+   "mode": "easy",
+   "layer": 4,
+   "path": "tasks/osint/easy/L4/osint-easy-L4-szl"
+  },
+  {
+   "id": "osint-easy-L4-tlg",
+   "side": "osint",
+   "mode": "easy",
+   "layer": 4,
+   "path": "tasks/osint/easy/L4/osint-easy-L4-tlg"
+  },
+  {
+   "id": "osint-easy-L5-dlb",
+   "side": "osint",
+   "mode": "easy",
+   "layer": 5,
+   "path": "tasks/osint/easy/L5/osint-easy-L5-dlb"
+  },
+  {
+   "id": "osint-easy-L5-szl",
+   "side": "osint",
+   "mode": "easy",
+   "layer": 5,
+   "path": "tasks/osint/easy/L5/osint-easy-L5-szl"
+  },
+  {
+   "id": "osint-easy-L5-tlg",
+   "side": "osint",
+   "mode": "easy",
+   "layer": 5,
+   "path": "tasks/osint/easy/L5/osint-easy-L5-tlg"
+  },
+  {
+   "id": "osint-easy-L6-dlb",
+   "side": "osint",
+   "mode": "easy",
+   "layer": 6,
+   "path": "tasks/osint/easy/L6/osint-easy-L6-dlb"
+  },
+  {
+   "id": "osint-easy-L6-szl",
+   "side": "osint",
+   "mode": "easy",
+   "layer": 6,
+   "path": "tasks/osint/easy/L6/osint-easy-L6-szl"
+  },
+  {
+   "id": "osint-easy-L6-tlg",
+   "side": "osint",
+   "mode": "easy",
+   "layer": 6,
+   "path": "tasks/osint/easy/L6/osint-easy-L6-tlg"
+  },
+  {
+   "id": "osint-easy-L7-dlb",
+   "side": "osint",
+   "mode": "easy",
+   "layer": 7,
+   "path": "tasks/osint/easy/L7/osint-easy-L7-dlb"
+  },
+  {
+   "id": "osint-easy-L7-szl",
+   "side": "osint",
+   "mode": "easy",
+   "layer": 7,
+   "path": "tasks/osint/easy/L7/osint-easy-L7-szl"
+  },
+  {
+   "id": "osint-easy-L7-tlg",
+   "side": "osint",
+   "mode": "easy",
+   "layer": 7,
+   "path": "tasks/osint/easy/L7/osint-easy-L7-tlg"
+  },
+  {
+   "id": "osint-hard-L1-dlb",
+   "side": "osint",
+   "mode": "hard",
+   "layer": 1,
+   "path": "tasks/osint/hard/L1/osint-hard-L1-dlb"
+  },
+  {
+   "id": "osint-hard-L1-szl",
+   "side": "osint",
+   "mode": "hard",
+   "layer": 1,
+   "path": "tasks/osint/hard/L1/osint-hard-L1-szl"
+  },
+  {
+   "id": "osint-hard-L1-tlg",
+   "side": "osint",
+   "mode": "hard",
+   "layer": 1,
+   "path": "tasks/osint/hard/L1/osint-hard-L1-tlg"
+  },
+  {
+   "id": "osint-hard-L2-dlb",
+   "side": "osint",
+   "mode": "hard",
+   "layer": 2,
+   "path": "tasks/osint/hard/L2/osint-hard-L2-dlb"
+  },
+  {
+   "id": "osint-hard-L2-szl",
+   "side": "osint",
+   "mode": "hard",
+   "layer": 2,
+   "path": "tasks/osint/hard/L2/osint-hard-L2-szl"
+  },
+  {
+   "id": "osint-hard-L2-tlg",
+   "side": "osint",
+   "mode": "hard",
+   "layer": 2,
+   "path": "tasks/osint/hard/L2/osint-hard-L2-tlg"
+  },
+  {
+   "id": "osint-hard-L3-dlb",
+   "side": "osint",
+   "mode": "hard",
+   "layer": 3,
+   "path": "tasks/osint/hard/L3/osint-hard-L3-dlb"
+  },
+  {
+   "id": "osint-hard-L3-szl",
+   "side": "osint",
+   "mode": "hard",
+   "layer": 3,
+   "path": "tasks/osint/hard/L3/osint-hard-L3-szl"
+  },
+  {
+   "id": "osint-hard-L3-tlg",
+   "side": "osint",
+   "mode": "hard",
+   "layer": 3,
+   "path": "tasks/osint/hard/L3/osint-hard-L3-tlg"
+  },
+  {
+   "id": "osint-hard-L4-dlb",
+   "side": "osint",
+   "mode": "hard",
+   "layer": 4,
+   "path": "tasks/osint/hard/L4/osint-hard-L4-dlb"
+  },
+  {
+   "id": "osint-hard-L4-szl",
+   "side": "osint",
+   "mode": "hard",
+   "layer": 4,
+   "path": "tasks/osint/hard/L4/osint-hard-L4-szl"
+  },
+  {
+   "id": "osint-hard-L4-tlg",
+   "side": "osint",
+   "mode": "hard",
+   "layer": 4,
+   "path": "tasks/osint/hard/L4/osint-hard-L4-tlg"
+  },
+  {
+   "id": "osint-hard-L5-dlb",
+   "side": "osint",
+   "mode": "hard",
+   "layer": 5,
+   "path": "tasks/osint/hard/L5/osint-hard-L5-dlb"
+  },
+  {
+   "id": "osint-hard-L5-szl",
+   "side": "osint",
+   "mode": "hard",
+   "layer": 5,
+   "path": "tasks/osint/hard/L5/osint-hard-L5-szl"
+  },
+  {
+   "id": "osint-hard-L5-tlg",
+   "side": "osint",
+   "mode": "hard",
+   "layer": 5,
+   "path": "tasks/osint/hard/L5/osint-hard-L5-tlg"
+  },
+  {
+   "id": "osint-hard-L6-dlb",
+   "side": "osint",
+   "mode": "hard",
+   "layer": 6,
+   "path": "tasks/osint/hard/L6/osint-hard-L6-dlb"
+  },
+  {
+   "id": "osint-hard-L6-szl",
+   "side": "osint",
+   "mode": "hard",
+   "layer": 6,
+   "path": "tasks/osint/hard/L6/osint-hard-L6-szl"
+  },
+  {
+   "id": "osint-hard-L6-tlg",
+   "side": "osint",
+   "mode": "hard",
+   "layer": 6,
+   "path": "tasks/osint/hard/L6/osint-hard-L6-tlg"
+  },
+  {
+   "id": "osint-hard-L7-dlb",
+   "side": "osint",
+   "mode": "hard",
+   "layer": 7,
+   "path": "tasks/osint/hard/L7/osint-hard-L7-dlb"
+  },
+  {
+   "id": "osint-hard-L7-szl",
+   "side": "osint",
+   "mode": "hard",
+   "layer": 7,
+   "path": "tasks/osint/hard/L7/osint-hard-L7-szl"
+  },
+  {
+   "id": "osint-hard-L7-tlg",
+   "side": "osint",
+   "mode": "hard",
+   "layer": 7,
+   "path": "tasks/osint/hard/L7/osint-hard-L7-tlg"
   }
  ]
 }

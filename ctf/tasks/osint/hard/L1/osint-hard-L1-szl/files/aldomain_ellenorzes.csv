@@ -1,0 +1,18 @@
+nev,ip,valasz,oldalcim
+status.szelrozsa.example,203.0.113.86,200,Bejelentkezés
+api.szelrozsa.example,203.0.113.88,200,Kezdőlap
+cdn.szelrozsa.example,203.0.113.93,200,Kezdőlap
+www.szelrozsa.example,203.0.113.83,200,Bejelentkezés
+hr.szelrozsa.example,203.0.113.71,200,Karrier
+karrier.szelrozsa.example,203.0.113.82,200,Karrier
+webmail2.szelrozsa.example,,NXDOMAIN,
+legacy.szelrozsa.example,,NXDOMAIN,
+sso.szelrozsa.example,203.0.113.102,200,Kezdőlap
+teszt.szelrozsa.example,,NXDOMAIN,
+mail.szelrozsa.example,203.0.113.117,200,Karrier
+uat.szelrozsa.example,,NXDOMAIN,
+vpn.szelrozsa.example,203.0.113.80,200,Karrier
+shop.szelrozsa.example,203.0.113.117,200,Karrier
+demo.szelrozsa.example,,NXDOMAIN,
+old-vpn.szelrozsa.example,203.0.113.33,200,Távoli elérés – régi átjáró
+intranet-old.szelrozsa.example,,NXDOMAIN,

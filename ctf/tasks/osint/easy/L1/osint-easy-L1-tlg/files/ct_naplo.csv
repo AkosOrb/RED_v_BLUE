@@ -1,0 +1,49 @@
+naplozva,nev,kiado,ervenyes_tol,ervenyes_ig
+2023-02-07 00:00:00,uat.tolgyfa.example,Pelda Kereskedelmi CA,2023-02-07,2024-03-10
+2023-02-26 00:00:00,teszt.tolgyfa.example,Pelda Kereskedelmi CA,2023-02-26,2024-03-29
+2023-06-09 00:00:00,demo.tolgyfa.example,Pelda Kereskedelmi CA,2023-06-09,2024-07-10
+2023-08-04 00:00:00,webmail2.tolgyfa.example,Minta Hitelesito,2023-08-04,2024-09-04
+2024-01-12 11:04:00,www.tolgyfa.example,Gyakorlati TLS CA,2024-01-12,2025-02-12
+2024-01-22 07:52:37,status.tolgyfa.example,Pelda Kereskedelmi CA,2024-01-22,2025-02-22
+2024-02-09 00:00:00,legacy.tolgyfa.example,Minta Hitelesito,2024-02-09,2025-03-12
+2024-02-11 12:15:05,www.tolgyfa.example,Gyakorlati TLS CA,2024-02-11,2025-03-14
+2024-02-22 05:19:26,sso.tolgyfa.example,Gyakorlati TLS CA,2024-02-22,2025-03-25
+2024-04-16 01:42:52,api.tolgyfa.example,Pelda Kereskedelmi CA,2024-04-16,2025-05-18
+2024-04-17 15:50:05,hr.tolgyfa.example,Minta Hitelesito,2024-04-17,2025-05-19
+2024-05-11 20:31:59,status.tolgyfa.example,Pelda Kereskedelmi CA,2024-05-11,2025-06-12
+2024-06-12 21:55:43,www.tolgyfa.example,Pelda Kereskedelmi CA,2024-06-12,2025-07-14
+2024-06-17 00:00:00,intranet-old.tolgyfa.example,Pelda Kereskedelmi CA,2024-06-17,2025-07-19
+2024-06-17 03:47:57,hr.tolgyfa.example,Gyakorlati TLS CA,2024-06-17,2025-07-19
+2024-10-06 04:06:00,hr.tolgyfa.example,Gyakorlati TLS CA,2024-10-06,2025-11-07
+2025-01-12 22:19:39,shop.tolgyfa.example,Gyakorlati TLS CA,2025-01-12,2026-02-13
+2025-02-03 13:03:09,status.tolgyfa.example,Gyakorlati TLS CA,2025-02-03,2026-03-07
+2025-02-17 11:10:51,cdn.tolgyfa.example,Gyakorlati TLS CA,2025-02-17,2026-03-21
+2025-03-02 07:43:26,shop.tolgyfa.example,Minta Hitelesito,2025-03-02,2026-04-03
+2025-03-31 03:16:31,shop.tolgyfa.example,Gyakorlati TLS CA,2025-03-31,2026-05-02
+2025-04-07 11:23:49,shop.tolgyfa.example,Pelda Kereskedelmi CA,2025-04-07,2026-05-09
+2025-04-17 00:00:00,beta-elearn.tolgyfa.example,Kiserleti Tanusitvany CA,2025-04-17,2026-05-19
+2025-05-29 00:00:00,karrier.tolgyfa.example,Pelda Kereskedelmi CA,2025-05-29,2026-06-30
+2025-05-31 21:26:49,vpn.tolgyfa.example,Minta Hitelesito,2025-05-31,2026-07-02
+2025-07-20 21:12:00,vpn.tolgyfa.example,Minta Hitelesito,2025-07-20,2026-08-21
+2025-08-12 07:38:15,shop.tolgyfa.example,Pelda Kereskedelmi CA,2025-08-12,2026-09-13
+2025-08-15 16:51:34,hr.tolgyfa.example,Gyakorlati TLS CA,2025-08-15,2026-09-16
+2025-10-20 00:00:00,vpn.tolgyfa.example,Gyakorlati TLS CA,2025-10-20,2026-11-21
+2025-12-11 00:00:00,status.tolgyfa.example,Minta Hitelesito,2025-12-11,2027-01-12
+2025-12-27 17:42:42,sso.tolgyfa.example,Minta Hitelesito,2025-12-27,2027-01-28
+2026-01-16 00:00:00,api.tolgyfa.example,Gyakorlati TLS CA,2026-01-16,2027-02-17
+2026-01-18 00:00:00,vpn.tolgyfa.example,Minta Hitelesito,2026-01-18,2027-02-19
+2026-02-02 00:00:00,hr.tolgyfa.example,Pelda Kereskedelmi CA,2026-02-02,2027-03-06
+2026-03-07 00:00:00,sso.tolgyfa.example,Pelda Kereskedelmi CA,2026-03-07,2027-04-08
+2026-03-23 00:00:00,www.tolgyfa.example,Pelda Kereskedelmi CA,2026-03-23,2027-04-24
+2026-04-06 00:12:16,sso.tolgyfa.example,Gyakorlati TLS CA,2026-04-06,2027-05-08
+2026-05-03 00:00:00,hr.tolgyfa.example,Gyakorlati TLS CA,2026-05-03,2027-06-04
+2026-05-19 23:59:58,karrier.tolgyfa.example,Gyakorlati TLS CA,2026-05-19,2027-06-20
+2026-06-04 13:59:08,cdn.tolgyfa.example,Minta Hitelesito,2026-06-04,2027-07-06
+2026-06-05 00:00:00,sso.tolgyfa.example,Gyakorlati TLS CA,2026-06-05,2027-07-07
+2026-06-10 00:00:00,cdn.tolgyfa.example,Pelda Kereskedelmi CA,2026-06-10,2027-07-12
+2026-07-12 00:00:00,mail.tolgyfa.example,Gyakorlati TLS CA,2026-07-12,2027-08-13
+2026-08-06 00:00:00,shop.tolgyfa.example,Gyakorlati TLS CA,2026-08-06,2027-09-07
+2026-09-08 00:00:00,cdn.tolgyfa.example,Pelda Kereskedelmi CA,2026-09-08,2027-10-10
+2026-10-02 09:07:36,vpn.tolgyfa.example,Pelda Kereskedelmi CA,2026-10-02,2027-11-03
+2026-10-10 00:00:00,mail.tolgyfa.example,Minta Hitelesito,2026-10-10,2027-11-11
+2027-01-08 00:00:00,mail.tolgyfa.example,Minta Hitelesito,2027-01-08,2028-02-09

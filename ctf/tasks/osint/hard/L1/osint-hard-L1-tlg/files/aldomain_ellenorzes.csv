@@ -1,0 +1,18 @@
+nev,ip,valasz,oldalcim
+status.tolgyfa.example,192.0.2.84,200,Karrier
+teszt.tolgyfa.example,,NXDOMAIN,
+demo.tolgyfa.example,,NXDOMAIN,
+webmail2.tolgyfa.example,,NXDOMAIN,
+beta-elearn.tolgyfa.example,192.0.2.26,200,E-learning – béta
+api.tolgyfa.example,192.0.2.99,200,Bejelentkezés
+vpn.tolgyfa.example,192.0.2.75,200,Állapot
+sso.tolgyfa.example,192.0.2.120,200,Bejelentkezés
+uat.tolgyfa.example,,NXDOMAIN,
+legacy.tolgyfa.example,,NXDOMAIN,
+shop.tolgyfa.example,192.0.2.105,200,Kezdőlap
+www.tolgyfa.example,192.0.2.107,200,Állapot
+hr.tolgyfa.example,192.0.2.62,200,Karrier
+cdn.tolgyfa.example,192.0.2.107,200,Állapot
+intranet-old.tolgyfa.example,,NXDOMAIN,
+karrier.tolgyfa.example,192.0.2.91,200,Állapot
+mail.tolgyfa.example,192.0.2.90,200,Állapot

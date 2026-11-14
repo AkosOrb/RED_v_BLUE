@@ -1,0 +1,185 @@
+{
+  "id": "osint-easy-L7-tlg",
+  "side": "osint",
+  "mode": "easy",
+  "layer": 7,
+  "incident": {
+    "name": "Nyilvános digitális lábnyom felmérése (szintetikus gyakorlat)",
+    "url": "https://owasp.org/www-project-web-security-testing-guide/"
+  },
+  "title": {
+    "hu": "Kockázati jelentés",
+    "en": "Risk report"
+  },
+  "story": {
+    "hu": "Az utolsó szakasz: állítsd össze a felmérés eredményét. A megállapításokból és a titkosított záró jegyzetből határozd meg a súlyos kockázatok számát és a felmérés záró kódszavát.",
+    "en": "The final stage: compile the review's result. From the findings and the encrypted closing note, determine the number of serious risks and the review's closing codeword."
+  },
+  "keyIn": {
+    "type": "keyword",
+    "from": "L6"
+  },
+  "keyOut": {
+    "type": "final",
+    "text": {
+      "hu": "Vége a láncnak",
+      "en": "End of the chain"
+    },
+    "enc": {
+      "f1+f2": "7c97bde324d9a35090e3",
+      "f1+f3": "903f0a650d9cfe114681",
+      "f1+f4": "d86cf19e355444201914",
+      "f2+f3": "d3c643415cd7e8c31842",
+      "f2+f4": "a40f671b43a575e0a1af",
+      "f3+f4": "98969f4db90dcaa890df"
+    }
+  },
+  "flags": [
+    {
+      "id": "f1",
+      "q": {
+        "hu": "Mi a felmérés záró kódszava a titkosított jegyzetben?",
+        "en": "What is the review's closing codeword in the encrypted note?"
+      },
+      "hash": "30f7051c981e6e02c7360dcc7681c2207e24beaef05f223e32fa858b90d2f353",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "Vigenère-rejtjel; a kulcsot az előző réteg adta (a projekt-kódnév).",
+            "en": "Vigenère cipher; the key is the previous layer's project codename."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "Ékezet nélküli magyar szöveg, a szóközök megmaradtak.",
+            "en": "Hungarian text without accents; spaces are kept."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "A kulcsszó betűit vond ki a rejtett szöveg betűiből, ismétlődve.",
+            "en": "Subtract the keyword letters from the ciphertext, repeating."
+          }
+        }
+      ]
+    },
+    {
+      "id": "f2",
+      "q": {
+        "hu": "Hány megállapítás súlyossága „magas” vagy „kritikus”?",
+        "en": "How many findings are rated \"magas\" (high) or \"kritikus\" (critical)?"
+      },
+      "hash": "3dd450e95269919d014b6f6c932e92279a5941c10f770035b1fff7bd1c924542",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "A kockázati jelentés fájlja.",
+            "en": "The risk report file."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "A sulyossag oszlopot számold.",
+            "en": "Count the severity column."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "Két szint: magas és kritikus.",
+            "en": "Two levels: high and critical."
+          }
+        }
+      ]
+    },
+    {
+      "id": "f3",
+      "q": {
+        "hu": "Melyik érintett eszközhöz tartozik a „kritikus” megállapítás?",
+        "en": "Which affected asset has the \"kritikus\" (critical) finding?"
+      },
+      "hash": "a217134c51f4a2866e3d25705d63053f06c53e97822b2f2904ef79d1715b26c3",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "Szűrj a kritikus sulyossagra.",
+            "en": "Filter on the critical severity."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "Az erintett oszlop.",
+            "en": "The affected column."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "A hitelesítés nélküli adatbázis-port IP-je.",
+            "en": "The IP of the unauthenticated database port."
+          }
+        }
+      ]
+    },
+    {
+      "id": "f4",
+      "q": {
+        "hu": "Hány megállapítás van összesen a jelentésben?",
+        "en": "How many findings are in the report in total?"
+      },
+      "hash": "10e068193e4270d8d35ee62c36a1c300430e1cca95a8d2ccde038de02690da58",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "Minden réteg egy megállapítást adott.",
+            "en": "Each layer produced one finding."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "Számold a sorokat.",
+            "en": "Count the rows."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "L1-től L6-ig.",
+            "en": "From L1 to L6."
+          }
+        }
+      ]
+    }
+  ],
+  "files": [
+    {
+      "name": "kockazati_jelentes.csv",
+      "view": "table"
+    },
+    {
+      "name": "zaro_jegyzet.txt",
+      "view": "text"
+    }
+  ]
+}
