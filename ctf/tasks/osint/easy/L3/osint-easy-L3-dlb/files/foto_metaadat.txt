@@ -1,0 +1,107 @@
+# Nyilvánosan megosztott fotók metaadatai (exiftool-kimenet, SZINTETIKUS)
+
+======== IMG_6216.jpg
+File Name                       : IMG_6216.jpg
+Artist                          : nagy.dora
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:07:28 04:51:00
+Image Size                      : 3024x4032
+GPS Position                    : (nincs)
+
+======== IMG_6128.jpg
+File Name                       : IMG_6128.jpg
+Artist                          : szabo.tamas
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:12 10:07:00
+Image Size                      : 1920x1080
+GPS Latitude                    : 47.4418 N
+GPS Longitude                   : 19.0610 E
+
+======== IMG_1580.jpg
+File Name                       : IMG_1580.jpg
+Artist                          : balogh.daniel
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:17 13:32:00
+Image Size                      : 3024x4032
+GPS Latitude                    : 47.4999 N
+GPS Longitude                   : 18.9597 E
+
+======== IMG_6377.jpg
+File Name                       : IMG_6377.jpg
+Artist                          : balogh.daniel
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:18 13:22:00
+Image Size                      : 3024x4032
+GPS Latitude                    : 47.5005 N
+GPS Longitude                   : 18.9604 E
+
+======== IMG_9796.jpg
+File Name                       : IMG_9796.jpg
+Artist                          : nagy.dora
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:20 00:53:00
+Image Size                      : 1920x1080
+GPS Position                    : (nincs)
+
+======== IMG_7182_belepo.jpg
+File Name                       : IMG_7182_belepo.jpg
+Artist                          : nagy.dora
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:30 22:18:59
+Image Size                      : 4032x3024
+GPS Latitude                    : 47.5122 N
+GPS Longitude                   : 19.1182 E
+
+======== IMG_5826.jpg
+File Name                       : IMG_5826.jpg
+Artist                          : simon.noemi
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:30 22:49:00
+Image Size                      : 3024x4032
+GPS Position                    : (nincs)
+
+======== IMG_1538.jpg
+File Name                       : IMG_1538.jpg
+Artist                          : simon.noemi
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:09:02 12:35:00
+Image Size                      : 3024x4032
+GPS Latitude                    : 47.5002 N
+GPS Longitude                   : 18.9602 E
+
+======== IMG_2360.jpg
+File Name                       : IMG_2360.jpg
+Artist                          : szabo.tamas
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:09:04 08:40:00
+Image Size                      : 3024x4032
+GPS Latitude                    : 47.4420 N
+GPS Longitude                   : 19.0608 E
+
+======== IMG_6907.jpg
+File Name                       : IMG_6907.jpg
+Artist                          : nemeth.bence
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:09:05 15:17:00
+Image Size                      : 1920x1080
+GPS Latitude                    : 47.5001 N
+GPS Longitude                   : 18.9601 E
+
+======== IMG_6625.jpg
+File Name                       : IMG_6625.jpg
+Artist                          : lakatos.istvan
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:09:10 15:35:00
+Image Size                      : 1920x1080
+GPS Position                    : (nincs)

@@ -9,9 +9,9 @@ import json, os, sys
 ROOT = os.path.join(os.path.dirname(__file__), '..')
 TASKS = os.path.join(ROOT, 'tasks')
 KEY_TYPES = {1: 'hostname', 2: 'account', 3: 'time', 4: 'domain', 5: 'subnet', 6: 'keyword', 7: 'final'}
-# Két pálya: blue = incidenskezelés, red = behatolásteszt (pentester). Mindkettő 7 réteg,
-# azonos kulcstípus-lánccal, pontozással és ranglistával.
-SIDES, MODES = ('blue', 'red'), ('easy', 'hard')
+# Három pálya: blue = incidenskezelés, red = behatolásteszt (pentester), osint = nyilvános
+# lábnyom felmérése. Mindhárom 7 réteg, azonos kulcstípus-lánccal, pontozással és ranglistával.
+SIDES, MODES = ('blue', 'red', 'osint'), ('easy', 'hard')
 
 errors, index = [], []
 

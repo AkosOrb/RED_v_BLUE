@@ -1,6 +1,6 @@
 # Red vs Blue CTF – feladatbank
 
-Egyéni, jeopardy-stílusú CTF játékmód a Red vs Blue webapphoz. Két pálya közül lehet választani, azonos
+Egyéni, jeopardy-stílusú CTF játékmód a Red vs Blue webapphoz. Három pálya közül lehet választani, azonos
 felépítéssel, pontozással és ranglistával:
 
 - **Blue – incidenskezelés** (`side = blue`): riasztástól a helyreállításig; a támadói módszerek csak a
@@ -8,6 +8,9 @@ felépítéssel, pontozással és ranglistával:
 - **Red – behatolásteszt** (`side = red`): egy *engedélyezett* penetration test 7 szakasza a felderítéstől
   az adatszivárogtatásig. Minden anyag szintetikus, a feladatok kizárólag elemzésről szólnak – nincs működő
   exploit, futtatható kártevő vagy lépésről-lépésre támadási leírás.
+- **OSINT – nyilvános lábnyom felmérése** (`side = osint`): egy kitalált cég megbízásából felméred, mit lát
+  kívülről a cég nyilvános digitális lábnyomából, hogy csökkenthető legyen a támadási felület. 7 szakasz a
+  webes lábnyomtól a kockázati jelentésig, kizárólag nyílt forrású, szintetikus adatokon.
 
 A szabályterv: [Red vs Blue CTF – szabályterv és játékmenet](https://claude.ai/artifact/3EzsQwQ324WrNDFcFgay5K).
 
@@ -22,11 +25,13 @@ ctf/
   tools/build_index.py   ellenőrzés + indexgenerálás
 ```
 
-- `side`: `blue` (incidenskezelés) vagy `red` (behatolásteszt), `mode`: `easy` | `hard`, réteg: 1–7.
-- Minden réteg rögzített kulcstípust ad tovább (mindkét pályán ugyanaz), így bármelyik két változat
+- `side`: `blue` (incidenskezelés), `red` (behatolásteszt) vagy `osint` (nyilvános lábnyom), `mode`: `easy` | `hard`, réteg: 1–7.
+- Minden réteg rögzített kulcstípust ad tovább (mindhárom pályán ugyanaz), így bármelyik két változat
   összeilleszthető: 1 `hostname` → 2 `account` → 3 `time` → 4 `domain` → 5 `subnet` → 6 `keyword` → 7 `final`.
 - Red rétegek: 1 felderítés → 2 kezdeti hozzáférés → 3 végrehajtás → 4 megmaradás → 5 jogosultságemelés →
   6 oldalirányú mozgás → 7 adatszivárogtatás.
+- OSINT rétegek: 1 webes lábnyom → 2 munkatársak és közösségi média → 3 kép-metaadat → 4 a cég saját domainjei →
+  5 a cég saját IP-tartománya → 6 archívumok és régi oldalak → 7 kockázati jelentés.
 - Sorsoláskor a játék egy teljes, azonos történetű láncot választ (az azonosítók csak a réteg számában térnek el,
   pl. `blue-easy-L1-kfl` … `blue-easy-L7-kfl`); ha nincs teljes lánc, rétegenként sorsol.
 - Nyílt válasz soha nem kerül a repóba. A megoldókulcs az oktatónál van.
@@ -76,6 +81,18 @@ listában szereplő felhasználónevek látják (alapból: `oktato`).
    `update public.profiles set role = 'instructor' where username = '<név>';`
 
 A játékosok regisztrációkor mindig `player` szerepkört kapnak; oktatóvá csak az adatbázisban lehet valakit tenni.
+
+**Már működő adatbázis frissítése (migráció).** A `games.side` ellenőrzés most már három pályát enged
+(`blue`, `red`, `osint`). Ha a sémát korábban futtattad le (csak `blue`/`red` engedéllyel), az OSINT-játékok
+online mentése addig hibát ad, amíg le nem futtatod az SQL Editorban:
+
+```sql
+alter table public.games drop constraint games_side_check,
+  add constraint games_side_check check (side in ('blue', 'red', 'osint'));
+```
+
+(A megszorítás neve eltérhet – nézd meg a `games` tábla megszorításait a Supabase felületén.)
+Helyi próbamódot és az önálló, egyfájlos változatot ez nem érinti.
 
 ## Pontozás röviden
 

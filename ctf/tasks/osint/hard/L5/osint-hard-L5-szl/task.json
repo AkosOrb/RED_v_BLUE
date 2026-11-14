@@ -1,0 +1,181 @@
+{
+  "id": "osint-hard-L5-szl",
+  "side": "osint",
+  "mode": "hard",
+  "layer": 5,
+  "incident": {
+    "name": "Nyilvános digitális lábnyom felmérése (szintetikus gyakorlat)",
+    "url": "https://owasp.org/www-project-web-security-testing-guide/"
+  },
+  "title": {
+    "hu": "A cég saját IP-tartománya",
+    "en": "The company's own IP range"
+  },
+  "story": {
+    "hu": "Megvannak a domainek. Melyik címtartomány a cégé, és mi látszik belőle kívülről? A kitett szolgáltatások listájából határozd meg a cég /24-es tartományát, és keresd meg a legkockázatosabb, hitelesítés nélkül elérhető szolgáltatást.",
+    "en": "You have the domains. Which address range is the company's, and what is visible from outside? From the exposed-services list, determine the company's /24 range and find the riskiest service that is reachable without authentication."
+  },
+  "keyIn": {
+    "type": "domain",
+    "from": "L4"
+  },
+  "keyOut": {
+    "type": "subnet",
+    "text": {
+      "hu": "A cég saját /24-es címtartománya",
+      "en": "The company's own /24 address range"
+    },
+    "enc": {
+      "f1+f2": "49567e65cc1bee6a2e6a75c71f4c",
+      "f1+f3": "4afdb8e55f63b004f1cbd82c6f9b",
+      "f1+f4": "803e167fd4ce04ed4f6a024f4cb3",
+      "f2+f3": "ddfc311841e9f76069e81960ca03",
+      "f2+f4": "59d23752877e79440479b3790627",
+      "f3+f4": "e6d4a43f563b9ce2a202bcbd35a2"
+    }
+  },
+  "flags": [
+    {
+      "id": "f1",
+      "q": {
+        "hu": "Melyik autonóm rendszer (ASN) a cég szolgáltatóját jelzi?",
+        "en": "Which autonomous system (ASN) marks the company's provider?"
+      },
+      "hash": "4e715e3f5a3c681f85d0fd4be320d1a05d7c5a3b2a1d756ad0cffade7dded879",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "A céges gépeknek van kitöltött nev oszlopuk.",
+            "en": "The company hosts have a filled-in name column."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "Nézd az asn oszlopot ezeknél.",
+            "en": "Look at the asn column for those."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "Formátum: AS + szám.",
+            "en": "Format: AS + number."
+          }
+        }
+      ]
+    },
+    {
+      "id": "f2",
+      "q": {
+        "hu": "Melyik IP-n fut hitelesítés nélkül elérhető adatbázis-port?",
+        "en": "Which IP runs a database port reachable without authentication?"
+      },
+      "hash": "f14825c6bed2f1bd80167f0c2029c646608afa42218fc0eab5430834e49fa46f",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "A megjegyzes oszlopban van egy kockázati jelzés.",
+            "en": "There is a risk note in the note column."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "Az Elasticsearch (9200) port a gyanús.",
+            "en": "The Elasticsearch (9200) port is the suspicious one."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "Az elfelejtett gép IP-je.",
+            "en": "The forgotten host's IP."
+          }
+        }
+      ]
+    },
+    {
+      "id": "f3",
+      "q": {
+        "hu": "Hány saját IP-címe látszik a cégnek (kitöltött nev)?",
+        "en": "How many of the company's own IPs are visible (name filled in)?"
+      },
+      "hash": "93d82797cfd167dff88fc72eb6a7957ec8d761554dd2c56facfec43b5c4b8241",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "A céges sorok nev oszlopa ki van töltve.",
+            "en": "The company rows have the name column filled in."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "Számold az egyedi IP-ket.",
+            "en": "Count the distinct IPs."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "Az üres nevű sorok idegen zaj.",
+            "en": "Rows with empty names are unrelated noise."
+          }
+        }
+      ]
+    },
+    {
+      "id": "f4",
+      "q": {
+        "hu": "Melyik /24-es tartományba esnek a cég gépei?",
+        "en": "Which /24 range do the company's hosts fall in?"
+      },
+      "hash": "1cad3e0aa30966402d056324aa55222e5f81b676ccaeb58d1685905ae0a7dbb2",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "A céges IP-k első három számcsoportja közös.",
+            "en": "The first three groups of the company IPs are the same."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "Egészítsd ki /24-re.",
+            "en": "Complete it to a /24."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "Formátum: a.b.c.0/24",
+            "en": "Format: a.b.c.0/24"
+          }
+        }
+      ]
+    }
+  ],
+  "files": [
+    {
+      "name": "kitett_szolgaltatasok.csv",
+      "view": "table"
+    }
+  ]
+}

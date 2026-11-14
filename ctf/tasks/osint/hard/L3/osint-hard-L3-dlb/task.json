@@ -1,0 +1,185 @@
+{
+  "id": "osint-hard-L3-dlb",
+  "side": "osint",
+  "mode": "hard",
+  "layer": 3,
+  "incident": {
+    "name": "Nyilvános digitális lábnyom felmérése (szintetikus gyakorlat)",
+    "url": "https://owasp.org/www-project-web-security-testing-guide/"
+  },
+  "title": {
+    "hu": "Kép-metaadat",
+    "en": "Image metadata"
+  },
+  "story": {
+    "hu": "A munkatárs egy fotót is megosztott az új belépőkártyájáról. A nyilvános fotók metaadataiból állapítsd meg, melyik kép az övé, hol és pontosan mikor készült – a cég így látja, mennyi szivárog ki a képek EXIF-adataiból.",
+    "en": "The employee also shared a photo of their new access badge. From the metadata of the public photos, work out which picture is theirs, where and exactly when it was taken – this shows the company how much leaks through image EXIF data."
+  },
+  "keyIn": {
+    "type": "account",
+    "from": "L2"
+  },
+  "keyOut": {
+    "type": "time",
+    "text": {
+      "hu": "A belépőkártyás fotó készítési ideje",
+      "en": "Time the badge photo was taken"
+    },
+    "enc": {
+      "f1+f2": "5b0cfa36215f1a91",
+      "f1+f3": "9562b4d812dc9ff9",
+      "f1+f4": "39d320ff99481b8b",
+      "f2+f3": "1084350b495d41c6",
+      "f2+f4": "cd6df7c014505cdc",
+      "f3+f4": "6dd80ebb3b1d7162"
+    }
+  },
+  "flags": [
+    {
+      "id": "f1",
+      "q": {
+        "hu": "Hány fotó Artist mezője a munkatárs fióknevét tartalmazza?",
+        "en": "How many photos have the employee's account name in the Artist field?"
+      },
+      "hash": "c17d01165d6af70f5aa9fda542db404fe3b8066512cf7ac10a5f40bede903153",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "Keress rá a fióknévre a fájlban.",
+            "en": "Search the file for the account name."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "Az Artist sorokat nézd.",
+            "en": "Look at the Artist lines."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "Minden ======== blokk egy fotó.",
+            "en": "Each ======== block is one photo."
+          }
+        }
+      ]
+    },
+    {
+      "id": "f2",
+      "q": {
+        "hu": "Melyik fájl a belépőkártyás fotó (van GPS-adata)?",
+        "en": "Which file is the badge photo (it has GPS data)?"
+      },
+      "hash": "8a79face0eb970012d8cfc93f6cd784038bea092e7894ce2d518862cb8aaec84",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "A munkatárs fotói közül csak egynek van helyadata.",
+            "en": "Only one of the employee's photos has location data."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "A fájlnév is árulkodó.",
+            "en": "The file name is telling too."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "A File Name sor teljes értéke.",
+            "en": "The full value of the File Name line."
+          }
+        }
+      ]
+    },
+    {
+      "id": "f3",
+      "q": {
+        "hu": "Melyik telephelyen készült a fotó?",
+        "en": "At which site was the photo taken?"
+      },
+      "hash": "2db2b0eae4ab07b3b356a2879d7777282e1a09ed2f8bc5c4bf5829b3f1d186d4",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "Vesd össze a GPS-koordinátákat a telephelylistával.",
+            "en": "Compare the GPS coordinates with the site list."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "A legközelebbi telephelyet keresd.",
+            "en": "Find the nearest site."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "Az eltérés kevesebb, mint 0,001 fok.",
+            "en": "The difference is under 0.001 degrees."
+          }
+        }
+      ]
+    },
+    {
+      "id": "f4",
+      "q": {
+        "hu": "Pontosan mikor készült a fotó (ÓÓ:PP:MM)?",
+        "en": "Exactly when was the photo taken (HH:MM:SS)?"
+      },
+      "hash": "ec3644bc10b68b7a4cf2d75bfa4a56a8a5718e90ea87009958e2a41aaa78662a",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "A Date/Time Original sor.",
+            "en": "The Date/Time Original line."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "Csak az időpont kell, a dátum nem.",
+            "en": "Only the time is needed, not the date."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "Formátum: ÓÓ:PP:MM",
+            "en": "Format: HH:MM:SS"
+          }
+        }
+      ]
+    }
+  ],
+  "files": [
+    {
+      "name": "foto_metaadat.txt",
+      "view": "text"
+    },
+    {
+      "name": "telephelyek.csv",
+      "view": "table"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+ÁLLÁSHIRDETÉS – Tölgyfa Egyetem
+
+Pozíció: Informatika-mérnök
+Csapat: Informatika
+Elvárás: Linux, konténerek, CI/CD, felhőalapú szolgáltatások
+Jelentkezés: a leendő csapatvezetőnél, a szokásos céges címen (szabo.<keresztnév>@tolgyfa.example formában)
+
+ÁLLÁSHIRDETÉS – Tölgyfa Egyetem
+
+Pozíció: Ügyfélszolgálati munkatárs
+Csapat: Ügyfélkapcsolat
+Jelentkezés: karrier@tolgyfa.example
+
+Megjegyzés: a céges e-mail-címek formája: vezeteknev.keresztnev@tolgyfa.example (ékezet nélkül)

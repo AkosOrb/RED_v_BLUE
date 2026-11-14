@@ -11,7 +11,7 @@
 /* Same look as the main Red vs Blue app: industrial label (charcoal, warm beige, signal orange) on grid paper. */
 :root{
   --ground:#ECE8E2; --paper:#D6CEC3; --ink:#232323; --mute:#6b655e; --char:#3e3e3e;
-  --red:#FF3B12; --blue:#2F86DA; --white:#F6F3EE; --soft:#D9D2C8; --ok:#2a7d45;
+  --red:#FF3B12; --blue:#2F86DA; --osint:#0f9d8a; --white:#F6F3EE; --soft:#D9D2C8; --ok:#2a7d45;
   --btn-bg:#3e3e3e; --btn-bg2:#525252; --btn-fg:#F6F3EE; --btn-on-bg:#FF3B12; --btn-on-fg:#1a1a1a;
   --f-disp:'Inter Tight','Helvetica Neue',Helvetica,Arial,sans-serif; --f-body:'Inter Tight','Helvetica Neue',Helvetica,Arial,sans-serif; --f-mono:'Share Tech Mono',ui-monospace,Menlo,monospace;
   --f-num:'Inter Tight','Helvetica Neue',Helvetica,Arial,sans-serif;
@@ -49,7 +49,7 @@ a{color:inherit}
 .stack{display:flex;flex-direction:column;gap:14px}
 .btn{border:0;background:var(--btn-bg);color:var(--btn-fg);padding:10px 16px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;font-size:13px;clip-path:polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%,0 8px)}
 .btn:hover{background:var(--btn-bg2)}
-.btn.red{box-shadow:inset 6px 0 0 var(--red)}.btn.blue{box-shadow:inset 6px 0 0 var(--blue)}
+.btn.red{box-shadow:inset 6px 0 0 var(--red)}.btn.blue{box-shadow:inset 6px 0 0 var(--blue)}.btn.osint{box-shadow:inset 6px 0 0 var(--osint)}
 .btn.ghost{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 2px var(--ink)}
 .btn.ghost:hover{background:var(--gridline)}
 .panel .btn.ghost{color:var(--white);box-shadow:inset 0 0 0 2px var(--white)}
@@ -90,7 +90,7 @@ table.lb th,table.lb td{border-bottom:1px solid var(--mute);padding:6px 8px;text
 table.lb th{font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase}
 .tag{display:inline-block;font-family:var(--f-mono);font-size:11px;padding:1px 6px;background:var(--char);color:var(--white)}
 .theme{display:inline-flex;align-items:center;justify-content:center;min-width:34px}
-.tag.r{background:var(--red)}.tag.b{background:var(--blue)}
+.tag.r{background:var(--red)}.tag.b{background:var(--blue)}.tag.o{background:var(--osint)}
 .err{color:var(--bad);font-weight:700;min-height:1.4em}
 /* Instructor view on narrow screens: game rows become cards, event rows stack. */
 .only-narrow{display:none}
@@ -117,7 +117,7 @@ table.lb th{font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-t
 .homegrid{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:14px;align-items:stretch}
 .homegrid>.frame{display:flex}.homegrid>.frame>.fi{flex:1}
 @media (max-width:720px){.homegrid{grid-template-columns:1fr}}
-.tracks{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:stretch}
+.tracks{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;align-items:stretch}
 .tracks>.frame{display:flex}.tracks>.frame>.fi{flex:1}
 @media (max-width:720px){.tracks{grid-template-columns:1fr}}
 .demo{aspect-ratio:1/1;width:100%;max-width:420px;margin:0 auto}
@@ -192,12 +192,13 @@ const LAYERS = 7, FLAGS = 4, HINT_COST = [10, 25, 50], MULT = { easy: 1, hard: 1
 // Two tracks, each 7 stages with the same scoring, key chain and leaderboard. Blue = incident response
 // (attacker techniques appear only as evidence to recognise). Red = an authorised penetration test on
 // synthetic artifacts, analysis only (no working exploits). The default when none is chosen is blue.
-const SIDES = ['blue', 'red'];
+const SIDES = ['blue', 'red', 'osint'];
 const SIDE = 'blue';
-const SIDE_LABEL = { blue: ['Incidenskezelés', 'Incident response'], red: ['Behatolásteszt', 'Penetration test'] };
+const SIDE_LABEL = { blue: ['Incidenskezelés', 'Incident response'], red: ['Behatolásteszt', 'Penetration test'], osint: ['OSINT-felmérés', 'OSINT review'] };
 const LAYER_NAMES = {
   blue: [['Riasztás', 'Alert'], ['Triázs', 'Triage'], ['Naplóelemzés', 'Log analysis'], ['Forenzika', 'Forensics'], ['Elszigetelés', 'Containment'], ['Felszámolás', 'Eradication'], ['Helyreállítás', 'Recovery']],
   red: [['Felderítés', 'Reconnaissance'], ['Kezdeti hozzáférés', 'Initial access'], ['Végrehajtás', 'Execution'], ['Megmaradás', 'Persistence'], ['Jogosultságemelés', 'Privilege escalation'], ['Oldalirányú mozgás', 'Lateral movement'], ['Adatszivárogtatás', 'Exfiltration']],
+  osint: [['Webes lábnyom', 'Web footprint'], ['Munkatársak és közösségi média', 'People and social media'], ['Kép-metaadat', 'Image metadata'], ['A cég saját domainjei', 'Company domains'], ['A cég saját IP-tartománya', 'Company IP range'], ['Archívumok és régi oldalak', 'Archives and old pages'], ['Kockázati jelentés', 'Risk report']],
 };
 const sideNames = () => LAYER_NAMES[(GAME && GAME.side) || SIDE];
 function flagPoints(k, mode, hintsTaken, late) {
@@ -442,16 +443,19 @@ const TRACK_DESC = {
          'Run the 7 stages of incident response from the alert to recovery. You have to recognise and understand the attacker\'s methods from the evidence.'],
   red: ['Egy engedélyezett behatolásteszt 7 szakaszát viszed végig a felderítéstől az adatszivárogtatásig, kizárólag szintetikus anyagokon. A támadói lépéseket a megbízás során keletkezett nyomokból kell elemezned.',
         'Run the 7 stages of an authorised penetration test from reconnaissance to exfiltration, on synthetic artifacts only. You analyse the attacker steps from the evidence the engagement left behind.'],
+  osint: ['Egy kitalált cég megbízásából felméred, mit lát kívülről a cég nyilvános digitális lábnyomából, hogy csökkenthető legyen a támadási felület. 7 szakasz a webes lábnyomtól a kockázati jelentésig, kizárólag nyílt forrású, szintetikus adatokon.',
+          'On behalf of a fictional company, you review what an outsider can see of its public digital footprint, so the attack surface can be reduced. 7 stages from web footprint to risk report, on open-source synthetic data only.'],
 };
 function homeHTML() {
   const g = GAME && !GAME.closed ? GAME : null;
+  const trackTag = { blue: ['Blue · védő oldal', 'Blue · defensive'], red: ['Red · támadó oldal', 'Red · offensive'], osint: ['OSINT · nyílt forrás', 'OSINT · open source'] };
   const trackCard = side => {
-    const cls = side === 'red' ? 'red' : 'blue';
+    const cls = side === 'red' ? 'red' : side === 'osint' ? 'osint' : 'blue';
     const modeBtns = ['easy', 'hard'].map(m => {
       const ok = INDEX && [1, 2, 3, 4, 5, 6, 7].every(k => INDEX.tasks.some(t => t.side === side && t.mode === m && t.layer === k));
       return `<button class="btn ${cls}" data-a="new" data-side="${side}" data-mode="${m}" ${ok && !g ? '' : 'disabled'}>${m === 'easy' ? L('Könnyű', 'Easy') : L('Nehéz', 'Hard')}${ok ? '' : ' · ' + L('hamarosan', 'coming soon')}</button>`;
     }).join('');
-    return `<div class="frame cut"><div class="fi stack"><div><div class="lbl">${side === 'red' ? L('Red · támadó oldal', 'Red · offensive') : L('Blue · védő oldal', 'Blue · defensive')}</div>
+    return `<div class="frame cut"><div class="fi stack"><div><div class="lbl">${L(...trackTag[side])}</div>
      <h2 style="margin-top:4px">${L(...SIDE_LABEL[side])}</h2></div>
      <p style="margin:0">${L(...TRACK_DESC[side])}</p>
      <div class="row">${modeBtns}</div></div></div>`;
@@ -460,7 +464,7 @@ function homeHTML() {
    ${g ? `<div class="panel cut"><div class="lbl">${L('Folyamatban lévő játék', 'Game in progress')}</div>
      <h2 style="margin:6px 0">${L(...SIDE_LABEL[g.side || 'blue'])} · ${g.mode === 'easy' ? L('könnyű', 'easy') : L('nehéz', 'hard')} · ${g.score} ${L('pont', 'pts')} · ${Math.min(g.state.unlocked, 7)}. ${L('réteg', 'layer')}</h2>
      <div class="row"><button class="btn" data-a="resume">${L('Folytatás', 'Continue')}</button></div></div>` : ''}
-   <div class="tracks">${trackCard('blue')}${trackCard('red')}</div>
+   <div class="tracks">${trackCard('blue')}${trackCard('red')}${trackCard('osint')}</div>
    <div class="frame cut demo" id="demo" role="img" aria-label="${L('Mintajáték-animáció', 'Sample game animation')}">${demoHTML()}</div>
    ${g ? `<p class="hint">${L('Új játékot a mostani lezárása után indíthatsz.', 'You can start a new game after closing the current one.')}</p>` : ''}
    <p class="hint">${L('Könnyű mód: minden a böngészőben megoldható. Nehéz mód: letöltött fájlokkal, saját elemzőeszközökkel dolgozol.', 'Easy mode: everything can be solved in the browser. Hard mode: you work on downloaded files with your own analysis tools.')}</p>
@@ -540,7 +544,7 @@ async function boardHTML() {
   const list = Object.values(best).sort((a, b) => b.score - a.score || String(a.updated_at).localeCompare(String(b.updated_at)));
   return `<div class="frame cut"><div class="fi"><h2>${L('Ranglista', 'Leaderboard')}</h2><p class="hint">${L('Játékosonként a legjobb eredmény. Holtversenynél az nyer, aki korábban érte el.', 'Best result per player. Ties go to whoever reached it first.')}</p>
    <table class="lb"><thead><tr><th>#</th><th>${L('Játékos', 'Player')}</th><th>${L('Pálya', 'Track')}</th><th>${L('Mód', 'Mode')}</th><th>${L('Réteg', 'Layer')}</th><th>${L('Pont', 'Points')}</th></tr></thead>
-   <tbody>${list.map((r, i) => `<tr><td>${i + 1}</td><td>${esc(r.username)}</td><td><span class="tag ${r.side === 'red' ? 'r' : 'b'}">${r.side === 'red' ? 'Red' : 'Blue'}</span></td><td>${r.mode === 'easy' ? L('könnyű', 'easy') : L('nehéz', 'hard')}</td><td>${r.layer}</td><td><b>${r.score}</b></td></tr>`).join('') || `<tr><td colspan="6">${L('Még nincs eredmény.', 'No results yet.')}</td></tr>`}</tbody></table></div></div>`;
+   <tbody>${list.map((r, i) => `<tr><td>${i + 1}</td><td>${esc(r.username)}</td><td><span class="tag ${r.side === 'red' ? 'r' : r.side === 'osint' ? 'o' : 'b'}">${r.side === 'red' ? 'Red' : r.side === 'osint' ? 'OSINT' : 'Blue'}</span></td><td>${r.mode === 'easy' ? L('könnyű', 'easy') : L('nehéz', 'hard')}</td><td>${r.layer}</td><td><b>${r.score}</b></td></tr>`).join('') || `<tr><td colspan="6">${L('Még nincs eredmény.', 'No results yet.')}</td></tr>`}</tbody></table></div></div>`;
 }
 
 const EV_NAMES = { start: ['Játék indítása', 'Game started'], open_layer: ['Réteg megnyitása', 'Layer opened'], view_file: ['Fájl megnyitása', 'File viewed'], download: ['Fájl letöltése', 'File downloaded'], submit: ['Zászló beküldése', 'Flag submitted'], hint: ['Tipp kérése', 'Hint taken'], unlock: ['Következő réteg megnyílt', 'Next layer unlocked'], finish: ['Mind a 7 réteg teljesítve', 'All 7 layers completed'], close: ['Játék lezárása', 'Game closed'] };

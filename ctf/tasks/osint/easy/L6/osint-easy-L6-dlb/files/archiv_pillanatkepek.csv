@@ -1,0 +1,19 @@
+mentve,url,statusz,oldalcim
+2024-12-27 18:58:00,https://delibab-regi.example/,200,
+2025-01-08 00:00:00,https://delibab-regi.example/,200,Délibáb Energia – régi oldal
+2025-01-30 16:53:00,https://www.delibab.example/,404,Kezdőlap
+2025-02-07 00:00:00,https://delibab-regi.example/projektek,200,Projektek
+2025-03-10 15:33:00,https://delibab-regi.example/,200,
+2025-06-27 19:25:00,https://www.delibab.example/,200,Projektek
+2025-06-28 18:12:00,https://delibab-regi.example/,301,
+2025-06-30 22:47:00,https://delibab-regi.example/,404,Projektek
+2025-07-24 15:47:00,https://delibab-regi.example/,200,Karrier
+2025-08-03 23:37:00,https://www.delibab.example/,404,Projektek
+2025-09-03 20:56:00,https://karrier.delibab.example/,200,Projektek
+2025-12-23 01:31:00,https://delibab-regi.example/,301,Projektek
+2026-01-15 23:51:00,https://delibab-regi.example/,404,Karrier
+2026-03-05 03:59:00,https://www.delibab.example/,200,Projektek
+2026-03-05 23:34:00,https://delibab-regi.example/,301,Kezdőlap
+2026-04-13 17:22:00,https://delibab-regi.example/,404,Kezdőlap
+2026-07-18 16:56:00,https://karrier.delibab.example/,404,Karrier
+2026-08-08 00:00:00,https://delibab-regi.example/,404,

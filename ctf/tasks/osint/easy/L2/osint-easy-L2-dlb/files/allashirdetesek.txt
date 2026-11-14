@@ -1,0 +1,14 @@
+ÁLLÁSHIRDETÉS – Délibáb Energia Zrt.
+
+Pozíció: DevOps-mérnök
+Csapat: DevOps
+Elvárás: Linux, konténerek, CI/CD, felhőalapú szolgáltatások
+Jelentkezés: a leendő csapatvezetőnél, a szokásos céges címen (nagy.<keresztnév>@delibab.example formában)
+
+ÁLLÁSHIRDETÉS – Délibáb Energia Zrt.
+
+Pozíció: Ügyfélszolgálati munkatárs
+Csapat: Ügyfélkapcsolat
+Jelentkezés: karrier@delibab.example
+
+Megjegyzés: a céges e-mail-címek formája: vezeteknev.keresztnev@delibab.example (ékezet nélkül)

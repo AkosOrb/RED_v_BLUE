@@ -1,0 +1,102 @@
+# Nyilvánosan megosztott fotók metaadatai (exiftool-kimenet, SZINTETIKUS)
+
+======== IMG_5675.jpg
+File Name                       : IMG_5675.jpg
+Artist                          : horvath.csilla
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:26 11:00:00
+Image Size                      : 1920x1080
+GPS Position                    : (nincs)
+
+======== IMG_5825.jpg
+File Name                       : IMG_5825.jpg
+Artist                          : szabo.lilla
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:27 02:24:00
+Image Size                      : 4032x3024
+GPS Position                    : (nincs)
+
+======== IMG_3762.jpg
+File Name                       : IMG_3762.jpg
+Artist                          : molnar.daniel
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:09:04 08:23:00
+Image Size                      : 1920x1080
+GPS Position                    : (nincs)
+
+======== IMG_9702.jpg
+File Name                       : IMG_9702.jpg
+Artist                          : papp.eszter
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:09:05 12:47:00
+Image Size                      : 1920x1080
+GPS Latitude                    : 47.5005 N
+GPS Longitude                   : 18.9602 E
+
+======== IMG_7772.jpg
+File Name                       : IMG_7772.jpg
+Artist                          : meszaros.adam
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:09:07 21:31:00
+Image Size                      : 1920x1080
+GPS Position                    : (nincs)
+
+======== IMG_1017.jpg
+File Name                       : IMG_1017.jpg
+Artist                          : racz.anna
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:09:09 13:01:00
+Image Size                      : 1920x1080
+GPS Position                    : (nincs)
+
+======== IMG_1387.jpg
+File Name                       : IMG_1387.jpg
+Artist                          : farkas.reka
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:09:10 03:43:00
+Image Size                      : 1920x1080
+GPS Position                    : (nincs)
+
+======== IMG_8776.jpg
+File Name                       : IMG_8776.jpg
+Artist                          : szabo.lilla
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:09:13 12:57:00
+Image Size                      : 1920x1080
+GPS Position                    : (nincs)
+
+======== IMG_5163.jpg
+File Name                       : IMG_5163.jpg
+Artist                          : racz.anna
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:09:14 05:47:00
+Image Size                      : 3024x4032
+GPS Position                    : (nincs)
+
+======== IMG_2168_belepo.jpg
+File Name                       : IMG_2168_belepo.jpg
+Artist                          : szabo.lilla
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:09:23 23:52:36
+Image Size                      : 1920x1080
+GPS Latitude                    : 47.5122 N
+GPS Longitude                   : 19.1182 E
+
+======== IMG_9518.jpg
+File Name                       : IMG_9518.jpg
+Artist                          : molnar.daniel
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:09:24 10:40:00
+Image Size                      : 3024x4032
+GPS Position                    : (nincs)

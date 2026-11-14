@@ -1,0 +1,3066 @@
+# Nyilvánosan megosztott fotók metaadatai (exiftool-kimenet, SZINTETIKUS)
+
+======== IMG_4013.jpg
+File Name                       : IMG_4013.jpg
+Artist                          : nagy.dora
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:07:31 19:04:00
+Image Size                      : 4032x3024
+GPS Position                    : (nincs)
+
+======== IMG_6804.jpg
+File Name                       : IMG_6804.jpg
+Artist                          : horvath.peter
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:04 01:19:00
+Image Size                      : 3024x4032
+GPS Latitude                    : 47.4424 N
+GPS Longitude                   : 19.0611 E
+
+======== IMG_3007.jpg
+File Name                       : IMG_3007.jpg
+Artist                          : farkas.gabor
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:04 03:45:00
+Image Size                      : 3024x4032
+GPS Latitude                    : 47.4976 N
+GPS Longitude                   : 19.0403 E
+
+======== IMG_4071.jpg
+File Name                       : IMG_4071.jpg
+Artist                          : horvath.bence
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:04 04:53:00
+Image Size                      : 4032x3024
+GPS Latitude                    : 47.4983 N
+GPS Longitude                   : 19.0401 E
+
+======== IMG_9406.jpg
+File Name                       : IMG_9406.jpg
+Artist                          : olah.mate
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:04 05:53:00
+Image Size                      : 3024x4032
+GPS Position                    : (nincs)
+
+======== IMG_6635.jpg
+File Name                       : IMG_6635.jpg
+Artist                          : horvath.bence
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:04 10:57:00
+Image Size                      : 4032x3024
+GPS Latitude                    : 47.5002 N
+GPS Longitude                   : 18.9604 E
+
+======== IMG_4640.jpg
+File Name                       : IMG_4640.jpg
+Artist                          : molnar.judit
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:04 18:44:00
+Image Size                      : 4032x3024
+GPS Position                    : (nincs)
+
+======== IMG_6255.jpg
+File Name                       : IMG_6255.jpg
+Artist                          : fekete.anna
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:04 23:54:00
+Image Size                      : 3024x4032
+GPS Latitude                    : 47.5004 N
+GPS Longitude                   : 18.9603 E
+
+======== IMG_2388.jpg
+File Name                       : IMG_2388.jpg
+Artist                          : takacs.tamas
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:05 03:37:00
+Image Size                      : 4032x3024
+GPS Latitude                    : 47.5000 N
+GPS Longitude                   : 18.9604 E
+
+======== IMG_6056.jpg
+File Name                       : IMG_6056.jpg
+Artist                          : fekete.tamas
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:05 09:47:00
+Image Size                      : 4032x3024
+GPS Position                    : (nincs)
+
+======== IMG_6903.jpg
+File Name                       : IMG_6903.jpg
+Artist                          : kiss.csilla
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:05 12:13:00
+Image Size                      : 4032x3024
+GPS Latitude                    : 47.4423 N
+GPS Longitude                   : 19.0606 E
+
+======== IMG_2284.jpg
+File Name                       : IMG_2284.jpg
+Artist                          : farkas.eszter
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:05 13:59:00
+Image Size                      : 1920x1080
+GPS Latitude                    : 47.4418 N
+GPS Longitude                   : 19.0613 E
+
+======== IMG_5113.jpg
+File Name                       : IMG_5113.jpg
+Artist                          : molnar.judit
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:05 14:23:00
+Image Size                      : 3024x4032
+GPS Latitude                    : 47.4423 N
+GPS Longitude                   : 19.0611 E
+
+======== IMG_5084.jpg
+File Name                       : IMG_5084.jpg
+Artist                          : takacs.gabor
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:05 16:42:00
+Image Size                      : 3024x4032
+GPS Position                    : (nincs)
+
+======== IMG_3397.jpg
+File Name                       : IMG_3397.jpg
+Artist                          : horvath.peter
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:05 16:45:00
+Image Size                      : 3024x4032
+GPS Latitude                    : 47.4423 N
+GPS Longitude                   : 19.0612 E
+
+======== IMG_3986.jpg
+File Name                       : IMG_3986.jpg
+Artist                          : szabo.peter
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:05 18:39:00
+Image Size                      : 4032x3024
+GPS Position                    : (nincs)
+
+======== IMG_6543.jpg
+File Name                       : IMG_6543.jpg
+Artist                          : takacs.gabor
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:05 19:58:00
+Image Size                      : 4032x3024
+GPS Position                    : (nincs)
+
+======== IMG_7859.jpg
+File Name                       : IMG_7859.jpg
+Artist                          : szabo.peter
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:05 21:37:00
+Image Size                      : 4032x3024
+GPS Latitude                    : 47.4975 N
+GPS Longitude                   : 19.0403 E
+
+======== IMG_7723.jpg
+File Name                       : IMG_7723.jpg
+Artist                          : szabo.peter
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:05 22:40:00
+Image Size                      : 1920x1080
+GPS Latitude                    : 47.4983 N
+GPS Longitude                   : 19.0406 E
+
+======== IMG_7160.jpg
+File Name                       : IMG_7160.jpg
+Artist                          : horvath.peter
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:05 23:45:00
+Image Size                      : 3024x4032
+GPS Latitude                    : 47.4418 N
+GPS Longitude                   : 19.0613 E
+
+======== IMG_6712.jpg
+File Name                       : IMG_6712.jpg
+Artist                          : fekete.anna
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:06 07:16:00
+Image Size                      : 1920x1080
+GPS Position                    : (nincs)
+
+======== IMG_9888.jpg
+File Name                       : IMG_9888.jpg
+Artist                          : farkas.eszter
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:06 15:43:00
+Image Size                      : 3024x4032
+GPS Position                    : (nincs)
+
+======== IMG_5947.jpg
+File Name                       : IMG_5947.jpg
+Artist                          : szabo.noemi
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:06 23:40:00
+Image Size                      : 3024x4032
+GPS Position                    : (nincs)
+
+======== IMG_8284.jpg
+File Name                       : IMG_8284.jpg
+Artist                          : farkas.gabor
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:07 04:43:00
+Image Size                      : 4032x3024
+GPS Latitude                    : 47.4983 N
+GPS Longitude                   : 19.0405 E
+
+======== IMG_1952.jpg
+File Name                       : IMG_1952.jpg
+Artist                          : fekete.tamas
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:07 08:36:00
+Image Size                      : 3024x4032
+GPS Latitude                    : 47.4976 N
+GPS Longitude                   : 19.0402 E
+
+======== IMG_1145.jpg
+File Name                       : IMG_1145.jpg
+Artist                          : takacs.gabor
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:07 08:42:00
+Image Size                      : 4032x3024
+GPS Latitude                    : 47.5004 N
+GPS Longitude                   : 18.9602 E
+
+======== IMG_8792.jpg
+File Name                       : IMG_8792.jpg
+Artist                          : farkas.gabor
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:07 12:25:00
+Image Size                      : 1920x1080
+GPS Latitude                    : 47.4418 N
+GPS Longitude                   : 19.0609 E
+
+======== IMG_6277.jpg
+File Name                       : IMG_6277.jpg
+Artist                          : horvath.bence
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:07 14:58:00
+Image Size                      : 1920x1080
+GPS Position                    : (nincs)
+
+======== IMG_2330.jpg
+File Name                       : IMG_2330.jpg
+Artist                          : fekete.tamas
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:07 16:33:00
+Image Size                      : 1920x1080
+GPS Position                    : (nincs)
+
+======== IMG_2560.jpg
+File Name                       : IMG_2560.jpg
+Artist                          : simon.anna
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:07 19:26:00
+Image Size                      : 4032x3024
+GPS Latitude                    : 47.5007 N
+GPS Longitude                   : 18.9602 E
+
+======== IMG_4760.jpg
+File Name                       : IMG_4760.jpg
+Artist                          : takacs.gabor
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:07 20:39:00
+Image Size                      : 4032x3024
+GPS Position                    : (nincs)
+
+======== IMG_7979.jpg
+File Name                       : IMG_7979.jpg
+Artist                          : takacs.gabor
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:07 21:16:00
+Image Size                      : 3024x4032
+GPS Position                    : (nincs)
+
+======== IMG_6291.jpg
+File Name                       : IMG_6291.jpg
+Artist                          : szabo.noemi
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:07 22:51:00
+Image Size                      : 3024x4032
+GPS Latitude                    : 47.5005 N
+GPS Longitude                   : 18.9598 E
+
+======== IMG_5026.jpg
+File Name                       : IMG_5026.jpg
+Artist                          : szabo.noemi
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:08 03:53:00
+Image Size                      : 1920x1080
+GPS Position                    : (nincs)
+
+======== IMG_4290.jpg
+File Name                       : IMG_4290.jpg
+Artist                          : farkas.eszter
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:08 07:52:00
+Image Size                      : 4032x3024
+GPS Position                    : (nincs)
+
+======== IMG_8649.jpg
+File Name                       : IMG_8649.jpg
+Artist                          : molnar.judit
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:08 08:04:00
+Image Size                      : 4032x3024
+GPS Latitude                    : 47.4420 N
+GPS Longitude                   : 19.0608 E
+
+======== IMG_4689.jpg
+File Name                       : IMG_4689.jpg
+Artist                          : kiss.csilla
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:08 08:07:00
+Image Size                      : 1920x1080
+GPS Position                    : (nincs)
+
+======== IMG_7299.jpg
+File Name                       : IMG_7299.jpg
+Artist                          : kiss.csilla
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:08 13:07:00
+Image Size                      : 4032x3024
+GPS Position                    : (nincs)
+
+======== IMG_3185.jpg
+File Name                       : IMG_3185.jpg
+Artist                          : fekete.anna
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:08 14:33:00
+Image Size                      : 3024x4032
+GPS Latitude                    : 47.4977 N
+GPS Longitude                   : 19.0402 E
+
+======== IMG_7361.jpg
+File Name                       : IMG_7361.jpg
+Artist                          : takacs.gabor
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:08 15:09:00
+Image Size                      : 4032x3024
+GPS Latitude                    : 47.4979 N
+GPS Longitude                   : 19.0404 E
+
+======== IMG_9881.jpg
+File Name                       : IMG_9881.jpg
+Artist                          : farkas.gabor
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:08 15:21:00
+Image Size                      : 3024x4032
+GPS Latitude                    : 47.4421 N
+GPS Longitude                   : 19.0609 E
+
+======== IMG_1813.jpg
+File Name                       : IMG_1813.jpg
+Artist                          : molnar.judit
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:08 18:38:00
+Image Size                      : 3024x4032
+GPS Latitude                    : 47.4977 N
+GPS Longitude                   : 19.0402 E
+
+======== IMG_4785.jpg
+File Name                       : IMG_4785.jpg
+Artist                          : farkas.eszter
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:08 18:44:00
+Image Size                      : 4032x3024
+GPS Latitude                    : 47.4981 N
+GPS Longitude                   : 19.0405 E
+
+======== IMG_7453.jpg
+File Name                       : IMG_7453.jpg
+Artist                          : fekete.tamas
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:08 20:12:00
+Image Size                      : 1920x1080
+GPS Position                    : (nincs)
+
+======== IMG_6390.jpg
+File Name                       : IMG_6390.jpg
+Artist                          : horvath.bence
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:08 22:05:00
+Image Size                      : 3024x4032
+GPS Position                    : (nincs)
+
+======== IMG_3854.jpg
+File Name                       : IMG_3854.jpg
+Artist                          : horvath.peter
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:09 03:50:00
+Image Size                      : 1920x1080
+GPS Position                    : (nincs)
+
+======== IMG_9596.jpg
+File Name                       : IMG_9596.jpg
+Artist                          : olah.mate
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:09 05:35:00
+Image Size                      : 4032x3024
+GPS Latitude                    : 47.5004 N
+GPS Longitude                   : 18.9603 E
+
+======== IMG_5886.jpg
+File Name                       : IMG_5886.jpg
+Artist                          : farkas.gabor
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:09 08:15:00
+Image Size                      : 4032x3024
+GPS Position                    : (nincs)
+
+======== IMG_2788.jpg
+File Name                       : IMG_2788.jpg
+Artist                          : fekete.anna
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:09 08:26:00
+Image Size                      : 4032x3024
+GPS Position                    : (nincs)
+
+======== IMG_8148.jpg
+File Name                       : IMG_8148.jpg
+Artist                          : olah.mate
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:09 11:32:00
+Image Size                      : 3024x4032
+GPS Latitude                    : 47.5000 N
+GPS Longitude                   : 18.9599 E
+
+======== IMG_4984.jpg
+File Name                       : IMG_4984.jpg
+Artist                          : farkas.gabor
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:09 14:41:00
+Image Size                      : 4032x3024
+GPS Latitude                    : 47.4976 N
+GPS Longitude                   : 19.0398 E
+
+======== IMG_9017.jpg
+File Name                       : IMG_9017.jpg
+Artist                          : olah.mate
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:09 14:54:00
+Image Size                      : 1920x1080
+GPS Position                    : (nincs)
+
+======== IMG_2526.jpg
+File Name                       : IMG_2526.jpg
+Artist                          : szabo.peter
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:09 21:46:00
+Image Size                      : 1920x1080
+GPS Latitude                    : 47.4422 N
+GPS Longitude                   : 19.0609 E
+
+======== IMG_5179.jpg
+File Name                       : IMG_5179.jpg
+Artist                          : farkas.gabor
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:09 22:44:00
+Image Size                      : 1920x1080
+GPS Latitude                    : 47.4978 N
+GPS Longitude                   : 19.0401 E
+
+======== IMG_5210.jpg
+File Name                       : IMG_5210.jpg
+Artist                          : olah.mate
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:10 05:43:00
+Image Size                      : 1920x1080
+GPS Position                    : (nincs)
+
+======== IMG_9534.jpg
+File Name                       : IMG_9534.jpg
+Artist                          : szabo.peter
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:10 07:01:00
+Image Size                      : 3024x4032
+GPS Position                    : (nincs)
+
+======== IMG_8233.jpg
+File Name                       : IMG_8233.jpg
+Artist                          : fekete.tamas
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:10 12:08:00
+Image Size                      : 4032x3024
+GPS Position                    : (nincs)
+
+======== IMG_9495.jpg
+File Name                       : IMG_9495.jpg
+Artist                          : molnar.judit
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:10 14:24:00
+Image Size                      : 4032x3024
+GPS Latitude                    : 47.4982 N
+GPS Longitude                   : 19.0404 E
+
+======== IMG_2949.jpg
+File Name                       : IMG_2949.jpg
+Artist                          : horvath.peter
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:10 16:26:00
+Image Size                      : 1920x1080
+GPS Latitude                    : 47.4418 N
+GPS Longitude                   : 19.0608 E
+
+======== IMG_3402.jpg
+File Name                       : IMG_3402.jpg
+Artist                          : simon.anna
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:10 20:48:00
+Image Size                      : 3024x4032
+GPS Position                    : (nincs)
+
+======== IMG_1535.jpg
+File Name                       : IMG_1535.jpg
+Artist                          : farkas.eszter
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:10 21:22:00
+Image Size                      : 1920x1080
+GPS Position                    : (nincs)
+
+======== IMG_5383.jpg
+File Name                       : IMG_5383.jpg
+Artist                          : horvath.peter
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:11 02:52:00
+Image Size                      : 4032x3024
+GPS Position                    : (nincs)
+
+======== IMG_6714.jpg
+File Name                       : IMG_6714.jpg
+Artist                          : takacs.gabor
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:11 04:19:00
+Image Size                      : 1920x1080
+GPS Latitude                    : 47.4417 N
+GPS Longitude                   : 19.0610 E
+
+======== IMG_9159.jpg
+File Name                       : IMG_9159.jpg
+Artist                          : farkas.eszter
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:11 05:07:00
+Image Size                      : 3024x4032
+GPS Position                    : (nincs)
+
+======== IMG_5178.jpg
+File Name                       : IMG_5178.jpg
+Artist                          : horvath.bence
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:11 07:05:00
+Image Size                      : 1920x1080
+GPS Latitude                    : 47.4419 N
+GPS Longitude                   : 19.0610 E
+
+======== IMG_4152.jpg
+File Name                       : IMG_4152.jpg
+Artist                          : takacs.gabor
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:11 11:22:00
+Image Size                      : 3024x4032
+GPS Latitude                    : 47.5000 N
+GPS Longitude                   : 18.9598 E
+
+======== IMG_3934.jpg
+File Name                       : IMG_3934.jpg
+Artist                          : takacs.gabor
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:11 11:53:00
+Image Size                      : 4032x3024
+GPS Latitude                    : 47.5006 N
+GPS Longitude                   : 18.9604 E
+
+======== IMG_5658.jpg
+File Name                       : IMG_5658.jpg
+Artist                          : horvath.bence
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:11 13:48:00
+Image Size                      : 1920x1080
+GPS Position                    : (nincs)
+
+======== IMG_1701.jpg
+File Name                       : IMG_1701.jpg
+Artist                          : fekete.tamas
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:11 15:48:00
+Image Size                      : 4032x3024
+GPS Position                    : (nincs)
+
+======== IMG_7896.jpg
+File Name                       : IMG_7896.jpg
+Artist                          : farkas.gabor
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:11 18:23:00
+Image Size                      : 1920x1080
+GPS Latitude                    : 47.5005 N
+GPS Longitude                   : 18.9599 E
+
+======== IMG_8787.jpg
+File Name                       : IMG_8787.jpg
+Artist                          : fekete.tamas
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:11 18:46:00
+Image Size                      : 1920x1080
+GPS Latitude                    : 47.5006 N
+GPS Longitude                   : 18.9599 E
+
+======== IMG_4379.jpg
+File Name                       : IMG_4379.jpg
+Artist                          : olah.mate
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:11 21:05:00
+Image Size                      : 1920x1080
+GPS Position                    : (nincs)
+
+======== IMG_7721.jpg
+File Name                       : IMG_7721.jpg
+Artist                          : fekete.anna
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:12 02:06:00
+Image Size                      : 1920x1080
+GPS Position                    : (nincs)
+
+======== IMG_7435.jpg
+File Name                       : IMG_7435.jpg
+Artist                          : simon.anna
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:12 06:13:00
+Image Size                      : 1920x1080
+GPS Position                    : (nincs)
+
+======== IMG_6884.jpg
+File Name                       : IMG_6884.jpg
+Artist                          : szabo.peter
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:12 11:50:00
+Image Size                      : 4032x3024
+GPS Latitude                    : 47.4977 N
+GPS Longitude                   : 19.0399 E
+
+======== IMG_4890.jpg
+File Name                       : IMG_4890.jpg
+Artist                          : fekete.tamas
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:12 14:12:00
+Image Size                      : 1920x1080
+GPS Latitude                    : 47.4422 N
+GPS Longitude                   : 19.0606 E
+
+======== IMG_4548.jpg
+File Name                       : IMG_4548.jpg
+Artist                          : fekete.anna
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:12 18:29:00
+Image Size                      : 3024x4032
+GPS Position                    : (nincs)
+
+======== IMG_3064.jpg
+File Name                       : IMG_3064.jpg
+Artist                          : simon.anna
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:12 18:47:00
+Image Size                      : 3024x4032
+GPS Latitude                    : 47.5006 N
+GPS Longitude                   : 18.9599 E
+
+======== IMG_5375.jpg
+File Name                       : IMG_5375.jpg
+Artist                          : szabo.noemi
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:12 19:54:00
+Image Size                      : 4032x3024
+GPS Position                    : (nincs)
+
+======== IMG_9439.jpg
+File Name                       : IMG_9439.jpg
+Artist                          : fekete.anna
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:12 19:57:00
+Image Size                      : 1920x1080
+GPS Latitude                    : 47.5002 N
+GPS Longitude                   : 18.9601 E
+
+======== IMG_3732.jpg
+File Name                       : IMG_3732.jpg
+Artist                          : molnar.judit
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:13 03:58:00
+Image Size                      : 1920x1080
+GPS Latitude                    : 47.4980 N
+GPS Longitude                   : 19.0406 E
+
+======== IMG_4401.jpg
+File Name                       : IMG_4401.jpg
+Artist                          : szabo.noemi
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:13 04:21:00
+Image Size                      : 3024x4032
+GPS Position                    : (nincs)
+
+======== IMG_9293.jpg
+File Name                       : IMG_9293.jpg
+Artist                          : molnar.judit
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:13 08:33:00
+Image Size                      : 4032x3024
+GPS Position                    : (nincs)
+
+======== IMG_5525.jpg
+File Name                       : IMG_5525.jpg
+Artist                          : fekete.tamas
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:13 13:47:00
+Image Size                      : 3024x4032
+GPS Position                    : (nincs)
+
+======== IMG_5675.jpg
+File Name                       : IMG_5675.jpg
+Artist                          : szabo.noemi
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:13 18:10:00
+Image Size                      : 3024x4032
+GPS Latitude                    : 47.5003 N
+GPS Longitude                   : 18.9601 E
+
+======== IMG_7939.jpg
+File Name                       : IMG_7939.jpg
+Artist                          : takacs.gabor
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:13 19:48:00
+Image Size                      : 1920x1080
+GPS Position                    : (nincs)
+
+======== IMG_7221.jpg
+File Name                       : IMG_7221.jpg
+Artist                          : simon.anna
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:13 20:13:00
+Image Size                      : 4032x3024
+GPS Latitude                    : 47.5006 N
+GPS Longitude                   : 18.9598 E
+
+======== IMG_2205.jpg
+File Name                       : IMG_2205.jpg
+Artist                          : olah.mate
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:13 21:41:00
+Image Size                      : 3024x4032
+GPS Latitude                    : 47.4418 N
+GPS Longitude                   : 19.0613 E
+
+======== IMG_5893.jpg
+File Name                       : IMG_5893.jpg
+Artist                          : molnar.judit
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:13 22:33:00
+Image Size                      : 4032x3024
+GPS Latitude                    : 47.4982 N
+GPS Longitude                   : 19.0406 E
+
+======== IMG_1004.jpg
+File Name                       : IMG_1004.jpg
+Artist                          : szabo.noemi
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:14 02:10:00
+Image Size                      : 4032x3024
+GPS Latitude                    : 47.5002 N
+GPS Longitude                   : 18.9600 E
+
+======== IMG_6723.jpg
+File Name                       : IMG_6723.jpg
+Artist                          : simon.anna
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:14 02:44:00
+Image Size                      : 1920x1080
+GPS Latitude                    : 47.4424 N
+GPS Longitude                   : 19.0611 E
+
+======== IMG_6631.jpg
+File Name                       : IMG_6631.jpg
+Artist                          : fekete.anna
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:14 03:33:00
+Image Size                      : 4032x3024
+GPS Position                    : (nincs)
+
+======== IMG_1033.jpg
+File Name                       : IMG_1033.jpg
+Artist                          : kiss.csilla
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:14 04:39:00
+Image Size                      : 3024x4032
+GPS Latitude                    : 47.4999 N
+GPS Longitude                   : 18.9601 E
+
+======== IMG_3240.jpg
+File Name                       : IMG_3240.jpg
+Artist                          : farkas.eszter
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:14 09:58:00
+Image Size                      : 4032x3024
+GPS Latitude                    : 47.4979 N
+GPS Longitude                   : 19.0404 E
+
+======== IMG_2327.jpg
+File Name                       : IMG_2327.jpg
+Artist                          : fekete.tamas
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:14 18:34:00
+Image Size                      : 4032x3024
+GPS Position                    : (nincs)
+
+======== IMG_6131.jpg
+File Name                       : IMG_6131.jpg
+Artist                          : szabo.noemi
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:15 01:14:00
+Image Size                      : 1920x1080
+GPS Position                    : (nincs)
+
+======== IMG_6281.jpg
+File Name                       : IMG_6281.jpg
+Artist                          : szabo.peter
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:15 05:28:00
+Image Size                      : 4032x3024
+GPS Position                    : (nincs)
+
+======== IMG_3191.jpg
+File Name                       : IMG_3191.jpg
+Artist                          : kiss.csilla
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:15 14:58:00
+Image Size                      : 1920x1080
+GPS Position                    : (nincs)
+
+======== IMG_7568.jpg
+File Name                       : IMG_7568.jpg
+Artist                          : fekete.tamas
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:15 21:41:00
+Image Size                      : 4032x3024
+GPS Latitude                    : 47.4999 N
+GPS Longitude                   : 18.9598 E
+
+======== IMG_2971.jpg
+File Name                       : IMG_2971.jpg
+Artist                          : takacs.tamas
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:16 02:19:00
+Image Size                      : 3024x4032
+GPS Position                    : (nincs)
+
+======== IMG_2256.jpg
+File Name                       : IMG_2256.jpg
+Artist                          : horvath.bence
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:16 05:13:00
+Image Size                      : 3024x4032
+GPS Latitude                    : 47.5002 N
+GPS Longitude                   : 18.9600 E
+
+======== IMG_9625.jpg
+File Name                       : IMG_9625.jpg
+Artist                          : horvath.bence
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:16 05:42:00
+Image Size                      : 4032x3024
+GPS Latitude                    : 47.4421 N
+GPS Longitude                   : 19.0610 E
+
+======== IMG_6609.jpg
+File Name                       : IMG_6609.jpg
+Artist                          : farkas.eszter
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:16 09:56:00
+Image Size                      : 1920x1080
+GPS Latitude                    : 47.4423 N
+GPS Longitude                   : 19.0614 E
+
+======== IMG_2009.jpg
+File Name                       : IMG_2009.jpg
+Artist                          : simon.anna
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:16 11:47:00
+Image Size                      : 4032x3024
+GPS Position                    : (nincs)
+
+======== IMG_2444.jpg
+File Name                       : IMG_2444.jpg
+Artist                          : farkas.gabor
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:16 22:22:00
+Image Size                      : 4032x3024
+GPS Latitude                    : 47.5005 N
+GPS Longitude                   : 18.9602 E
+
+======== IMG_2702.jpg
+File Name                       : IMG_2702.jpg
+Artist                          : szabo.noemi
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:17 01:04:00
+Image Size                      : 1920x1080
+GPS Latitude                    : 47.5004 N
+GPS Longitude                   : 18.9599 E
+
+======== IMG_3497.jpg
+File Name                       : IMG_3497.jpg
+Artist                          : kiss.csilla
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:17 08:13:00
+Image Size                      : 3024x4032
+GPS Position                    : (nincs)
+
+======== IMG_7386.jpg
+File Name                       : IMG_7386.jpg
+Artist                          : szabo.noemi
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:17 09:55:00
+Image Size                      : 4032x3024
+GPS Latitude                    : 47.5003 N
+GPS Longitude                   : 18.9605 E
+
+======== IMG_2278.jpg
+File Name                       : IMG_2278.jpg
+Artist                          : olah.mate
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:17 10:00:00
+Image Size                      : 4032x3024
+GPS Latitude                    : 47.5007 N
+GPS Longitude                   : 18.9601 E
+
+======== IMG_3826.jpg
+File Name                       : IMG_3826.jpg
+Artist                          : horvath.peter
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:17 12:07:00
+Image Size                      : 3024x4032
+GPS Position                    : (nincs)
+
+======== IMG_7174.jpg
+File Name                       : IMG_7174.jpg
+Artist                          : fekete.tamas
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:17 12:19:00
+Image Size                      : 4032x3024
+GPS Latitude                    : 47.4977 N
+GPS Longitude                   : 19.0399 E
+
+======== IMG_5925.jpg
+File Name                       : IMG_5925.jpg
+Artist                          : horvath.bence
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:17 16:17:00
+Image Size                      : 1920x1080
+GPS Latitude                    : 47.4978 N
+GPS Longitude                   : 19.0404 E
+
+======== IMG_4319.jpg
+File Name                       : IMG_4319.jpg
+Artist                          : olah.mate
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:17 16:37:00
+Image Size                      : 1920x1080
+GPS Position                    : (nincs)
+
+======== IMG_5964.jpg
+File Name                       : IMG_5964.jpg
+Artist                          : takacs.gabor
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:17 17:28:00
+Image Size                      : 1920x1080
+GPS Position                    : (nincs)
+
+======== IMG_5112.jpg
+File Name                       : IMG_5112.jpg
+Artist                          : kiss.csilla
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:17 18:14:00
+Image Size                      : 4032x3024
+GPS Latitude                    : 47.5006 N
+GPS Longitude                   : 18.9604 E
+
+======== IMG_7080.jpg
+File Name                       : IMG_7080.jpg
+Artist                          : szabo.peter
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:17 19:13:00
+Image Size                      : 4032x3024
+GPS Position                    : (nincs)
+
+======== IMG_3999.jpg
+File Name                       : IMG_3999.jpg
+Artist                          : molnar.judit
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:17 20:37:00
+Image Size                      : 4032x3024
+GPS Position                    : (nincs)
+
+======== IMG_1523.jpg
+File Name                       : IMG_1523.jpg
+Artist                          : horvath.bence
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:18 02:07:00
+Image Size                      : 1920x1080
+GPS Latitude                    : 47.4977 N
+GPS Longitude                   : 19.0405 E
+
+======== IMG_4552.jpg
+File Name                       : IMG_4552.jpg
+Artist                          : takacs.gabor
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:18 02:50:00
+Image Size                      : 4032x3024
+GPS Latitude                    : 47.5000 N
+GPS Longitude                   : 18.9601 E
+
+======== IMG_6593.jpg
+File Name                       : IMG_6593.jpg
+Artist                          : takacs.gabor
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:18 03:22:00
+Image Size                      : 3024x4032
+GPS Position                    : (nincs)
+
+======== IMG_3375.jpg
+File Name                       : IMG_3375.jpg
+Artist                          : takacs.gabor
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:18 06:01:00
+Image Size                      : 1920x1080
+GPS Position                    : (nincs)
+
+======== IMG_5571.jpg
+File Name                       : IMG_5571.jpg
+Artist                          : farkas.gabor
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:18 12:08:00
+Image Size                      : 1920x1080
+GPS Latitude                    : 47.5004 N
+GPS Longitude                   : 18.9603 E
+
+======== IMG_1989.jpg
+File Name                       : IMG_1989.jpg
+Artist                          : takacs.gabor
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:18 13:26:00
+Image Size                      : 4032x3024
+GPS Latitude                    : 47.5002 N
+GPS Longitude                   : 18.9602 E
+
+======== IMG_9144.jpg
+File Name                       : IMG_9144.jpg
+Artist                          : fekete.tamas
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:18 21:19:00
+Image Size                      : 4032x3024
+GPS Latitude                    : 47.5003 N
+GPS Longitude                   : 18.9602 E
+
+======== IMG_6501.jpg
+File Name                       : IMG_6501.jpg
+Artist                          : horvath.peter
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:18 22:42:00
+Image Size                      : 4032x3024
+GPS Latitude                    : 47.4976 N
+GPS Longitude                   : 19.0401 E
+
+======== IMG_9640.jpg
+File Name                       : IMG_9640.jpg
+Artist                          : fekete.anna
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:18 22:49:00
+Image Size                      : 4032x3024
+GPS Latitude                    : 47.4980 N
+GPS Longitude                   : 19.0402 E
+
+======== IMG_6991.jpg
+File Name                       : IMG_6991.jpg
+Artist                          : farkas.gabor
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:19 03:43:00
+Image Size                      : 1920x1080
+GPS Position                    : (nincs)
+
+======== IMG_3375.jpg
+File Name                       : IMG_3375.jpg
+Artist                          : horvath.bence
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:19 08:10:00
+Image Size                      : 3024x4032
+GPS Position                    : (nincs)
+
+======== IMG_7971.jpg
+File Name                       : IMG_7971.jpg
+Artist                          : olah.mate
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:19 10:29:00
+Image Size                      : 3024x4032
+GPS Position                    : (nincs)
+
+======== IMG_3411.jpg
+File Name                       : IMG_3411.jpg
+Artist                          : fekete.anna
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:19 12:52:00
+Image Size                      : 4032x3024
+GPS Position                    : (nincs)
+
+======== IMG_7204.jpg
+File Name                       : IMG_7204.jpg
+Artist                          : takacs.tamas
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:19 14:35:00
+Image Size                      : 1920x1080
+GPS Position                    : (nincs)
+
+======== IMG_1943.jpg
+File Name                       : IMG_1943.jpg
+Artist                          : farkas.gabor
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:19 19:03:00
+Image Size                      : 1920x1080
+GPS Latitude                    : 47.5001 N
+GPS Longitude                   : 18.9599 E
+
+======== IMG_6831.jpg
+File Name                       : IMG_6831.jpg
+Artist                          : szabo.peter
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:20 05:51:00
+Image Size                      : 1920x1080
+GPS Latitude                    : 47.5006 N
+GPS Longitude                   : 18.9598 E
+
+======== IMG_1034.jpg
+File Name                       : IMG_1034.jpg
+Artist                          : fekete.anna
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:20 08:21:00
+Image Size                      : 3024x4032
+GPS Latitude                    : 47.5007 N
+GPS Longitude                   : 18.9602 E
+
+======== IMG_9442.jpg
+File Name                       : IMG_9442.jpg
+Artist                          : fekete.anna
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:20 10:06:00
+Image Size                      : 1920x1080
+GPS Latitude                    : 47.4420 N
+GPS Longitude                   : 19.0608 E
+
+======== IMG_5834.jpg
+File Name                       : IMG_5834.jpg
+Artist                          : fekete.tamas
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:20 14:09:00
+Image Size                      : 4032x3024
+GPS Position                    : (nincs)
+
+======== IMG_4758.jpg
+File Name                       : IMG_4758.jpg
+Artist                          : molnar.judit
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:20 14:20:00
+Image Size                      : 1920x1080
+GPS Latitude                    : 47.4977 N
+GPS Longitude                   : 19.0401 E
+
+======== IMG_8213.jpg
+File Name                       : IMG_8213.jpg
+Artist                          : farkas.eszter
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:20 15:07:00
+Image Size                      : 3024x4032
+GPS Position                    : (nincs)
+
+======== IMG_4287.jpg
+File Name                       : IMG_4287.jpg
+Artist                          : farkas.eszter
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:20 15:37:00
+Image Size                      : 4032x3024
+GPS Latitude                    : 47.5006 N
+GPS Longitude                   : 18.9599 E
+
+======== IMG_9272.jpg
+File Name                       : IMG_9272.jpg
+Artist                          : molnar.judit
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:20 19:12:00
+Image Size                      : 3024x4032
+GPS Position                    : (nincs)
+
+======== IMG_4617.jpg
+File Name                       : IMG_4617.jpg
+Artist                          : simon.anna
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:20 19:40:00
+Image Size                      : 1920x1080
+GPS Position                    : (nincs)
+
+======== IMG_2263.jpg
+File Name                       : IMG_2263.jpg
+Artist                          : farkas.gabor
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:20 23:49:00
+Image Size                      : 4032x3024
+GPS Position                    : (nincs)
+
+======== IMG_6930.jpg
+File Name                       : IMG_6930.jpg
+Artist                          : olah.mate
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:21 01:57:00
+Image Size                      : 3024x4032
+GPS Position                    : (nincs)
+
+======== IMG_9878.jpg
+File Name                       : IMG_9878.jpg
+Artist                          : szabo.noemi
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:21 08:21:00
+Image Size                      : 3024x4032
+GPS Latitude                    : 47.5005 N
+GPS Longitude                   : 18.9598 E
+
+======== IMG_3487.jpg
+File Name                       : IMG_3487.jpg
+Artist                          : horvath.bence
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:21 09:45:00
+Image Size                      : 3024x4032
+GPS Position                    : (nincs)
+
+======== IMG_2257.jpg
+File Name                       : IMG_2257.jpg
+Artist                          : horvath.bence
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:21 13:10:00
+Image Size                      : 3024x4032
+GPS Latitude                    : 47.5007 N
+GPS Longitude                   : 18.9600 E
+
+======== IMG_5458.jpg
+File Name                       : IMG_5458.jpg
+Artist                          : fekete.anna
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:21 22:33:00
+Image Size                      : 3024x4032
+GPS Position                    : (nincs)
+
+======== IMG_8494.jpg
+File Name                       : IMG_8494.jpg
+Artist                          : horvath.peter
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:22 02:28:00
+Image Size                      : 3024x4032
+GPS Latitude                    : 47.4421 N
+GPS Longitude                   : 19.0610 E
+
+======== IMG_7017.jpg
+File Name                       : IMG_7017.jpg
+Artist                          : farkas.eszter
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:22 06:05:00
+Image Size                      : 1920x1080
+GPS Position                    : (nincs)
+
+======== IMG_6396.jpg
+File Name                       : IMG_6396.jpg
+Artist                          : szabo.noemi
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:22 06:58:00
+Image Size                      : 1920x1080
+GPS Latitude                    : 47.5006 N
+GPS Longitude                   : 18.9603 E
+
+======== IMG_3987.jpg
+File Name                       : IMG_3987.jpg
+Artist                          : molnar.judit
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:22 08:26:00
+Image Size                      : 3024x4032
+GPS Latitude                    : 47.5003 N
+GPS Longitude                   : 18.9601 E
+
+======== IMG_5096.jpg
+File Name                       : IMG_5096.jpg
+Artist                          : kiss.csilla
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:22 11:26:00
+Image Size                      : 4032x3024
+GPS Latitude                    : 47.4977 N
+GPS Longitude                   : 19.0405 E
+
+======== IMG_6190.jpg
+File Name                       : IMG_6190.jpg
+Artist                          : olah.mate
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:22 14:36:00
+Image Size                      : 3024x4032
+GPS Latitude                    : 47.5002 N
+GPS Longitude                   : 18.9601 E
+
+======== IMG_8762.jpg
+File Name                       : IMG_8762.jpg
+Artist                          : farkas.eszter
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:22 18:56:00
+Image Size                      : 4032x3024
+GPS Latitude                    : 47.4982 N
+GPS Longitude                   : 19.0404 E
+
+======== IMG_9702.jpg
+File Name                       : IMG_9702.jpg
+Artist                          : takacs.tamas
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:22 22:49:00
+Image Size                      : 1920x1080
+GPS Position                    : (nincs)
+
+======== IMG_6514.jpg
+File Name                       : IMG_6514.jpg
+Artist                          : farkas.gabor
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:23 01:00:00
+Image Size                      : 1920x1080
+GPS Latitude                    : 47.4976 N
+GPS Longitude                   : 19.0401 E
+
+======== IMG_4378.jpg
+File Name                       : IMG_4378.jpg
+Artist                          : molnar.judit
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:23 01:01:00
+Image Size                      : 4032x3024
+GPS Position                    : (nincs)
+
+======== IMG_5710.jpg
+File Name                       : IMG_5710.jpg
+Artist                          : simon.anna
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:23 03:24:00
+Image Size                      : 1920x1080
+GPS Position                    : (nincs)
+
+======== IMG_6736.jpg
+File Name                       : IMG_6736.jpg
+Artist                          : nagy.dora
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:23 04:23:00
+Image Size                      : 3024x4032
+GPS Position                    : (nincs)
+
+======== IMG_4903.jpg
+File Name                       : IMG_4903.jpg
+Artist                          : horvath.peter
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:23 05:41:00
+Image Size                      : 4032x3024
+GPS Latitude                    : 47.4420 N
+GPS Longitude                   : 19.0611 E
+
+======== IMG_3855.jpg
+File Name                       : IMG_3855.jpg
+Artist                          : fekete.anna
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:23 06:09:00
+Image Size                      : 1920x1080
+GPS Position                    : (nincs)
+
+======== IMG_4238.jpg
+File Name                       : IMG_4238.jpg
+Artist                          : takacs.tamas
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:23 06:33:00
+Image Size                      : 4032x3024
+GPS Position                    : (nincs)
+
+======== IMG_4435.jpg
+File Name                       : IMG_4435.jpg
+Artist                          : kiss.csilla
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:23 09:54:00
+Image Size                      : 3024x4032
+GPS Latitude                    : 47.4999 N
+GPS Longitude                   : 18.9603 E
+
+======== IMG_9000.jpg
+File Name                       : IMG_9000.jpg
+Artist                          : takacs.tamas
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:23 12:29:00
+Image Size                      : 1920x1080
+GPS Position                    : (nincs)
+
+======== IMG_2191.jpg
+File Name                       : IMG_2191.jpg
+Artist                          : simon.anna
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:23 13:04:00
+Image Size                      : 1920x1080
+GPS Position                    : (nincs)
+
+======== IMG_6240.jpg
+File Name                       : IMG_6240.jpg
+Artist                          : simon.anna
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:23 14:50:00
+Image Size                      : 1920x1080
+GPS Latitude                    : 47.4422 N
+GPS Longitude                   : 19.0610 E
+
+======== IMG_7207.jpg
+File Name                       : IMG_7207.jpg
+Artist                          : olah.mate
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:23 17:09:00
+Image Size                      : 1920x1080
+GPS Position                    : (nincs)
+
+======== IMG_3064.jpg
+File Name                       : IMG_3064.jpg
+Artist                          : olah.mate
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:23 20:50:00
+Image Size                      : 3024x4032
+GPS Position                    : (nincs)
+
+======== IMG_4031.jpg
+File Name                       : IMG_4031.jpg
+Artist                          : fekete.anna
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:23 22:02:00
+Image Size                      : 3024x4032
+GPS Position                    : (nincs)
+
+======== IMG_2504.jpg
+File Name                       : IMG_2504.jpg
+Artist                          : farkas.eszter
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:24 00:46:00
+Image Size                      : 1920x1080
+GPS Position                    : (nincs)
+
+======== IMG_4307.jpg
+File Name                       : IMG_4307.jpg
+Artist                          : farkas.eszter
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:24 01:32:00
+Image Size                      : 3024x4032
+GPS Position                    : (nincs)
+
+======== IMG_5570.jpg
+File Name                       : IMG_5570.jpg
+Artist                          : horvath.peter
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:24 02:11:00
+Image Size                      : 1920x1080
+GPS Position                    : (nincs)
+
+======== IMG_9252.jpg
+File Name                       : IMG_9252.jpg
+Artist                          : farkas.eszter
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:24 04:41:00
+Image Size                      : 1920x1080
+GPS Latitude                    : 47.5005 N
+GPS Longitude                   : 18.9598 E
+
+======== IMG_5967.jpg
+File Name                       : IMG_5967.jpg
+Artist                          : takacs.tamas
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:24 06:28:00
+Image Size                      : 1920x1080
+GPS Latitude                    : 47.5002 N
+GPS Longitude                   : 18.9604 E
+
+======== IMG_5232.jpg
+File Name                       : IMG_5232.jpg
+Artist                          : horvath.bence
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:24 15:33:00
+Image Size                      : 1920x1080
+GPS Latitude                    : 47.4982 N
+GPS Longitude                   : 19.0402 E
+
+======== IMG_8305.jpg
+File Name                       : IMG_8305.jpg
+Artist                          : takacs.tamas
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:24 19:33:00
+Image Size                      : 3024x4032
+GPS Latitude                    : 47.4422 N
+GPS Longitude                   : 19.0610 E
+
+======== IMG_6442.jpg
+File Name                       : IMG_6442.jpg
+Artist                          : fekete.tamas
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:24 22:05:00
+Image Size                      : 1920x1080
+GPS Position                    : (nincs)
+
+======== IMG_4388.jpg
+File Name                       : IMG_4388.jpg
+Artist                          : farkas.eszter
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:25 09:32:00
+Image Size                      : 4032x3024
+GPS Position                    : (nincs)
+
+======== IMG_3766.jpg
+File Name                       : IMG_3766.jpg
+Artist                          : olah.mate
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:25 10:11:00
+Image Size                      : 3024x4032
+GPS Latitude                    : 47.4982 N
+GPS Longitude                   : 19.0401 E
+
+======== IMG_2159.jpg
+File Name                       : IMG_2159.jpg
+Artist                          : fekete.tamas
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:25 16:49:00
+Image Size                      : 1920x1080
+GPS Position                    : (nincs)
+
+======== IMG_8373.jpg
+File Name                       : IMG_8373.jpg
+Artist                          : fekete.anna
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:25 21:10:00
+Image Size                      : 4032x3024
+GPS Latitude                    : 47.4425 N
+GPS Longitude                   : 19.0608 E
+
+======== IMG_6085.jpg
+File Name                       : IMG_6085.jpg
+Artist                          : szabo.noemi
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:25 22:17:00
+Image Size                      : 3024x4032
+GPS Position                    : (nincs)
+
+======== IMG_6174.jpg
+File Name                       : IMG_6174.jpg
+Artist                          : kiss.csilla
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:26 05:41:00
+Image Size                      : 3024x4032
+GPS Position                    : (nincs)
+
+======== IMG_2898.jpg
+File Name                       : IMG_2898.jpg
+Artist                          : simon.anna
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:26 07:39:00
+Image Size                      : 1920x1080
+GPS Latitude                    : 47.5004 N
+GPS Longitude                   : 18.9604 E
+
+======== IMG_6487.jpg
+File Name                       : IMG_6487.jpg
+Artist                          : kiss.csilla
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:26 07:56:00
+Image Size                      : 1920x1080
+GPS Latitude                    : 47.5002 N
+GPS Longitude                   : 18.9603 E
+
+======== IMG_8160.jpg
+File Name                       : IMG_8160.jpg
+Artist                          : horvath.peter
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:26 13:15:00
+Image Size                      : 1920x1080
+GPS Latitude                    : 47.4421 N
+GPS Longitude                   : 19.0611 E
+
+======== IMG_6961.jpg
+File Name                       : IMG_6961.jpg
+Artist                          : farkas.eszter
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:26 15:39:00
+Image Size                      : 1920x1080
+GPS Latitude                    : 47.4423 N
+GPS Longitude                   : 19.0609 E
+
+======== IMG_8113.jpg
+File Name                       : IMG_8113.jpg
+Artist                          : takacs.tamas
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:26 17:08:00
+Image Size                      : 3024x4032
+GPS Latitude                    : 47.4977 N
+GPS Longitude                   : 19.0405 E
+
+======== IMG_6157.jpg
+File Name                       : IMG_6157.jpg
+Artist                          : simon.anna
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:26 18:12:00
+Image Size                      : 1920x1080
+GPS Position                    : (nincs)
+
+======== IMG_2242.jpg
+File Name                       : IMG_2242.jpg
+Artist                          : takacs.tamas
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:26 20:15:00
+Image Size                      : 4032x3024
+GPS Position                    : (nincs)
+
+======== IMG_5218.jpg
+File Name                       : IMG_5218.jpg
+Artist                          : kiss.csilla
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:27 07:31:00
+Image Size                      : 4032x3024
+GPS Position                    : (nincs)
+
+======== IMG_5867.jpg
+File Name                       : IMG_5867.jpg
+Artist                          : farkas.eszter
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:27 08:22:00
+Image Size                      : 4032x3024
+GPS Position                    : (nincs)
+
+======== IMG_7910.jpg
+File Name                       : IMG_7910.jpg
+Artist                          : molnar.judit
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:27 10:40:00
+Image Size                      : 4032x3024
+GPS Position                    : (nincs)
+
+======== IMG_5985.jpg
+File Name                       : IMG_5985.jpg
+Artist                          : kiss.csilla
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:27 12:26:00
+Image Size                      : 1920x1080
+GPS Latitude                    : 47.5004 N
+GPS Longitude                   : 18.9600 E
+
+======== IMG_9825.jpg
+File Name                       : IMG_9825.jpg
+Artist                          : farkas.gabor
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:27 14:45:00
+Image Size                      : 1920x1080
+GPS Position                    : (nincs)
+
+======== IMG_9712.jpg
+File Name                       : IMG_9712.jpg
+Artist                          : horvath.peter
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:27 15:33:00
+Image Size                      : 1920x1080
+GPS Position                    : (nincs)
+
+======== IMG_1577.jpg
+File Name                       : IMG_1577.jpg
+Artist                          : takacs.tamas
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:28 03:34:00
+Image Size                      : 1920x1080
+GPS Latitude                    : 47.4980 N
+GPS Longitude                   : 19.0404 E
+
+======== IMG_1762.jpg
+File Name                       : IMG_1762.jpg
+Artist                          : olah.mate
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:28 05:15:00
+Image Size                      : 1920x1080
+GPS Latitude                    : 47.4421 N
+GPS Longitude                   : 19.0611 E
+
+======== IMG_3754.jpg
+File Name                       : IMG_3754.jpg
+Artist                          : horvath.bence
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:28 07:00:00
+Image Size                      : 1920x1080
+GPS Latitude                    : 47.5002 N
+GPS Longitude                   : 18.9604 E
+
+======== IMG_3356.jpg
+File Name                       : IMG_3356.jpg
+Artist                          : takacs.tamas
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:28 12:44:00
+Image Size                      : 4032x3024
+GPS Latitude                    : 47.5002 N
+GPS Longitude                   : 18.9605 E
+
+======== IMG_1088.jpg
+File Name                       : IMG_1088.jpg
+Artist                          : fekete.anna
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:28 15:00:00
+Image Size                      : 1920x1080
+GPS Position                    : (nincs)
+
+======== IMG_3344.jpg
+File Name                       : IMG_3344.jpg
+Artist                          : szabo.noemi
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:28 19:14:00
+Image Size                      : 3024x4032
+GPS Position                    : (nincs)
+
+======== IMG_2671.jpg
+File Name                       : IMG_2671.jpg
+Artist                          : fekete.anna
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:28 19:25:00
+Image Size                      : 4032x3024
+GPS Latitude                    : 47.5007 N
+GPS Longitude                   : 18.9603 E
+
+======== IMG_9470.jpg
+File Name                       : IMG_9470.jpg
+Artist                          : fekete.tamas
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:28 20:31:00
+Image Size                      : 3024x4032
+GPS Latitude                    : 47.5000 N
+GPS Longitude                   : 18.9599 E
+
+======== IMG_6002.jpg
+File Name                       : IMG_6002.jpg
+Artist                          : farkas.gabor
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:28 22:19:00
+Image Size                      : 3024x4032
+GPS Latitude                    : 47.4979 N
+GPS Longitude                   : 19.0401 E
+
+======== IMG_7209.jpg
+File Name                       : IMG_7209.jpg
+Artist                          : simon.anna
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:29 10:17:00
+Image Size                      : 4032x3024
+GPS Position                    : (nincs)
+
+======== IMG_9217.jpg
+File Name                       : IMG_9217.jpg
+Artist                          : simon.anna
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:29 10:23:00
+Image Size                      : 1920x1080
+GPS Position                    : (nincs)
+
+======== IMG_3000.jpg
+File Name                       : IMG_3000.jpg
+Artist                          : farkas.gabor
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:29 11:13:00
+Image Size                      : 1920x1080
+GPS Position                    : (nincs)
+
+======== IMG_7396.jpg
+File Name                       : IMG_7396.jpg
+Artist                          : simon.anna
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:29 14:51:00
+Image Size                      : 1920x1080
+GPS Position                    : (nincs)
+
+======== IMG_8076.jpg
+File Name                       : IMG_8076.jpg
+Artist                          : szabo.peter
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:29 17:45:00
+Image Size                      : 3024x4032
+GPS Position                    : (nincs)
+
+======== IMG_6871.jpg
+File Name                       : IMG_6871.jpg
+Artist                          : takacs.tamas
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:29 21:05:00
+Image Size                      : 1920x1080
+GPS Position                    : (nincs)
+
+======== IMG_8175.jpg
+File Name                       : IMG_8175.jpg
+Artist                          : farkas.eszter
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:30 00:52:00
+Image Size                      : 4032x3024
+GPS Position                    : (nincs)
+
+======== IMG_8408.jpg
+File Name                       : IMG_8408.jpg
+Artist                          : molnar.judit
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:30 01:28:00
+Image Size                      : 4032x3024
+GPS Latitude                    : 47.4978 N
+GPS Longitude                   : 19.0401 E
+
+======== IMG_5014.jpg
+File Name                       : IMG_5014.jpg
+Artist                          : szabo.noemi
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:30 01:43:00
+Image Size                      : 3024x4032
+GPS Position                    : (nincs)
+
+======== IMG_3086.jpg
+File Name                       : IMG_3086.jpg
+Artist                          : szabo.peter
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:30 04:55:00
+Image Size                      : 4032x3024
+GPS Position                    : (nincs)
+
+======== IMG_7622.jpg
+File Name                       : IMG_7622.jpg
+Artist                          : fekete.tamas
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:30 07:47:00
+Image Size                      : 3024x4032
+GPS Position                    : (nincs)
+
+======== IMG_1948.jpg
+File Name                       : IMG_1948.jpg
+Artist                          : takacs.gabor
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:30 08:32:00
+Image Size                      : 1920x1080
+GPS Position                    : (nincs)
+
+======== IMG_8253.jpg
+File Name                       : IMG_8253.jpg
+Artist                          : szabo.peter
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:30 15:53:00
+Image Size                      : 4032x3024
+GPS Latitude                    : 47.4424 N
+GPS Longitude                   : 19.0613 E
+
+======== IMG_8947.jpg
+File Name                       : IMG_8947.jpg
+Artist                          : farkas.eszter
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:30 19:56:00
+Image Size                      : 1920x1080
+GPS Position                    : (nincs)
+
+======== IMG_6840.jpg
+File Name                       : IMG_6840.jpg
+Artist                          : takacs.tamas
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:30 22:22:00
+Image Size                      : 4032x3024
+GPS Latitude                    : 47.5001 N
+GPS Longitude                   : 18.9601 E
+
+======== IMG_7431.jpg
+File Name                       : IMG_7431.jpg
+Artist                          : takacs.gabor
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:30 23:53:00
+Image Size                      : 1920x1080
+GPS Latitude                    : 47.4424 N
+GPS Longitude                   : 19.0610 E
+
+======== IMG_7840.jpg
+File Name                       : IMG_7840.jpg
+Artist                          : fekete.anna
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:31 05:48:00
+Image Size                      : 1920x1080
+GPS Position                    : (nincs)
+
+======== IMG_8341.jpg
+File Name                       : IMG_8341.jpg
+Artist                          : farkas.gabor
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:31 06:06:00
+Image Size                      : 1920x1080
+GPS Latitude                    : 47.4981 N
+GPS Longitude                   : 19.0406 E
+
+======== IMG_8625.jpg
+File Name                       : IMG_8625.jpg
+Artist                          : fekete.tamas
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:31 10:16:00
+Image Size                      : 4032x3024
+GPS Position                    : (nincs)
+
+======== IMG_9128.jpg
+File Name                       : IMG_9128.jpg
+Artist                          : fekete.anna
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:31 13:17:00
+Image Size                      : 4032x3024
+GPS Latitude                    : 47.4978 N
+GPS Longitude                   : 19.0401 E
+
+======== IMG_8385.jpg
+File Name                       : IMG_8385.jpg
+Artist                          : horvath.bence
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:31 17:29:00
+Image Size                      : 3024x4032
+GPS Position                    : (nincs)
+
+======== IMG_7024.jpg
+File Name                       : IMG_7024.jpg
+Artist                          : kiss.csilla
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:31 17:50:00
+Image Size                      : 4032x3024
+GPS Position                    : (nincs)
+
+======== IMG_5713.jpg
+File Name                       : IMG_5713.jpg
+Artist                          : szabo.noemi
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:08:31 19:07:00
+Image Size                      : 1920x1080
+GPS Latitude                    : 47.4421 N
+GPS Longitude                   : 19.0612 E
+
+======== IMG_2699.jpg
+File Name                       : IMG_2699.jpg
+Artist                          : olah.mate
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:08:31 20:45:00
+Image Size                      : 4032x3024
+GPS Position                    : (nincs)
+
+======== IMG_6583.jpg
+File Name                       : IMG_6583.jpg
+Artist                          : farkas.gabor
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:31 21:34:00
+Image Size                      : 3024x4032
+GPS Position                    : (nincs)
+
+======== IMG_9895.jpg
+File Name                       : IMG_9895.jpg
+Artist                          : szabo.noemi
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:08:31 22:46:00
+Image Size                      : 1920x1080
+GPS Latitude                    : 47.5004 N
+GPS Longitude                   : 18.9601 E
+
+======== IMG_1466.jpg
+File Name                       : IMG_1466.jpg
+Artist                          : horvath.bence
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:09:01 02:55:00
+Image Size                      : 1920x1080
+GPS Position                    : (nincs)
+
+======== IMG_8180.jpg
+File Name                       : IMG_8180.jpg
+Artist                          : molnar.judit
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:09:01 04:47:00
+Image Size                      : 1920x1080
+GPS Latitude                    : 47.4981 N
+GPS Longitude                   : 19.0402 E
+
+======== IMG_5441.jpg
+File Name                       : IMG_5441.jpg
+Artist                          : kiss.csilla
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:09:01 05:59:00
+Image Size                      : 4032x3024
+GPS Latitude                    : 47.4980 N
+GPS Longitude                   : 19.0401 E
+
+======== IMG_5204.jpg
+File Name                       : IMG_5204.jpg
+Artist                          : fekete.anna
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:09:01 06:13:00
+Image Size                      : 1920x1080
+GPS Position                    : (nincs)
+
+======== IMG_4954.jpg
+File Name                       : IMG_4954.jpg
+Artist                          : molnar.judit
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:09:01 08:07:00
+Image Size                      : 3024x4032
+GPS Position                    : (nincs)
+
+======== IMG_3499.jpg
+File Name                       : IMG_3499.jpg
+Artist                          : takacs.tamas
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:09:01 08:16:00
+Image Size                      : 1920x1080
+GPS Latitude                    : 47.5003 N
+GPS Longitude                   : 18.9600 E
+
+======== IMG_2266.jpg
+File Name                       : IMG_2266.jpg
+Artist                          : kiss.csilla
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:09:01 08:16:00
+Image Size                      : 1920x1080
+GPS Latitude                    : 47.5005 N
+GPS Longitude                   : 18.9598 E
+
+======== IMG_9195.jpg
+File Name                       : IMG_9195.jpg
+Artist                          : farkas.gabor
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:09:01 09:58:00
+Image Size                      : 1920x1080
+GPS Position                    : (nincs)
+
+======== IMG_7616.jpg
+File Name                       : IMG_7616.jpg
+Artist                          : takacs.gabor
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:09:01 11:22:00
+Image Size                      : 3024x4032
+GPS Latitude                    : 47.4417 N
+GPS Longitude                   : 19.0606 E
+
+======== IMG_9314.jpg
+File Name                       : IMG_9314.jpg
+Artist                          : farkas.eszter
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:09:01 15:10:00
+Image Size                      : 1920x1080
+GPS Position                    : (nincs)
+
+======== IMG_9895_belepo.jpg
+File Name                       : IMG_9895_belepo.jpg
+Artist                          : nagy.dora
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:09:01 22:34:52
+Image Size                      : 4032x3024
+GPS Latitude                    : 47.5122 N
+GPS Longitude                   : 19.1182 E
+
+======== IMG_9171.jpg
+File Name                       : IMG_9171.jpg
+Artist                          : fekete.tamas
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:09:02 04:35:00
+Image Size                      : 4032x3024
+GPS Position                    : (nincs)
+
+======== IMG_8004.jpg
+File Name                       : IMG_8004.jpg
+Artist                          : szabo.noemi
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:09:02 08:13:00
+Image Size                      : 3024x4032
+GPS Position                    : (nincs)
+
+======== IMG_7057.jpg
+File Name                       : IMG_7057.jpg
+Artist                          : horvath.bence
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:09:02 09:05:00
+Image Size                      : 4032x3024
+GPS Latitude                    : 47.4419 N
+GPS Longitude                   : 19.0609 E
+
+======== IMG_8778.jpg
+File Name                       : IMG_8778.jpg
+Artist                          : fekete.anna
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:09:02 12:51:00
+Image Size                      : 1920x1080
+GPS Position                    : (nincs)
+
+======== IMG_9587.jpg
+File Name                       : IMG_9587.jpg
+Artist                          : molnar.judit
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:09:02 16:31:00
+Image Size                      : 4032x3024
+GPS Latitude                    : 47.5004 N
+GPS Longitude                   : 18.9597 E
+
+======== IMG_8888.jpg
+File Name                       : IMG_8888.jpg
+Artist                          : takacs.tamas
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:09:02 17:43:00
+Image Size                      : 1920x1080
+GPS Latitude                    : 47.4422 N
+GPS Longitude                   : 19.0611 E
+
+======== IMG_5603.jpg
+File Name                       : IMG_5603.jpg
+Artist                          : simon.anna
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:09:02 20:05:00
+Image Size                      : 1920x1080
+GPS Position                    : (nincs)
+
+======== IMG_6835.jpg
+File Name                       : IMG_6835.jpg
+Artist                          : farkas.eszter
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:09:02 23:19:00
+Image Size                      : 3024x4032
+GPS Latitude                    : 47.4980 N
+GPS Longitude                   : 19.0403 E
+
+======== IMG_9973.jpg
+File Name                       : IMG_9973.jpg
+Artist                          : szabo.noemi
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:09:03 07:22:00
+Image Size                      : 3024x4032
+GPS Latitude                    : 47.5006 N
+GPS Longitude                   : 18.9605 E
+
+======== IMG_5392.jpg
+File Name                       : IMG_5392.jpg
+Artist                          : farkas.gabor
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:09:03 17:30:00
+Image Size                      : 4032x3024
+GPS Latitude                    : 47.4421 N
+GPS Longitude                   : 19.0606 E
+
+======== IMG_4562.jpg
+File Name                       : IMG_4562.jpg
+Artist                          : szabo.peter
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:09:03 23:36:00
+Image Size                      : 3024x4032
+GPS Position                    : (nincs)
+
+======== IMG_4620.jpg
+File Name                       : IMG_4620.jpg
+Artist                          : horvath.bence
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:09:04 03:51:00
+Image Size                      : 3024x4032
+GPS Position                    : (nincs)
+
+======== IMG_6014.jpg
+File Name                       : IMG_6014.jpg
+Artist                          : szabo.noemi
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:09:04 05:40:00
+Image Size                      : 3024x4032
+GPS Latitude                    : 47.4977 N
+GPS Longitude                   : 19.0399 E
+
+======== IMG_4821.jpg
+File Name                       : IMG_4821.jpg
+Artist                          : fekete.tamas
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:09:04 07:44:00
+Image Size                      : 3024x4032
+GPS Latitude                    : 47.5007 N
+GPS Longitude                   : 18.9605 E
+
+======== IMG_3435.jpg
+File Name                       : IMG_3435.jpg
+Artist                          : simon.anna
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:09:04 15:23:00
+Image Size                      : 3024x4032
+GPS Position                    : (nincs)
+
+======== IMG_5787.jpg
+File Name                       : IMG_5787.jpg
+Artist                          : molnar.judit
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:09:04 17:32:00
+Image Size                      : 3024x4032
+GPS Latitude                    : 47.4978 N
+GPS Longitude                   : 19.0402 E
+
+======== IMG_7120.jpg
+File Name                       : IMG_7120.jpg
+Artist                          : szabo.peter
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:09:04 22:27:00
+Image Size                      : 4032x3024
+GPS Latitude                    : 47.4418 N
+GPS Longitude                   : 19.0608 E
+
+======== IMG_7702.jpg
+File Name                       : IMG_7702.jpg
+Artist                          : fekete.anna
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:09:04 23:10:00
+Image Size                      : 3024x4032
+GPS Latitude                    : 47.4979 N
+GPS Longitude                   : 19.0405 E
+
+======== IMG_7975.jpg
+File Name                       : IMG_7975.jpg
+Artist                          : molnar.judit
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:09:05 02:27:00
+Image Size                      : 4032x3024
+GPS Position                    : (nincs)
+
+======== IMG_4056.jpg
+File Name                       : IMG_4056.jpg
+Artist                          : horvath.peter
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:09:05 03:38:00
+Image Size                      : 3024x4032
+GPS Position                    : (nincs)
+
+======== IMG_7082.jpg
+File Name                       : IMG_7082.jpg
+Artist                          : takacs.gabor
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:09:05 09:38:00
+Image Size                      : 1920x1080
+GPS Position                    : (nincs)
+
+======== IMG_2342.jpg
+File Name                       : IMG_2342.jpg
+Artist                          : horvath.peter
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:09:05 18:10:00
+Image Size                      : 1920x1080
+GPS Latitude                    : 47.4421 N
+GPS Longitude                   : 19.0613 E
+
+======== IMG_7411.jpg
+File Name                       : IMG_7411.jpg
+Artist                          : olah.mate
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:09:05 18:34:00
+Image Size                      : 4032x3024
+GPS Latitude                    : 47.5006 N
+GPS Longitude                   : 18.9597 E
+
+======== IMG_2736.jpg
+File Name                       : IMG_2736.jpg
+Artist                          : fekete.tamas
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:09:05 22:17:00
+Image Size                      : 1920x1080
+GPS Latitude                    : 47.4999 N
+GPS Longitude                   : 18.9603 E
+
+======== IMG_5306.jpg
+File Name                       : IMG_5306.jpg
+Artist                          : olah.mate
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:09:05 23:31:00
+Image Size                      : 1920x1080
+GPS Latitude                    : 47.4424 N
+GPS Longitude                   : 19.0614 E
+
+======== IMG_6872.jpg
+File Name                       : IMG_6872.jpg
+Artist                          : takacs.gabor
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:09:06 02:19:00
+Image Size                      : 4032x3024
+GPS Position                    : (nincs)
+
+======== IMG_9291.jpg
+File Name                       : IMG_9291.jpg
+Artist                          : farkas.eszter
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:09:06 05:54:00
+Image Size                      : 4032x3024
+GPS Latitude                    : 47.4419 N
+GPS Longitude                   : 19.0611 E
+
+======== IMG_2500.jpg
+File Name                       : IMG_2500.jpg
+Artist                          : fekete.tamas
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:09:06 06:15:00
+Image Size                      : 4032x3024
+GPS Latitude                    : 47.4975 N
+GPS Longitude                   : 19.0401 E
+
+======== IMG_9634.jpg
+File Name                       : IMG_9634.jpg
+Artist                          : olah.mate
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:09:06 13:33:00
+Image Size                      : 1920x1080
+GPS Latitude                    : 47.5000 N
+GPS Longitude                   : 18.9605 E
+
+======== IMG_8199.jpg
+File Name                       : IMG_8199.jpg
+Artist                          : fekete.anna
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:09:06 14:07:00
+Image Size                      : 3024x4032
+GPS Position                    : (nincs)
+
+======== IMG_6959.jpg
+File Name                       : IMG_6959.jpg
+Artist                          : szabo.noemi
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:09:06 20:34:00
+Image Size                      : 4032x3024
+GPS Latitude                    : 47.4420 N
+GPS Longitude                   : 19.0612 E
+
+======== IMG_4042.jpg
+File Name                       : IMG_4042.jpg
+Artist                          : horvath.peter
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:09:06 22:15:00
+Image Size                      : 4032x3024
+GPS Position                    : (nincs)
+
+======== IMG_4915.jpg
+File Name                       : IMG_4915.jpg
+Artist                          : fekete.anna
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:09:07 09:55:00
+Image Size                      : 4032x3024
+GPS Position                    : (nincs)
+
+======== IMG_1163.jpg
+File Name                       : IMG_1163.jpg
+Artist                          : kiss.csilla
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:09:07 11:16:00
+Image Size                      : 3024x4032
+GPS Position                    : (nincs)
+
+======== IMG_5412.jpg
+File Name                       : IMG_5412.jpg
+Artist                          : simon.anna
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:09:07 11:49:00
+Image Size                      : 4032x3024
+GPS Latitude                    : 47.4976 N
+GPS Longitude                   : 19.0399 E
+
+======== IMG_8899.jpg
+File Name                       : IMG_8899.jpg
+Artist                          : fekete.anna
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:09:07 12:06:00
+Image Size                      : 3024x4032
+GPS Position                    : (nincs)
+
+======== IMG_3282.jpg
+File Name                       : IMG_3282.jpg
+Artist                          : fekete.anna
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:09:07 14:45:00
+Image Size                      : 3024x4032
+GPS Position                    : (nincs)
+
+======== IMG_9902.jpg
+File Name                       : IMG_9902.jpg
+Artist                          : farkas.eszter
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:09:07 20:32:00
+Image Size                      : 3024x4032
+GPS Position                    : (nincs)
+
+======== IMG_6224.jpg
+File Name                       : IMG_6224.jpg
+Artist                          : molnar.judit
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:09:07 20:42:00
+Image Size                      : 1920x1080
+GPS Latitude                    : 47.4421 N
+GPS Longitude                   : 19.0611 E
+
+======== IMG_2865.jpg
+File Name                       : IMG_2865.jpg
+Artist                          : szabo.noemi
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:09:07 22:03:00
+Image Size                      : 1920x1080
+GPS Position                    : (nincs)
+
+======== IMG_9851.jpg
+File Name                       : IMG_9851.jpg
+Artist                          : szabo.peter
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:09:08 00:00:00
+Image Size                      : 3024x4032
+GPS Position                    : (nincs)
+
+======== IMG_2693.jpg
+File Name                       : IMG_2693.jpg
+Artist                          : fekete.anna
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:09:08 02:30:00
+Image Size                      : 3024x4032
+GPS Position                    : (nincs)
+
+======== IMG_9922.jpg
+File Name                       : IMG_9922.jpg
+Artist                          : fekete.tamas
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:09:08 06:30:00
+Image Size                      : 4032x3024
+GPS Latitude                    : 47.5002 N
+GPS Longitude                   : 18.9601 E
+
+======== IMG_6168.jpg
+File Name                       : IMG_6168.jpg
+Artist                          : fekete.anna
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:09:08 07:18:00
+Image Size                      : 3024x4032
+GPS Position                    : (nincs)
+
+======== IMG_3883.jpg
+File Name                       : IMG_3883.jpg
+Artist                          : takacs.tamas
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:09:08 13:30:00
+Image Size                      : 3024x4032
+GPS Latitude                    : 47.4418 N
+GPS Longitude                   : 19.0613 E
+
+======== IMG_2978.jpg
+File Name                       : IMG_2978.jpg
+Artist                          : fekete.tamas
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:09:08 14:42:00
+Image Size                      : 4032x3024
+GPS Position                    : (nincs)
+
+======== IMG_6789.jpg
+File Name                       : IMG_6789.jpg
+Artist                          : olah.mate
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:09:08 19:55:00
+Image Size                      : 1920x1080
+GPS Latitude                    : 47.5006 N
+GPS Longitude                   : 18.9604 E
+
+======== IMG_8035.jpg
+File Name                       : IMG_8035.jpg
+Artist                          : szabo.noemi
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:09:08 20:41:00
+Image Size                      : 1920x1080
+GPS Position                    : (nincs)
+
+======== IMG_3234.jpg
+File Name                       : IMG_3234.jpg
+Artist                          : farkas.eszter
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:09:08 21:39:00
+Image Size                      : 3024x4032
+GPS Position                    : (nincs)
+
+======== IMG_4066.jpg
+File Name                       : IMG_4066.jpg
+Artist                          : horvath.peter
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:09:08 22:53:00
+Image Size                      : 3024x4032
+GPS Latitude                    : 47.5005 N
+GPS Longitude                   : 18.9601 E
+
+======== IMG_3747.jpg
+File Name                       : IMG_3747.jpg
+Artist                          : horvath.bence
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:09:09 00:55:00
+Image Size                      : 1920x1080
+GPS Latitude                    : 47.4423 N
+GPS Longitude                   : 19.0612 E
+
+======== IMG_4456.jpg
+File Name                       : IMG_4456.jpg
+Artist                          : fekete.tamas
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:09:09 04:08:00
+Image Size                      : 4032x3024
+GPS Latitude                    : 47.4978 N
+GPS Longitude                   : 19.0405 E
+
+======== IMG_9953.jpg
+File Name                       : IMG_9953.jpg
+Artist                          : szabo.peter
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:09:09 05:31:00
+Image Size                      : 3024x4032
+GPS Latitude                    : 47.4419 N
+GPS Longitude                   : 19.0608 E
+
+======== IMG_4715.jpg
+File Name                       : IMG_4715.jpg
+Artist                          : takacs.gabor
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:09:09 06:22:00
+Image Size                      : 4032x3024
+GPS Latitude                    : 47.5001 N
+GPS Longitude                   : 18.9600 E
+
+======== IMG_4609.jpg
+File Name                       : IMG_4609.jpg
+Artist                          : szabo.noemi
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:09:09 09:54:00
+Image Size                      : 3024x4032
+GPS Position                    : (nincs)
+
+======== IMG_3041.jpg
+File Name                       : IMG_3041.jpg
+Artist                          : farkas.gabor
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:09:09 13:08:00
+Image Size                      : 3024x4032
+GPS Position                    : (nincs)
+
+======== IMG_8165.jpg
+File Name                       : IMG_8165.jpg
+Artist                          : farkas.gabor
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:09:09 14:21:00
+Image Size                      : 3024x4032
+GPS Latitude                    : 47.5003 N
+GPS Longitude                   : 18.9605 E
+
+======== IMG_9561.jpg
+File Name                       : IMG_9561.jpg
+Artist                          : fekete.anna
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:09:09 15:37:00
+Image Size                      : 1920x1080
+GPS Latitude                    : 47.5004 N
+GPS Longitude                   : 18.9599 E
+
+======== IMG_9080.jpg
+File Name                       : IMG_9080.jpg
+Artist                          : farkas.eszter
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:09:09 21:56:00
+Image Size                      : 3024x4032
+GPS Latitude                    : 47.4976 N
+GPS Longitude                   : 19.0403 E
+
+======== IMG_2331.jpg
+File Name                       : IMG_2331.jpg
+Artist                          : kiss.csilla
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:09:10 05:55:00
+Image Size                      : 3024x4032
+GPS Position                    : (nincs)
+
+======== IMG_6611.jpg
+File Name                       : IMG_6611.jpg
+Artist                          : takacs.gabor
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:09:10 08:13:00
+Image Size                      : 4032x3024
+GPS Position                    : (nincs)
+
+======== IMG_4519.jpg
+File Name                       : IMG_4519.jpg
+Artist                          : farkas.eszter
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:09:10 09:11:00
+Image Size                      : 3024x4032
+GPS Position                    : (nincs)
+
+======== IMG_7873.jpg
+File Name                       : IMG_7873.jpg
+Artist                          : horvath.peter
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:09:10 11:57:00
+Image Size                      : 3024x4032
+GPS Position                    : (nincs)
+
+======== IMG_2411.jpg
+File Name                       : IMG_2411.jpg
+Artist                          : takacs.tamas
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:09:10 17:31:00
+Image Size                      : 3024x4032
+GPS Position                    : (nincs)
+
+======== IMG_7615.jpg
+File Name                       : IMG_7615.jpg
+Artist                          : horvath.peter
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:09:10 21:25:00
+Image Size                      : 1920x1080
+GPS Position                    : (nincs)
+
+======== IMG_5618.jpg
+File Name                       : IMG_5618.jpg
+Artist                          : horvath.bence
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:09:10 23:02:00
+Image Size                      : 1920x1080
+GPS Position                    : (nincs)
+
+======== IMG_8520.jpg
+File Name                       : IMG_8520.jpg
+Artist                          : kiss.csilla
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:09:11 01:27:00
+Image Size                      : 1920x1080
+GPS Position                    : (nincs)
+
+======== IMG_8206.jpg
+File Name                       : IMG_8206.jpg
+Artist                          : horvath.bence
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:09:11 03:31:00
+Image Size                      : 1920x1080
+GPS Latitude                    : 47.4422 N
+GPS Longitude                   : 19.0613 E
+
+======== IMG_3278.jpg
+File Name                       : IMG_3278.jpg
+Artist                          : olah.mate
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:09:11 12:15:00
+Image Size                      : 4032x3024
+GPS Latitude                    : 47.4420 N
+GPS Longitude                   : 19.0611 E
+
+======== IMG_4481.jpg
+File Name                       : IMG_4481.jpg
+Artist                          : molnar.judit
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:09:11 18:55:00
+Image Size                      : 3024x4032
+GPS Position                    : (nincs)
+
+======== IMG_9810.jpg
+File Name                       : IMG_9810.jpg
+Artist                          : molnar.judit
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:09:11 19:06:00
+Image Size                      : 1920x1080
+GPS Position                    : (nincs)
+
+======== IMG_9654.jpg
+File Name                       : IMG_9654.jpg
+Artist                          : fekete.tamas
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:09:11 19:08:00
+Image Size                      : 3024x4032
+GPS Position                    : (nincs)
+
+======== IMG_6113.jpg
+File Name                       : IMG_6113.jpg
+Artist                          : farkas.eszter
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:09:11 22:32:00
+Image Size                      : 1920x1080
+GPS Latitude                    : 47.4417 N
+GPS Longitude                   : 19.0613 E
+
+======== IMG_2842.jpg
+File Name                       : IMG_2842.jpg
+Artist                          : molnar.judit
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:09:11 23:25:00
+Image Size                      : 4032x3024
+GPS Latitude                    : 47.4421 N
+GPS Longitude                   : 19.0606 E
+
+======== IMG_9525.jpg
+File Name                       : IMG_9525.jpg
+Artist                          : horvath.bence
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:09:12 06:26:00
+Image Size                      : 3024x4032
+GPS Latitude                    : 47.5003 N
+GPS Longitude                   : 18.9601 E
+
+======== IMG_1872.jpg
+File Name                       : IMG_1872.jpg
+Artist                          : szabo.peter
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:09:12 10:27:00
+Image Size                      : 1920x1080
+GPS Position                    : (nincs)
+
+======== IMG_5130.jpg
+File Name                       : IMG_5130.jpg
+Artist                          : kiss.csilla
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:09:12 11:32:00
+Image Size                      : 3024x4032
+GPS Position                    : (nincs)
+
+======== IMG_7003.jpg
+File Name                       : IMG_7003.jpg
+Artist                          : horvath.peter
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:09:12 14:16:00
+Image Size                      : 4032x3024
+GPS Latitude                    : 47.4975 N
+GPS Longitude                   : 19.0398 E
+
+======== IMG_6351.jpg
+File Name                       : IMG_6351.jpg
+Artist                          : farkas.eszter
+Make                            : Mintamarka
+Camera Model Name               : Pro 7
+Date/Time Original              : 2026:09:12 15:00:00
+Image Size                      : 4032x3024
+GPS Position                    : (nincs)
+
+======== IMG_1770.jpg
+File Name                       : IMG_1770.jpg
+Artist                          : szabo.noemi
+Make                            : Telefongyarto
+Camera Model Name               : Modell X1
+Date/Time Original              : 2026:09:12 19:52:00
+Image Size                      : 4032x3024
+GPS Position                    : (nincs)
+
+======== IMG_3308.jpg
+File Name                       : IMG_3308.jpg
+Artist                          : simon.anna
+Make                            : Kepalkoto
+Camera Model Name               : Okos 12
+Date/Time Original              : 2026:09:12 23:14:00
+Image Size                      : 3024x4032
+GPS Position                    : (nincs)

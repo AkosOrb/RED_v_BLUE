@@ -1,0 +1,7 @@
+reteg,megallapitas,erintett,sulyossag
+L1,"Elfelejtett, gazdátlan gép lejárt tanúsítvánnyal",old-vpn.szelrozsa.example,magas
+L2,Munkatárs fiókneve kikövetkeztethető nyilvános adatokból,toth.marton,kozepes
+L3,Fotó EXIF-adata elárulja a telephelyet és időpontot,IMG_7524_belepo.jpg,kozepes
+L4,Elfeledett domain hamarosan lejár,szelrozsa-2019.example,magas
+L5,Hitelesítés nélkül elérhető adatbázis-port,203.0.113.52,kritikus
+L6,Belső projekt-kódnév archivált oldal forrásában,IRANYTU,alacsony

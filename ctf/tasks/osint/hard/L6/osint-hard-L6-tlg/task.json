@@ -1,0 +1,185 @@
+{
+  "id": "osint-hard-L6-tlg",
+  "side": "osint",
+  "mode": "hard",
+  "layer": 6,
+  "incident": {
+    "name": "Nyilvános digitális lábnyom felmérése (szintetikus gyakorlat)",
+    "url": "https://owasp.org/www-project-web-security-testing-guide/"
+  },
+  "title": {
+    "hu": "Archívumok és régi oldalak",
+    "en": "Archives and old pages"
+  },
+  "story": {
+    "hu": "A cég elfeledett domainjéről archivált pillanatképek maradtak fenn. Az egyik régi oldal forráskódjában bennfelejtettek egy belső projekt-kódnevet. Keresd meg, mikor mentették az oldalt, és fejtsd ki a kódnevet – ezt a cégnek el kell távolítania.",
+    "en": "Archived snapshots survive from the company's forgotten domain. One old page's source left an internal project codename in it. Find when the page was saved and extract the codename – the company should remove it."
+  },
+  "keyIn": {
+    "type": "subnet",
+    "from": "L5"
+  },
+  "keyOut": {
+    "type": "keyword",
+    "text": {
+      "hu": "A bennfelejtett belső projekt-kódnév",
+      "en": "The leaked internal project codename"
+    },
+    "enc": {
+      "f1+f2": "6b73b428bea1",
+      "f1+f3": "be336b312efa",
+      "f1+f4": "c2163a736bf1",
+      "f2+f3": "af2bb714a66d",
+      "f2+f4": "a46deeba70e3",
+      "f3+f4": "ab2f3a93ef53"
+    }
+  },
+  "flags": [
+    {
+      "id": "f1",
+      "q": {
+        "hu": "Melyik domainről vannak archivált pillanatképek a leggyakrabban?",
+        "en": "Which domain has the most archived snapshots?"
+      },
+      "hash": "44efbd77cf739fc2523e1e9656ef7ac3feb9b4da85720ea3811a274c9695c1a5",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "Az előző rétegek kulcsa segít.",
+            "en": "The earlier layers' keys help."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "Az elfeledett domainről van szó.",
+            "en": "It is the forgotten domain."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "Az url oszlopban nézd a hosztot.",
+            "en": "Look at the host in the url column."
+          }
+        }
+      ]
+    },
+    {
+      "id": "f2",
+      "q": {
+        "hu": "Melyik aloldalon (útvonalon) maradt bent a belső lista?",
+        "en": "On which subpage (path) was the internal list left in?"
+      },
+      "hash": "f405b1bdccb9e416da45803b24a28e75a1becb8297cde7ba6be9e4d3bba0617a",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "A /projektek útvonalat keresd.",
+            "en": "Look for the /projektek path."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "A forrásfájl fejléce is megadja.",
+            "en": "The source file header gives it too."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "Egy szó, perjel nélkül.",
+            "en": "One word, no slash."
+          }
+        }
+      ]
+    },
+    {
+      "id": "f3",
+      "q": {
+        "hu": "Mi a bennfelejtett belső projekt-kódneve?",
+        "en": "What is the leaked internal project codename?"
+      },
+      "hash": "1ba7dd6715ffbe491fa5e743b7da23a94d5b06e37fa9c1dc1a522f52df322ff6",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "Nyisd meg az archivált oldal forrását.",
+            "en": "Open the archived page source."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "HTML-kommentben van (<!-- ... -->).",
+            "en": "It is in an HTML comment (<!-- ... -->)."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "A „kódnév” szó után, idézőjelben.",
+            "en": "After the word \"kódnév\", in quotes."
+          }
+        }
+      ]
+    },
+    {
+      "id": "f4",
+      "q": {
+        "hu": "Mikor mentették ezt az oldalt (ÉÉÉÉ-HH-NN)?",
+        "en": "When was this page saved (YYYY-MM-DD)?"
+      },
+      "hash": "8cf0455b5abbef548a75c9d01030d3c6bb9be2d24fa0411bb1388016543f569f",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "A mentve oszlop, vagy a forrás fejléce.",
+            "en": "The saved column, or the source header."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "A /projektek pillanatkép dátuma.",
+            "en": "The date of the /projektek snapshot."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "Formátum: ÉÉÉÉ-HH-NN",
+            "en": "Format: YYYY-MM-DD"
+          }
+        }
+      ]
+    }
+  ],
+  "files": [
+    {
+      "name": "archiv_pillanatkepek.csv",
+      "view": "table"
+    },
+    {
+      "name": "archiv_oldal_forras.html",
+      "view": "text"
+    }
+  ]
+}
