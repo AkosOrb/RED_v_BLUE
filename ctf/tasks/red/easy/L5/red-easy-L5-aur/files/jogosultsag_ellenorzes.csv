@@ -1,0 +1,29 @@
+gep,ip,talalat,sulyossag,reszlet
+AUR-APP-01,10.50.1.40,gyenge_jelszohazirend,ALACSONY,Rovid jelszo engedelyezett
+AUR-APP-01,10.50.1.40,jelszo-ujrahasznositas,KRITIKUS,A helyi rendszergazda jelszava megegyezik mas gepekevel
+AUR-APP-02,10.50.1.44,elavult_patch,KOZEPES,Hianyzo biztonsagi javitas
+AUR-APP-02,10.50.1.44,jelszo-ujrahasznositas,KRITIKUS,A helyi rendszergazda jelszava megegyezik mas gepekevel
+AUR-DB-01,10.50.1.30,gyenge_jelszohazirend,ALACSONY,Rovid jelszo engedelyezett
+AUR-DB-01,10.50.1.30,jelszo-ujrahasznositas,KRITIKUS,A helyi rendszergazda jelszava megegyezik mas gepekevel
+AUR-DC-01,10.50.1.10,elavult_patch,KOZEPES,Hianyzo biztonsagi javitas
+AUR-FS-01,10.50.1.20,jelszo-ujrahasznositas,KRITIKUS,A helyi rendszergazda jelszava megegyezik mas gepekevel
+AUR-FS-01,10.50.1.20,nyitott_megoszas,ALACSONY,Olvashato halozati megosztas
+AUR-JUMP-01,10.50.1.50,nyitott_megoszas,ALACSONY,Olvashato halozati megosztas
+AUR-WEB-01,10.50.1.62,elavult_patch,KOZEPES,Hianyzo biztonsagi javitas
+AUR-WEB-02,10.50.1.64,elavult_patch,KOZEPES,Hianyzo biztonsagi javitas
+AUR-WEB-03,10.50.1.66,elavult_patch,KOZEPES,Hianyzo biztonsagi javitas
+AUR-WEB-04,10.50.1.68,nyitott_megoszas,ALACSONY,Olvashato halozati megosztas
+AUR-WEB-05,10.50.1.70,nyitott_megoszas,ALACSONY,Olvashato halozati megosztas
+AUR-WEB-06,10.50.1.72,elavult_patch,KOZEPES,Hianyzo biztonsagi javitas
+AUR-WS-01,10.50.4.23,gyenge_jelszohazirend,ALACSONY,Rovid jelszo engedelyezett
+AUR-WS-02,10.50.4.26,nyitott_megoszas,ALACSONY,Olvashato halozati megosztas
+AUR-WS-03,10.50.4.29,gyenge_jelszohazirend,ALACSONY,Rovid jelszo engedelyezett
+AUR-WS-04,10.50.4.32,nyitott_megoszas,ALACSONY,Olvashato halozati megosztas
+AUR-WS-05,10.50.4.35,elavult_patch,KOZEPES,Hianyzo biztonsagi javitas
+AUR-WS-06,10.50.4.38,gyenge_jelszohazirend,ALACSONY,Rovid jelszo engedelyezett
+AUR-WS-07,10.50.4.41,nyitott_megoszas,ALACSONY,Olvashato halozati megosztas
+AUR-WS-08,10.50.4.44,gyenge_jelszohazirend,ALACSONY,Rovid jelszo engedelyezett
+AUR-WS-09,10.50.4.47,elavult_patch,KOZEPES,Hianyzo biztonsagi javitas
+AUR-WS-10,10.50.4.50,gyenge_jelszohazirend,ALACSONY,Rovid jelszo engedelyezett
+AUR-WS-11,10.50.4.53,gyenge_jelszohazirend,ALACSONY,Rovid jelszo engedelyezett
+AUR-WS-12,10.50.4.56,gyenge_jelszohazirend,ALACSONY,Rovid jelszo engedelyezett

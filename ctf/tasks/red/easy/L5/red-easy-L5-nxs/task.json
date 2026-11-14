@@ -1,0 +1,185 @@
+{
+  "id": "red-easy-L5-nxs",
+  "side": "red",
+  "mode": "easy",
+  "layer": 5,
+  "incident": {
+    "name": "Engedélyezett behatolásteszt (szintetikus gyakorlat)",
+    "url": "https://attack.mitre.org/"
+  },
+  "title": {
+    "hu": "Jogosultságemelés",
+    "en": "Privilege escalation"
+  },
+  "story": {
+    "hu": "Helyi rendszergazdai jogot szereztél. A jogosultság-ellenőrzés eredményéből állapítsd meg, milyen hibát tudsz kihasználni a továbblépéshez, és melyik alhálózat a következő cél.",
+    "en": "You gained local admin. From the privilege-check results, work out which weakness lets you move on and which subnet is the next target."
+  },
+  "keyIn": {
+    "type": "domain",
+    "from": "L4"
+  },
+  "keyOut": {
+    "type": "subnet",
+    "text": {
+      "hu": "A legtöbb kiszolgálót tartalmazó alhálózat (következő cél)",
+      "en": "The subnet with the most servers (next target)"
+    },
+    "enc": {
+      "f1+f2": "bb566a1808d547bc96ab620d",
+      "f1+f3": "46115c293c3117dd7410c399",
+      "f1+f4": "5e1155fd97158459a7b45308",
+      "f2+f3": "4ccbeb4f1969668ab166af39",
+      "f2+f4": "a888f46d16b4bd72774cd508",
+      "f3+f4": "fa4b875357cbb1ba21542b68"
+    }
+  },
+  "flags": [
+    {
+      "id": "f1",
+      "q": {
+        "hu": "Melyik gépen van a legkorábbi (ábécé szerint első) KRITIKUS találat?",
+        "en": "Which host has the first (alphabetically) CRITICAL finding?"
+      },
+      "hash": "a4c1801ecbaa9e509bdd10988e0c17bfcaefe7d5c3df620f653c7566b808e361",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "Szűrj a sulyossag = KRITIKUS sorokra.",
+            "en": "Filter on severity = CRITICAL."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "Rendezd a gépneveket ábécé szerint.",
+            "en": "Sort the host names alphabetically."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "NXS-APP előtaggal kezdődik.",
+            "en": "It starts with the NXS-APP prefix."
+          }
+        }
+      ]
+    },
+    {
+      "id": "f2",
+      "q": {
+        "hu": "Mi a kritikus találat kategóriája (talalat oszlop)?",
+        "en": "What is the category of the critical finding (talalat column)?"
+      },
+      "hash": "b190b052ed7eb261ac95c891576968ad82131bf7593a04295d77d083c81459ac",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "A KRITIKUS sorok talalat oszlopa.",
+            "en": "The talalat column of the CRITICAL rows."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "Ugyanaz a jelszó több gépen.",
+            "en": "The same password on several hosts."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "Ékezet nélkül: jelszo-ujrahasznositas.",
+            "en": "Without accents: jelszo-ujrahasznositas."
+          }
+        }
+      ]
+    },
+    {
+      "id": "f3",
+      "q": {
+        "hu": "Hány gépet érint ez a kritikus találat?",
+        "en": "How many hosts does this critical finding affect?"
+      },
+      "hash": "f56c5c132ca89bc8c062e53466d4668dc96a5c351d5daa70935fa9cfd911104f",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "Számold a KRITIKUS sorokat.",
+            "en": "Count the CRITICAL rows."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "Mind ugyanabban a kategóriában.",
+            "en": "All in the same category."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "Egyjegyű szám.",
+            "en": "A one-digit number."
+          }
+        }
+      ]
+    },
+    {
+      "id": "f4",
+      "q": {
+        "hu": "Melyik /24-es alhálózaton van a legtöbb kiszolgáló (nem munkaállomás)?",
+        "en": "Which /24 subnet holds the most servers (not workstations)?"
+      },
+      "hash": "16ec12c742ed9128ba959148f08c3ca2036c47e6f4338f22edeb46c201ed72c3",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "A halozat.csv adja az IP-ket.",
+            "en": "halozat.csv gives the IPs."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "A kiszolgálók nem NXS-WS-sel kezdődnek.",
+            "en": "Servers do not start with NXS-WS."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "Formátum: 10.0.0.0/24",
+            "en": "Format: 10.0.0.0/24"
+          }
+        }
+      ]
+    }
+  ],
+  "files": [
+    {
+      "name": "jogosultsag_ellenorzes.csv",
+      "view": "table"
+    },
+    {
+      "name": "halozat.csv",
+      "view": "table"
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+gep,ip,talalat,sulyossag,reszlet
+ORV-APP-01,10.50.1.40,elavult_patch,KOZEPES,Hianyzo biztonsagi javitas
+ORV-APP-01,10.50.1.40,jelszo-ujrahasznositas,KRITIKUS,A helyi rendszergazda jelszava megegyezik mas gepekevel
+ORV-APP-02,10.50.1.44,elavult_patch,KOZEPES,Hianyzo biztonsagi javitas
+ORV-APP-02,10.50.1.44,jelszo-ujrahasznositas,KRITIKUS,A helyi rendszergazda jelszava megegyezik mas gepekevel
+ORV-DB-01,10.50.1.30,jelszo-ujrahasznositas,KRITIKUS,A helyi rendszergazda jelszava megegyezik mas gepekevel
+ORV-DB-01,10.50.1.30,nyitott_megoszas,ALACSONY,Olvashato halozati megosztas
+ORV-DC-01,10.50.1.10,gyenge_jelszohazirend,ALACSONY,Rovid jelszo engedelyezett
+ORV-FS-01,10.50.1.20,elavult_patch,KOZEPES,Hianyzo biztonsagi javitas
+ORV-FS-01,10.50.1.20,jelszo-ujrahasznositas,KRITIKUS,A helyi rendszergazda jelszava megegyezik mas gepekevel
+ORV-JUMP-01,10.50.1.50,elavult_patch,KOZEPES,Hianyzo biztonsagi javitas
+ORV-WEB-01,10.50.1.62,gyenge_jelszohazirend,ALACSONY,Rovid jelszo engedelyezett
+ORV-WEB-02,10.50.1.64,elavult_patch,KOZEPES,Hianyzo biztonsagi javitas
+ORV-WEB-03,10.50.1.66,gyenge_jelszohazirend,ALACSONY,Rovid jelszo engedelyezett
+ORV-WEB-04,10.50.1.68,gyenge_jelszohazirend,ALACSONY,Rovid jelszo engedelyezett
+ORV-WEB-05,10.50.1.70,gyenge_jelszohazirend,ALACSONY,Rovid jelszo engedelyezett
+ORV-WEB-06,10.50.1.72,gyenge_jelszohazirend,ALACSONY,Rovid jelszo engedelyezett
+ORV-WS-01,10.50.4.23,gyenge_jelszohazirend,ALACSONY,Rovid jelszo engedelyezett
+ORV-WS-02,10.50.4.26,gyenge_jelszohazirend,ALACSONY,Rovid jelszo engedelyezett
+ORV-WS-03,10.50.4.29,elavult_patch,KOZEPES,Hianyzo biztonsagi javitas
+ORV-WS-04,10.50.4.32,elavult_patch,KOZEPES,Hianyzo biztonsagi javitas
+ORV-WS-05,10.50.4.35,gyenge_jelszohazirend,ALACSONY,Rovid jelszo engedelyezett
+ORV-WS-06,10.50.4.38,elavult_patch,KOZEPES,Hianyzo biztonsagi javitas
+ORV-WS-07,10.50.4.41,gyenge_jelszohazirend,ALACSONY,Rovid jelszo engedelyezett
+ORV-WS-08,10.50.4.44,gyenge_jelszohazirend,ALACSONY,Rovid jelszo engedelyezett
+ORV-WS-09,10.50.4.47,nyitott_megoszas,ALACSONY,Olvashato halozati megosztas
+ORV-WS-10,10.50.4.50,gyenge_jelszohazirend,ALACSONY,Rovid jelszo engedelyezett
+ORV-WS-11,10.50.4.53,nyitott_megoszas,ALACSONY,Olvashato halozati megosztas
+ORV-WS-12,10.50.4.56,gyenge_jelszohazirend,ALACSONY,Rovid jelszo engedelyezett

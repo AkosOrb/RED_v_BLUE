@@ -1,0 +1,178 @@
+{
+  "id": "red-hard-L1-orv",
+  "side": "red",
+  "mode": "hard",
+  "layer": 1,
+  "incident": {
+    "name": "Engedélyezett behatolásteszt (szintetikus gyakorlat)",
+    "url": "https://attack.mitre.org/"
+  },
+  "title": {
+    "hu": "Felderítés",
+    "en": "Reconnaissance"
+  },
+  "story": {
+    "hu": "2026. április 2. Engedélyezett behatolástesztet (PT-2026-04) végzel az Orvosi Központ Kft. hálózatán. A felderítő portvizsgálat eredményéből válaszd ki, melyik gép a legígéretesebb belépési pont, és min keresztül.",
+    "en": "2 April 2026. You are running an authorised penetration test (PT-2026-04) against Orvosi Pénzügyi Zrt. From the reconnaissance port-scan results, pick the most promising entry host and the way in."
+  },
+  "keyIn": null,
+  "keyOut": {
+    "type": "hostname",
+    "text": {
+      "hu": "A kiszemelt belépési gép neve",
+      "en": "Name of the chosen entry host"
+    },
+    "enc": {
+      "f1+f2": "daaf09a9193354732ae0",
+      "f1+f3": "88247ef7cc0125c51f5d",
+      "f1+f4": "66bc48f8a34fbd9f9223",
+      "f2+f3": "77c608a8973541f52185",
+      "f2+f4": "e3b590cae267ac77e56f",
+      "f3+f4": "6ff1e9763a5f3339773d"
+    }
+  },
+  "flags": [
+    {
+      "id": "f1",
+      "q": {
+        "hu": "Hány gép válaszolt a felderítő vizsgálatban (van legalább egy nyitott portja)?",
+        "en": "How many hosts responded in the scan (have at least one open port)?"
+      },
+      "hash": "064d39693d39544224605beb332cc67a79866a796fdddf3efb2357000559c75a",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "Minden sor egy nyitott portot jelent.",
+            "en": "Each row is one open port."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "Számold a különböző gépneveket.",
+            "en": "Count the distinct host names."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "A gep oszlop egyedi értékei.",
+            "en": "Distinct values of the host column."
+          }
+        }
+      ]
+    },
+    {
+      "id": "f2",
+      "q": {
+        "hu": "Melyik gépen van a legtöbb nyitott port?",
+        "en": "Which host has the most open ports?"
+      },
+      "hash": "5c7d8e4fea09c8f7fbe0a9cd9e6240ca98a1f7729fc5558ccfee7ae338610e15",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "Csoportosíts gép szerint.",
+            "en": "Group by host."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "Számold a sorokat gépenként.",
+            "en": "Count the rows per host."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "A webkiszolgálók egyikéről van szó.",
+            "en": "It is one of the web servers."
+          }
+        }
+      ]
+    },
+    {
+      "id": "f3",
+      "q": {
+        "hu": "Milyen verziószámú OrvosiPortal fut rajta (elavult, sebezhető)?",
+        "en": "Which OrvosiPortal version runs on it (outdated, vulnerable)?"
+      },
+      "hash": "2e0456eee32261a60cefe3fa9bb30fee0c9dbf3be3e4ab003e5c8bb5fbbd2347",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "Szűrj a célgépre.",
+            "en": "Filter on the target host."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "A megjegyzes oszlop jelzi az elavult szolgáltatást.",
+            "en": "The note column flags the outdated service."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "Formátum: 1.2.3",
+            "en": "Format: 1.2.3"
+          }
+        }
+      ]
+    },
+    {
+      "id": "f4",
+      "q": {
+        "hu": "Melyik porton érhető el ez a sebezhető webszolgáltatás?",
+        "en": "On which port is the vulnerable web service reachable?"
+      },
+      "hash": "8bacd3ecd24fe82df074e601a21eba5605112ee4e5a00f89c541e01a40c9501e",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "Ugyanaz a sor, mint az előző kérdésnél.",
+            "en": "Same row as the previous question."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "A port oszlop.",
+            "en": "The port column."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "Négyjegyű HTTPS-port.",
+            "en": "A four-digit HTTPS port."
+          }
+        }
+      ]
+    }
+  ],
+  "files": [
+    {
+      "name": "felderites_portscan.csv",
+      "view": "table"
+    }
+  ]
+}

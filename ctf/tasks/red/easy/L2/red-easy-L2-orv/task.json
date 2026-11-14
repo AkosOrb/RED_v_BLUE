@@ -1,0 +1,185 @@
+{
+  "id": "red-easy-L2-orv",
+  "side": "red",
+  "mode": "easy",
+  "layer": 2,
+  "incident": {
+    "name": "Engedélyezett behatolásteszt (szintetikus gyakorlat)",
+    "url": "https://attack.mitre.org/"
+  },
+  "title": {
+    "hu": "Kezdeti hozzáférés",
+    "en": "Initial access"
+  },
+  "story": {
+    "hu": "Megvan a belépési gép. A webes vizsgálat jegyzőkönyvéből és a kiszivárgott konfigurációból derítsd ki, melyik végpont nyitott, és milyen fiókhoz jutottál hozzá.",
+    "en": "You have the entry host. From the web test report and the leaked configuration, work out which endpoint is exposed and which account you gained."
+  },
+  "keyIn": {
+    "type": "hostname",
+    "from": "L1"
+  },
+  "keyOut": {
+    "type": "account",
+    "text": {
+      "hu": "A megszerzett szolgáltatásfiók",
+      "en": "The service account you obtained"
+    },
+    "enc": {
+      "f1+f2": "f35ecaaabb698b7e7cb1",
+      "f1+f3": "76726a1fbf237ac3a53a",
+      "f1+f4": "4e23b570884e491a48e9",
+      "f2+f3": "87d27493ea6d72c9e325",
+      "f2+f4": "0a5ef30d355979fc24bf",
+      "f3+f4": "543c0389c7384ce3ec49"
+    }
+  },
+  "flags": [
+    {
+      "id": "f1",
+      "q": {
+        "hu": "Melyik végpont érhető el hitelesítés nélkül?",
+        "en": "Which endpoint is reachable without authentication?"
+      },
+      "hash": "8b5cc9cb74be7a1b838404307ddef6ece6a2bb7f50842b4debbca446e7bbe72e",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "Nézd a megjegyzes oszlopot.",
+            "en": "Look at the note column."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "Egy adminisztrációs exportvégpontról van szó.",
+            "en": "It is an administrative export endpoint."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "Perjellel kezdődő útvonal.",
+            "en": "A path starting with a slash."
+          }
+        }
+      ]
+    },
+    {
+      "id": "f2",
+      "q": {
+        "hu": "Melyik sebezhetőség-azonosító tartozik ehhez a végponthoz?",
+        "en": "Which vulnerability ID is linked to this endpoint?"
+      },
+      "hash": "3d1723d9b12a15c00dd451d34863a39abe865d69c0dbc56db8f8d2800452f404",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "A sebezhetoseg_id oszlop.",
+            "en": "The vulnerability ID column."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "Csak a nyitott végpont sorában van kitöltve.",
+            "en": "Only the exposed endpoint row has it filled in."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "Formátum: ORV-ÉÉÉÉ-NN",
+            "en": "Format: ORV-YYYY-NN"
+          }
+        }
+      ]
+    },
+    {
+      "id": "f3",
+      "q": {
+        "hu": "Melyik konfigurációs fájl szivárogtatott ki hitelesítő adatot?",
+        "en": "Which configuration file leaked credentials?"
+      },
+      "hash": "2fc80ebcda0a8ff6f9c2d2e7f697ff4487c0883686498baf41ceb096b88a1bda",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "A vizsgálat egyik letölthető fájlra mutat.",
+            "en": "The scan points to a downloadable file."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "Ponttal kezdődő, rejtett konfigurációs fájl.",
+            "en": "A hidden config file starting with a dot."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "Add meg a teljes fájlnevet.",
+            "en": "Give the full file name."
+          }
+        }
+      ]
+    },
+    {
+      "id": "f4",
+      "q": {
+        "hu": "Melyik szolgáltatásfiók szerepel a kiszivárgott konfigurációban?",
+        "en": "Which service account appears in the leaked configuration?"
+      },
+      "hash": "78d6b74a02b8f9586143e50c73fcb9e090733d32adbe562296eb4f5ba6652d22",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "Nyisd meg a .env.backup fájlt.",
+            "en": "Open the .env.backup file."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "A SERVICE_ACCOUNT sort keresd.",
+            "en": "Find the SERVICE_ACCOUNT line."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "svc_ előtaggal kezdődik.",
+            "en": "It starts with the svc_ prefix."
+          }
+        }
+      ]
+    }
+  ],
+  "files": [
+    {
+      "name": "web_vizsgalat.csv",
+      "view": "table"
+    },
+    {
+      "name": ".env.backup",
+      "view": "text"
+    }
+  ]
+}
