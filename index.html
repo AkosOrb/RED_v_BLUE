@@ -310,6 +310,10 @@ input.nm{text-transform:none;letter-spacing:.06em}
 .cw{position:relative}
 .cw .fi>.lbl:first-child{display:block;padding-right:150px;min-height:26px}
 .tutbtn{position:absolute;top:10px;right:10px;z-index:2;font-family:var(--f-mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;background:var(--field);color:var(--ink);border:1.5px solid var(--ink);padding:5px 8px;cursor:pointer;display:inline-flex;gap:6px;align-items:center}
+ol.rsteps{margin:8px 0 0;padding-left:22px}ol.rsteps li{margin:0 0 6px}ol.rsteps.cols{columns:2 280px;column-gap:28px}ol.rsteps.cols li{break-inside:avoid}
+ol.rsteps li.x1,ol.rsteps li.x2{background:var(--field);padding:4px 6px;margin-left:-6px}
+.xadd{display:inline}.xtag{display:inline-block;font-family:var(--f-mono);font-size:9px;font-weight:400;letter-spacing:.12em;padding:1px 5px;margin-right:2px;vertical-align:1px;color:#fff;background:var(--char)}.xtag.x2{background:var(--red)}
+.rtabs{margin:6px 0 4px}
 .tutbtn:hover{background:var(--btn-on-bg);color:var(--btn-on-fg);border-color:var(--btn-on-bg)}
 .tutbtn i{font-style:normal;display:inline-flex;width:15px;height:15px;border-radius:50%;background:var(--ink);color:var(--field);align-items:center;justify-content:center;font-size:10px;font-weight:700}
 .tutbtn:hover i{background:var(--btn-on-fg);color:var(--btn-on-bg)}
@@ -2202,22 +2206,108 @@ function menuHTML() {
     <p class="hint">${!NETREADY ? L('Online kapcsolat ellenőrzése…', 'Checking the online connection…') : online ? (NETKIND === 'mqtt' ? L('Online kapcsolat ingyenes nyilvános közvetítő szervereken át: bármely internetkapcsolattal működik, a két gépnek nem kell egy hálózaton lennie.', 'Online play runs through free public relay servers: it works on any internet connection, and the devices do not need to be on the same network.') : L(`Online kapcsolat: ${NETKIND === 'db' ? 'közös játékadatbázis' : 'élő szoba'}. A két eszköz ugyanezt a linket nyitja meg.`, `Online connection: ${NETKIND === 'db' ? 'shared game database' : 'live room'}. All devices open this same link.`)) : L('Az online módhoz a játékot a Claude felületén, bejelentkezve kell megnyitni, és legalább Közreműködő (Contributor) hozzáférés kell hozzá. A helyi játék mindenhol működik.', 'For online play, open the game in Claude while signed in, with at least Contributor access. Local play works everywhere.')}</p>
    </div></div>
    <div class="frame cut" style="margin-top:20px"><div class="fi"><h2>${L('Egy kör röviden', 'A round in brief')} · ${L(...GM_NAMES[GMSEL])}</h2>
-   <ol style="margin:8px 0 0;padding-left:20px;columns:2 260px;column-gap:28px">${roundBrief(GMSEL).map(([h, t]) => `<li><b>${h}:</b> ${t}</li>`).join('')}</ol>
-   ${GMSEL ? `<p class="hint" style="margin:8px 0 0">${L('A részleteket a Játékszabályokban találjátok.', 'You will find the details in the Game rules.')}</p>` : ''}</div></div>`;
+   ${roundListHTML(GMSEL, 'cols')}
+   ${GMSEL ? `<p class="hint" style="margin:8px 0 0">${L('A címkézett részek a választott mód kiegészítései. A részleteket a Játékszabályokban találjátok.', 'Tagged parts are the additions of the chosen mode. You will find the details in the Game rules.')}</p>` : ''}${roundAnimBtns(GMSEL)}</div></div>`;
 }
-// Steps of one round for the menu summary, in the mode picked on the menu.
-function roundBrief(gm) {
-  const S = [];
-  S.push(gm ? [L('Utánpótlás', 'Supply'), L(`mindkét csapat titokban eloszt utánpótlás-pontokat (Red ${SUP_PTS.r}, Blue ${SUP_PTS.b}): egy lap ${SUP_CARD} pont, minden megmaradó pont +1 Erőforrás. Nincs automatikus húzás vagy jövedelem.`, `both teams secretly split supply points (Red ${SUP_PTS.r}, Blue ${SUP_PTS.b}): a card costs ${SUP_CARD}, every point left is +1 Resource. There is no automatic draw or income.`)]
-    : [L('Húzás', 'Draw'), L('mindkét csapat 5 lapra egészíti ki a kezét.', 'both teams fill their hands to 5 cards.')]);
-  S.push([L('Támadás', 'Attack'), L('a Red lefordítva kijátszik egy lapot a bábu szakaszának kategóriájából, és egyik szerepkörével +1 laperősítést tehet mellé.', "Red plays a card face down from the category of the pawn's stage, and may add a +1 card boost from one role.") + (gm === 2 ? L(' Erős (4–5) lap Zajt kelt.', ' A strong (4–5) card makes noise.') : '')]);
-  S.push([L('Védekezés', 'Defense'), L('a Blue azonos kategóriájú lappal védekezik (egyik szerepkörével szintén +1 laperősítést tehet mellé), vagy passzol.', 'Blue defends with a card of the same category (and may also add a +1 card boost from one role), or passes.') + (gm === 2 ? L(' A koronaékszer szakaszán +1.', ' +1 at the crown jewel stage.') : '')]);
-  S.push([L('Felfedés és eredmény', 'Reveal and result'), L('erősség + szerepkör-bónusz + laperősítés + tartós kontrollok. A nagyobb összérték nyer, döntetlennél kriptopárbaj dönt.', 'strength + role bonus + card boost + persistent controls. The higher total wins; a tie means a crypto duel.') + (gm ? L(' A lapok ára az erősségük, ezt Erőforrásból fizetitek.', ' Each card costs its strength in Resources.') : '')]);
-  if (gm) S.push([L('Jutalom', 'Reward'), L('az ütközés nyertese jutalmat választ (például előrelépés, Perzisztencia-jelző vagy Észlelés-jelző).', 'the winner of the clash picks a reward (for example advance, Persistence or a Detection token).')]);
-  S.push([L('Megerősítés', 'Fortify'), L('a Blue lerakhat egy „Tartós” lapot kontrollként.', 'Blue may place a "Persistent" card as a control.')]);
-  if (gm === 2) S.push([L('Előkészítés', 'Staging'), L('a Red 1 Erőforrásért lefordítva letehet egy lapot egy későbbi szakaszhoz.', 'for 1 Resource Red may stage a card face down at a later stage.')]);
-  S.push([L('Takarítás', 'Cleanup'), L('a körjelző továbblép. Ha a Red a 10. kör végéig nem ér célba, a Blue nyer.', 'the round marker advances. If Red has not reached the objective by the end of round 10, Blue wins.')]);
-  return S;
+// Steps of one round, complete for the given mode. Each step: [title, base text, extras], an extra is [level, text]:
+// level 1 = added in Advanced (and Pro), 2 = added in Pro. A step whose own level is above 0 exists only from that mode.
+function roundSteps(gm) {
+  const X = (lv, hu, en) => [lv, L(hu, en)];
+  const S = [
+    [0, L('Játék előtt (egyszer)', 'Before the game (once)'), L('mindkét csapat 5 lapot húz, a Red bábu a Felderítésen kezd, a Red lép először.', 'both teams draw 5 cards, the Red pawn starts on Reconnaissance, Red goes first.'), [
+      gm === 2 ? X(1, 'A Blue 2 Erőforrással kezd.', 'Blue starts with 2 Resources.') : X(1, 'Mindkét csapat 2 Erőforrással kezd.', 'Both teams start with 2 Resources.'),
+      X(2, 'A Red 4 Erőforrással kezd és titkos küldetést húz. A Blue titokban kiválasztja a koronaékszert (egy szakasz, ott minden védekezése +1).', 'Red starts with 4 Resources and draws a secret mission. Blue secretly picks the crown jewel (a stage where every defense gets +1).')]],
+    gm ? [1, L('Utánpótlás (mindkét csapat)', 'Supply (both teams)'), L(`nincs automatikus húzás és jövedelem. Mindkét csapat titokban eloszt utánpótlás-pontokat (Red ${SUP_PTS.r}, Blue ${SUP_PTS.b}): egy lap ${SUP_CARD} pont, minden megmaradó pont +1 Erőforrás (legfeljebb ${RES_CAP}). A választásokat egyszerre fedik fel.`, `there is no automatic draw or income. Both teams secretly split supply points (Red ${SUP_PTS.r}, Blue ${SUP_PTS.b}): a card costs ${SUP_CARD} points, every point left is +1 Resource (max ${RES_CAP}). The picks are revealed together.`), []]
+      : [0, L('Húzás (mindkét csapat)', 'Draw (both teams)'), L('mindkét csapat 5 lapra egészíti ki a kezét.', 'both teams fill their hands back up to 5 cards.'), []],
+    [0, L('Támadás (Red)', 'Attack (Red)'), L('lefordítva kijátszik egy lapot a bábu szakaszának kategóriájából, blöffölhet is. Egy szerepköre +1 laperősítést tehet mellé. Újratervezés: ha nincs ilyen lapja, legfeljebb 3 lapot cserélhet, ha így sincs, nem támad.', "plays one card face down from the category of the pawn's stage (bluffing is allowed). One role may add a +1 card boost. Replan: with no such card, swap up to 3 cards; if there is still none, no attack."), [
+      X(1, 'A lap ára az erőssége Erőforrásban, csak kifizethető lapot tehet le. Az újratervezés 1 Erőforrás.', 'A card costs its strength in Resources; only an affordable card may be played. Replanning costs 1 Resource.'),
+      X(2, 'Az előkészített lappal ingyen és +1-gyel támad. A 4-es vagy 5-ös lap +1 Zajt kelt. Támadás helyett csendes kört is választhat (Zaj −2). A Felderítő 2 Erőforrásért benézhet.', 'A staged card attacks for free with +1. A 4 or 5 card makes +1 Noise. Instead of attacking Red may take a quiet round (Noise −2). Recon may peek for 2 Resources.')]],
+    [0, L('Védekezés (Blue)', 'Defense (Blue)'), L('azonos kategóriájú lappal lefordítva védekezik (egy szerepköre +1 laperősítést tehet mellé), vagy passzol. Passznál a támadás sikeres.', 'defends face down with a card of the same category (one role may add a +1 boost), or passes. On a pass the attack succeeds.'), [
+      X(1, 'A lap ára az erőssége, a passz ingyenes.', 'A card costs its strength; passing is free.'),
+      X(2, 'A koronaékszer szakaszán +1.', '+1 at the crown jewel stage.')]],
+    [0, L('Felfedés és eredmény', 'Reveal and result'), L('összérték = erősség + szerepkör-bónusz + laperősítés + tartós kontrollok. Ha a Red nagyobb, a bábu előrelép; ha a Blue, Észlelés-jelzőt kap. Döntetlennél kriptopárbaj dönt.', 'total = strength + role bonus + card boost + persistent controls. If Red is higher the pawn advances; if Blue is, Blue gains a Detection token. A tie means a crypto duel.'), [
+      X(1, 'A lapokat most fizetitek ki. Az előrelépés és az Észlelés-jelző helyett a nyertes jutalmat választ (következő lépés).', 'Cards are paid now. Instead of the automatic advance or Detection token, the winner picks a reward (next step).'),
+      X(2, '4 Zajnál a Blue Észlelés-jelzőt kap. A párbajt megnyerő Kriptográfus +1 Erőforrást hoz.', 'At 4 Noise Blue gains a Detection token. A Cryptographer who wins the duel brings +1 Resource.')]],
+    [1, L('Jutalom (az ütközés nyertese)', 'Reward (clash winner)'), L('Red: előrelépés, vagy Perzisztencia-jelző (+1 a támadásra azon a szakaszon, onnan nem léptethető vissza). Blue: Észlelés-jelző, Fenyegetés-felderítés (2 Red lap megtekintése) vagy Kiűzés (egy Perzisztencia-jelző levétele).', 'Red: advance, or a Persistence token (+1 to attacks at that stage, the pawn cannot be pushed back from there). Blue: a Detection token, threat intel (look at 2 Red cards) or eviction (remove a Persistence token).'), []],
+    [0, L('Megerősítés (Blue)', 'Fortify (Blue)'), L('egy „Tartós” lapot kontrollként lerakhat: a játék végéig +1 minden védekezéshez a kategóriájában. Az Incidenskezelő ilyenkor visszaléptetheti a bábut.', 'may place one "Persistent" card as a control: +1 to every defense in its category until the end. The Incident Handler may push the pawn back now.'), [
+      X(1, 'A kontroll ára erősség − 2.', 'A control costs strength − 2.'),
+      X(2, 'Fenyegetésvadászat: 2 Erőforrásért levehet egy előkészített Red lapot. Az Incidenskezelő 1 Erőforrás, a CISO egyszer +3 Erőforrást kérhet a második kontroll helyett.', 'Threat hunt: for 2 Resources remove a staged Red card. The Incident Handler costs 1 Resource; the CISO may take +3 Resources once instead of a second control.')]],
+    [2, L('Előkészítés (Red)', 'Staging (Red)'), L('1 Erőforrásért lefordítva letehet egy lapot egy későbbi, azonos kategóriájú szakasz mellé (körönként egyet).', 'for 1 Resource may stage one card face down at a later stage of its category (one per round).'), []],
+    [1, L('Kézlimit (mindkét csapat)', 'Hand limit (both teams)'), L(`akinek ${HAND_MAX}-nél több lapja van, a többletet a nyílt dobópaklira dobja.`, `a team holding more than ${HAND_MAX} cards discards the excess to the open discard pile.`), []],
+    [0, L('Takarítás', 'Cleanup'), L('az ütközés lapjai a dobópaklira kerülnek, a körjelző lép. Ha a 10. kör végéig a Red nem ér célba, a Blue nyer.', 'the clash cards go to the discard pile and the round marker advances. If Red has not reached the objective by the end of round 10, Blue wins.'), [
+      X(2, 'A Red a teljesített titkos küldetéssel is nyer.', 'Red also wins by completing the secret mission.')]]
+  ];
+  return S.filter(s => s[0] <= gm).map(([lv, t, x, ex]) => [t, x, ex.filter(e => e[0] <= gm), lv]);
+}
+const XTAG = lv => `<span class="xtag x${lv}">${lv === 2 ? 'PROFI' : L('HALADÓ', 'ADVANCED')}</span>`;
+function roundListHTML(gm, cls = '') {
+  return `<ol class="rsteps ${cls}">${roundSteps(gm).map(([t, x, ex, lv]) => `<li class="${lv ? 'x' + lv : ''}"><b>${t}:</b> ${lv ? XTAG(lv) + ' ' : ''}${x}${ex.map(([l, e]) => ` <span class="xadd x${l}">${XTAG(l)} ${e}</span>`).join('')}</li>`).join('')}</ol>`;
+}
+// buttons that open the round animations; the extra-step animations only from the mode that has them
+const roundAnimBtns = gm => `<div class="row" style="margin-top:10px">${[[0, L('Animáció: egy kör', 'Animation: one round')], [1, L('Animáció: Haladó kiegészítő lépések', 'Animation: Advanced extra steps')], [2, L('Animáció: Profi kiegészítő lépések', 'Animation: Pro extra steps')]].filter(([g]) => g <= gm).map(([g, t]) => `<button class="btn ghost" data-a="tut" data-v="r${g}">▶ ${t}</button>`).join('')}</div>`;
+function roundRulesHTML() {
+  const g = ST && SCREEN === 'game' ? ST.gm | 0 : GMSEL;
+  return `<section><h3>${L('Egy kör menete', 'A round')}</h3>
+    <p>${L('Válaszd ki a játékmódot: a lista a teljes kört mutatja, a Haladó és a Profi mód kiegészítéseit címke jelöli.', 'Pick the game mode: the list shows the whole round; Advanced and Pro additions are tagged.')}</p>
+    <div class="row rtabs" role="group" aria-label="${L('Játékmód', 'Game mode')}">${GM_NAMES.map((n, i) => `<button class="btn ${i === g ? '' : 'ghost'}" data-a="rmode" data-v="${i}" aria-pressed="${i === g}">${L(...n)}</button>`).join('')}</div>
+    ${[0, 1, 2].map(i => `<div class="rpane" data-gm="${i}" ${i === g ? '' : 'hidden'}>${roundListHTML(i)}${roundAnimBtns(i)}</div>`).join('')}</section>`;
+}
+function roundAnimSteps(k) {
+  const ok = (t, c = '') => mt(t, c), ain = (h, dl) => `<span class="mappear" style="display:inline-block;--dl:${dl || 0}s">${h}</span>`;
+  const res = (s, a, b, dl) => `<span class="mlbl">${L('Erőforrás', 'Resources')}</span><span><b class="${s}">${a}</b> ${ain(`→ <b class="${s}">${b}</b>`, dl)}</span>`;
+  const S = {
+    r0: [
+      [L('Húzás', 'Draw'), L('A kör elején mindkét csapat 5 lapra egészíti ki a kezét a saját paklijából.', 'At the start of the round both teams fill their hands back up to 5 cards from their own deck.'),
+        dv('Red', `${ml(L('Kéz', 'Hand'))}${mr(mcard('r', 3) + mcard('r', 1) + mcard('r', 4))}${appear(mr(mcard('r', 2) + mcard('r', 5)), -.6)}${appear(ok('5/5', 'no'), .2)}`, { sm: 1 }) + dv('Blue', `${ml(L('Kéz', 'Hand'))}${mr(mcard('b', 2) + mcard('b', 4) + mcard('b', 3))}${mr(mcard('b', 1) + ain(mcard('b', 5), -.3))}${appear(ok('5/5', 'ok'), .4)}`, { sm: 1, dd: .2 })],
+      [L('Támadás', 'Attack'), L('A Red lefordítva kijátszik egy lapot a bábu szakaszának kategóriájából, és egy szerepköre +1 laperősítést tehet mellé, szintén lefordítva.', "Red plays a card face down from the category of the pawn's stage; one role may add a +1 card boost, also face down."),
+        dv(L('Red · 02 Kezdeti hozzáférés', 'Red · 02 Initial Access'), `${ml(L('Lefordított lap', 'Face-down card'))}${mr(mcard('r', 4, 1, 9) + appear(ok(L('+1 laperősítés?', '+1 boost?'), 'no'), -.8))}${mr(mb(L('Lap kijátszása', 'Play card'), 'r', 1))}`)],
+      [L('Védekezés', 'Defense'), L('A Blue azonos kategóriájú lappal védekezik lefordítva (szintén tehet mellé laperősítést), vagy passzol. Passznál a támadás sikeres.', 'Blue defends face down with a card of the same category (a boost is possible too), or passes. On a pass the attack succeeds.'),
+        dv(L('Blue · 02', 'Blue · 02'), `${mr(mcard('r', 4, 1, 9) + '<b>vs</b>' + appear(mcard('b', 3, 1, 9), -.4))}${mr(mb(L('Védekezés', 'Defend'), 'b', 1) + mb(L('Passz', 'Pass')))}`)],
+      [L('Felfedés', 'Reveal'), L('Mindkét lapot felfedik. Összérték = erősség + szerepkör-bónusz + laperősítés + tartós kontrollok. A nagyobb nyer: a Red előrelép, vagy a Blue Észlelés-jelzőt kap.', 'Both cards are revealed. Total = strength + role bonus + card boost + persistent controls. Higher wins: Red advances, or Blue gains a Detection token.'),
+        dv(L('Ütközés', 'Clash'), `${mr(mcard('r', 4, 1, 0) + '<b>vs</b>' + mcard('b', 3, 1, 0))}${appear(mr(`<b class="r">4 + 1 = 5</b><b>vs</b><b class="b">3 + 1 = 4</b>`), .2)}${appear(`<span class="mbig r">${L('Red előrelép', 'Red advances')}</span>`, .9)}`)],
+      [L('Döntetlen: kriptopárbaj', 'Tie: crypto duel'), L('Egyenlő összértéknél a két Kriptográfus ugyanazt a titkosított üzenetet fejti 5 percig. Aki előbb jól beküldi, megnyeri az ütközést.', 'On equal totals the two Cryptographers solve the same encrypted message within 5 minutes. Whoever submits the right answer first wins the clash.'),
+        dv(L('Ütközés', 'Clash'), `${mr(mcard('r', 4) + '<b>vs</b>' + mcard('b', 4))}${appear(ok(L('Kriptopárbaj · IV. szint', 'Crypto duel · level IV'), 'no'), -.4)}${appear(mr(mf('·−·· ·− ·−−', 0) + mb(L('Beküldés', 'Submit'), '', 1, 1.2)), .3)}`)],
+      [L('Megerősítés', 'Fortify'), L('A Blue egy „Tartós” lapot kontrollként lerakhat. A kontroll a játék végéig +1-et ad minden védekezéshez a saját kategóriájában.', 'Blue may place a "Persistent" card as a control. It gives +1 to every defense in its category until the end of the game.'),
+        dv('Blue', `${mr(mcard('b', 3) + ok(L('Tartós', 'Persistent')))}${mr(mb(L('Kontroll lerakása', 'Place control'), 'b', 1))}${appear(ok(L('03 kontroll: +1', '03 control: +1'), 'ok'), .3)}`)],
+      [L('Takarítás', 'Cleanup'), L('Az ütközés lapjai a dobópaklira kerülnek, a körjelző lép. Ha a Red a 10. kör végéig nem ér célba, a Blue nyer.', 'The clash cards go to the discard pile and the round marker advances. If Red has not reached the objective by the end of round 10, Blue wins.'),
+        dv(L('Körjelző', 'Round marker'), `${mr(mb('3') + mb('4', '', 1) + mb('5') + mb('…') + mb('10', 'b'))}${appear(ok(L('4. kör', 'Round 4')), .2)}`)]
+    ],
+    r1: [
+      [L('Utánpótlás a kör elején', 'Supply at the start of the round'), L(`Nincs automatikus húzás és jövedelem. Mindkét csapat titokban eloszt pontokat: egy lap ${SUP_CARD} pont, minden megmaradó pont +1 Erőforrás. A Red ${SUP_PTS.r}, a Blue ${SUP_PTS.b} pontból gazdálkodik.`, `No automatic draw or income. Both teams secretly split points: a card costs ${SUP_CARD}, every point left is +1 Resource. Red has ${SUP_PTS.r} points, Blue ${SUP_PTS.b}.`),
+        dv(`Red · ${SUP_PTS.r} ${L('pont', 'pts')}`, `${mb(L('3 lap', '3 cards'), 'r')}${mb(L('2 lap + 2', '2 cards + 2'), 'r', 1)}${mb(L('1 lap + 4', '1 card + 4'), 'r')}${mb(L('6 Erőforrás', '6 Resources'), 'r')}`, { sm: 1 }) + dv(`Blue · ${SUP_PTS.b} ${L('pont', 'pts')}`, `${mb(L('2 lap + 1', '2 cards + 1'), 'b')}${mb(L('1 lap + 3', '1 card + 3'), 'b')}${mb(L('5 Erőforrás', '5 Resources'), 'b', 1, .5)}`, { sm: 1, dd: .2 })],
+      [L('Egyszerre felfedve', 'Revealed together'), L(`A két választás egyszerre lép életbe: a lapokat húzzátok, az Erőforrást hozzáadjátok (legfeljebb ${RES_CAP}, a fölötte lévő elvész).`, `Both picks take effect together: draw the cards, add the Resources (max ${RES_CAP}; anything above is lost).`),
+        dv('Red', `${ml(L('2 lap + 2', '2 cards + 2'))}${mr(mcard('r', 3) + appear(mcard('r', 2) + mcard('r', 5), -.4))}${res('r', 2, 4, .2)}`, { sm: 1 }) + dv('Blue', `${ml(L('5 Erőforrás', '5 Resources'))}${mr(mcard('b', 4) + mcard('b', 1))}${res('b', 2, 7, .4)}`, { sm: 1, dd: .2 })],
+      [L('A lapnak ára van', 'Cards cost Resources'), L('Minden lap ára az erőssége, a felfedéskor fizetitek, ezért csak kifizethető lapot tehettek le. A passz ingyenes, a bónuszok és a laperősítés is. Az újratervezés 1 Erőforrás.', 'Every card costs its strength, paid at the reveal, so you can only play a card you can afford. Passing, bonuses and the card boost are free. Replanning costs 1 Resource.'),
+        dv('Red', `${mr(mcard('r', 4) + mcard('r', 5) + ok(L('5 > 4: nem fizethető', '5 > 4: unaffordable'), 'no'))}${mr(mb(L('4-es lap kijátszása', 'Play the 4'), 'r', 1))}${res('r', 4, 0, .3)}`)],
+      [L('Jutalom: Red', 'Reward: Red'), L('Ha a Red nyeri az ütközést, választ: előrelépés, vagy Perzisztencia-jelző. A jelző +1-et ad a támadásra azon a szakaszon, és onnan a bábu nem léptethető vissza.', 'When Red wins the clash it picks: advance, or a Persistence token. The token gives +1 to attacks at that stage, and the pawn cannot be pushed back from there.'),
+        dv(L('Red nyert', 'Red won'), `${mr(mb(L('Előrelépés', 'Advance'), 'r') + mb(L('Perzisztencia', 'Persistence'), 'r', 1))}${appear(ok(L('03 · jelző: +1', '03 · token: +1'), 'no'), .3)}`)],
+      [L('Jutalom: Blue', 'Reward: Blue'), L('Ha a Blue nyer, választ: Észlelés-jelző, Fenyegetés-felderítés (megnéz 2 véletlen Red lapot) vagy Kiűzés (levesz egy Perzisztencia-jelzőt).', 'When Blue wins it picks: a Detection token, threat intel (looks at 2 random Red cards) or eviction (removes a Persistence token).'),
+        dv(L('Blue nyert', 'Blue won'), `${mb(L('Észlelés-jelző', 'Detection token'), 'b')}${mb(L('Fenyegetés-felderítés', 'Threat intel'), 'b', 1)}${mb(L('Kiűzés', 'Eviction'), 'b')}${appear(mr(mcard('r', 2) + mcard('r', 5)), .3)}`)],
+      [L('Olcsóbb kontroll', 'Cheaper control'), L('Megerősítéskor a kontroll ára erősség − 2. Egy 4-es Tartós lap tehát 2 Erőforrás.', 'When fortifying, a control costs strength − 2. A Persistent 4 therefore costs 2 Resources.'),
+        dv('Blue', `${mr(mcard('b', 4) + ok(L('Tartós', 'Persistent')) + ok('4 − 2 = 2', 'ok'))}${mr(mb(L('Kontroll lerakása', 'Place control'), 'b', 1))}${res('b', 7, 5, .3)}`)],
+      [L(`Kézlimit ${HAND_MAX}`, `Hand limit ${HAND_MAX}`), L(`A kör végén akinek ${HAND_MAX}-nél több lapja van, a többletet a nyílt dobópaklira dobja. Ezért nem érdemes mindig lapot kérni.`, `At the end of the round a team holding more than ${HAND_MAX} cards discards the excess to the open discard pile, so asking for cards every time does not pay off.`),
+        dv(L('Red · 8 lap', 'Red · 8 cards'), `${mr(mcard('r', 1, 1, 9) + mcard('r', 2) + mcard('r', 3) + mcard('r', 3))}${mr(mcard('r', 4) + mcard('r', 4) + mcard('r', 5) + mcard('r', 5))}${appear(ok(L('1 lap a dobópaklira', '1 card discarded'), 'no'), .2)}`)]
+    ],
+    r2: [
+      [L('Játék előtt', 'Before the game'), L('A Red titkos küldetést húz, és 4 Erőforrással kezd. A Blue titokban kiválaszt egy szakaszt koronaékszernek: ott minden védekezése +1-et kap.', 'Red draws a secret mission and starts with 4 Resources. Blue secretly picks one stage as the crown jewel: every defense there gets +1.'),
+        dv('Red', `${ml(L('Titkos küldetés', 'Secret mission'))}${mr(mcard('r', '?', 1, -1) + appear(ok(L('Kémkedés', 'Espionage'), 'no'), .2))}${ml(L('Erőforrás', 'Resources'))}<b class="r">4</b>`, { sm: 1 }) + dv('Blue', `${ml(L('Koronaékszer', 'Crown jewel'))}${mr(mb('02') + mb('03', 'b', 1) + mb('04'))}`, { sm: 1, dd: .2 })],
+      [L('Zaj', 'Noise'), L('Minden 4-es vagy 5-ös lappal indított támadás +1 Zajt kelt. 4 Zajnál a Blue Észlelés-jelzőt kap, és a Zaj nullázódik.', 'Every attack with a 4 or 5 card makes +1 Noise. At 4 Noise Blue gains a Detection token and Noise resets.'),
+        dv(L('Zajmérő', 'Noise track'), `${mr(mcard('r', 5))}${ml(L('Zaj', 'Noise'))}${mr(mt('1', 'no') + mt('2', 'no') + mt('3', 'no') + appear(mt('4', 'no'), -.6))}${appear(ok(L('Blue: +1 Észlelés-jelző', 'Blue: +1 Detection token'), 'ok'), .3)}`)],
+      [L('Csendes kör', 'Quiet round'), L('A Red támadás helyett csendes kört választhat: nem támad, a Zaj 2-vel csökken.', 'Instead of attacking Red may take a quiet round: no attack, Noise drops by 2.'),
+        dv('Red', `${mr(mb(L('Lap kijátszása', 'Play card'), 'r') + mb(L('Csendes kör', 'Quiet round'), 'r', 1))}${ml(L('Zaj', 'Noise'))}<span><b>3</b> ${ain('→ <b>1</b>', .2)}</span>`)],
+      [L('Koronaékszer', 'Crown jewel'), L('A koronaékszer szakaszán a Blue minden védekezése +1-et kap. Az első ottani védekezéskor felfedődik.', 'At the crown jewel stage every Blue defense gets +1. It is revealed at the first defense there.'),
+        dv(L('Ütközés · 03', 'Clash · 03'), `${mr(mcard('r', 4) + '<b>vs</b>' + mcard('b', 4))}${appear(ok(L('Koronaékszer +1', 'Crown jewel +1'), 'ok'), -.3)}${appear(`<span class="mbig b">${L('Blue nyer', 'Blue wins')}</span>`, .6)}`)],
+      [L('Előkészítés', 'Staging'), L('A Blue megerősítése után a Red 1 Erőforrásért lefordítva letehet egy lapot egy későbbi szakasz mellé. Amikor a bábu odaér, ingyen és +1-gyel támadhat vele.', "After Blue's fortify, for 1 Resource Red may stage a card face down at a later stage. When the pawn gets there it attacks with it for free and +1."),
+        dv('Red', `${ml(L('Előkészítés a 04-hez', 'Stage at 04'))}${mr(mcard('r', 3, 1, 9) + mb('04', 'r', 1))}${res('r', 3, 2, .3)}${appear(ok(L('később: 3 + 1, ingyen', 'later: 3 + 1, free'), 'no'), .7)}`)],
+      [L('Fenyegetésvadászat', 'Threat hunt'), L('Megerősítéskor a Blue 2 Erőforrásért, körönként egyszer eltávolíthat egy előkészített Red lapot.', 'When fortifying, Blue may pay 2 Resources once per round to remove a staged Red card.'),
+        dv('Blue', `${mr(mcard('r', 3, 1, 9) + ok('04'))}${mr(mb(L('Vadászat · 2', 'Hunt · 2'), 'b', 1))}${appear(ok(L('Lap eltávolítva', 'Card removed'), 'ok'), .2)}${res('b', 6, 4, .3)}`)],
+      [L('Szerepkörök ára', 'Roles cost Resources'), L('A Felderítő körönként egyszer 2 Erőforrásért néz be (egy Blue lapba vagy a koronaékszerbe). Az Incidenskezelő 1 Erőforrás. A CISO egyszer +3 Erőforrást kérhet a második kontroll helyett. A párbajt megnyerő Kriptográfus +1 Erőforrást hoz.', 'Recon peeks once per round for 2 Resources (a Blue card or the crown jewel). The Incident Handler costs 1 Resource. The CISO may take +3 Resources once instead of a second control. A Cryptographer who wins the duel brings +1 Resource.'),
+        dv(L('Költségek', 'Costs'), `${mr(ok(L('Felderítő −2', 'Recon −2'), 'no') + ok(L('Incidenskezelő −1', 'Incident Handler −1'), 'ok'))}${appear(mr(ok('CISO +3', 'ok') + ok(L('Kriptográfus +1', 'Cryptographer +1'))), -.2)}`)],
+      [L('Küldetés teljesítése', 'Mission complete'), L('A Red a titkos küldetésével is nyerhet, például Kémkedés: 3 egymást követő kör végén legalább a 04-en áll. A Blue győzelmi feltételei nem változnak.', 'Red can also win with its secret mission, e.g. Espionage: at least at stage 04 at the end of 3 rounds in a row. Blue\'s win conditions do not change.'),
+        dv(L('Kémkedés', 'Espionage'), `${mr(mt('1', 'no') + appear(mt('2', 'no'), -1) + appear(mt('3', 'no'), -.4))}${appear(`<span class="mbig r">${L('Red nyer', 'Red wins')}</span>`, .4)}`)]
+    ]
+  };
+  return S[k] || [];
 }
 
 function gameHTML() {
@@ -2328,12 +2418,12 @@ function modesRulesHTML() {
     <li><b>Költséggel járó szerepkörök:</b> a Felderítő körönként egyszer, 2 Erőforrásért néz be (egy Blue lapba vagy a koronaékszerbe). CISO: egyszer +3 Erőforrás a második kontroll helyett. Az Incidenskezelő 1 Erőforrásba kerül. A párbajt megnyerő Kriptográfus +1 Erőforrást hoz a csapatának.</li></ul></section>`;
 }
 // ---------- "how to start" walkthroughs: one per game mode, an animated mock screen per step ----------
-let TUT = '', TSTEP = 0, TPLAY = true, tutT = 0;
-const TUT_MS = 4400;
+let TUT = '', TSTEP = 0, TPLAY = true, tutT = 0, TUTRULES = false;
+const TUT_MS = 4400, isRound = k => /^r\d$/.test(k);
 const RMOT = matchMedia('(prefers-reduced-motion:reduce)');
-function tutOpen(k) { TUT = k; TSTEP = 0; TPLAY = !RMOT.matches; RULES = false; CREF = false; tutSched(); render(); const b = document.querySelector('.tutov .rulestop .btn'); if (b) b.focus(); }
-function tutClose() { TUT = ''; clearTimeout(tutT); render(); }
-function tutSched() { clearTimeout(tutT); if (TUT && TPLAY) tutT = setTimeout(() => { if (!TUT) return; TSTEP = (TSTEP + 1) % tutSteps(TUT).length; tutSched(); render(); }, TUT_MS); }
+function tutOpen(k) { if (!TUT) TUTRULES = RULES; TUT = k; TSTEP = 0; TPLAY = !RMOT.matches; RULES = false; CREF = false; tutSched(); render(); const b = document.querySelector('.tutov .rulestop .btn'); if (b) b.focus(); }
+function tutClose() { TUT = ''; clearTimeout(tutT); if (TUTRULES) { RULES = true; TUTRULES = false; } render(); }
+function tutSched() { clearTimeout(tutT); if (TUT && TPLAY) tutT = setTimeout(() => { if (!TUT) return; TSTEP = (TSTEP + 1) % tutSteps(TUT).length; tutSched(); render(); }, isRound(TUT) ? 7500 : TUT_MS); }
 function tutGo(i) { const n = tutSteps(TUT).length; TSTEP = (i + n) % n; tutSched(); render(); }
 const tutBtn = k => `<button class="tutbtn" data-a="tut" data-v="${k}" aria-haspopup="dialog"><i aria-hidden="true">?</i>${L('Hogyan indítsd?', 'How to start')}</button>`;
 // mock UI pieces
@@ -2415,14 +2505,15 @@ function tutSteps(k) {
         dv(L('Ranglista', 'Leaderboard'), `${mr(mb(L('Ranglista', 'Leaderboard'), '', 1))}${appear(`<div class="mcol"><div>1. rvb_anna</div><div><b>1250</b></div><div>2. bence</div><div><b>975</b></div></div>`, 0)}`)]
     ]
   };
-  return S[k] || [];
+  return S[k] || roundAnimSteps(k);
 }
-const TUT_NAME = k => ({ local: L('Helyi játék', 'Local game'), online: L('Online játék két eszközön', 'Online game on two devices'), team: L('Szerepkörös játék', 'Role-based game'), join: L('Csatlakozás kóddal és közvetítés', 'Join with code and watch'), ctf: L('CTF – zászlószerzés', 'CTF – capture the flag') }[k] || '');
+const TUT_NAME = k => ({ local: L('Helyi játék', 'Local game'), online: L('Online játék két eszközön', 'Online game on two devices'), team: L('Szerepkörös játék', 'Role-based game'), join: L('Csatlakozás kóddal és közvetítés', 'Join with code and watch'), ctf: L('CTF – zászlószerzés', 'CTF – capture the flag'), r0: L('Alapjáték', 'Base game'), r1: L('Haladó mód kiegészítő lépései', 'Advanced mode extra steps'), r2: L('Profi mód kiegészítő lépései', 'Pro mode extra steps') }[k] || '');
 function tutHTML() {
   const st = tutSteps(TUT), cur = st[TSTEP] || st[0], online = !!ROOM;
-  const go = { local: `<button class="btn" data-a="local">${L('Indítás most', 'Start now')}</button>`, online: `<button class="btn red" data-a="host" data-side="r" ${online ? '' : 'disabled'}>${L('Red leszek', 'I play Red')}</button><button class="btn blue" data-a="host" data-side="b" ${online ? '' : 'disabled'}>${L('Blue leszek', 'I play Blue')}</button>`, team: `<button class="btn" data-a="hostteam" ${online ? '' : 'disabled'}>${L('Szerepkörös játék', 'Role-based game')}</button>`, join: `<button class="btn" data-a="tutjoin">${L('Kód beírása', 'Enter the code')}</button>`, ctf: `<a class="btn" href="ctf/">${L('CTF megnyitása', 'Open CTF')}</a>` }[TUT] || '';
-  return `<div class="rulesov tutov" role="dialog" aria-modal="true" aria-label="${esc(L('Hogyan indítsd?', 'How to start') + ' · ' + TUT_NAME(TUT))}"><div class="rulesbox cut">
-   <div class="rulestop"><h2>${L('Hogyan indítsd?', 'How to start')} · ${esc(TUT_NAME(TUT))}</h2><button class="btn" data-a="tutclose">${L('Bezárás', 'Close')}</button></div>
+  const go = { local: `<button class="btn" data-a="local">${L('Indítás most', 'Start now')}</button>`, online: `<button class="btn red" data-a="host" data-side="r" ${online ? '' : 'disabled'}>${L('Red leszek', 'I play Red')}</button><button class="btn blue" data-a="host" data-side="b" ${online ? '' : 'disabled'}>${L('Blue leszek', 'I play Blue')}</button>`, team: `<button class="btn" data-a="hostteam" ${online ? '' : 'disabled'}>${L('Szerepkörös játék', 'Role-based game')}</button>`, join: `<button class="btn" data-a="tutjoin">${L('Kód beírása', 'Enter the code')}</button>`, ctf: `<a class="btn" href="ctf/">${L('CTF megnyitása', 'Open CTF')}</a>`, r0: `<button class="btn" data-a="tut" data-v="r1">${L('Tovább: Haladó kiegészítések', 'Next: Advanced extras')} ›</button>`, r1: `<button class="btn" data-a="tut" data-v="r2">${L('Tovább: Profi kiegészítések', 'Next: Pro extras')} ›</button>`, r2: `<button class="btn ghost" data-a="tut" data-v="r0">‹ ${L('Vissza az alapkörhöz', 'Back to the base round')}</button>` }[TUT] || '';
+  const ttl = isRound(TUT) ? L('Egy kör menete', 'A round') : L('Hogyan indítsd?', 'How to start');
+  return `<div class="rulesov tutov" role="dialog" aria-modal="true" aria-label="${esc(ttl + ' · ' + TUT_NAME(TUT))}"><div class="rulesbox cut">
+   <div class="rulestop"><h2>${ttl} · ${esc(TUT_NAME(TUT))}</h2><button class="btn" data-a="tutclose">${L('Bezárás', 'Close')}</button></div>
    <div class="tutgrid"><div><div class="tstage" aria-hidden="true"><span class="snum">${String(TSTEP + 1).padStart(2, '0')} / ${String(st.length).padStart(2, '0')}</span>${cur[2]}</div>
      <div class="tprog${TPLAY ? '' : ' paused'}"><i></i></div>
      <p class="tnow" aria-live="polite"><b>${TSTEP + 1}. ${esc(cur[0])}.</b> ${esc(cur[1])}</p>
@@ -2444,13 +2535,7 @@ function rulesHTML() {
 ${LANG === 'en' ? `   <section><h3>Goal of the game</h3><p>Red, the attacker, wants to get through a fictional company's network along the five stages of the attack chain: Reconnaissance, Initial Access, Persistence, Lateral Movement, Objective. Blue, the defender, detects and stops them.</p>
     <p><b class="r">Red wins</b> by attacking successfully at stage 05 · Objective. <b class="b">Blue wins</b> by collecting 5 Detection tokens, or when round 10 ends and Red has not reached the objective.</p></section>
    <section><h3>Setup</h3><p>2–5 players per team. A 2-player team picks 3 roles; from 3 players all 5 roles are in play (one player may hold several). Both teams draw 5 cards from their own deck. The Red pawn starts on Reconnaissance, and Red goes first.</p></section>
-   <section><h3>A round</h3><ol>
-    <li><b>Draw:</b> both teams fill their hands back up to 5 cards.</li>
-    <li><b>Attack (Red):</b> play one card face down from the category of the pawn's stage. Bluffing with a weak card is allowed. A role may add a face-down +1 card boost. <i>Replan:</i> with no such card, swap up to 3 cards; if there is still none, Red does not attack this round.</li>
-    <li><b>Defense (Blue):</b> defend face down with a card of the same category (a role may add a +1 boost), or pass. On a pass the attack succeeds automatically.</li>
-    <li><b>Reveal and result:</b> total = card strength + role bonus + card boost + persistent controls (Blue only). Higher wins; a tie is settled by a crypto duel.</li>
-    <li><b>Fortify (Blue):</b> may place one "Persistent" card as a control.</li>
-    <li><b>Cleanup:</b> the clash cards go to the discard pile and the round marker advances.</li></ol></section>
+   ${roundRulesHTML()}
    <section><h3>Clash result</h3><ul>
     <li><b class="r">Red higher</b> (or Blue passed): the Red pawn advances one stage.</li>
     <li><b class="b">Blue higher:</b> Blue gains 1 Detection token; the pawn stays.</li>
@@ -2467,13 +2552,7 @@ ${LANG === 'en' ? `   <section><h3>Goal of the game</h3><p>Red, the attacker, wa
 ` : `   <section><h3>A játék célja</h3><p>A Red támadóként végig akar jutni egy kitalált cég hálózatán a támadási lánc öt szakaszán: Felderítés, Kezdeti hozzáférés, Beágyazódás, Oldalirányú mozgás, Cél. A Blue védőként észleli és megállítja.</p>
     <p><b class="r">A Red nyer</b>, ha sikeresen támad a 05 · Cél szakaszon. <b class="b">A Blue nyer</b>, ha összegyűjt 5 Észlelés-jelzőt, vagy ha lezárul a 10. kör, és a Red nem ért célba.</p></section>
    <section><h3>Előkészítés</h3><p>Csapatonként 2–5 fő. A 2 fős csapat 3 szerepkört választ, 3 főtől mind az 5 szerepkör játékban van (valaki többet is vihet). Mindkét csapat 5 lapot húz a saját paklijából. A Red bábu a Felderítésen kezd, a Red lép először.</p></section>
-   <section><h3>Egy kör menete</h3><ol>
-    <li><b>Húzás:</b> mindkét csapat 5 lapra egészíti ki a kezét.</li>
-    <li><b>Támadás (Red):</b> lefordítva kijátszik egy lapot a bábu szakaszának kategóriájából. Blöffölhet gyenge lappal is. Egy szerepkör lefordítva +1 laperősítést tehet mellé. <i>Újratervezés:</i> ha nincs ilyen lapja, legfeljebb 3 lapot cserélhet; ha így sincs, ebben a körben nem támad.</li>
-    <li><b>Védekezés (Blue):</b> azonos kategóriájú lappal védekezik lefordítva (egy szerepkör +1 laperősítést tehet mellé), vagy passzol. Passznál a támadás automatikusan sikeres.</li>
-    <li><b>Felfedés és eredmény:</b> összérték = lap erőssége + szerepkör-bónusz + laperősítés + tartós kontrollok (csak Blue). A nagyobb nyer, döntetlennél kriptopárbaj dönt.</li>
-    <li><b>Megerősítés (Blue):</b> egy „Tartós” lapot kontrollként kirakhat.</li>
-    <li><b>Takarítás:</b> az ütközés lapjai a dobópaklira kerülnek, a körjelző lép.</li></ol></section>
+   ${roundRulesHTML()}
    <section><h3>Ütközés eredménye</h3><ul>
     <li><b class="r">Red nagyobb</b> (vagy a Blue passzolt): a Red bábu egy szakasszal előre lép.</li>
     <li><b class="b">Blue nagyobb:</b> a Blue kap 1 Észlelés-jelzőt, a bábu marad.</li>
@@ -2624,6 +2703,7 @@ document.addEventListener('click', e => {
   switch (t.dataset.a) {
     case 'tut': return tutOpen(t.dataset.v);
     case 'tutclose': return tutClose();
+    case 'rmode': { const v = t.dataset.v; document.querySelectorAll('.rtabs .btn').forEach(b => { const on = b.dataset.v === v; b.classList.toggle('ghost', !on); b.setAttribute('aria-pressed', on); }); document.querySelectorAll('.rpane').forEach(x => { x.hidden = x.dataset.gm !== v; }); return; }
     case 'tutprev': return tutGo(TSTEP - 1);
     case 'tutnext': return tutGo(TSTEP + 1);
     case 'tstep': return tutGo(+t.dataset.v);
