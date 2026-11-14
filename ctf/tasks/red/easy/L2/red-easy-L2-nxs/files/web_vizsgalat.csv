@@ -1,5 +1,5 @@
 vegpont,metodus,statusz,megjegyzes,sebezhetoseg_id
-/backup/.env.backup,GET,200,"kiszivargott konfiguracios fajl, benne szolgaltatasfiok",
+/backup/env.backup,GET,200,"kiszivargott konfiguracios fajl, benne szolgaltatasfiok",
 /admin,GET,302,atiranyitas a bejelentkezeshez,
 /login,POST,401,szabalyos bejelentkezes,
 /api/health,GET,200,"allapotjelzo, nem erzekeny",

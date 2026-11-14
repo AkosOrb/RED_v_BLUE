@@ -4,4 +4,4 @@ vegpont,metodus,statusz,megjegyzes,sebezhetoseg_id
 /login,POST,401,szabalyos bejelentkezes,
 /api/health,GET,200,"allapotjelzo, nem erzekeny",
 /static/app.js,GET,200,kliensoldali szkript,
-/backup/.env.backup,GET,200,"kiszivargott konfiguracios fajl, benne szolgaltatasfiok",
+/backup/env.backup,GET,200,"kiszivargott konfiguracios fajl, benne szolgaltatasfiok",

@@ -27,11 +27,11 @@
     },
     "enc": {
       "f1+f2": "dcc0aedd112767b2fcc1",
-      "f1+f3": "fbdd2281f828731a73f9",
+      "f1+f3": "2e29c9f2b32ea7fde216",
       "f1+f4": "10ad366575b7d7f42653",
-      "f2+f3": "c44632af2a68dff2c4f5",
+      "f2+f3": "928e17162f1ee637b668",
       "f2+f4": "d88d166f64084b58b21c",
-      "f3+f4": "30a4af30073882d5a66b"
+      "f3+f4": "8825c9c0f74ea345a1f6"
     }
   },
   "flags": [
@@ -109,7 +109,7 @@
         "hu": "Melyik konfigurációs fájl szivárogtatott ki hitelesítő adatot?",
         "en": "Which configuration file leaked credentials?"
       },
-      "hash": "515c01ed5bff3fee322101b1ea6f6d9cc3bec75357b75498136d50761d1d4936",
+      "hash": "34df36ab04b233b8dd22b86e04d82447af17d7c4a443a4fab12e6e8c1f2f79ff",
       "hints": [
         {
           "tier": 1,
@@ -123,8 +123,8 @@
           "tier": 2,
           "cost": 25,
           "text": {
-            "hu": "Ponttal kezdődő, rejtett konfigurációs fájl.",
-            "en": "A hidden config file starting with a dot."
+            "hu": "A .backup kiterjesztésű konfigurációs mentés.",
+            "en": "The config backup with the .backup extension."
           }
         },
         {
@@ -178,7 +178,7 @@
       "view": "table"
     },
     {
-      "name": ".env.backup",
+      "name": "env.backup",
       "view": "text"
     }
   ]

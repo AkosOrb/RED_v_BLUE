@@ -3,5 +3,5 @@ vegpont,metodus,statusz,megjegyzes,sebezhetoseg_id
 /static/app.js,GET,200,kliensoldali szkript,
 /login,POST,401,szabalyos bejelentkezes,
 /admin,GET,302,atiranyitas a bejelentkezeshez,
-/backup/.env.backup,GET,200,"kiszivargott konfiguracios fajl, benne szolgaltatasfiok",
+/backup/env.backup,GET,200,"kiszivargott konfiguracios fajl, benne szolgaltatasfiok",
 /admin/export,GET,200,hitelesites nelkul elerheto adminisztracios exportvegpont,ORV-2026-07
