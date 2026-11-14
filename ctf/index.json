@@ -293,6 +293,300 @@
    "mode": "hard",
    "layer": 7,
    "path": "tasks/blue/hard/L7/blue-hard-L7-vtm"
+  },
+  {
+   "id": "red-easy-L1-aur",
+   "side": "red",
+   "mode": "easy",
+   "layer": 1,
+   "path": "tasks/red/easy/L1/red-easy-L1-aur"
+  },
+  {
+   "id": "red-easy-L1-nxs",
+   "side": "red",
+   "mode": "easy",
+   "layer": 1,
+   "path": "tasks/red/easy/L1/red-easy-L1-nxs"
+  },
+  {
+   "id": "red-easy-L1-orv",
+   "side": "red",
+   "mode": "easy",
+   "layer": 1,
+   "path": "tasks/red/easy/L1/red-easy-L1-orv"
+  },
+  {
+   "id": "red-easy-L2-aur",
+   "side": "red",
+   "mode": "easy",
+   "layer": 2,
+   "path": "tasks/red/easy/L2/red-easy-L2-aur"
+  },
+  {
+   "id": "red-easy-L2-nxs",
+   "side": "red",
+   "mode": "easy",
+   "layer": 2,
+   "path": "tasks/red/easy/L2/red-easy-L2-nxs"
+  },
+  {
+   "id": "red-easy-L2-orv",
+   "side": "red",
+   "mode": "easy",
+   "layer": 2,
+   "path": "tasks/red/easy/L2/red-easy-L2-orv"
+  },
+  {
+   "id": "red-easy-L3-aur",
+   "side": "red",
+   "mode": "easy",
+   "layer": 3,
+   "path": "tasks/red/easy/L3/red-easy-L3-aur"
+  },
+  {
+   "id": "red-easy-L3-nxs",
+   "side": "red",
+   "mode": "easy",
+   "layer": 3,
+   "path": "tasks/red/easy/L3/red-easy-L3-nxs"
+  },
+  {
+   "id": "red-easy-L3-orv",
+   "side": "red",
+   "mode": "easy",
+   "layer": 3,
+   "path": "tasks/red/easy/L3/red-easy-L3-orv"
+  },
+  {
+   "id": "red-easy-L4-aur",
+   "side": "red",
+   "mode": "easy",
+   "layer": 4,
+   "path": "tasks/red/easy/L4/red-easy-L4-aur"
+  },
+  {
+   "id": "red-easy-L4-nxs",
+   "side": "red",
+   "mode": "easy",
+   "layer": 4,
+   "path": "tasks/red/easy/L4/red-easy-L4-nxs"
+  },
+  {
+   "id": "red-easy-L4-orv",
+   "side": "red",
+   "mode": "easy",
+   "layer": 4,
+   "path": "tasks/red/easy/L4/red-easy-L4-orv"
+  },
+  {
+   "id": "red-easy-L5-aur",
+   "side": "red",
+   "mode": "easy",
+   "layer": 5,
+   "path": "tasks/red/easy/L5/red-easy-L5-aur"
+  },
+  {
+   "id": "red-easy-L5-nxs",
+   "side": "red",
+   "mode": "easy",
+   "layer": 5,
+   "path": "tasks/red/easy/L5/red-easy-L5-nxs"
+  },
+  {
+   "id": "red-easy-L5-orv",
+   "side": "red",
+   "mode": "easy",
+   "layer": 5,
+   "path": "tasks/red/easy/L5/red-easy-L5-orv"
+  },
+  {
+   "id": "red-easy-L6-aur",
+   "side": "red",
+   "mode": "easy",
+   "layer": 6,
+   "path": "tasks/red/easy/L6/red-easy-L6-aur"
+  },
+  {
+   "id": "red-easy-L6-nxs",
+   "side": "red",
+   "mode": "easy",
+   "layer": 6,
+   "path": "tasks/red/easy/L6/red-easy-L6-nxs"
+  },
+  {
+   "id": "red-easy-L6-orv",
+   "side": "red",
+   "mode": "easy",
+   "layer": 6,
+   "path": "tasks/red/easy/L6/red-easy-L6-orv"
+  },
+  {
+   "id": "red-easy-L7-aur",
+   "side": "red",
+   "mode": "easy",
+   "layer": 7,
+   "path": "tasks/red/easy/L7/red-easy-L7-aur"
+  },
+  {
+   "id": "red-easy-L7-nxs",
+   "side": "red",
+   "mode": "easy",
+   "layer": 7,
+   "path": "tasks/red/easy/L7/red-easy-L7-nxs"
+  },
+  {
+   "id": "red-easy-L7-orv",
+   "side": "red",
+   "mode": "easy",
+   "layer": 7,
+   "path": "tasks/red/easy/L7/red-easy-L7-orv"
+  },
+  {
+   "id": "red-hard-L1-aur",
+   "side": "red",
+   "mode": "hard",
+   "layer": 1,
+   "path": "tasks/red/hard/L1/red-hard-L1-aur"
+  },
+  {
+   "id": "red-hard-L1-nxs",
+   "side": "red",
+   "mode": "hard",
+   "layer": 1,
+   "path": "tasks/red/hard/L1/red-hard-L1-nxs"
+  },
+  {
+   "id": "red-hard-L1-orv",
+   "side": "red",
+   "mode": "hard",
+   "layer": 1,
+   "path": "tasks/red/hard/L1/red-hard-L1-orv"
+  },
+  {
+   "id": "red-hard-L2-aur",
+   "side": "red",
+   "mode": "hard",
+   "layer": 2,
+   "path": "tasks/red/hard/L2/red-hard-L2-aur"
+  },
+  {
+   "id": "red-hard-L2-nxs",
+   "side": "red",
+   "mode": "hard",
+   "layer": 2,
+   "path": "tasks/red/hard/L2/red-hard-L2-nxs"
+  },
+  {
+   "id": "red-hard-L2-orv",
+   "side": "red",
+   "mode": "hard",
+   "layer": 2,
+   "path": "tasks/red/hard/L2/red-hard-L2-orv"
+  },
+  {
+   "id": "red-hard-L3-aur",
+   "side": "red",
+   "mode": "hard",
+   "layer": 3,
+   "path": "tasks/red/hard/L3/red-hard-L3-aur"
+  },
+  {
+   "id": "red-hard-L3-nxs",
+   "side": "red",
+   "mode": "hard",
+   "layer": 3,
+   "path": "tasks/red/hard/L3/red-hard-L3-nxs"
+  },
+  {
+   "id": "red-hard-L3-orv",
+   "side": "red",
+   "mode": "hard",
+   "layer": 3,
+   "path": "tasks/red/hard/L3/red-hard-L3-orv"
+  },
+  {
+   "id": "red-hard-L4-aur",
+   "side": "red",
+   "mode": "hard",
+   "layer": 4,
+   "path": "tasks/red/hard/L4/red-hard-L4-aur"
+  },
+  {
+   "id": "red-hard-L4-nxs",
+   "side": "red",
+   "mode": "hard",
+   "layer": 4,
+   "path": "tasks/red/hard/L4/red-hard-L4-nxs"
+  },
+  {
+   "id": "red-hard-L4-orv",
+   "side": "red",
+   "mode": "hard",
+   "layer": 4,
+   "path": "tasks/red/hard/L4/red-hard-L4-orv"
+  },
+  {
+   "id": "red-hard-L5-aur",
+   "side": "red",
+   "mode": "hard",
+   "layer": 5,
+   "path": "tasks/red/hard/L5/red-hard-L5-aur"
+  },
+  {
+   "id": "red-hard-L5-nxs",
+   "side": "red",
+   "mode": "hard",
+   "layer": 5,
+   "path": "tasks/red/hard/L5/red-hard-L5-nxs"
+  },
+  {
+   "id": "red-hard-L5-orv",
+   "side": "red",
+   "mode": "hard",
+   "layer": 5,
+   "path": "tasks/red/hard/L5/red-hard-L5-orv"
+  },
+  {
+   "id": "red-hard-L6-aur",
+   "side": "red",
+   "mode": "hard",
+   "layer": 6,
+   "path": "tasks/red/hard/L6/red-hard-L6-aur"
+  },
+  {
+   "id": "red-hard-L6-nxs",
+   "side": "red",
+   "mode": "hard",
+   "layer": 6,
+   "path": "tasks/red/hard/L6/red-hard-L6-nxs"
+  },
+  {
+   "id": "red-hard-L6-orv",
+   "side": "red",
+   "mode": "hard",
+   "layer": 6,
+   "path": "tasks/red/hard/L6/red-hard-L6-orv"
+  },
+  {
+   "id": "red-hard-L7-aur",
+   "side": "red",
+   "mode": "hard",
+   "layer": 7,
+   "path": "tasks/red/hard/L7/red-hard-L7-aur"
+  },
+  {
+   "id": "red-hard-L7-nxs",
+   "side": "red",
+   "mode": "hard",
+   "layer": 7,
+   "path": "tasks/red/hard/L7/red-hard-L7-nxs"
+  },
+  {
+   "id": "red-hard-L7-orv",
+   "side": "red",
+   "mode": "hard",
+   "layer": 7,
+   "path": "tasks/red/hard/L7/red-hard-L7-orv"
   }
  ]
 }

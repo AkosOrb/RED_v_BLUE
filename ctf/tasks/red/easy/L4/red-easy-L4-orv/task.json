@@ -1,0 +1,185 @@
+{
+  "id": "red-easy-L4-orv",
+  "side": "red",
+  "mode": "easy",
+  "layer": 4,
+  "incident": {
+    "name": "Engedélyezett behatolásteszt (szintetikus gyakorlat)",
+    "url": "https://attack.mitre.org/"
+  },
+  "title": {
+    "hu": "Megmaradás",
+    "en": "Persistence"
+  },
+  "story": {
+    "hu": "A hozzáférés megtartásához perzisztenciát állítottál be. A perzisztencia-listából és a beacon konfigurációból azonosítsd a telepített mechanizmust és a visszahívási domaint.",
+    "en": "To keep access you set up persistence. From the persistence list and the beacon config, identify the mechanism you planted and the callback domain."
+  },
+  "keyIn": {
+    "type": "time",
+    "from": "L3"
+  },
+  "keyOut": {
+    "type": "domain",
+    "text": {
+      "hu": "A beacon visszahívási (C2) domainje",
+      "en": "The beacon callback (C2) domain"
+    },
+    "enc": {
+      "f1+f2": "9962668b55b7a1d1aca2e504400b40ef5f7d7166d93861",
+      "f1+f3": "04cc7a724978d175640a3d03ef1ad273a4d8813bd4b685",
+      "f1+f4": "68a1f5a2cf91222b338f0364304cb11daf9863e77dadc9",
+      "f2+f3": "36b9447868e033c6c962e90aa3200528b1a72761ecc64b",
+      "f2+f4": "5dbd324078c95a9039cb28a64a85d8021f97c0ff898b0e",
+      "f3+f4": "e38ece9f9caf1fa5f932404f94242ebe4ebf3210800b48"
+    }
+  },
+  "flags": [
+    {
+      "id": "f1",
+      "q": {
+        "hu": "Milyen nevű ütemezett feladat jött létre a célgépen?",
+        "en": "What is the name of the scheduled task created on the target host?"
+      },
+      "hash": "aa8e47db7630cf6cbbe89f373fb1e93aef8ef90c4db00da5872b74c9befda874",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "Szűrj a célgépre, tipus = utemezett_feladat.",
+            "en": "Filter on the target host, type = scheduled task."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "Nem a Microsoft frissítője.",
+            "en": "Not the Microsoft updater."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "A nev oszlop, Orvosi-ra utaló név.",
+            "en": "The name column, an Orvosi-related name."
+          }
+        }
+      ]
+    },
+    {
+      "id": "f2",
+      "q": {
+        "hu": "Melyik fájlt (modult) tölti be a perzisztencia?",
+        "en": "Which file (module) does the persistence load?"
+      },
+      "hash": "30e52cefb3ffe00eb67c8f67ac34af0a85c2db780bfcab3971d09c61016890ae",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "Nézd az utvonal oszlopot a feladat sorában.",
+            "en": "Look at the path column of the task row."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "A ProgramData\\Orvosi mappában van.",
+            "en": "It is in the ProgramData\\Orvosi folder."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "aur_ előtag, .dll végződés.",
+            "en": "aur_ prefix, .dll extension."
+          }
+        }
+      ]
+    },
+    {
+      "id": "f3",
+      "q": {
+        "hu": "Milyen időközönként (másodperc) jelentkezik a beacon?",
+        "en": "At what interval (seconds) does the beacon call back?"
+      },
+      "hash": "692a58d16ec84cc6b0baf312ce78876fde488fda01d00bf7b63d2101bd2c7330",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "Nyisd meg a beacon_config.txt fájlt.",
+            "en": "Open beacon_config.txt."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "Az interval sort keresd.",
+            "en": "Find the interval line."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "Kétjegyű szám.",
+            "en": "A two-digit number."
+          }
+        }
+      ]
+    },
+    {
+      "id": "f4",
+      "q": {
+        "hu": "Melyik domainre csatlakozik vissza a beacon (elsődleges callback)?",
+        "en": "Which domain does the beacon call back to (primary callback)?"
+      },
+      "hash": "18177a7214aff50513bf4f77b741eeb6c78d2cbe7cfc1554317772ea4525fa61",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "A callback sor a konfigurációban.",
+            "en": "The callback line in the config."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "Az URL-ből csak a domain kell.",
+            "en": "Only the domain from the URL is needed."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "A fallback nem ez; a callback a helyes.",
+            "en": "The fallback is not it; use the callback."
+          }
+        }
+      ]
+    }
+  ],
+  "files": [
+    {
+      "name": "perzisztencia.csv",
+      "view": "table"
+    },
+    {
+      "name": "beacon_config.txt",
+      "view": "text"
+    }
+  ]
+}

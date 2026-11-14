@@ -1,0 +1,181 @@
+{
+  "id": "red-hard-L3-orv",
+  "side": "red",
+  "mode": "hard",
+  "layer": 3,
+  "incident": {
+    "name": "Engedélyezett behatolásteszt (szintetikus gyakorlat)",
+    "url": "https://attack.mitre.org/"
+  },
+  "title": {
+    "hu": "Végrehajtás",
+    "en": "Execution"
+  },
+  "story": {
+    "hu": "A footholdból egy ügynököt (agent) indítottál a célgépen. A végrehajtási naplóból azonosítsd az ügynök folyamatát, és állapítsd meg, mikor futott le először. A parancsok csak hash-ként szerepelnek – a láncból kell következtetned.",
+    "en": "From the foothold you started an agent on the target host. From the execution log, identify the agent process and determine when it first ran. Commands appear only as hashes – reason from the process chain."
+  },
+  "keyIn": {
+    "type": "account",
+    "from": "L2"
+  },
+  "keyOut": {
+    "type": "time",
+    "text": {
+      "hu": "Az ügynök első futásának ideje",
+      "en": "Time the agent first ran"
+    },
+    "enc": {
+      "f1+f2": "b99a82941b120deb",
+      "f1+f3": "073f48b1b81a2684",
+      "f1+f4": "7032b3fbf9addef1",
+      "f2+f3": "49b2bf221399d2cd",
+      "f2+f4": "7645445a15629463",
+      "f3+f4": "e1e367d41c8992be"
+    }
+  },
+  "flags": [
+    {
+      "id": "f1",
+      "q": {
+        "hu": "Melyik folyamat a telepített ügynök?",
+        "en": "Which process is the deployed agent?"
+      },
+      "hash": "c11f9d8a6a9c6b4ccb835bf902b26676dfa7b41063784de965a7a46f0e12fec2",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "Szűrj a célgépre.",
+            "en": "Filter on the target host."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "A w3wp.exe (webkiszolgáló) által indított szokatlan folyamat.",
+            "en": "An unusual process started by w3wp.exe (the web worker)."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "aur_ előtaggal kezdődik, .exe végű.",
+            "en": "Starts with the aur_ prefix, ends in .exe."
+          }
+        }
+      ]
+    },
+    {
+      "id": "f2",
+      "q": {
+        "hu": "Melyik szülőfolyamat indította az ügynököt?",
+        "en": "Which parent process started the agent?"
+      },
+      "hash": "843536445251a6e9cfede61c9f0b04fd9fbe0c2d161c0b1d2b98129f79c420b1",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "Keresd az ügynök sorát.",
+            "en": "Find the agent row."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "A szulo oszlop.",
+            "en": "The parent column."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "A webkiszolgáló munkamenet-folyamata.",
+            "en": "The web server worker process."
+          }
+        }
+      ]
+    },
+    {
+      "id": "f3",
+      "q": {
+        "hu": "Melyik fiók munkamenetében futott az ügynök?",
+        "en": "In which account's session did the agent run?"
+      },
+      "hash": "1c4f0317387c9910349f842d1e26e7c4d9e7108e69a4da48b81540849734e6bb",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "A felhasznalo oszlop.",
+            "en": "The user column."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "Ugyanaz a fiók, amit az előző rétegben szereztél.",
+            "en": "The same account you obtained in the previous layer."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "svc_ előtag.",
+            "en": "The svc_ prefix."
+          }
+        }
+      ]
+    },
+    {
+      "id": "f4",
+      "q": {
+        "hu": "Mikor futott le először az ügynök (ÓÓ:PP:MM)?",
+        "en": "When did the agent first run (HH:MM:SS)?"
+      },
+      "hash": "00374de22ec353d422c97f32bfb98d9ec97e47b57fdc04b95d9c0e860c9eff7b",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "Az ido oszlop.",
+            "en": "The time column."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "A legkorábbi orv_agent sor a célgépen.",
+            "en": "The earliest orv_agent row on the target host."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "Formátum: 14:00:00",
+            "en": "Format: 14:00:00"
+          }
+        }
+      ]
+    }
+  ],
+  "files": [
+    {
+      "name": "vegrehajtas_naplo.csv",
+      "view": "table"
+    }
+  ]
+}

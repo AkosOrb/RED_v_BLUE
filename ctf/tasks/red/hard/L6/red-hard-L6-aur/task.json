@@ -1,0 +1,185 @@
+{
+  "id": "red-hard-L6-aur",
+  "side": "red",
+  "mode": "hard",
+  "layer": 6,
+  "incident": {
+    "name": "Engedélyezett behatolásteszt (szintetikus gyakorlat)",
+    "url": "https://attack.mitre.org/"
+  },
+  "title": {
+    "hu": "Oldalirányú mozgás",
+    "en": "Lateral movement"
+  },
+  "story": {
+    "hu": "A kritikus alhálózatban az újrahasznosított admin jelszóval továbbléptél. A mozgásnaplóból és a megtalált jelszószéf-exportból állapítsd meg, meddig jutottál, és mi a széf kulcsszava.",
+    "en": "In the critical subnet you moved on with the reused admin password. From the movement log and the found vault export, work out how far you got and the vault keyword."
+  },
+  "keyIn": {
+    "type": "subnet",
+    "from": "L5"
+  },
+  "keyOut": {
+    "type": "keyword",
+    "text": {
+      "hu": "A jelszószéf-export helyreállítási kulcsszava (nagybetűvel)",
+      "en": "The vault export recovery keyword (upper case)"
+    },
+    "enc": {
+      "f1+f2": "0e0f660b94a3",
+      "f1+f3": "7d41d7854c7c",
+      "f1+f4": "45e5bc23205d",
+      "f2+f3": "07019854c5f0",
+      "f2+f4": "e8d799c389a1",
+      "f3+f4": "f99ee496fe0e"
+    }
+  },
+  "flags": [
+    {
+      "id": "f1",
+      "q": {
+        "hu": "Hány gépre jutott be sikeresen az újrahasznosított fiók a célgépről?",
+        "en": "How many hosts did the reused account successfully reach from the target host?"
+      },
+      "hash": "7c8181281804ee80edbfd35a2248f9a12ab1c0b485676cf51d76f4fa1e114216",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "Szűrj a célgép IP-jéről induló, sikeres sorokra.",
+            "en": "Filter on successful rows from the target host IP."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "Egyedi cel_ip értékeket számolj.",
+            "en": "Count distinct target IPs."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "Csak a sikeres eredmény számít.",
+            "en": "Only successful results count."
+          }
+        }
+      ]
+    },
+    {
+      "id": "f2",
+      "q": {
+        "hu": "Melyik rendszergazdai fiókot használtad újra a mozgáshoz?",
+        "en": "Which admin account did you reuse for the movement?"
+      },
+      "hash": "b87fa25ace46598e0675a4518ea3c5b7f8817a9a5a09513862a1a3d7dbf5b6c5",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "A fiok oszlop a sikeres mozgásoknál.",
+            "en": "The account column on the successful moves."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "adm. előtaggal kezdődik.",
+            "en": "It starts with the adm. prefix."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "A szef_export.txt is megnevezi.",
+            "en": "The vault export also names it."
+          }
+        }
+      ]
+    },
+    {
+      "id": "f3",
+      "q": {
+        "hu": "Melyik gépen találtad a jelszószéf-exportot?",
+        "en": "On which host did you find the vault export?"
+      },
+      "hash": "da109c3f6475a9aee678decd01dd1218ef089bd44f1959f88cf6a27b67c9ca4e",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "Nyisd meg a szef_export.txt fájlt.",
+            "en": "Open szef_export.txt."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "Az első sor megadja a gépet.",
+            "en": "The first line gives the host."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "A fájlszerver.",
+            "en": "The file server."
+          }
+        }
+      ]
+    },
+    {
+      "id": "f4",
+      "q": {
+        "hu": "Mi a széf-export helyreállítási kulcsszava (nagybetűvel)?",
+        "en": "What is the vault export recovery keyword (upper case)?"
+      },
+      "hash": "61895a37b17fe261f95b1e5a24cebfd3091503bebfd6cba3f54a451485abfbcf",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "A helyreallitasi_kulcsszo sort keresd.",
+            "en": "Find the recovery keyword line."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "Egyetlen szó, ékezet nélkül.",
+            "en": "A single word, without accents."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "A következő réteg titkosított jegyzetéhez kell.",
+            "en": "Needed for the next layer's encrypted note."
+          }
+        }
+      ]
+    }
+  ],
+  "files": [
+    {
+      "name": "mozgas_naplo.csv",
+      "view": "table"
+    },
+    {
+      "name": "szef_export.txt",
+      "view": "text"
+    }
+  ]
+}

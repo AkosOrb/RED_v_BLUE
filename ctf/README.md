@@ -1,8 +1,15 @@
 # Red vs Blue CTF – feladatbank
 
-Egyéni, jeopardy-stílusú CTF játékmód a Red vs Blue webapphoz. A játék kizárólag az incidenskezelésről szól
-(riasztástól a helyreállításig); a támadói módszerek csak a bizonyítékokban, felismerendő nyomként jelennek meg. A szabályterv:
-[Red vs Blue CTF – szabályterv és játékmenet](https://claude.ai/artifact/3EzsQwQ324WrNDFcFgay5K).
+Egyéni, jeopardy-stílusú CTF játékmód a Red vs Blue webapphoz. Két pálya közül lehet választani, azonos
+felépítéssel, pontozással és ranglistával:
+
+- **Blue – incidenskezelés** (`side = blue`): riasztástól a helyreállításig; a támadói módszerek csak a
+  bizonyítékokban, felismerendő nyomként jelennek meg.
+- **Red – behatolásteszt** (`side = red`): egy *engedélyezett* penetration test 7 szakasza a felderítéstől
+  az adatszivárogtatásig. Minden anyag szintetikus, a feladatok kizárólag elemzésről szólnak – nincs működő
+  exploit, futtatható kártevő vagy lépésről-lépésre támadási leírás.
+
+A szabályterv: [Red vs Blue CTF – szabályterv és játékmenet](https://claude.ai/artifact/3EzsQwQ324WrNDFcFgay5K).
 
 ## Szerkezet
 
@@ -15,9 +22,11 @@ ctf/
   tools/build_index.py   ellenőrzés + indexgenerálás
 ```
 
-- `side`: mindig `blue` (incidenskezelés), `mode`: `easy` | `hard`, réteg: 1–7.
-- Minden réteg rögzített kulcstípust ad tovább, így bármelyik két változat összeilleszthető:
-  1 `hostname` → 2 `account` → 3 `time` → 4 `domain` → 5 `subnet` → 6 `keyword` → 7 `final`.
+- `side`: `blue` (incidenskezelés) vagy `red` (behatolásteszt), `mode`: `easy` | `hard`, réteg: 1–7.
+- Minden réteg rögzített kulcstípust ad tovább (mindkét pályán ugyanaz), így bármelyik két változat
+  összeilleszthető: 1 `hostname` → 2 `account` → 3 `time` → 4 `domain` → 5 `subnet` → 6 `keyword` → 7 `final`.
+- Red rétegek: 1 felderítés → 2 kezdeti hozzáférés → 3 végrehajtás → 4 megmaradás → 5 jogosultságemelés →
+  6 oldalirányú mozgás → 7 adatszivárogtatás.
 - Sorsoláskor a játék egy teljes, azonos történetű láncot választ (az azonosítók csak a réteg számában térnek el,
   pl. `blue-easy-L1-kfl` … `blue-easy-L7-kfl`); ha nincs teljes lánc, rétegenként sorsol.
 - Nyílt válasz soha nem kerül a repóba. A megoldókulcs az oktatónál van.

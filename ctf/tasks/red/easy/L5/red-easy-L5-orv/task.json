@@ -1,0 +1,185 @@
+{
+  "id": "red-easy-L5-orv",
+  "side": "red",
+  "mode": "easy",
+  "layer": 5,
+  "incident": {
+    "name": "Engedélyezett behatolásteszt (szintetikus gyakorlat)",
+    "url": "https://attack.mitre.org/"
+  },
+  "title": {
+    "hu": "Jogosultságemelés",
+    "en": "Privilege escalation"
+  },
+  "story": {
+    "hu": "Helyi rendszergazdai jogot szereztél. A jogosultság-ellenőrzés eredményéből állapítsd meg, milyen hibát tudsz kihasználni a továbblépéshez, és melyik alhálózat a következő cél.",
+    "en": "You gained local admin. From the privilege-check results, work out which weakness lets you move on and which subnet is the next target."
+  },
+  "keyIn": {
+    "type": "domain",
+    "from": "L4"
+  },
+  "keyOut": {
+    "type": "subnet",
+    "text": {
+      "hu": "A legtöbb kiszolgálót tartalmazó alhálózat (következő cél)",
+      "en": "The subnet with the most servers (next target)"
+    },
+    "enc": {
+      "f1+f2": "177989bf035735342ac1ba90",
+      "f1+f3": "a389b9e9c8f36fd44c2f59f3",
+      "f1+f4": "de431eb81da1f1ef6abaa687",
+      "f2+f3": "fd2e52e9dcf370cf46b1df28",
+      "f2+f4": "8bc4a5ec1d19ee8bbded596b",
+      "f3+f4": "366b2dcaaaae2445c150b543"
+    }
+  },
+  "flags": [
+    {
+      "id": "f1",
+      "q": {
+        "hu": "Melyik gépen van a legkorábbi (ábécé szerint első) KRITIKUS találat?",
+        "en": "Which host has the first (alphabetically) CRITICAL finding?"
+      },
+      "hash": "11dc9af820a496485c22fa57154a0b74facd435c7465d09ba349c8f1e49f900f",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "Szűrj a sulyossag = KRITIKUS sorokra.",
+            "en": "Filter on severity = CRITICAL."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "Rendezd a gépneveket ábécé szerint.",
+            "en": "Sort the host names alphabetically."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "ORV-APP előtaggal kezdődik.",
+            "en": "It starts with the ORV-APP prefix."
+          }
+        }
+      ]
+    },
+    {
+      "id": "f2",
+      "q": {
+        "hu": "Mi a kritikus találat kategóriája (talalat oszlop)?",
+        "en": "What is the category of the critical finding (talalat column)?"
+      },
+      "hash": "67117c446e56493c2b8ad4f1b8d8c27a3b1e2173ab470d3eafaac1249875c184",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "A KRITIKUS sorok talalat oszlopa.",
+            "en": "The talalat column of the CRITICAL rows."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "Ugyanaz a jelszó több gépen.",
+            "en": "The same password on several hosts."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "Ékezet nélkül: jelszo-ujrahasznositas.",
+            "en": "Without accents: jelszo-ujrahasznositas."
+          }
+        }
+      ]
+    },
+    {
+      "id": "f3",
+      "q": {
+        "hu": "Hány gépet érint ez a kritikus találat?",
+        "en": "How many hosts does this critical finding affect?"
+      },
+      "hash": "076f5acbf00cb59536048b5a35d8faab7a2ed6144872be3cdf50300524eb6777",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "Számold a KRITIKUS sorokat.",
+            "en": "Count the CRITICAL rows."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "Mind ugyanabban a kategóriában.",
+            "en": "All in the same category."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "Egyjegyű szám.",
+            "en": "A one-digit number."
+          }
+        }
+      ]
+    },
+    {
+      "id": "f4",
+      "q": {
+        "hu": "Melyik /24-es alhálózaton van a legtöbb kiszolgáló (nem munkaállomás)?",
+        "en": "Which /24 subnet holds the most servers (not workstations)?"
+      },
+      "hash": "78d78dc5d530d9d56a07de7a302f1bc80235e02ed79b582ee9577af2d88c2dac",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "A halozat.csv adja az IP-ket.",
+            "en": "halozat.csv gives the IPs."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "A kiszolgálók nem ORV-WS-sel kezdődnek.",
+            "en": "Servers do not start with ORV-WS."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "Formátum: 10.0.0.0/24",
+            "en": "Format: 10.0.0.0/24"
+          }
+        }
+      ]
+    }
+  ],
+  "files": [
+    {
+      "name": "jogosultsag_ellenorzes.csv",
+      "view": "table"
+    },
+    {
+      "name": "halozat.csv",
+      "view": "table"
+    }
+  ]
+}

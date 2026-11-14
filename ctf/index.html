@@ -117,6 +117,9 @@ table.lb th{font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-t
 .homegrid{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:14px;align-items:stretch}
 .homegrid>.frame{display:flex}.homegrid>.frame>.fi{flex:1}
 @media (max-width:720px){.homegrid{grid-template-columns:1fr}}
+.tracks{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:stretch}
+.tracks>.frame{display:flex}.tracks>.frame>.fi{flex:1}
+@media (max-width:720px){.tracks{grid-template-columns:1fr}}
 .demo{aspect-ratio:1/1;width:100%;max-width:420px;margin:0 auto}
 .demo>.fi{height:100%;padding:10px;display:grid;grid-template-columns:62px minmax(0,1fr);gap:8px;overflow:hidden}
 .demo .dl{display:flex;flex-direction:column;gap:4px}
@@ -186,10 +189,17 @@ const USER_RE = /^[a-z0-9._-]{3,24}$/;
 
 // ---------------------------------------------------------------- rules
 const LAYERS = 7, FLAGS = 4, HINT_COST = [10, 25, 50], MULT = { easy: 1, hard: 1.5 };
-// The CTF is incident response only: every game follows these 7 stages. Attacker techniques show up only
-// as something the player has to recognise in the evidence.
+// Two tracks, each 7 stages with the same scoring, key chain and leaderboard. Blue = incident response
+// (attacker techniques appear only as evidence to recognise). Red = an authorised penetration test on
+// synthetic artifacts, analysis only (no working exploits). The default when none is chosen is blue.
+const SIDES = ['blue', 'red'];
 const SIDE = 'blue';
-const LAYER_NAMES = [['Riasztás', 'Alert'], ['Triázs', 'Triage'], ['Naplóelemzés', 'Log analysis'], ['Forenzika', 'Forensics'], ['Elszigetelés', 'Containment'], ['Felszámolás', 'Eradication'], ['Helyreállítás', 'Recovery']];
+const SIDE_LABEL = { blue: ['Incidenskezelés', 'Incident response'], red: ['Behatolásteszt', 'Penetration test'] };
+const LAYER_NAMES = {
+  blue: [['Riasztás', 'Alert'], ['Triázs', 'Triage'], ['Naplóelemzés', 'Log analysis'], ['Forenzika', 'Forensics'], ['Elszigetelés', 'Containment'], ['Felszámolás', 'Eradication'], ['Helyreállítás', 'Recovery']],
+  red: [['Felderítés', 'Reconnaissance'], ['Kezdeti hozzáférés', 'Initial access'], ['Végrehajtás', 'Execution'], ['Megmaradás', 'Persistence'], ['Jogosultságemelés', 'Privilege escalation'], ['Oldalirányú mozgás', 'Lateral movement'], ['Adatszivárogtatás', 'Exfiltration']],
+};
+const sideNames = () => LAYER_NAMES[(GAME && GAME.side) || SIDE];
 function flagPoints(k, mode, hintsTaken, late) {
   const cost = HINT_COST.slice(0, hintsTaken).reduce((a, b) => a + b, 0);
   return Math.round(25 * k * (late ? 0.5 : 1) * (1 - cost / 100) * MULT[mode]);
@@ -427,20 +437,31 @@ setInterval(() => {
   DEMO_T++; el.innerHTML = demoHTML();
 }, 280);
 
+const TRACK_DESC = {
+  blue: ['Vezesd végig az incidenskezelés 7 szakaszát a riasztástól a helyreállításig. A támadó módszereit a nyomokból kell felismerned és megértened.',
+         'Run the 7 stages of incident response from the alert to recovery. You have to recognise and understand the attacker\'s methods from the evidence.'],
+  red: ['Egy engedélyezett behatolásteszt 7 szakaszát viszed végig a felderítéstől az adatszivárogtatásig, kizárólag szintetikus anyagokon. A támadói lépéseket a megbízás során keletkezett nyomokból kell elemezned.',
+        'Run the 7 stages of an authorised penetration test from reconnaissance to exfiltration, on synthetic artifacts only. You analyse the attacker steps from the evidence the engagement left behind.'],
+};
 function homeHTML() {
   const g = GAME && !GAME.closed ? GAME : null;
-  const modeBtns = ['easy', 'hard'].map(m => {
-    const ok = INDEX && [1, 2, 3, 4, 5, 6, 7].every(k => INDEX.tasks.some(t => t.side === SIDE && t.mode === m && t.layer === k));
-    return `<button class="btn blue" data-a="new" data-mode="${m}" ${ok && !g ? '' : 'disabled'}>${m === 'easy' ? L('Könnyű', 'Easy') : L('Nehéz', 'Hard')}${ok ? '' : ' · ' + L('hamarosan', 'coming soon')}</button>`;
-  }).join('');
+  const trackCard = side => {
+    const cls = side === 'red' ? 'red' : 'blue';
+    const modeBtns = ['easy', 'hard'].map(m => {
+      const ok = INDEX && [1, 2, 3, 4, 5, 6, 7].every(k => INDEX.tasks.some(t => t.side === side && t.mode === m && t.layer === k));
+      return `<button class="btn ${cls}" data-a="new" data-side="${side}" data-mode="${m}" ${ok && !g ? '' : 'disabled'}>${m === 'easy' ? L('Könnyű', 'Easy') : L('Nehéz', 'Hard')}${ok ? '' : ' · ' + L('hamarosan', 'coming soon')}</button>`;
+    }).join('');
+    return `<div class="frame cut"><div class="fi stack"><div><div class="lbl">${side === 'red' ? L('Red · támadó oldal', 'Red · offensive') : L('Blue · védő oldal', 'Blue · defensive')}</div>
+     <h2 style="margin-top:4px">${L(...SIDE_LABEL[side])}</h2></div>
+     <p style="margin:0">${L(...TRACK_DESC[side])}</p>
+     <div class="row">${modeBtns}</div></div></div>`;
+  };
   return `<div class="stack">
    ${g ? `<div class="panel cut"><div class="lbl">${L('Folyamatban lévő játék', 'Game in progress')}</div>
-     <h2 style="margin:6px 0">${g.mode === 'easy' ? L('könnyű', 'easy') : L('nehéz', 'hard')} · ${g.score} ${L('pont', 'pts')} · ${Math.min(g.state.unlocked, 7)}. ${L('réteg', 'layer')}</h2>
+     <h2 style="margin:6px 0">${L(...SIDE_LABEL[g.side || 'blue'])} · ${g.mode === 'easy' ? L('könnyű', 'easy') : L('nehéz', 'hard')} · ${g.score} ${L('pont', 'pts')} · ${Math.min(g.state.unlocked, 7)}. ${L('réteg', 'layer')}</h2>
      <div class="row"><button class="btn" data-a="resume">${L('Folytatás', 'Continue')}</button></div></div>` : ''}
-   <div class="homegrid"><div class="frame cut"><div class="fi stack"><h2>${L('Incidenskezelés', 'Incident response')}</h2>
-    <p style="margin:0">${L('Vezesd végig az incidenskezelés 7 szakaszát a riasztástól a helyreállításig. A támadó módszereit a nyomokból kell felismerned és megértened.', 'Run the 7 stages of incident response from the alert to recovery. You have to recognise and understand the attacker\'s methods from the evidence.')}</p>
-    <div class="row">${modeBtns}</div></div></div>
-    <div class="frame cut demo" id="demo" role="img" aria-label="${L('Mintajáték-animáció', 'Sample game animation')}">${demoHTML()}</div></div>
+   <div class="tracks">${trackCard('blue')}${trackCard('red')}</div>
+   <div class="frame cut demo" id="demo" role="img" aria-label="${L('Mintajáték-animáció', 'Sample game animation')}">${demoHTML()}</div>
    ${g ? `<p class="hint">${L('Új játékot a mostani lezárása után indíthatsz.', 'You can start a new game after closing the current one.')}</p>` : ''}
    <p class="hint">${L('Könnyű mód: minden a böngészőben megoldható. Nehéz mód: letöltött fájlokkal, saját elemzőeszközökkel dolgozol.', 'Easy mode: everything can be solved in the browser. Hard mode: you work on downloaded files with your own analysis tools.')}</p>
   </div>`;
@@ -451,7 +472,7 @@ function layerListHTML() {
   return `<div class="layers">${s.tasks.map((tid, i) => {
     const k = i + 1, open = k <= s.unlocked, solved = Object.keys(s.flags[tid] || {}).length;
     return `<button class="layer" data-a="layer" data-k="${k}" ${open ? '' : 'disabled'} aria-current="${CUR === k}">
-      <span class="n">0${k}</span><span><b>${L(...LAYER_NAMES[i])}</b><div class="bar"><i style="width:${solved * 25}%"></i></div></span>
+      <span class="n">0${k}</span><span><b>${L(...sideNames()[i])}</b><div class="bar"><i style="width:${solved * 25}%"></i></div></span>
       <span class="mono">${open ? solved + '/4' : '🔒'}</span></button>`;
   }).join('')}</div>
   <div class="panel cut" style="margin-top:10px"><div class="lbl">${L('Pontszám', 'Score')}</div><div class="logo" style="color:var(--white)">${g.score}</div>
@@ -489,7 +510,7 @@ function playHTML() {
   const late = (s.maxOpened || 1) > CUR;
   return `<div class="play"><div>${layerListHTML()}</div><div class="stack" style="min-width:0">
    <div class="frame cut"><div class="fi stack">
-    <div><div class="lbl">0${CUR} · ${L(...LAYER_NAMES[CUR - 1])} · ${L('legfeljebb', 'up to')} ${layerMax(CUR, g.mode)} ${L('pont', 'pts')}</div><h2 style="margin-top:4px">${esc(T(t.title))}</h2></div>
+    <div><div class="lbl">0${CUR} · ${L(...sideNames()[CUR - 1])} · ${L('legfeljebb', 'up to')} ${layerMax(CUR, g.mode)} ${L('pont', 'pts')}</div><h2 style="margin-top:4px">${esc(T(t.title))}</h2></div>
     <p style="margin:0">${esc(T(t.story))}</p>
     ${prevKey != null ? `<div class="keybox"><div class="lbl">${L('Kulcs az előző rétegből', 'Key from the previous layer')}</div>${esc(T(prevT.keyOut.text))}: <b>${esc(prevKey)}</b></div>` : ''}
     ${late && !g.closed ? `<p class="hint">${L('Ezen a rétegen már túljutottál: az itt maradt részzászlók fél pontot érnek.', 'You have moved past this layer: the sub-flags left here are worth half points.')}</p>` : ''}
@@ -518,8 +539,8 @@ async function boardHTML() {
   for (const r of rows) { const k = r.username; if (!best[k] || r.score > best[k].score) best[k] = r; }
   const list = Object.values(best).sort((a, b) => b.score - a.score || String(a.updated_at).localeCompare(String(b.updated_at)));
   return `<div class="frame cut"><div class="fi"><h2>${L('Ranglista', 'Leaderboard')}</h2><p class="hint">${L('Játékosonként a legjobb eredmény. Holtversenynél az nyer, aki korábban érte el.', 'Best result per player. Ties go to whoever reached it first.')}</p>
-   <table class="lb"><thead><tr><th>#</th><th>${L('Játékos', 'Player')}</th><th>${L('Mód', 'Mode')}</th><th>${L('Réteg', 'Layer')}</th><th>${L('Pont', 'Points')}</th></tr></thead>
-   <tbody>${list.map((r, i) => `<tr><td>${i + 1}</td><td>${esc(r.username)}</td><td>${r.mode === 'easy' ? L('könnyű', 'easy') : L('nehéz', 'hard')}</td><td>${r.layer}</td><td><b>${r.score}</b></td></tr>`).join('') || `<tr><td colspan="5">${L('Még nincs eredmény.', 'No results yet.')}</td></tr>`}</tbody></table></div></div>`;
+   <table class="lb"><thead><tr><th>#</th><th>${L('Játékos', 'Player')}</th><th>${L('Pálya', 'Track')}</th><th>${L('Mód', 'Mode')}</th><th>${L('Réteg', 'Layer')}</th><th>${L('Pont', 'Points')}</th></tr></thead>
+   <tbody>${list.map((r, i) => `<tr><td>${i + 1}</td><td>${esc(r.username)}</td><td><span class="tag ${r.side === 'red' ? 'r' : 'b'}">${r.side === 'red' ? 'Red' : 'Blue'}</span></td><td>${r.mode === 'easy' ? L('könnyű', 'easy') : L('nehéz', 'hard')}</td><td>${r.layer}</td><td><b>${r.score}</b></td></tr>`).join('') || `<tr><td colspan="6">${L('Még nincs eredmény.', 'No results yet.')}</td></tr>`}</tbody></table></div></div>`;
 }
 
 const EV_NAMES = { start: ['Játék indítása', 'Game started'], open_layer: ['Réteg megnyitása', 'Layer opened'], view_file: ['Fájl megnyitása', 'File viewed'], download: ['Fájl letöltése', 'File downloaded'], submit: ['Zászló beküldése', 'Flag submitted'], hint: ['Tipp kérése', 'Hint taken'], unlock: ['Következő réteg megnyílt', 'Next layer unlocked'], finish: ['Mind a 7 réteg teljesítve', 'All 7 layers completed'], close: ['Játék lezárása', 'Game closed'] };
@@ -650,8 +671,8 @@ async function openLayer(k) {
   log('open_layer', { layer: k });
 }
 
-async function newGame(mode) {
-  const side = SIDE;
+async function newGame(mode, side) {
+  side = SIDES.includes(side) ? side : SIDE;
   await loadIndex();
   // Prefer one whole chain (same story, ids differ only in the layer number) so each key fits the next layer's files;
   // fall back to drawing each layer separately when no complete chain exists.
@@ -772,7 +793,7 @@ app.addEventListener('click', async ev => {
       } catch (e) { TEACH.msg = e.message; }
     }
     else if (a === 'csv') await exportCSV();
-    else if (a === 'new') await newGame(el.dataset.mode);
+    else if (a === 'new') await newGame(el.dataset.mode, el.dataset.side);
     else if (a === 'resume') { await openLayer(Math.min(GAME.state.unlocked, LAYERS)); VIEW = 'play'; }
     else if (a === 'layer') await openLayer(+el.dataset.k);
     else if (a === 'submit') await submit(el.dataset.f);

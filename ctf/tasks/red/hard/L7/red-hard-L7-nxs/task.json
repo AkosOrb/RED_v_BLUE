@@ -1,0 +1,185 @@
+{
+  "id": "red-hard-L7-nxs",
+  "side": "red",
+  "mode": "hard",
+  "layer": 7,
+  "incident": {
+    "name": "Engedélyezett behatolásteszt (szintetikus gyakorlat)",
+    "url": "https://attack.mitre.org/"
+  },
+  "title": {
+    "hu": "Adatszivárogtatás",
+    "en": "Exfiltration"
+  },
+  "story": {
+    "hu": "A megbízás utolsó szakasza: az adatkiszivárgás igazolása szintetikus környezetben. Az exfil-naplóból és a titkosított záró jegyzetből állapítsd meg a kiszivárogtatás mértékét és a megbízás záró kódszavát.",
+    "en": "The final stage of the engagement: proving data exfiltration in a synthetic environment. From the exfil log and the encrypted closing note, determine the scope of exfiltration and the engagement's closing codeword."
+  },
+  "keyIn": {
+    "type": "keyword",
+    "from": "L6"
+  },
+  "keyOut": {
+    "type": "final",
+    "text": {
+      "hu": "Vége a láncnak",
+      "en": "End of the chain"
+    },
+    "enc": {
+      "f1+f2": "ad2139e031548fffb2",
+      "f1+f3": "95e2dd5c3bcd48780b",
+      "f1+f4": "813070ef0ec4618b64",
+      "f2+f3": "b0015f96fb43d9cd78",
+      "f2+f4": "fef8367450207b396a",
+      "f3+f4": "5b33fd0ccc9f136c88"
+    }
+  },
+  "flags": [
+    {
+      "id": "f1",
+      "q": {
+        "hu": "Mi a megbízás záró kódszava a titkosított jegyzetben?",
+        "en": "What is the engagement's closing codeword in the encrypted note?"
+      },
+      "hash": "79edf7822f04b38c127780a321fb7e4dbd63706c1a50915039ff43013d5c9e02",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "Vigenère-rejtjel; a kulcsot az előző réteg adta.",
+            "en": "Vigenère cipher; the previous layer gave the key."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "Ékezet nélküli magyar szöveg, a szóközök megmaradtak.",
+            "en": "Hungarian text without accents; spaces are kept."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "A kulcsszó betűit vond ki a rejtett szöveg betűiből, ismétlődve.",
+            "en": "Subtract the keyword letters from the ciphertext, repeating."
+          }
+        }
+      ]
+    },
+    {
+      "id": "f2",
+      "q": {
+        "hu": "Melyik gépről ment ki a legtöbb adat az exfil-domainre?",
+        "en": "Which host sent the most data to the exfil domain?"
+      },
+      "hash": "9e69f3a9bd8829edd03af266e2850c4086787783b7d68ba556cd77c045b7ecaa",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "Szűrj a cel_domain = exfil-domainre.",
+            "en": "Filter on cel_domain = the exfil domain."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "Add össze a bájtokat gépenként.",
+            "en": "Sum the bytes per host."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "Az adatbázis-kiszolgálóról van szó.",
+            "en": "It is the database server."
+          }
+        }
+      ]
+    },
+    {
+      "id": "f3",
+      "q": {
+        "hu": "Melyik külső domainre szivárgott ki az adat?",
+        "en": "To which external domain was the data exfiltrated?"
+      },
+      "hash": "002ec395fee4e6112b51acf0e81e14ce9553709f9330c688534f8bc6533fedf6",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "A legtöbb nagy méretű átvitel ide megy.",
+            "en": "Most of the large transfers go here."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "exfil. előtaggal kezdődik.",
+            "en": "It starts with the exfil. prefix."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": ".example végű domain.",
+            "en": "A .example domain."
+          }
+        }
+      ]
+    },
+    {
+      "id": "f4",
+      "q": {
+        "hu": "Hány átvitel (sor) ment az exfil-domainre összesen?",
+        "en": "How many transfers (rows) went to the exfil domain in total?"
+      },
+      "hash": "5c1b8cd9d299d2931721b22e7ec17dc45bac4442c465173f03ddd26b3c903421",
+      "hints": [
+        {
+          "tier": 1,
+          "cost": 10,
+          "text": {
+            "hu": "Csak az exfil-domain sorait számold.",
+            "en": "Count only the exfil domain rows."
+          }
+        },
+        {
+          "tier": 2,
+          "cost": 25,
+          "text": {
+            "hu": "A többi domain nem számít.",
+            "en": "Other domains do not count."
+          }
+        },
+        {
+          "tier": 3,
+          "cost": 50,
+          "text": {
+            "hu": "Minden sor egy átvitel.",
+            "en": "Each row is one transfer."
+          }
+        }
+      ]
+    }
+  ],
+  "files": [
+    {
+      "name": "exfil_naplo.csv",
+      "view": "table"
+    },
+    {
+      "name": "zaro_jegyzet.txt",
+      "view": "text"
+    }
+  ]
+}
