@@ -249,6 +249,12 @@ svg.dtree{display:block;font-family:var(--f-mono)}
 .dtree .et{font-size:11px}.dtree .et.now{fill:#F6F3EE;font-weight:700}
 .dtree .gl{font-family:var(--f-body);font-weight:800;font-size:13px;fill:#1a1a1a}
 .dtree .ql{font-size:10px;font-weight:700}
+/* story turns: a step back or a jump ahead after a decision */
+.turn{display:flex;flex-direction:column;gap:2px;padding:8px 12px;border-left:6px solid var(--warn);background:rgba(201,138,0,.12);animation:tfade .5s var(--ease) backwards}
+.turn.jump{border-left-color:var(--ok);background:rgba(46,125,50,.12)}
+.turn b{font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+.dtree .tb{fill:none;stroke-width:2.5;stroke-dasharray:6 5}
+.dtree .tl2{font-size:10px;font-weight:700}
 @keyframes tdraw{to{stroke-dashoffset:0}}
 @keyframes tpop{from{transform:scale(0);opacity:0}}
 @keyframes tfade{from{opacity:0}}
@@ -320,15 +326,24 @@ function orderOf(run, id) {
   return run.perm[id];
 }
 const letterOf = (run, id, i) => String.fromCharCode(65 + ((run.perm && run.perm[id]) ? run.perm[id].indexOf(i) : i));
+// A turn of the story after a decision: step back to an earlier stage or jump ahead.
+const turnNote = (c, t) => T(c.nodes[t.at].go[t.b].note);
+const TURN = { back: ['↺', 'Visszalépés', 'Step back'], jump: ['⏩', 'Előreugrás', 'Jump ahead'] };
+function turnsHTML(c, h, delay) {
+  return (h.turns || []).map(t => `<div class="turn ${t.kind}" style="animation-delay:${delay}s"><b>${TURN[t.kind][0]} ${L(TURN[t.kind][1], TURN[t.kind][2])}${t.pts ? ` · ${t.pts > 0 ? '+' : '−'}${Math.abs(t.pts)} ${L('pont', 'pts')}` : ''}</b><span>${esc(turnNote(c, t))}</span></div>`).join('');
+}
 const elapsedText = t => `T+${pad(Math.floor(t / 60))}:${pad(t % 60)}`;
 
 // ---------------------------------------------------------------- state
 const KEY = 'rvb-dontes-v1';
 let DATA = store.get(KEY) || { stats: {}, run: null };
+// a run saved before the cases were rewritten (v1) or pointing to a node that no longer exists is dropped
+if (DATA.run && (DATA.run.v !== 2 || !window.IR_CASES.some(c => c.id === DATA.run.cid && (DATA.run.end || c.nodes[DATA.run.node])))) DATA.run = null;
+if (!DATA.v2) { DATA.stats = {}; DATA.v2 = true; }   // endings and best scores of the old cases no longer apply
 let TIMED = store.get('rvb-dontes-timer'); if (TIMED == null) TIMED = true;
 let VIEW = DATA.run ? 'play' : 'home';
-const REACH = {};               // case id -> explore() result
-CASES.forEach(c => { REACH[c.id] = E.explore(c, FAIL); });
+const REACH = {};               // case id -> { max, ends } (exploring every path is the checker's job)
+CASES.forEach(c => { REACH[c.id] = E.reach(c, FAIL); });
 const caseOf = id => CASES.find(c => c.id === id);
 const save = () => store.set(KEY, DATA);
 // ---------------------------------------------------------------- CTF account + leaderboard
@@ -402,7 +417,8 @@ function treeHTML(c, run, animate) {
   const CW = 160, OS = 26, X0 = 84, steps = run.hist.length;
   const maxOpt = Math.max(...run.hist.map(h => c.nodes[h.node].choices.length));
   const ER = 30, fanH = (maxOpt - 1) * OS, endH = (ends.length - 1) * ER;
-  const Y = 58 + Math.max(fanH, endH) / 2, H = Y + Math.max(fanH, endH) / 2 + 34;
+  const hasBack = run.hist.some(h => (h.turns || []).some(t => t.kind === 'back'));
+  const Y = (hasBack ? 84 : 58) + Math.max(fanH, endH) / 2, H = Y + Math.max(fanH, endH) / 2 + 34;
   const XE = X0 + steps * CW + 40, W = XE + 230;
   const at = k => anim ? `animation-delay:${(.25 + k * .4).toFixed(2)}s` : 'animation:none;stroke-dashoffset:0';
   const curve = (x1, y1, x2, y2) => { const mx = (x1 + x2) / 2; return `M${x1} ${y1} C${mx} ${y1} ${mx} ${y2} ${x2} ${y2}`; };
@@ -411,7 +427,7 @@ function treeHTML(c, run, animate) {
   let g = '', lastX = X0, lastY = Y;
   run.hist.forEach((h, k) => {
     const n = c.nodes[h.node], x = X0 + k * CW, ord = orderOf(run, h.node), px = x + CW * .5;
-    g += `<g class="hd" style="${at(k)}"><text class="sn" x="${x}" y="18" text-anchor="middle">${pad(k + 1)}</text><text x="${x}" y="32" text-anchor="middle">${esc(short(T(n.title), 22))}</text></g>`;
+    g += `<g class="hd" style="${at(k)}"><text class="sn" x="${x}" y="18" text-anchor="middle">${pad(k + 1)}${h.rep ? ' ↺' : ''}</text><text x="${x}" y="32" text-anchor="middle">${esc(short(T(n.title), 22))}</text></g>`;
     ord.forEach((i, j) => {
       const ch = n.choices[i], y = Y + (j - (ord.length - 1) / 2) * OS, col = `var(--q${quality(ch.pts)})`, L1 = String.fromCharCode(65 + j);
       if (i === h.i) {
@@ -420,6 +436,16 @@ function treeHTML(c, run, animate) {
         g += `<path class="e go" d="${d}" style="stroke:${col};--len:${len(x, Y, px, y) + (nx ? len(px, y, nx, Y) : 0)};${at(k)}"/>`;
         g += `<g class="pk" style="${at(k + .5)}"><circle cx="${px}" cy="${y}" r="6" style="fill:${col}"/><text class="ql" x="${px}" y="${y - 10}" text-anchor="middle" style="fill:${col}">${L1} · ${ch.pts}${h.timeout ? ' ⏱' : ''}</text></g>`;
         lastX = px; lastY = y;
+        (h.turns || []).forEach(t => {
+          if (t.kind === 'jump') {
+            const mx = nx ? (px + nx) / 2 : px + 40;
+            g += `<text class="tl2" x="${mx}" y="${Y - 14}" text-anchor="middle" style="fill:var(--ok);${at(k + .6).replace('stroke-dashoffset:0', '')}">⏩ ${L('ugrás', 'jump')} +${t.pts}</text>`;
+          } else if (t.kind === 'back') {
+            const j = run.hist.findIndex(x => x.node === t.to), tx = X0 + j * CW, top = 50;
+            g += `<path class="tb" d="M${px} ${y - 8} C${px} ${top} ${px} ${top} ${px - 30} ${top} L${tx + 30} ${top} C${tx} ${top} ${tx} ${top} ${tx} ${Y - 12}" style="stroke:var(--warn);${anim ? `animation:tfade .5s ${(.25 + (k + .6) * .4).toFixed(2)}s backwards` : ''}"/>`;
+            g += `<text class="tl2" x="${(px + tx) / 2}" y="${top - 6}" text-anchor="middle" style="fill:var(--warn)">↺ ${L('visszalépés', 'step back')} ${t.pts}</text>`;
+          }
+        });
       } else {
         g += `<g class="alt" style="${at(k)}"><path class="e" d="${curve(x + 10, Y, px - 6, y)}" style="stroke:${col}"/><circle cx="${px}" cy="${y}" r="4" style="stroke:${col}"/><text x="${px + 9}" y="${y + 3.5}">${L1}</text></g>`;
       }
@@ -434,7 +460,7 @@ function treeHTML(c, run, animate) {
       <text class="et${cur ? ' now' : ''}" x="${XE + 20}" y="${y + 4}">${known ? esc(short(endTitle(id), 26)) : L('még nem találtad meg', 'not found yet')}</text></g>`;
   });
   return `<div class="treewrap"><svg class="dtree" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${L('Döntési fa: a döntéseid, a kihagyott lehetőségek és az eset befejezései', 'Decision tree: your decisions, the options you passed on and the endings of the case')}">${g}</svg></div>
-   <div class="legend"><span><i style="background:var(--qbest)"></i>${L('kiváló', 'best')}</span><span><i style="background:var(--qok)"></i>${L('elfogadható', 'acceptable')}</span><span><i style="background:var(--qrisky)"></i>${L('kockázatos', 'risky')}</span><span><i style="background:var(--qpoor)"></i>${L('rossz', 'poor')}</span><span>${L('vastag vonal: a te utad, szaggatott: a nem választott lehetőség', 'thick line: your path, dashed: an option you did not pick')}</span></div>`;
+   <div class="legend"><span><i style="background:var(--qbest)"></i>${L('kiváló', 'best')}</span><span><i style="background:var(--qok)"></i>${L('elfogadható', 'acceptable')}</span><span><i style="background:var(--qrisky)"></i>${L('kockázatos', 'risky')}</span><span><i style="background:var(--qpoor)"></i>${L('rossz', 'poor')}</span><span>${L('vastag vonal: a te utad, szaggatott: a nem választott lehetőség', 'thick line: your path, dashed: an option you did not pick')}</span><span>⏩ ${L('előreugrás', 'jump ahead')} · ↺ ${L('visszalépés', 'step back')}</span></div>`;
 }
 
 let GEN = 0;                    // bumps on every render: stops old reveal sequences and timers
@@ -505,8 +531,9 @@ function homeHTML() {
    <h2 class="sr-only">${L('Esetek', 'Cases')}</h2>
    <div class="cases">${CASES.map(card).join('')}</div>
    <section class="panel cut how" aria-label="${L('Hogyan működik?', 'How does it work?')}">
-    <div><h3>${L('Három mérő', 'Three meters')}</h3><p>${L('Működés, Bizonyítékok és Bizalom, analóg műszereken. Minden döntés mozgatja őket; a piros sáv a veszélyzóna. Ha bármelyik nullára esik, az eset kudarccal zárul.', 'Operations, Evidence and Trust, on analog gauges. Every decision moves them; the red band is the danger zone. If any of them hits zero, the case ends in failure.')}</p></div>
-    <div><h3>${L('Pontozás', 'Scoring')}</h3><p>${L('Döntésenként legfeljebb 100 pont, a befejezés értékelése (S, A, B, C, F) bónuszt ad, és a végén a mérők átlaga is beszámít.', 'Up to 100 points per decision, the ending grade (S, A, B, C, F) adds a bonus, and the average of the meters counts at the end.')}</p></div>
+    <div><h3>${L('Három mérő', 'Three meters')}</h3><p>${L('Működés, Bizonyítékok és Bizalom, analóg műszereken. Nincs ingyen döntés: mindegyik javít valamin, és áldoz valamit. A piros sáv a veszélyzóna; ha bármelyik mérő nullára esik, az eset kudarccal zárul.', 'Operations, Evidence and Trust, on analog gauges. No decision is free: each one improves something and sacrifices something. The red band is the danger zone; if any meter hits zero, the case ends in failure.')}</p></div>
+    <div><h3>${L('Fordulatok', 'Turns')}</h3><p>${L('Egy elhamarkodott lépés később visszadobhat egy korábbi szakaszhoz (↺, pontlevonással, és a megismételt döntések nem adnak újra pontot). Az alapos munka viszont előreugrást hozhat (⏩), ami pontot és időt ad.', 'A hasty step can later throw you back to an earlier stage (↺, with a penalty, and repeated decisions earn no points again). Thorough work, on the other hand, can bring a jump ahead (⏩) that gives points and time.')}</p></div>
+    <div><h3>${L('Pontozás', 'Scoring')}</h3><p>${L('Döntésenként legfeljebb 100 pont (mindig pontosan egy legjobb válasz van), a fordulatok pontja, a befejezés értékelése (S, A, B, C, F) bónuszt ad, és a végén a mérők átlaga is beszámít.', 'Up to 100 points per decision (there is always exactly one best answer), the points of the turns, the ending grade (S, A, B, C, F) adds a bonus, and the average of the meters counts at the end.')}</p></div>
     <div><h3>${L('Tanulságok', 'Lessons')}</h3><p>${L('A végén visszajátszod a döntéseidet: mindegyiknél látod, mi lett volna a bevált gyakorlat, és miért. Játszd újra, és fedezd fel az összes befejezést.', 'At the end you replay your decisions: for each one you see what good practice would have been, and why. Play again and discover every ending.')}</p></div>
    </section>
    <p class="hint">${L('Minden cég, személy és cím kitalált. Ha a CTF-fiókoddal be vagy lépve, az eredményeid a CTF ranglistájára kerülnek.', 'All companies, people and addresses are fictional. If you are logged in with your CTF account, your results go on the CTF leaderboard.')}</p>
@@ -542,7 +569,8 @@ function meterHTML(k, v) {
 function trailHTML(c, run, current) {
   const items = run.hist.map((h, i) => {
     const n = c.nodes[h.node];
-    return `<li style="--q:var(--q${quality(h.pts)})"><span class="tl">${pad(i + 1)} · ${letterOf(run, h.node, h.i)} · ${h.pts} ${L('p', 'pts')}</span>${esc(T(n.title))}</li>`;
+    const mark = (h.turns || []).map(t => TURN[t.kind][0]).join(' ');
+    return `<li style="--q:var(--q${quality(h.pts)})"><span class="tl">${pad(i + 1)} · ${letterOf(run, h.node, h.i)} · ${h.rep ? L('ismételt', 'repeat') : `${h.pts} ${L('p', 'pts')}`}${mark ? ` · ${mark}` : ''}</span>${esc(T(n.title))}</li>`;
   });
   if (current) items.push(`<li class="cur"><span class="tl">${pad(run.hist.length + 1)} · ${L('most', 'now')}</span>${esc(T(current.title))}</li>`);
   return `<ol class="trail">${items.join('')}</ol>`;
@@ -573,8 +601,9 @@ function resultHTML(c, run) {
   return `<div class="result" id="result" aria-live="polite">
     <div class="lbl">${L('Következmény', 'Consequence')}</div>
     ${h.timeout ? `<p class="timeout">${L('Lejárt az idő: a helyzet döntött helyetted.', 'Time ran out: the situation decided for you.')}</p>` : ''}
-    <div class="qual"><span class="q ${q}">${L(...QNAME[q])}</span><span class="pts">+${h.pts}</span></div>
+    <div class="qual"><span class="q ${q}">${L(...QNAME[q])}</span><span class="pts">+${h.rep ? 0 : h.pts}</span>${h.rep ? `<span class="hint">${L('Ismételt döntés: újra nem jár érte pont.', 'Repeated decision: it earns no points again.')}</span>` : ''}</div>
     <p class="fb">${esc(T(ch.fb))}</p>
+    ${turnsHTML(c, h, .7)}
     <div class="chips">${chipsHTML(h)}${dt ? `<span class="chip t" style="animation-delay:.6s">⏱ +${durText(dt)}</span>` : ''}</div>
     <div class="row"><button class="btn hot" data-a="next" id="next">${run.end ? L('Az eset lezárása', 'Close the case') : L('Tovább', 'Continue')} →</button></div>
    </div>`;
@@ -600,7 +629,7 @@ function prevRun(run) {
   if (!run.show) return run;
   const h = run.hist[run.hist.length - 1], m = { ...run.m };
   for (const k in h.d) m[k] -= h.d[k];
-  return { ...run, m, pts: run.pts - h.pts, t: run.hist.length > 1 ? run.hist[run.hist.length - 2].t : 0, hist: run.hist.slice(0, -1) };
+  return { ...run, m, pts: run.pts - (h.gain != null ? h.gain : h.pts) - (h.rp || 0), t: run.hist.length > 1 ? run.hist[run.hist.length - 2].t : 0, hist: run.hist.slice(0, -1) };
 }
 function playHTML(animate) {
   const run = DATA.run, c = caseOf(run.cid);
@@ -621,6 +650,7 @@ function endHTML(animate) {
     return `<li style="--q:var(--q${q});animation-delay:${animate ? .9 + i * .12 : 0}s"><div class="lbl">${pad(i + 1)} · ${L(...PHASE[n.phase])} · ${elapsedText(h.t)}</div>
       <h3 style="margin-top:2px">${esc(T(n.title))}</h3>
       <p class="you"><b>${L('A döntésed', 'Your decision')} (${letterOf(run, h.node, h.i)}):</b> ${esc(T(ch.text))} <span class="q ${q}" style="padding:1px 6px;font-size:12px;font-weight:800;color:${q === 'ok' ? '#1a1a1a' : '#fff'}">${L(...QNAME[q])} · ${h.pts}</span>${h.timeout ? ` <span class="timeout">${L('(lejárt az idő)', '(time ran out)')}</span>` : ''}</p>
+      ${turnsHTML(c, h, 0)}
       ${h.i !== bi ? `<p class="alt"><b>${L('Bevált gyakorlat', 'Good practice')} (${letterOf(run, h.node, bi)}):</b> ${esc(T(n.choices[bi].text))}</p>` : ''}
       <p class="lesson">${esc(T(n.lesson))}</p></li>`;
   }).join('');
@@ -628,7 +658,7 @@ function endHTML(animate) {
    <section class="frame cut endcard${animate && !RM() ? ' thud' : ''}"><div class="fi stack">
     <div class="endhead"><div class="grade g-${e.end}"><span class="lbl">${L('Értékelés', 'Grade')}</span><b>${e.end}</b><span class="lbl">${L(...GRADE_NAME[e.end])}</span></div>
      <div class="stack" style="gap:8px"><div class="lbl">${L('Befejezés', 'Ending')} · ${esc(T(c.title))} · ${esc(T(c.org))}</div><h1>${esc(T(e.title))}</h1><p style="font-size:16px">${esc(T(e.text))}</p></div></div>
-    <div class="breakdown">${num(sc.pts, '', L('Döntések', 'Decisions'))}${num(sc.bonus, '', L('Befejezés bónusz', 'Ending bonus'))}${num(sc.meters, '', L('Mérők átlaga', 'Meter average'))}${num(sc.total, 'tot', L('Összesen', 'Total'))}</div>
+    <div class="breakdown">${num(sc.pts, '', L('Döntések és fordulatok', 'Decisions and turns'))}${num(sc.bonus, '', L('Befejezés bónusz', 'Ending bonus'))}${num(sc.meters, '', L('Mérők átlaga', 'Meter average'))}${num(sc.total, 'tot', L('Összesen', 'Total'))}</div>
     <p class="hint">${L('Legjobb eredményed', 'Your best')}: ${st.best} · ${L('elérhető legtöbb', 'maximum possible')}: ${REACH[c.id].max} · ${L('eltelt idő', 'time elapsed')}: ${durText(run.t)}</p>
     <div><div class="lbl" style="margin-bottom:6px">${L('Felfedezett befejezések', 'Endings discovered')}: ${st.ends.length}/${ids.length}</div>
      <div class="ends">${ids.map((id, i) => st.ends.includes(id) ? `<div class="endt${id === run.end ? ' now' : ''}" style="animation-delay:${animate ? .5 + i * .06 : 0}s"><span class="gl g-${gradeOf(id)}">${gradeOf(id)}</span>${esc(endTitle(id))}</div>` : `<div class="endt lock" style="animation-delay:${animate ? .5 + i * .06 : 0}s"><span class="gl">?</span>${L('Még nem találtad meg', 'Not found yet')}</div>`).join('')}</div></div>
