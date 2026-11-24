@@ -19,6 +19,8 @@ jobs:
           python-version: '3.12'
       - name: Feladatok ellenőrzése és index.json generálása
         run: python3 ctf/tools/build_index.py
+      - name: Döntési esetek ellenőrzése (ctf/dontes)
+        run: node ctf/tools/check_dontes.js
       - name: index.json visszaírása (csak push esetén)
         if: github.event_name == 'push'
         run: |

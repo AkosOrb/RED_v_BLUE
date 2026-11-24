@@ -384,6 +384,7 @@ function loginHTML() {
     <p class="hint">${L('Felhasználónév: 3–24 karakter, kisbetű, szám, pont, kötőjel vagy aláhúzás. Jelszó: legalább 8 karakter.', 'Username: 3–24 characters, lowercase letters, digits, dot, hyphen or underscore. Password: at least 8 characters.')}</p>
    </div></div>
    <div class="panel cut stack"><h3>${L('Hogyan működik?', 'How does it work?')}</h3>
+    <p><a href="${BUNDLE ? (CFG.decisionsUrl || 'RedVsBlue_CTF_dontesek.html') : 'dontes/'}"><b>${L('Fiók nélkül is kipróbálható: incidenskezelés döntésekkel →', 'Try it without an account: incident response by decisions →')}</b></a></p>
     <p>${L('Egy kitalált cég SOC-elemzőjeként egy valós incidens mintájára kezelsz egy támadást a riasztástól a helyreállításig. Válassz nehézséget, és a rendszer 7 egymásra épülő réteget sorsol. Minden réteg 4 részzászlóból áll; ha legalább 2 megvan, megnyílik a következő réteg, és kapsz egy kulcsot, amely segít a megoldásában.', 'As a SOC analyst at a fictional company you handle an attack modelled on a real incident, from the alert to recovery. Pick a difficulty and the system draws 7 layers built on each other. Each layer has 4 sub-flags; with at least 2 solved the next layer opens and you get a key that helps you solve it.')}</p>
     <p>${L('A k-adik réteg legfeljebb 100 × k pontot ér (nehéz módban × 1,5). Visszatérhetsz korábbi rétegekre, de az ott maradt pontok feleződnek. Tippeket is kérhetsz, ezek pontba kerülnek: 10%, 25%, 50%.', 'Layer k is worth up to 100 × k points (× 1.5 in hard mode). You may return to earlier layers, but the points left there are halved. You can ask for hints; they cost 10%, 25% and 50%.')}</p>
    </div></div>`;
@@ -446,6 +447,11 @@ const TRACK_DESC = {
   osint: ['Egy kitalált cég megbízásából felméred, mit lát kívülről a cég nyilvános digitális lábnyomából, hogy csökkenthető legyen a támadási felület. 7 szakasz a webes lábnyomtól a kockázati jelentésig, kizárólag nyílt forrású, szintetikus adatokon.',
           'On behalf of a fictional company, you review what an outsider can see of its public digital footprint, so the attack surface can be reduced. 7 stages from web footprint to risk report, on open-source synthetic data only.'],
 };
+// Link card to the decision-based incident response mode (ctf/dontes/), which needs no account.
+const decisionCard = () => `<a class="frame cut" href="${BUNDLE ? (CFG.decisionsUrl || 'RedVsBlue_CTF_dontesek.html') : 'dontes/'}" style="text-decoration:none;display:block"><div class="fi row" style="justify-content:space-between;gap:14px">
+   <div style="flex:1;min-width:240px"><div class="lbl">${L('Új · döntési szimuláció', 'New · decision simulation')}</div><h2 style="margin-top:4px">${L('Incidenskezelés döntésekkel', 'Incident response by decisions')}</h2>
+   <p style="margin:4px 0 0">${L('Naplóelemzés helyett esetleírások és döntések: minden választás más következménnyel jár, a történet onnan folytatódik. Három eset, több befejezés.', 'Case descriptions and decisions instead of log analysis: every choice has different consequences and the story continues from there. Three cases, several endings.')}</p></div>
+   <span class="btn blue">${L('Megnyitás', 'Open')} →</span></div></a>`;
 function homeHTML() {
   const g = GAME && !GAME.closed ? GAME : null;
   const trackTag = { blue: ['Blue · védő oldal', 'Blue · defensive'], red: ['Red · támadó oldal', 'Red · offensive'], osint: ['OSINT · nyílt forrás', 'OSINT · open source'] };
@@ -465,6 +471,7 @@ function homeHTML() {
      <h2 style="margin:6px 0">${L(...SIDE_LABEL[g.side || 'blue'])} · ${g.mode === 'easy' ? L('könnyű', 'easy') : L('nehéz', 'hard')} · ${g.score} ${L('pont', 'pts')} · ${Math.min(g.state.unlocked, 7)}. ${L('réteg', 'layer')}</h2>
      <div class="row"><button class="btn" data-a="resume">${L('Folytatás', 'Continue')}</button></div></div>` : ''}
    <div class="tracks">${trackCard('blue')}${trackCard('red')}${trackCard('osint')}</div>
+   ${decisionCard()}
    <div class="frame cut demo" id="demo" role="img" aria-label="${L('Mintajáték-animáció', 'Sample game animation')}">${demoHTML()}</div>
    ${g ? `<p class="hint">${L('Új játékot a mostani lezárása után indíthatsz.', 'You can start a new game after closing the current one.')}</p>` : ''}
    <p class="hint">${L('Könnyű mód: minden a böngészőben megoldható. Nehéz mód: letöltött fájlokkal, saját elemzőeszközökkel dolgozol.', 'Easy mode: everything can be solved in the browser. Hard mode: you work on downloaded files with your own analysis tools.')}</p>

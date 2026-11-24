@@ -1,0 +1,615 @@
+<!doctype html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'"><meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Red vs Blue CTF · Döntések</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=Share+Tech+Mono&display=swap">
+<style>
+/* Same look as the Red vs Blue app and CTF: industrial label (charcoal, warm beige, signal orange) on grid paper. */
+:root{
+  --ground:#ECE8E2; --paper:#D6CEC3; --ink:#232323; --mute:#6b655e; --char:#3e3e3e;
+  --red:#FF3B12; --blue:#2F86DA; --white:#F6F3EE; --soft:#D9D2C8; --ok:#2a7d45; --warn:#b27a00; --bad:#B32506;
+  --btn-bg:#3e3e3e; --btn-bg2:#525252; --btn-fg:#F6F3EE; --btn-on-bg:#FF3B12; --btn-on-fg:#1a1a1a;
+  --f-body:'Inter Tight','Helvetica Neue',Helvetica,Arial,sans-serif; --f-mono:'Share Tech Mono',ui-monospace,Menlo,monospace;
+  --stripes:repeating-linear-gradient(-55deg,var(--red) 0 7px,transparent 7px 13px);
+  --on-ink:#F6F3EE; --field:#FBFAF7; --well:#D9D2C8; --gridline:rgba(35,35,35,.06);
+  --ease:cubic-bezier(.2,.8,.2,1);
+  color-scheme:light;
+}
+:root[data-theme=dark]{
+  --ground:#191919; --paper:#2a2a2a; --ink:#E8E2D8; --mute:#9a938a; --char:#121212;
+  --white:#F2EEE7; --soft:#bdb6ab; --ok:#4fb874; --warn:#e0a92e; --bad:#FF7A55;
+  --btn-bg:#454545; --btn-bg2:#575757;
+  --on-ink:#161616; --field:#111; --well:#1f1f1f; --gridline:rgba(232,226,216,.05);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background-color:var(--ground);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.45;margin:0;
+  background-image:linear-gradient(var(--gridline) 1px,transparent 1px),linear-gradient(90deg,var(--gridline) 1px,transparent 1px);background-size:32px 32px}
+button{font:inherit;cursor:pointer;color:inherit}
+button:focus-visible,a:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+h1,h2,h3{margin:0;text-wrap:balance;font-weight:800;text-transform:uppercase;letter-spacing:-.01em}
+h1{font-size:clamp(26px,4.2vw,40px);line-height:1.02;letter-spacing:-.025em}
+h2{font-size:21px}
+h3{font-size:15px}
+p{margin:0}
+a{color:inherit}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.wrap{max-width:1180px;margin:0 auto;padding:12px 16px 48px}
+.lbl{font-family:var(--f-mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase}
+.mono{font-family:var(--f-mono)}
+.hint{color:var(--mute);font-size:13px}
+.cut{clip-path:polygon(12px 0,100% 0,100% calc(100% - 12px),calc(100% - 12px) 100%,0 100%,0 12px)}
+.frame{background:var(--ink);padding:2px}
+.frame>.fi{background:var(--paper);padding:16px 18px;clip-path:polygon(11px 0,100% 0,100% calc(100% - 11px),calc(100% - 11px) 100%,0 100%,0 11px)}
+.panel{background:var(--char);color:var(--soft);padding:14px 16px;background-image:radial-gradient(rgba(246,243,238,.07) 1.2px,transparent 1.6px);background-size:14px 14px}
+.panel h2,.panel h3{color:var(--white)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.stack{display:flex;flex-direction:column;gap:14px}
+.btn{border:0;background:var(--btn-bg);color:var(--btn-fg);padding:10px 16px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;font-size:13px;text-decoration:none;display:inline-block;clip-path:polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%,0 8px)}
+.btn:hover{background:var(--btn-bg2)}
+.btn.hot{background:var(--btn-on-bg);color:var(--btn-on-fg)}
+.btn.hot:hover{filter:brightness(1.08)}
+.btn.ghost{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 2px var(--ink)}
+.btn.ghost:hover{background:var(--gridline)}
+.panel .btn.ghost{color:var(--white);box-shadow:inset 0 0 0 2px var(--white)}
+.btn.sm{padding:6px 10px;font-size:11px}
+.btn[aria-pressed=true]{background:var(--btn-on-bg);color:var(--btn-on-fg)}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:22px;padding-bottom:10px;border-bottom:3px solid var(--ink);position:relative}
+.top::after{content:'';position:absolute;left:0;bottom:-11px;width:120px;height:8px;background:var(--stripes)}
+.logo{font-weight:800;font-size:22px;letter-spacing:-.02em;text-decoration:none}
+.logo .r{color:var(--red)}.logo .b{color:var(--blue)}
+.pill{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;padding:3px 8px;border:1.5px solid var(--ink)}
+.theme{display:inline-flex;align-items:center;justify-content:center;min-width:34px}
+.tag{display:inline-block;font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;padding:1px 6px;background:var(--char);color:var(--white);text-transform:uppercase}
+
+/* ---------- home */
+.hero{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:18px;align-items:center}
+.hero p{max-width:60ch;font-size:16px}
+@media (max-width:760px){.hero{grid-template-columns:1fr}.hero .radar{display:none}}
+.radar{width:100%;max-width:300px;aspect-ratio:1;justify-self:end}
+.radar .sweep{transform-origin:150px 150px;animation:spin 4.5s linear infinite}
+.radar .blip{animation:blip 4.5s linear infinite;opacity:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes blip{0%,100%{opacity:0}5%{opacity:1}40%{opacity:.15}}
+.cases{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:16px;margin-top:18px}
+.case{display:flex}.case>.fi{flex:1;display:flex;flex-direction:column;gap:10px}
+.case .tree{height:86px;background:var(--char);margin:-16px -18px 4px;padding:8px 12px}
+.case .tree svg{width:100%;height:100%;display:block}
+.tree path{fill:none;stroke:#6b655e;stroke-width:2}
+.tree path.hotp{stroke:var(--red);stroke-dasharray:var(--len);stroke-dashoffset:var(--len);animation:trace 3.6s var(--ease) infinite}
+.tree rect{fill:#8a847c}.tree rect.hotn{fill:var(--red);animation:pulse 1.8s ease-in-out infinite}
+@keyframes trace{0%{stroke-dashoffset:var(--len)}55%,80%{stroke-dashoffset:0}100%{stroke-dashoffset:0;opacity:0}}
+@keyframes pulse{50%{opacity:.35}}
+.case .meta{display:flex;gap:6px;flex-wrap:wrap}
+.case .stats{display:flex;justify-content:space-between;gap:8px;border-top:2px solid var(--ink);padding-top:8px;margin-top:auto;font-family:var(--f-mono);font-size:12px}
+.how{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:18px}
+.how h3{margin-bottom:6px}
+.switch{display:inline-flex;align-items:center;gap:10px;background:none;border:0;padding:0;font-weight:700}
+.switch .sw{width:44px;height:24px;background:var(--btn-bg);position:relative;clip-path:polygon(6px 0,100% 0,100% calc(100% - 6px),calc(100% - 6px) 100%,0 100%,0 6px)}
+.switch .sw::after{content:'';position:absolute;top:4px;left:4px;width:16px;height:16px;background:var(--white);transition:transform .25s var(--ease)}
+.switch[aria-checked=true] .sw{background:var(--btn-on-bg)}
+.switch[aria-checked=true] .sw::after{transform:translateX(20px);background:var(--on-ink)}
+
+/* ---------- play */
+.play{display:grid;grid-template-columns:270px minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:860px){.play{grid-template-columns:1fr}}
+.side{display:flex;flex-direction:column;gap:12px;position:sticky;top:10px}
+@media (max-width:860px){.side{display:contents}.play>.scene{order:1}.side>.trailbox{order:2}.side>.abandon{order:3;justify-self:start}}
+.clock{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+.clock .hm{font-size:34px;font-weight:800;letter-spacing:-.03em;color:var(--white);font-variant-numeric:tabular-nums;display:inline-block}
+.clock .hm.tick{animation:roll .5s var(--ease)}
+@keyframes roll{0%{transform:translateY(-40%);opacity:0}100%{transform:none;opacity:1}}
+.dt{font-family:var(--f-mono);font-size:12px;color:var(--red);opacity:0}
+.dt.show{animation:dtfade 2.2s ease-out}
+@keyframes dtfade{0%{opacity:0;transform:translateY(6px)}15%,70%{opacity:1;transform:none}100%{opacity:0}}
+.meters{display:flex;flex-direction:column;gap:9px;margin-top:10px}
+@media (max-width:860px){.meters{display:grid;grid-template-columns:repeat(3,1fr)}.meter .mt{letter-spacing:.03em;font-size:10px;gap:4px}}
+.meter .mt{display:flex;justify-content:space-between;font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase}
+.meter .mt b{font-family:var(--f-body);font-size:14px;color:var(--white);font-variant-numeric:tabular-nums}
+.meter .mb{height:8px;background:#2a2a2a;margin-top:3px;position:relative;overflow:hidden}
+.meter .mb i{display:block;height:100%;background:var(--soft);transition:width .9s var(--ease),background .3s}
+.meter.low .mb i{background:var(--red)}
+.meter.up .mb i{animation:flashup 1s}.meter.down .mb i{animation:flashdown 1s}
+.meter.down{animation:shake .45s}
+@keyframes flashup{30%{background:var(--ok)}}
+@keyframes flashdown{30%{background:var(--red)}}
+@keyframes shake{25%{transform:translateX(-3px)}50%{transform:translateX(3px)}75%{transform:translateX(-2px)}}
+.score{display:flex;justify-content:space-between;align-items:baseline;border-top:1px solid #5a5a5a;margin-top:12px;padding-top:8px}
+.score b{font-size:26px;font-weight:800;color:var(--white);font-variant-numeric:tabular-nums}
+.trail{list-style:none;margin:8px 0 0;padding:0}
+.trail li{position:relative;padding:0 0 10px 22px;font-size:13px}
+.trail li::before{content:'';position:absolute;left:5px;top:12px;bottom:-2px;width:2px;background:var(--ink);transform-origin:top;animation:grow .5s var(--ease) backwards}
+.trail li:last-child::before{display:none}
+.trail li::after{content:'';position:absolute;left:0;top:3px;width:12px;height:12px;background:var(--q,var(--ink))}
+.trail li.cur::after{background:var(--red);animation:pulse 1.4s ease-in-out infinite}
+.trail .tl{font-family:var(--f-mono);font-size:10px;letter-spacing:.14em;color:var(--mute);text-transform:uppercase;display:block}
+@keyframes grow{from{transform:scaleY(0)}}
+
+.scene{min-width:0}
+.scene.leave{animation:leave .28s ease-in forwards}
+@keyframes leave{to{opacity:0;transform:translateX(-24px)}}
+.shead{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;flex-wrap:wrap}
+.phase{font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;padding:2px 8px;background:var(--ink);color:var(--paper)}
+.feed{display:flex;flex-direction:column;gap:10px}
+.msg{background:var(--field);border:2px solid var(--ink);padding:10px 12px 11px;position:relative;box-shadow:4px 4px 0 var(--ink)}
+.msg .mh{display:flex;gap:8px;align-items:center;margin-bottom:4px;flex-wrap:wrap}
+.msg .mh b{font-size:13px}
+.msg.k-alert{border-left:8px solid var(--red)}
+.msg.k-alert .tag{background:var(--red);color:#1a1a1a}
+.msg.k-mail .tag{background:var(--blue)}
+.msg.k-news .tag{background:#7a3db8}
+.msg.k-memo{background:var(--well)}
+.msg.k-memo p{font-family:var(--f-mono);font-size:13px}
+.msg.k-phone .tag::before{content:'';display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--ok);margin-right:5px;vertical-align:1px;animation:pulse 1s ease-in-out infinite}
+.typing{display:inline-flex;gap:4px;padding:10px 12px;background:var(--field);border:2px solid var(--ink);width:max-content}
+.typing i{width:7px;height:7px;background:var(--ink);animation:dot 1s infinite}
+.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+@keyframes dot{0%,60%,100%{opacity:.25;transform:none}30%{opacity:1;transform:translateY(-3px)}}
+.rv{opacity:0}
+.rv.in{opacity:1;animation:rise .45s var(--ease) backwards}
+.msg.rv.in{animation:slidein .5s var(--ease) backwards}
+.msg.k-alert.rv.in{animation:slidein .5s var(--ease) backwards,glitch .6s steps(2) .1s}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}}
+@keyframes slidein{from{opacity:0;transform:translateX(-26px)}}
+@keyframes glitch{0%{filter:none}25%{transform:translateX(3px);filter:hue-rotate(40deg)}50%{transform:translateX(-3px)}75%{transform:translateX(1px);filter:none}100%{transform:none}}
+.sit{font-size:17px;font-weight:600}
+.timer{display:flex;align-items:center;gap:10px}
+.timer .tb{flex:1;height:10px;background:var(--well);border:2px solid var(--ink);overflow:hidden}
+.timer .tb i{display:block;height:100%;background:var(--ink);width:100%}
+.timer.hurry .tb i{background:var(--red)}
+.timer.hurry .ts{color:var(--bad);animation:pulse .7s ease-in-out infinite}
+.timer .ts{font-family:var(--f-mono);font-size:14px;min-width:4ch;text-align:right;font-weight:700}
+.choices{display:flex;flex-direction:column;gap:10px}
+.choice{display:grid;grid-template-columns:38px minmax(0,1fr);gap:12px;align-items:center;text-align:left;border:0;background:var(--char);color:var(--white);padding:12px 14px;font-size:15px;font-weight:600;position:relative;
+  clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px);transition:transform .2s var(--ease),background .2s,opacity .35s}
+.choice .key{font-family:var(--f-mono);font-size:20px;display:flex;align-items:center;justify-content:center;width:38px;height:38px;background:var(--btn-bg2);color:var(--white);transition:background .2s}
+.choice:hover:not([disabled]){transform:translateX(6px)}
+.choice:hover:not([disabled]) .key{background:var(--red);color:#1a1a1a}
+.choice[disabled]{cursor:default}
+.choice.dim{opacity:.35}
+.choice.picked{background:var(--btn-on-bg);color:#1a1a1a;transform:translateX(6px);padding-right:104px}
+.choice.picked .key{background:#1a1a1a;color:var(--btn-on-bg)}
+.choice .stamp{position:absolute;right:12px;top:50%;font-family:var(--f-mono);font-size:11px;letter-spacing:.2em;padding:2px 6px;border:2px solid #1a1a1a;transform:translateY(-50%) rotate(-6deg);animation:stampin .35s var(--ease)}
+@keyframes stampin{from{transform:translateY(-50%) rotate(-6deg) scale(2.4);opacity:0}}
+.result{border-top:3px solid var(--ink);padding-top:14px;display:flex;flex-direction:column;gap:10px;animation:rise .5s var(--ease) backwards}
+.qual{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.qual .q{font-weight:800;text-transform:uppercase;letter-spacing:.03em;padding:4px 10px;color:#fff}
+.q.best{background:var(--ok)}.q.ok{background:var(--warn);color:#1a1a1a}.q.risky{background:#c2561c}.q.poor{background:var(--bad)}
+.qual .pts{font-size:22px;font-weight:800;font-variant-numeric:tabular-nums;animation:pop .6s cubic-bezier(.3,1.6,.5,1) backwards .15s}
+@keyframes pop{from{transform:scale(.2);opacity:0}}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{font-family:var(--f-mono);font-size:12px;padding:3px 8px;border:2px solid currentColor;animation:pop .5s cubic-bezier(.3,1.6,.5,1) backwards}
+.chip.up{color:var(--ok)}.chip.down{color:var(--bad)}
+.chip.t{color:var(--mute)}
+.fb{font-size:16px}
+.timeout{font-weight:700;color:var(--bad)}
+.skip{align-self:flex-end}
+
+/* ---------- ending */
+.endcard{position:relative;overflow:hidden}
+.endhead{display:grid;grid-template-columns:130px minmax(0,1fr);gap:18px;align-items:center}
+@media (max-width:560px){.endhead{grid-template-columns:1fr}}
+.grade{width:130px;height:130px;display:flex;flex-direction:column;align-items:center;justify-content:center;border:5px solid currentColor;transform:rotate(-8deg);animation:stamp .7s cubic-bezier(.2,1.4,.4,1) backwards .2s}
+.grade b{font-size:74px;line-height:.9;font-weight:800}
+.grade .lbl{font-size:10px}
+.g-S{color:var(--ok)}.g-A{color:var(--blue)}.g-B{color:var(--warn)}.g-C{color:#c2561c}.g-F{color:var(--bad)}
+@keyframes stamp{0%{transform:rotate(-8deg) scale(3);opacity:0}60%{opacity:1}100%{transform:rotate(-8deg) scale(1)}}
+.endcard.thud{animation:shake .4s .55s}
+.breakdown{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
+.breakdown div{background:var(--char);color:var(--soft);padding:10px 12px}
+.breakdown b{display:block;font-size:24px;color:var(--white);font-variant-numeric:tabular-nums}
+.breakdown .tot{background:var(--btn-on-bg);color:#1a1a1a}.breakdown .tot b{color:#1a1a1a}
+.ends{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.endt{border:2px solid var(--ink);padding:8px 10px;font-size:13px;min-height:62px;display:flex;flex-direction:column;gap:2px;animation:rise .4s var(--ease) backwards}
+.endt.lock{border-style:dashed;color:var(--mute)}
+.endt.now{box-shadow:inset 0 0 0 3px var(--red)}
+.endt .gl{font-weight:800;font-size:18px}
+.debrief{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:0}
+.debrief li{position:relative;padding:0 0 18px 30px;animation:rise .45s var(--ease) backwards}
+.debrief li::before{content:'';position:absolute;left:7px;top:18px;bottom:0;width:2px;background:var(--ink)}
+.debrief li:last-child::before{display:none}
+.debrief li::after{content:'';position:absolute;left:0;top:4px;width:16px;height:16px;background:var(--q,var(--ink))}
+.debrief .you{margin:4px 0}
+.debrief .lesson{background:var(--well);border-left:4px solid var(--blue);padding:8px 10px;font-size:14px;margin-top:6px}
+.debrief .alt{font-size:14px;margin-top:6px}
+:root{--qbest:var(--ok);--qok:var(--warn);--qrisky:#c2561c;--qpoor:var(--bad)}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .rv{opacity:1}
+}
+</style>
+<script>try{if(localStorage.getItem('rvb-theme')==='dark')document.documentElement.dataset.theme='dark'}catch(e){}</script>
+<script src="scenarios.js"></script>
+<script src="engine.js"></script>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<script>
+'use strict';
+// ---------------------------------------------------------------- basics
+const CASES = window.IR_CASES, FAIL = window.IR_FAIL, E = window.IR_ENGINE;
+let LANG = (() => { try { const q = new URLSearchParams(location.search).get('lang'); if (q === 'en' || q === 'hu') return q; return localStorage.getItem('rvb-lang') === 'en' ? 'en' : 'hu'; } catch (e) { return 'hu'; } })();
+const L = (hu, en) => LANG === 'en' ? en : hu;
+const T = o => o ? (o[LANG] || o.hu || '') : '';
+let DARK = document.documentElement.dataset.theme === 'dark';
+const MOON = '<svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path fill="currentColor" d="M20 15.5A8.5 8.5 0 0 1 8.5 4a8.5 8.5 0 1 0 11.5 11.5z"/></svg>';
+const SUN = '<svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="square"><circle cx="12" cy="12" r="4.2" fill="currentColor" stroke="none"/><path d="M12 1.5v3M12 19.5v3M1.5 12h3M19.5 12h3M4.6 4.6l2.1 2.1M17.3 17.3l2.1 2.1M4.6 19.4l2.1-2.1M17.3 6.7l2.1-2.1"/></svg>';
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const store = {
+  get(k) { try { return JSON.parse(localStorage.getItem(k) || 'null'); } catch (e) { return null; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { } },
+};
+const RM = () => window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const app = document.getElementById('app');
+// Standalone build: links back to the menu cannot be relative.
+const MENU_URL = window.IR_MENU_URL || '../../index.html', CTF_URL = window.IR_CTF_URL || '../';
+
+// ---------------------------------------------------------------- labels
+const METER_NAME = { ops: ['Működés', 'Operations'], ev: ['Bizonyítékok', 'Evidence'], trust: ['Bizalom', 'Trust'] };
+const PHASE = { det: ['Észlelés és elemzés', 'Detection & analysis'], cont: ['Elszigetelés', 'Containment'], erad: ['Felszámolás', 'Eradication'],
+  rec: ['Helyreállítás', 'Recovery'], comm: ['Kommunikáció és bejelentés', 'Communication & reporting'], post: ['Tanulságok', 'Lessons learned'] };
+const KIND = { phone: ['Hívás', 'Call'], mail: ['E-mail', 'Email'], chat: ['Üzenet', 'Message'], alert: ['Riasztás', 'Alert'], news: ['Hír', 'News'], memo: ['Dokumentum', 'Document'] };
+const DAYS = [['Hétfő', 'Monday'], ['Kedd', 'Tuesday'], ['Szerda', 'Wednesday'], ['Csütörtök', 'Thursday'], ['Péntek', 'Friday'], ['Szombat', 'Saturday'], ['Vasárnap', 'Sunday']];
+const quality = p => p >= 90 ? 'best' : p >= 50 ? 'ok' : p >= 20 ? 'risky' : 'poor';
+const QNAME = { best: ['Kiváló döntés', 'Best call'], ok: ['Elfogadható', 'Acceptable'], risky: ['Kockázatos', 'Risky'], poor: ['Rossz döntés', 'Poor call'] };
+const GRADE_NAME = { S: ['Kiváló', 'Outstanding'], A: ['Jó', 'Good'], B: ['Közepes', 'Fair'], C: ['Gyenge', 'Weak'], F: ['Kudarc', 'Failure'] };
+const pad = n => String(n).padStart(2, '0');
+function clockOf(c, t) {
+  const abs = c.start.min + t, day = Math.floor(abs / 1440), m = abs % 1440;
+  return { day: DAYS[(c.start.dow + day) % 7], hm: `${pad(Math.floor(m / 60))}:${pad(m % 60)}` };
+}
+function durText(min) {
+  if (min < 60) return `${min} ${L('perc', 'min')}`;
+  const h = Math.round(min / 60);
+  return h < 48 ? `${h} ${L('óra', 'h')}` : `${Math.round(h / 24)} ${L('nap', 'days')}`;
+}
+const elapsedText = t => `T+${pad(Math.floor(t / 60))}:${pad(t % 60)}`;
+
+// ---------------------------------------------------------------- state
+const KEY = 'rvb-dontes-v1';
+let DATA = store.get(KEY) || { stats: {}, run: null };
+let TIMED = store.get('rvb-dontes-timer'); if (TIMED == null) TIMED = true;
+let VIEW = DATA.run ? 'play' : 'home';
+const REACH = {};               // case id -> explore() result
+CASES.forEach(c => { REACH[c.id] = E.explore(c, FAIL); });
+const caseOf = id => CASES.find(c => c.id === id);
+const save = () => store.set(KEY, DATA);
+let GEN = 0;                    // bumps on every render: stops old reveal sequences and timers
+let TIMER = null;
+
+// ---------------------------------------------------------------- top bar
+function topHTML() {
+  return `<header class="top"><div class="row"><a class="logo" href="${esc(MENU_URL)}" title="${L('Vissza a Red vs Blue főmenübe', 'Back to the Red vs Blue menu')}"><span class="r">RED</span> VS <span class="b">BLUE</span></a><span class="pill">CTF</span><span class="pill">${L('DÖNTÉSEK', 'DECISIONS')}</span></div>
+   <nav class="row" aria-label="${L('Navigáció', 'Navigation')}">${VIEW !== 'home' ? `<button class="btn sm ghost" data-a="home">${L('Esetek', 'Cases')}</button>` : ''}<a class="btn sm ghost" href="${esc(CTF_URL)}">${L('CTF-pályák', 'CTF tracks')}</a>
+    <button class="btn sm" data-a="lang" lang="${LANG === 'en' ? 'hu' : 'en'}">${LANG === 'en' ? 'HU' : 'EN'}</button><button class="btn sm theme" data-a="theme" aria-pressed="${DARK}" aria-label="${L('Sötét mód', 'Dark mode')}" title="${L('Sötét mód', 'Dark mode')}">${DARK ? SUN : MOON}</button></nav></header>`;
+}
+
+// ---------------------------------------------------------------- home
+function radarSVG() {
+  const blips = [[205, 92, 0], [96, 118, 1.4], [178, 214, 2.7], [120, 200, 3.6]];
+  return `<svg class="radar" viewBox="0 0 300 300" aria-hidden="true">
+   <defs><linearGradient id="sw" x1="0" x2="1"><stop offset="0" stop-color="#FF3B12" stop-opacity="0"/><stop offset="1" stop-color="#FF3B12" stop-opacity=".55"/></linearGradient></defs>
+   <rect x="0" y="0" width="300" height="300" fill="#3e3e3e"/>
+   ${[40, 80, 120].map(r => `<circle cx="150" cy="150" r="${r}" fill="none" stroke="#6b655e" stroke-width="1.5"/>`).join('')}
+   <path d="M150 20V280M20 150H280" stroke="#6b655e" stroke-width="1"/>
+   <path class="sweep" d="M150 150 L150 30 A120 120 0 0 1 254 90 Z" fill="url(#sw)"/>
+   ${blips.map(([x, y, d]) => `<g class="blip" style="animation-delay:${d}s"><rect x="${x - 5}" y="${y - 5}" width="10" height="10" fill="#FF3B12"/><rect x="${x - 11}" y="${y - 11}" width="22" height="22" fill="none" stroke="#FF3B12" stroke-width="1.5"/></g>`).join('')}
+   <text x="14" y="288" fill="#D9D2C8" font-family="Share Tech Mono,monospace" font-size="11" letter-spacing="2">SOC · ${L('ÉLŐ', 'LIVE')}</text></svg>`;
+}
+// A small decision tree per case; one path (seeded by the case) is traced in orange, looping.
+function treeSVG(seed) {
+  let s = seed * 9301 + 49297; const rnd = () => (s = (s * 9301 + 49297) % 233280) / 233280;
+  const cols = [14, 96, 178, 260, 342], rows = [14, 38, 62];
+  let path = [1], lines = '', nodes = '';
+  for (let i = 1; i < cols.length; i++) path.push(Math.floor(rnd() * 3));
+  for (let i = 0; i < cols.length - 1; i++) for (let a = 0; a < 3; a++) for (let b = 0; b < 3; b++) {
+    if (i === 0 && a !== 1) continue;
+    if (Math.abs(a - b) > 1 && rnd() < .6) continue;
+    lines += `<path d="M${cols[i]} ${rows[a]} H${(cols[i] + cols[i + 1]) / 2} V${rows[b]} H${cols[i + 1]}"/>`;
+  }
+  let d = `M${cols[0]} ${rows[1]}`, len = 0;
+  for (let i = 1; i < cols.length; i++) { const x0 = cols[i - 1], mx = (x0 + cols[i]) / 2; d += ` H${mx} V${rows[path[i]]} H${cols[i]}`; len += (cols[i] - x0) + Math.abs(rows[path[i]] - rows[path[i - 1]]); }
+  cols.forEach((x, i) => rows.forEach((y, j) => { if (i === 0 && j !== 1) return; nodes += `<rect x="${x - 5}" y="${y - 5}" width="10" height="10" class="${path[i] === j ? 'hotn' : ''}" style="animation-delay:${i * .3}s"/>`; }));
+  return `<svg viewBox="0 0 356 76" preserveAspectRatio="xMidYMid meet" aria-hidden="true">${lines}<path class="hotp" d="${d}" style="--len:${len + 10}"/>${nodes}</svg>`;
+}
+function stats(cid) { return DATA.stats[cid] || { best: 0, ends: [], plays: 0 }; }
+function homeHTML() {
+  const run = DATA.run;
+  const card = (c, i) => {
+    const st = stats(c.id), ids = E.endingIds(c, REACH[c.id].ends), mine = run && run.cid === c.id && !(run.end && !run.show);
+    return `<article class="frame cut case"><div class="fi">
+      <div class="tree">${treeSVG(i * 17 + 5)}</div>
+      <div class="meta"><span class="tag">${esc(T(c.level))}</span><span class="tag" style="background:var(--btn-bg2)">${esc(T(c.role))}</span></div>
+      <div><div class="lbl">${esc(T(c.org))}</div><h2 style="margin-top:4px">${esc(T(c.title))}</h2></div>
+      <p>${esc(T(c.blurb))}</p>
+      <p class="hint">${esc(T(c.real))}</p>
+      <div class="row">${mine ? `<button class="btn hot" data-a="resume">${L('Folytatás', 'Continue')}</button><button class="btn ghost" data-a="start" data-c="${c.id}">${L('Újrakezdés', 'Restart')}</button>`
+        : `<button class="btn hot" data-a="start" data-c="${c.id}">${st.plays ? L('Új játék', 'Play again') : L('Eset megnyitása', 'Open case')}</button>`}</div>
+      <div class="stats"><span>${L('Befejezések', 'Endings')}: ${st.ends.length}/${ids.length}</span><span>${L('Legjobb', 'Best')}: ${st.best}/${REACH[c.id].max}</span></div>
+     </div></article>`;
+  };
+  return `<main class="stack">
+   <section class="frame cut"><div class="fi hero">
+    <div class="stack">
+     <div class="lbl">${L('Egyéni CTF · incidenskezelés · döntési szimuláció', 'Individual CTF · incident response · decision simulation')}</div>
+     <h1>${L('Minden döntésnek következménye van', 'Every decision has consequences')}</h1>
+     <p>${L('Itt nem naplófájlokat elemzel. Valós incidensek mintájára írt esetleírásokat kapsz, és neked kell döntened: kit hívsz, mit kapcsolsz le, mit mondasz a sajtónak. Minden döntés máshová viszi a történetet, és minden esetnek több befejezése van.', 'No log files here. You get case descriptions modelled on real incidents, and you make the calls: who you phone, what you shut down, what you tell the press. Every decision takes the story somewhere else, and every case has several endings.')}</p>
+     <div class="row" style="gap:18px">
+      <button class="switch" role="switch" data-a="timed" aria-checked="${TIMED}"><span class="sw" aria-hidden="true"></span>${L('Időnyomás', 'Time pressure')}</button>
+      <span class="hint">${L('Bekapcsolva a sürgős döntéseknél visszaszámlálás fut; ha lejár, a helyzet dönt helyetted.', 'When on, urgent decisions have a countdown; if it runs out, the situation decides for you.')}</span>
+     </div>
+    </div>${radarSVG()}</div></section>
+   <h2 class="sr-only">${L('Esetek', 'Cases')}</h2>
+   <div class="cases">${CASES.map(card).join('')}</div>
+   <section class="panel cut how" aria-label="${L('Hogyan működik?', 'How does it work?')}">
+    <div><h3>${L('Három mérő', 'Three meters')}</h3><p>${L('Működés, Bizonyítékok és Bizalom. Minden döntés mozgatja őket. Ha bármelyik nullára esik, az eset kudarccal zárul.', 'Operations, Evidence and Trust. Every decision moves them. If any of them hits zero, the case ends in failure.')}</p></div>
+    <div><h3>${L('Pontozás', 'Scoring')}</h3><p>${L('Döntésenként legfeljebb 100 pont, a befejezés értékelése (S, A, B, C, F) bónuszt ad, és a végén a mérők átlaga is beszámít.', 'Up to 100 points per decision, the ending grade (S, A, B, C, F) adds a bonus, and the average of the meters counts at the end.')}</p></div>
+    <div><h3>${L('Tanulságok', 'Lessons')}</h3><p>${L('A végén visszajátszod a döntéseidet: mindegyiknél látod, mi lett volna a bevált gyakorlat, és miért. Játszd újra, és fedezd fel az összes befejezést.', 'At the end you replay your decisions: for each one you see what good practice would have been, and why. Play again and discover every ending.')}</p></div>
+   </section>
+   <p class="hint">${L('Minden cég, személy és cím kitalált. Az eredmények csak ebben a böngészőben tárolódnak.', 'All companies, people and addresses are fictional. Results are stored only in this browser.')}</p>
+  </main>`;
+}
+
+// ---------------------------------------------------------------- play
+function meterHTML(k, v) {
+  return `<div class="meter${v <= 25 ? ' low' : ''}" data-k="${k}"><div class="mt"><span>${L(...METER_NAME[k])}</span><b class="mv">${v}</b></div><div class="mb" role="meter" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${v}" aria-label="${L(...METER_NAME[k])}"><i style="width:${v}%"></i></div></div>`;
+}
+function trailHTML(c, run, current) {
+  const items = run.hist.map((h, i) => {
+    const n = c.nodes[h.node];
+    return `<li style="--q:var(--q${quality(h.pts)})"><span class="tl">${pad(i + 1)} · ${String.fromCharCode(65 + h.i)} · ${h.pts} ${L('p', 'pts')}</span>${esc(T(n.title))}</li>`;
+  });
+  if (current) items.push(`<li class="cur"><span class="tl">${pad(run.hist.length + 1)} · ${L('most', 'now')}</span>${esc(T(current.title))}</li>`);
+  return `<ol class="trail">${items.join('')}</ol>`;
+}
+function sideHTML(c, run, shownRun, current) {
+  const ck = clockOf(c, shownRun.t);
+  return `<aside class="side" aria-label="${L('Állapot', 'Status')}">
+    <div class="panel cut" id="status">
+     <div class="lbl">${esc(T(c.org))}</div>
+     <div class="clock"><span><span class="mono" id="day" style="font-size:12px;letter-spacing:.12em;text-transform:uppercase">${L(...ck.day)}</span><br><b class="hm" id="hm">${ck.hm}</b></span><span style="text-align:right"><span class="mono" id="el" style="font-size:12px">${elapsedText(shownRun.t)}</span><br><span class="dt" id="dt"></span></span></div>
+     <div class="meters">${E.METERS.map(k => meterHTML(k, shownRun.m[k])).join('')}</div>
+     <div class="score"><span class="lbl">${L('Pontszám', 'Score')}</span><b id="sc">${shownRun.pts}</b></div>
+    </div>
+    <div class="frame cut trailbox"><div class="fi"><div class="lbl">${L('Döntési útvonal', 'Decision path')}</div><div id="trail">${trailHTML(c, shownRun, current)}</div></div></div>
+    <button class="btn sm ghost abandon" data-a="abandon">${L('Eset feladása', 'Abandon case')}</button>
+   </aside>`;
+}
+function msgHTML(m, cls) {
+  return `<div class="msg k-${m.k}${cls}"><div class="mh"><span class="tag">${L(...KIND[m.k])}</span><b>${esc(T(m.from))}</b></div><p>${esc(T(m.text))}</p></div>`;
+}
+function chipsHTML(h) {
+  const ch = E.METERS.filter(k => h.d[k]).map(k => `<span class="chip ${h.d[k] > 0 ? 'up' : 'down'}" style="animation-delay:${.25 + .12 * E.METERS.indexOf(k)}s">${h.d[k] > 0 ? '▲' : '▼'} ${L(...METER_NAME[k])} ${h.d[k] > 0 ? '+' : '−'}${Math.abs(h.d[k])}</span>`);
+  return ch.join('');
+}
+function resultHTML(c, run) {
+  const h = run.hist[run.hist.length - 1], n = c.nodes[h.node], ch = n.choices[h.i], q = quality(h.pts);
+  const dt = ch.dt || 0;
+  return `<div class="result" id="result" aria-live="polite">
+    <div class="lbl">${L('Következmény', 'Consequence')}</div>
+    ${h.timeout ? `<p class="timeout">${L('Lejárt az idő: a helyzet döntött helyetted.', 'Time ran out: the situation decided for you.')}</p>` : ''}
+    <div class="qual"><span class="q ${q}">${L(...QNAME[q])}</span><span class="pts">+${h.pts}</span></div>
+    <p class="fb">${esc(T(ch.fb))}</p>
+    <div class="chips">${chipsHTML(h)}${dt ? `<span class="chip t" style="animation-delay:.6s">⏱ +${durText(dt)}</span>` : ''}</div>
+    <div class="row"><button class="btn hot" data-a="next" id="next">${run.end ? L('Az eset lezárása', 'Close the case') : L('Tovább', 'Continue')} →</button></div>
+   </div>`;
+}
+function sceneHTML(c, run, node, revealed) {
+  const cls = revealed ? '' : ' rv';
+  const shown = run.show, picked = shown ? shown.i : null;
+  const idx = shown ? run.hist.length : run.hist.length + 1;
+  const timed = TIMED && node.urgent && !shown;
+  return `<main class="scene" id="scene"><div class="frame cut"><div class="fi stack">
+    <div class="shead${cls}"><div><div class="lbl">${pad(idx)} · ${L('döntés', 'decision')}</div><h2 style="margin-top:4px">${esc(T(node.title))}</h2></div><span class="phase">${L(...PHASE[node.phase])}</span></div>
+    <div class="feed" id="feed">${node.feed.map(m => msgHTML(m, cls)).join('')}</div>
+    <p class="sit${cls}">${esc(T(node.text))}</p>
+    ${timed ? `<div class="timer${cls}" id="timer" role="timer" aria-label="${L('Hátralévő idő', 'Time left')}"><div class="tb"><i id="tbar"></i></div><span class="ts" id="tsec">${node.urgent} s</span></div>` : ''}
+    <div class="choices" role="group" aria-label="${L('Lehetőségek', 'Options')}">${node.choices.map((ch, i) => `<button class="choice${cls}${picked === i ? ' picked' : picked != null ? ' dim' : ''}" data-a="choose" data-i="${i}" ${shown ? 'disabled' : ''} aria-keyshortcuts="${String.fromCharCode(65 + i)}"><span class="key">${String.fromCharCode(65 + i)}</span><span>${esc(T(ch.text))}</span>${picked === i ? `<span class="stamp">${L('DÖNTÉS', 'DECIDED')}</span>` : ''}</button>`).join('')}</div>
+    ${shown ? resultHTML(c, run) : ''}
+    ${revealed ? '' : `<button class="btn sm ghost skip" data-a="skip">${L('Gyorsítás', 'Skip')} »</button>`}
+   </div></div></main>`;
+}
+// The status panel shows the state before the last choice while its consequence is being shown, so the change can animate.
+function prevRun(run) {
+  if (!run.show) return run;
+  const h = run.hist[run.hist.length - 1], m = { ...run.m };
+  for (const k in h.d) m[k] -= h.d[k];
+  return { ...run, m, pts: run.pts - h.pts, t: run.hist.length > 1 ? run.hist[run.hist.length - 2].t : 0, hist: run.hist.slice(0, -1) };
+}
+function playHTML(animate) {
+  const run = DATA.run, c = caseOf(run.cid);
+  const node = c.nodes[run.show ? run.show.node : run.node];
+  const shownRun = run.show && animate ? prevRun(run) : run;
+  return `<div class="play">${sideHTML(c, run, shownRun, run.show ? (animate ? node : null) : node)}${sceneHTML(c, run, node, !animate || RM() || !!run.show)}</div>`;
+}
+
+// ---------------------------------------------------------------- ending
+function endHTML(animate) {
+  const run = DATA.run, c = caseOf(run.cid), e = E.ending(c, run, FAIL), sc = E.finalScore(c, run, FAIL);
+  const st = stats(c.id), ids = E.endingIds(c, REACH[c.id].ends);
+  const endTitle = id => T((id.startsWith('fail:') ? FAIL[id.slice(5)] : c.nodes[id]).title);
+  const gradeOf = id => (id.startsWith('fail:') ? FAIL[id.slice(5)] : c.nodes[id]).end;
+  const num = (v, cls, lbl) => `<div class="${cls}"><span class="lbl">${lbl}</span><b data-count="${v}">${animate && !RM() ? 0 : v}</b></div>`;
+  const deb = run.hist.map((h, i) => {
+    const n = c.nodes[h.node], ch = n.choices[h.i], q = quality(h.pts), best = E.bestPts(n), bi = n.choices.findIndex(x => x.pts === best);
+    return `<li style="--q:var(--q${q});animation-delay:${animate ? .9 + i * .12 : 0}s"><div class="lbl">${pad(i + 1)} · ${L(...PHASE[n.phase])} · ${elapsedText(h.t)}</div>
+      <h3 style="margin-top:2px">${esc(T(n.title))}</h3>
+      <p class="you"><b>${L('A döntésed', 'Your decision')} (${String.fromCharCode(65 + h.i)}):</b> ${esc(T(ch.text))} <span class="q ${q}" style="padding:1px 6px;font-size:12px;font-weight:800;color:${q === 'ok' ? '#1a1a1a' : '#fff'}">${L(...QNAME[q])} · ${h.pts}</span>${h.timeout ? ` <span class="timeout">${L('(lejárt az idő)', '(time ran out)')}</span>` : ''}</p>
+      ${h.i !== bi ? `<p class="alt"><b>${L('Bevált gyakorlat', 'Good practice')} (${String.fromCharCode(65 + bi)}):</b> ${esc(T(n.choices[bi].text))}</p>` : ''}
+      <p class="lesson">${esc(T(n.lesson))}</p></li>`;
+  }).join('');
+  return `<main class="stack">
+   <section class="frame cut endcard${animate && !RM() ? ' thud' : ''}"><div class="fi stack">
+    <div class="endhead"><div class="grade g-${e.end}"><span class="lbl">${L('Értékelés', 'Grade')}</span><b>${e.end}</b><span class="lbl">${L(...GRADE_NAME[e.end])}</span></div>
+     <div class="stack" style="gap:8px"><div class="lbl">${L('Befejezés', 'Ending')} · ${esc(T(c.title))} · ${esc(T(c.org))}</div><h1>${esc(T(e.title))}</h1><p style="font-size:16px">${esc(T(e.text))}</p></div></div>
+    <div class="breakdown">${num(sc.pts, '', L('Döntések', 'Decisions'))}${num(sc.bonus, '', L('Befejezés bónusz', 'Ending bonus'))}${num(sc.meters, '', L('Mérők átlaga', 'Meter average'))}${num(sc.total, 'tot', L('Összesen', 'Total'))}</div>
+    <p class="hint">${L('Legjobb eredményed', 'Your best')}: ${st.best} · ${L('elérhető legtöbb', 'maximum possible')}: ${REACH[c.id].max} · ${L('eltelt idő', 'time elapsed')}: ${durText(run.t)}</p>
+    <div><div class="lbl" style="margin-bottom:6px">${L('Felfedezett befejezések', 'Endings discovered')}: ${st.ends.length}/${ids.length}</div>
+     <div class="ends">${ids.map((id, i) => st.ends.includes(id) ? `<div class="endt${id === run.end ? ' now' : ''}" style="animation-delay:${animate ? .5 + i * .06 : 0}s"><span class="gl g-${gradeOf(id)}">${gradeOf(id)}</span>${esc(endTitle(id))}</div>` : `<div class="endt lock" style="animation-delay:${animate ? .5 + i * .06 : 0}s"><span class="gl">?</span>${L('Még nem találtad meg', 'Not found yet')}</div>`).join('')}</div></div>
+    <div class="row"><button class="btn hot" data-a="start" data-c="${c.id}">${L('Újrajátszás', 'Play again')}</button><button class="btn ghost" data-a="home">${L('Másik eset', 'Another case')}</button></div>
+   </div></section>
+   <section class="frame cut"><div class="fi stack"><h2>${L('Visszajátszás és tanulságok', 'Replay and lessons')}</h2><ol class="debrief">${deb}</ol></div></section>
+  </main>`;
+}
+
+// ---------------------------------------------------------------- render + animation
+function stopTimer() { if (TIMER) { clearInterval(TIMER); TIMER = null; } }
+function render(animate = false) {
+  GEN++; stopTimer();
+  document.documentElement.lang = LANG;
+  document.title = L('Red vs Blue CTF · Döntések', 'Red vs Blue CTF · Decisions');
+  if (VIEW === 'play' && !DATA.run) VIEW = 'home';
+  let body;
+  if (VIEW === 'play') body = DATA.run.end && !DATA.run.show ? endHTML(animate) : playHTML(animate);
+  else body = homeHTML();
+  app.innerHTML = topHTML() + body;
+  if (VIEW === 'play') {
+    if (DATA.run.end && !DATA.run.show) { if (animate && !RM()) countUp(); }
+    else if (DATA.run.show) { if (animate) animateResult(); }
+    else if (animate && !RM()) reveal(GEN); else startTimer(GEN);
+  }
+}
+// Messages arrive one by one (typing dots first), then the situation and the options.
+async function reveal(gen) {
+  const scene = document.getElementById('scene'); if (!scene) return;
+  const alive = () => gen === GEN;
+  const show = el => el && el.classList.add('in');
+  show(scene.querySelector('.shead')); await sleep(250); if (!alive()) return;
+  for (const m of scene.querySelectorAll('.msg')) {
+    const dots = document.createElement('div'); dots.className = 'typing'; dots.innerHTML = '<i></i><i></i><i></i>'; dots.setAttribute('aria-hidden', 'true');
+    m.before(dots); await sleep(650); if (!alive()) return; dots.remove(); show(m); await sleep(550); if (!alive()) return;
+  }
+  show(scene.querySelector('.sit')); await sleep(400); if (!alive()) return;
+  show(scene.querySelector('.timer'));
+  for (const b of scene.querySelectorAll('.choice')) { show(b); await sleep(110); if (!alive()) return; }
+  finishReveal(gen);
+}
+function finishReveal(gen) {
+  const scene = document.getElementById('scene'); if (!scene) return;
+  scene.querySelectorAll('.typing').forEach(d => d.remove());
+  scene.querySelectorAll('.rv').forEach(el => { el.classList.remove('rv'); });
+  const sk = scene.querySelector('.skip'); if (sk) sk.remove();
+  const first = scene.querySelector('.choice'); if (first && !first.disabled) first.focus({ preventScroll: true });
+  startTimer(gen);
+}
+function startTimer(gen) {
+  const run = DATA.run; if (!run || run.show || run.end) return;
+  const node = caseOf(run.cid).nodes[run.node];
+  if (!TIMED || !node.urgent) return;
+  let left = node.urgent * 1000; const total = left; let last = Date.now();
+  const bar = document.getElementById('tbar'), sec = document.getElementById('tsec'), box = document.getElementById('timer');
+  TIMER = setInterval(() => {
+    if (gen !== GEN) return stopTimer();
+    const now = Date.now(); if (!document.hidden) left -= now - last; last = now;
+    if (bar) bar.style.width = Math.max(0, left / total * 100) + '%';
+    if (sec) sec.textContent = Math.max(0, Math.ceil(left / 1000)) + ' s';
+    if (box) box.classList.toggle('hurry', left < 10000);
+    if (left <= 0) { stopTimer(); pick(node.timeout, true); }
+  }, 100);
+}
+function countTo(el, from, to, ms = 900) {
+  if (!el) return;
+  if (RM()) { el.textContent = to; return; }
+  const t0 = performance.now();
+  const step = now => { const p = Math.min(1, (now - t0) / ms), e = 1 - Math.pow(1 - p, 3); el.textContent = Math.round(from + (to - from) * e); if (p < 1) requestAnimationFrame(step); };
+  requestAnimationFrame(step);
+}
+function countUp() { document.querySelectorAll('[data-count]').forEach((el, i) => setTimeout(() => countTo(el, 0, +el.dataset.count, 1100), 500 + i * 180)); }
+// After a choice: meters slide to their new value, the clock rolls, the score counts up.
+function animateResult() {
+  const run = DATA.run, c = caseOf(run.cid), h = run.hist[run.hist.length - 1], before = prevRun(run), gen = GEN;
+  setTimeout(() => {
+    if (gen !== GEN || !document.getElementById('trail')) return;
+    for (const k of E.METERS) {
+      const el = document.querySelector(`.meter[data-k="${k}"]`); if (!el) continue;
+      el.querySelector('i').style.width = run.m[k] + '%';
+      el.querySelector('[role=meter]').setAttribute('aria-valuenow', run.m[k]);
+      el.classList.toggle('low', run.m[k] <= 25);
+      if (h.d[k]) { el.classList.add(h.d[k] > 0 ? 'up' : 'down'); countTo(el.querySelector('.mv'), before.m[k], run.m[k]); }
+    }
+    countTo(document.getElementById('sc'), before.pts, run.pts);
+    const ck = clockOf(c, run.t), hm = document.getElementById('hm');
+    if (hm && run.t !== before.t) {
+      hm.textContent = ck.hm; hm.classList.remove('tick'); void hm.offsetWidth; hm.classList.add('tick');
+      document.getElementById('day').textContent = L(...ck.day);
+      document.getElementById('el').textContent = elapsedText(run.t);
+      const dt = document.getElementById('dt'); dt.textContent = '+' + durText(run.t - before.t); dt.classList.add('show');
+    }
+    document.getElementById('trail').innerHTML = trailHTML(c, run, null);
+  }, RM() ? 0 : 350);
+  const nx = document.getElementById('next'); if (nx) nx.focus({ preventScroll: true });
+  const res = document.getElementById('result'); if (res && !RM()) res.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+// ---------------------------------------------------------------- actions
+function startCase(cid) {
+  const c = caseOf(cid);
+  DATA.run = E.newRun(c);
+  const st = stats(cid); st.plays++; DATA.stats[cid] = st;
+  save(); VIEW = 'play'; render(true); window.scrollTo(0, 0);
+}
+function pick(i, timedOut = false) {
+  const run = DATA.run; if (!run || run.show || run.end) return;
+  const c = caseOf(run.cid);
+  stopTimer();
+  // Lock the options in place and stamp the chosen one before the consequence appears.
+  const scene = document.getElementById('scene');
+  if (scene) {
+    finishRevealSilently(scene);
+    scene.querySelectorAll('.choice').forEach((b, j) => { b.disabled = true; b.classList.add(j === i ? 'picked' : 'dim'); });
+    const t = scene.querySelector('.timer'); if (t) t.remove();
+  }
+  DATA.run = E.choose(c, run, i, timedOut);
+  if (DATA.run.end) {
+    const st = stats(c.id), sc = E.finalScore(c, DATA.run, FAIL);
+    if (!st.ends.includes(DATA.run.end)) st.ends.push(DATA.run.end);
+    st.best = Math.max(st.best, sc.total); DATA.stats[c.id] = st;
+  }
+  save();
+  setTimeout(() => render(true), RM() ? 0 : 380);
+}
+function finishRevealSilently(scene) {
+  GEN++;
+  scene.querySelectorAll('.typing,.skip').forEach(d => d.remove());
+  scene.querySelectorAll('.rv').forEach(el => el.classList.remove('rv'));
+}
+async function next() {
+  const run = DATA.run; if (!run || !run.show) return;
+  run.show = null; save();
+  const scene = document.getElementById('scene');
+  if (scene && !RM()) { scene.classList.add('leave'); await sleep(280); }
+  render(true); window.scrollTo({ top: 0, behavior: RM() ? 'auto' : 'smooth' });
+}
+
+app.addEventListener('click', ev => {
+  const b = ev.target.closest('[data-a]'); if (!b) return;
+  const a = b.dataset.a;
+  if (a === 'lang') { LANG = LANG === 'en' ? 'hu' : 'en'; try { localStorage.setItem('rvb-lang', LANG); } catch (e) { } render(false); }
+  else if (a === 'theme') { DARK = !DARK; document.documentElement.dataset.theme = DARK ? 'dark' : ''; try { localStorage.setItem('rvb-theme', DARK ? 'dark' : 'light'); } catch (e) { } render(false); }
+  else if (a === 'home') { VIEW = 'home'; if (DATA.run && DATA.run.end && !DATA.run.show) { DATA.run = null; save(); } render(true); }
+  else if (a === 'timed') { TIMED = !TIMED; store.set('rvb-dontes-timer', TIMED); b.setAttribute('aria-checked', TIMED); }
+  else if (a === 'start') startCase(b.dataset.c);
+  else if (a === 'resume') { VIEW = 'play'; render(true); }
+  else if (a === 'abandon') { DATA.run = null; save(); VIEW = 'home'; render(true); }
+  else if (a === 'choose') pick(+b.dataset.i);
+  else if (a === 'next') next();
+  else if (a === 'skip') finishReveal(++GEN);
+});
+document.addEventListener('keydown', ev => {
+  if (VIEW !== 'play' || !DATA.run || DATA.run.show || DATA.run.end || ev.ctrlKey || ev.metaKey || ev.altKey) return;
+  const k = ev.key.toUpperCase(), i = 'ABC'.indexOf(k) >= 0 ? 'ABC'.indexOf(k) : '123'.indexOf(k);
+  const node = caseOf(DATA.run.cid).nodes[DATA.run.node];
+  if (i >= 0 && i < node.choices.length && !document.querySelector('.choice.rv:not(.in)')) { ev.preventDefault(); pick(i); }
+});
+// A saved game from an older or changed case file is dropped rather than crashing.
+try { if (DATA.run) { const c = caseOf(DATA.run.cid); if (!c || (DATA.run.node && !c.nodes[DATA.run.node])) throw 0; } } catch (e) { DATA.run = null; VIEW = 'home'; save(); }
+render(true);
+</script>
+</body>
+</html>
