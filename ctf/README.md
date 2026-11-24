@@ -97,13 +97,24 @@ listában szereplő felhasználónevek látják (alapból: `oktato`).
 A játékosok regisztrációkor mindig `player` szerepkört kapnak; oktatóvá csak az adatbázisban lehet valakit tenni.
 
 **Már működő adatbázis frissítése (migráció).** A `games.side` ellenőrzés most már három pályát enged
-(`blue`, `red`, `osint`). Ha a sémát korábban futtattad le (csak `blue`/`red` engedéllyel), az OSINT-játékok
+(`blue`, `red`, `osint`, valamint a döntési módhoz `dontes`). Ha a sémát korábban futtattad le (csak `blue`/`red` engedéllyel), az OSINT-játékok
 online mentése addig hibát ad, amíg le nem futtatod az SQL Editorban:
 
 ```sql
 alter table public.games drop constraint games_side_check,
-  add constraint games_side_check check (side in ('blue', 'red', 'osint'));
+  add constraint games_side_check check (side in ('blue', 'red', 'osint', 'dontes'));
+create or replace view public.leaderboard as
+  select p.username, g.side, g.mode, g.score, g.layer, g.closed, g.updated_at,
+         case when g.side = 'dontes' then g.state->>'cid' end as cid
+  from public.games g join public.profiles p on p.id = g.user_id;
+grant select on public.leaderboard to authenticated;
+revoke all on public.leaderboard from anon, public;
 ```
+
+A `dontes` érték a döntési incidenskezelés-mód (`ctf/dontes/`) eredményeihez kell: a befejezett eset egy
+lezárt sorként kerül a `games` táblába (`mode` = `hard`, ha időre ment), a `state.cid` mondja meg, melyik eset.
+A ranglistán külön fülön jelennek meg. Amíg a migráció nem fut le, a döntési módban a mentés hibát jelez,
+az eredmény pedig a böngészőben megmarad, és később újra menthető.
 
 (A megszorítás neve eltérhet – nézd meg a `games` tábla megszorításait a Supabase felületén.)
 Helyi próbamódot és az önálló, egyfájlos változatot ez nem érinti.

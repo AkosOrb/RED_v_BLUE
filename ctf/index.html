@@ -239,7 +239,7 @@ const LocalBackend = {
   },
   async logout() { store.set('rvbctf-session', null); },
   games() { return store.get('rvbctf-games') || []; },
-  async myGames(user) { return this.games().filter(g => g.user_id === user.id); },
+  async myGames(user) { return this.games().filter(g => g.user_id === user.id && g.side !== 'dontes'); },
   async saveGame(user, g) {
     const all = this.games(); const i = all.findIndex(x => x.id === g.id);
     const row = { ...g, user_id: user.id, username: user.username, updated_at: new Date().toISOString() };
@@ -251,8 +251,8 @@ const LocalBackend = {
     ev.push({ user_id: user.id, username: user.username, game_id: gameId, type, data, at: new Date().toISOString() });
     store.set('rvbctf-events', ev);
   },
-  async leaderboard() { return this.games().map(g => ({ username: g.username, side: g.side, mode: g.mode, score: g.score, layer: g.layer, closed: g.closed, updated_at: g.updated_at })); },
-  async allGames() { return this.games(); },
+  async leaderboard() { return this.games().map(g => ({ username: g.username, side: g.side, mode: g.mode, score: g.score, layer: g.layer, closed: g.closed, updated_at: g.updated_at, cid: g.side === 'dontes' ? g.state && g.state.cid : null })); },
+  async allGames() { return this.games().filter(g => g.side !== 'dontes'); },
   async deleteGames(ids) {
     const gone = id => ids === 'all' || ids.includes(id), games = this.games();
     store.set('rvbctf-games', games.filter(g => !gone(g.id)));
@@ -307,7 +307,7 @@ const SupabaseBackend = {
     catch (e) { return null; }
   },
   async logout() { store.set('rvbctf-sb', null); },
-  async myGames(user) { return this.rest(`games?user_id=eq.${user.id}&select=*&order=started_at.desc`); },
+  async myGames(user) { return this.rest(`games?user_id=eq.${user.id}&side=neq.dontes&select=*&order=started_at.desc`); },
   async saveGame(user, g) {
     const row = { id: g.id, user_id: user.id, side: g.side, mode: g.mode, state: g.state, score: g.score, layer: g.layer, closed: g.closed, updated_at: new Date().toISOString() };
     const r = await this.rest('games?on_conflict=id', { method: 'POST', headers: { Prefer: 'return=representation,resolution=merge-duplicates' }, body: JSON.stringify(row) });
@@ -323,7 +323,7 @@ const SupabaseBackend = {
     if (!r.length) throw new Error(L('Nem sikerült törölni. Az adatbázisban hiányzik az oktatói törlési jog (lásd supabase/schema.sql).', 'Nothing was deleted. The database lacks the instructor delete permission (see supabase/schema.sql).'));
     return r.length;
   },
-  async allGames() { return this.rest('games?select=*,profiles(username)&order=updated_at.desc').then(r => r.map(g => ({ ...g, username: g.profiles && g.profiles.username }))); },
+  async allGames() { return this.rest('games?side=neq.dontes&select=*,profiles(username)&order=updated_at.desc').then(r => r.map(g => ({ ...g, username: g.profiles && g.profiles.username }))); },
   async events(gameId) { return this.rest(`events?game_id=eq.${gameId}&select=*&order=at.asc`); },
 };
 const BACK = CFG.supabaseUrl && CFG.supabaseAnonKey ? SupabaseBackend : LocalBackend;
@@ -384,7 +384,7 @@ function loginHTML() {
     <p class="hint">${L('Felhasználónév: 3–24 karakter, kisbetű, szám, pont, kötőjel vagy aláhúzás. Jelszó: legalább 8 karakter.', 'Username: 3–24 characters, lowercase letters, digits, dot, hyphen or underscore. Password: at least 8 characters.')}</p>
    </div></div>
    <div class="panel cut stack"><h3>${L('Hogyan működik?', 'How does it work?')}</h3>
-    <p><a href="${BUNDLE ? (CFG.decisionsUrl || 'RedVsBlue_CTF_dontesek.html') : 'dontes/'}"><b>${L('Fiók nélkül is kipróbálható: incidenskezelés döntésekkel →', 'Try it without an account: incident response by decisions →')}</b></a></p>
+    <p><a href="${BUNDLE ? (CFG.decisionsUrl || 'RedVsBlue_CTF_dontesek.html') : 'dontes/'}"><b>${L('Incidenskezelés döntésekkel: fiók nélkül is kipróbálható, belépve a ranglistára is felkerülsz →', 'Incident response by decisions: try it without an account, or log in to get on the leaderboard →')}</b></a></p>
     <p>${L('Egy kitalált cég SOC-elemzőjeként egy valós incidens mintájára kezelsz egy támadást a riasztástól a helyreállításig. Válassz nehézséget, és a rendszer 7 egymásra épülő réteget sorsol. Minden réteg 4 részzászlóból áll; ha legalább 2 megvan, megnyílik a következő réteg, és kapsz egy kulcsot, amely segít a megoldásában.', 'As a SOC analyst at a fictional company you handle an attack modelled on a real incident, from the alert to recovery. Pick a difficulty and the system draws 7 layers built on each other. Each layer has 4 sub-flags; with at least 2 solved the next layer opens and you get a key that helps you solve it.')}</p>
     <p>${L('A k-adik réteg legfeljebb 100 × k pontot ér (nehéz módban × 1,5). Visszatérhetsz korábbi rétegekre, de az ott maradt pontok feleződnek. Tippeket is kérhetsz, ezek pontba kerülnek: 10%, 25%, 50%.', 'Layer k is worth up to 100 × k points (× 1.5 in hard mode). You may return to earlier layers, but the points left there are halved. You can ask for hints; they cost 10%, 25% and 50%.')}</p>
    </div></div>`;
@@ -450,7 +450,7 @@ const TRACK_DESC = {
 // Link card to the decision-based incident response mode (ctf/dontes/), which needs no account.
 const decisionCard = () => `<a class="frame cut" href="${BUNDLE ? (CFG.decisionsUrl || 'RedVsBlue_CTF_dontesek.html') : 'dontes/'}" style="text-decoration:none;display:block"><div class="fi row" style="justify-content:space-between;gap:14px">
    <div style="flex:1;min-width:240px"><div class="lbl">${L('Új · döntési szimuláció', 'New · decision simulation')}</div><h2 style="margin-top:4px">${L('Incidenskezelés döntésekkel', 'Incident response by decisions')}</h2>
-   <p style="margin:4px 0 0">${L('Naplóelemzés helyett esetleírások és döntések: minden választás más következménnyel jár, a történet onnan folytatódik. Három eset, több befejezés.', 'Case descriptions and decisions instead of log analysis: every choice has different consequences and the story continues from there. Three cases, several endings.')}</p></div>
+   <p style="margin:4px 0 0">${L('Naplóelemzés helyett esetleírások és döntések: minden választás más következménnyel jár, a történet onnan folytatódik. Három eset, több befejezés, saját ranglista.', 'Case descriptions and decisions instead of log analysis: every choice has different consequences and the story continues from there. Three cases, several endings, its own leaderboard.')}</p></div>
    <span class="btn blue">${L('Megnyitás', 'Open')} →</span></div></a>`;
 function homeHTML() {
   const g = GAME && !GAME.closed ? GAME : null;
@@ -544,12 +544,36 @@ function playHTML() {
   </div></div>`;
 }
 
+// Decision mode (ctf/dontes/) results share the games table as side = 'dontes'; they get their own tab,
+// because their points are on a different scale: best per case per player, summed over the cases.
+const DONTES_CASES = { korhaz: ['Péntek éjjeli zsarolóvírus', 'Friday night ransomware'], bec: ['Sürgős utalás', 'Urgent transfer'], ellatasilanc: ['Mérgezett frissítés', 'Poisoned update'] };
+let BOARD_TAB = 'ctf';
 async function boardHTML() {
   const rows = await BACK.leaderboard();
+  const tabs = `<div class="row" role="tablist" style="margin:10px 0">${[['ctf', L('CTF-pályák', 'CTF tracks')], ['dontes', L('Döntési esetek', 'Decision cases')]].map(([k, t]) => `<button class="btn sm${BOARD_TAB === k ? ' hot' : ' ghost'}" role="tab" aria-selected="${BOARD_TAB === k}" data-a="boardtab" data-t="${k}">${t}</button>`).join('')}</div>`;
+  const first = (a, b) => b.score - a.score || String(a.updated_at).localeCompare(String(b.updated_at));
+  if (BOARD_TAB === 'dontes') {
+    const cids = Object.keys(DONTES_CASES), per = {};
+    for (const r of rows) {
+      if (r.side !== 'dontes' || !DONTES_CASES[r.cid]) continue;
+      const p = per[r.username] = per[r.username] || { username: r.username, cases: {}, score: 0, updated_at: '' };
+      const cur = p.cases[r.cid];
+      if (!cur || r.score > cur.score) p.cases[r.cid] = { score: r.score, timed: r.mode === 'hard' };
+    }
+    const list = Object.values(per);
+    for (const p of list) {
+      p.score = cids.reduce((t, k) => t + (p.cases[k] ? p.cases[k].score : 0), 0);
+      p.updated_at = rows.filter(r => r.side === 'dontes' && r.username === p.username && p.cases[r.cid] && r.score === p.cases[r.cid].score).map(r => String(r.updated_at)).sort().pop() || '';
+    }
+    list.sort(first);
+    return `<div class="frame cut"><div class="fi"><h2>${L('Ranglista', 'Leaderboard')}</h2>${tabs}<p class="hint">${L('Döntési incidenskezelés: esetenként a legjobb eredményed számít, az összeg dönt. Holtversenynél az nyer, aki korábban érte el. ⏱ = időre játszva.', 'Decision-based incident response: your best result per case counts, the total decides. Ties go to whoever reached it first. ⏱ = played against the clock.')}</p>
+     <div style="overflow-x:auto"><table class="lb"><thead><tr><th>#</th><th>${L('Játékos', 'Player')}</th>${cids.map(k => `<th>${esc(L(...DONTES_CASES[k]))}</th>`).join('')}<th>${L('Összesen', 'Total')}</th></tr></thead>
+     <tbody>${list.map((p, i) => `<tr><td>${i + 1}</td><td>${esc(p.username)}</td>${cids.map(k => `<td>${p.cases[k] ? `${p.cases[k].score}${p.cases[k].timed ? ' ⏱' : ''}` : '–'}</td>`).join('')}<td><b>${p.score}</b></td></tr>`).join('') || `<tr><td colspan="${cids.length + 3}">${L('Még nincs eredmény.', 'No results yet.')} <a href="${esc(CFG.decisionsUrl || (BUNDLE ? 'RedVsBlue_CTF_dontesek.html' : 'dontes/'))}">${L('Játssz egy esetet!', 'Play a case!')}</a></td></tr>`}</tbody></table></div></div></div>`;
+  }
   const best = {};
-  for (const r of rows) { const k = r.username; if (!best[k] || r.score > best[k].score) best[k] = r; }
-  const list = Object.values(best).sort((a, b) => b.score - a.score || String(a.updated_at).localeCompare(String(b.updated_at)));
-  return `<div class="frame cut"><div class="fi"><h2>${L('Ranglista', 'Leaderboard')}</h2><p class="hint">${L('Játékosonként a legjobb eredmény. Holtversenynél az nyer, aki korábban érte el.', 'Best result per player. Ties go to whoever reached it first.')}</p>
+  for (const r of rows) { if (r.side === 'dontes') continue; const k = r.username; if (!best[k] || r.score > best[k].score) best[k] = r; }
+  const list = Object.values(best).sort(first);
+  return `<div class="frame cut"><div class="fi"><h2>${L('Ranglista', 'Leaderboard')}</h2>${tabs}<p class="hint">${L('Játékosonként a legjobb eredmény. Holtversenynél az nyer, aki korábban érte el.', 'Best result per player. Ties go to whoever reached it first.')}</p>
    <table class="lb"><thead><tr><th>#</th><th>${L('Játékos', 'Player')}</th><th>${L('Pálya', 'Track')}</th><th>${L('Mód', 'Mode')}</th><th>${L('Réteg', 'Layer')}</th><th>${L('Pont', 'Points')}</th></tr></thead>
    <tbody>${list.map((r, i) => `<tr><td>${i + 1}</td><td>${esc(r.username)}</td><td><span class="tag ${r.side === 'red' ? 'r' : r.side === 'osint' ? 'o' : 'b'}">${r.side === 'red' ? 'Red' : r.side === 'osint' ? 'OSINT' : 'Blue'}</span></td><td>${r.mode === 'easy' ? L('könnyű', 'easy') : L('nehéz', 'hard')}</td><td>${r.layer}</td><td><b>${r.score}</b></td></tr>`).join('') || `<tr><td colspan="6">${L('Még nincs eredmény.', 'No results yet.')}</td></tr>`}</tbody></table></div></div>`;
 }
@@ -762,6 +786,7 @@ async function afterLogin() {
   const games = await BACK.myGames(USER);
   GAME = games.find(g => !g.closed) || null;
   VIEW = 'home';
+  if (location.hash === '#ranglista') { VIEW = 'board'; BOARD_TAB = 'dontes'; history.replaceState(null, '', location.pathname + location.search); }
 }
 
 app.addEventListener('click', async ev => {
@@ -786,6 +811,7 @@ app.addEventListener('click', async ev => {
     else if (a === 'logout') { await BACK.logout(); USER = GAME = null; VIEW = 'login'; }
     else if (a === 'home') VIEW = 'home';
     else if (a === 'board') VIEW = 'board';
+    else if (a === 'boardtab') { BOARD_TAB = el.dataset.t; VIEW = 'board'; }
     else if (a === 'teach') { VIEW = 'teach'; TEACH.sel = null; }
     else if (a === 'tsel') { TEACH.sel = el.dataset.id; TEACH.seen = null; }
     else if (a === 'replay') TEACH.seen = null;

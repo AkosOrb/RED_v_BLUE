@@ -13,7 +13,7 @@ create table if not exists public.profiles (
 create table if not exists public.games (
   id uuid primary key default gen_random_uuid(),
   user_id uuid not null references public.profiles on delete cascade,
-  side text not null default 'blue' check (side in ('blue', 'red', 'osint')),  -- blue=incidenskezelés, red=behatolásteszt, osint=nyilvános lábnyom felmérése
+  side text not null default 'blue' check (side in ('blue', 'red', 'osint', 'dontes')),  -- blue=incidenskezelés, red=behatolásteszt, osint=nyilvános lábnyom felmérése, dontes=döntési incidenskezelés (ctf/dontes/, egy befejezett eset = egy sor)
   mode text not null check (mode in ('easy', 'hard')),
   state jsonb not null,
   score integer not null default 0,
@@ -83,7 +83,8 @@ create policy events_insert on public.events for insert to authenticated
 
 -- Ranglista: mindenki látja, de csak ezeket az oszlopokat.
 create or replace view public.leaderboard as
-  select p.username, g.side, g.mode, g.score, g.layer, g.closed, g.updated_at
+  select p.username, g.side, g.mode, g.score, g.layer, g.closed, g.updated_at,
+         case when g.side = 'dontes' then g.state->>'cid' end as cid  -- döntési mód: melyik eset
   from public.games g join public.profiles p on p.id = g.user_id;
 grant select on public.leaderboard to authenticated;
 -- A nézet a tulajdonos jogaival fut, ezért a be nem jelentkezett (anon) látogatótól el kell venni.
