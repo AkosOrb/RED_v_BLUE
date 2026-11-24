@@ -95,7 +95,7 @@ a{color:inherit}
 .switch[aria-checked=true] .sw::after{transform:translateX(20px);background:var(--on-ink)}
 
 /* ---------- play */
-.play{display:grid;grid-template-columns:270px minmax(0,1fr);gap:16px;align-items:start}
+.play{display:grid;grid-template-columns:300px minmax(0,1fr);gap:16px;align-items:start}
 @media (max-width:860px){.play{grid-template-columns:1fr}}
 .side{display:flex;flex-direction:column;gap:12px;position:sticky;top:10px}
 @media (max-width:860px){.side{display:contents}.play>.scene{order:1}.side>.trailbox{order:2}.side>.abandon{order:3;justify-self:start}}
@@ -106,15 +106,30 @@ a{color:inherit}
 .dt{font-family:var(--f-mono);font-size:12px;color:var(--red);opacity:0}
 .dt.show{animation:dtfade 2.2s ease-out}
 @keyframes dtfade{0%{opacity:0;transform:translateY(6px)}15%,70%{opacity:1;transform:none}100%{opacity:0}}
-.meters{display:flex;flex-direction:column;gap:9px;margin-top:10px}
-@media (max-width:860px){.meters{display:grid;grid-template-columns:repeat(3,1fr)}.meter .mt{letter-spacing:.03em;font-size:10px;gap:4px}}
-.meter .mt{display:flex;justify-content:space-between;font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase}
-.meter .mt b{font-family:var(--f-body);font-size:14px;color:var(--white);font-variant-numeric:tabular-nums}
-.meter .mb{height:8px;background:#2a2a2a;margin-top:3px;position:relative;overflow:hidden}
-.meter .mb i{display:block;height:100%;background:var(--soft);transition:width .9s var(--ease),background .3s}
-.meter.low .mb i{background:var(--red)}
-.meter.up .mb i{animation:flashup 1s}.meter.down .mb i{animation:flashdown 1s}
-.meter.down{animation:shake .45s}
+.meters{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-top:10px}
+/* Analog round gauges: 270° dial, red danger zone 0–25, amber caution 25–40, needle with mechanical overshoot. */
+.meter{display:flex;flex-direction:column;align-items:center;text-align:center;min-width:0}
+.meter svg{width:100%;max-width:104px;height:auto;display:block;overflow:visible}
+.meter .face{fill:#1e1e1e;stroke:#6b655e;stroke-width:2}
+.meter .bezel{fill:none;stroke:#2c2c2c;stroke-width:4}
+.meter .tk{stroke:#bdb6ab;stroke-width:1.2}.meter .tk.mj{stroke:#F6F3EE;stroke-width:2}
+.meter .arc{fill:none;stroke:#555;stroke-width:4}
+.meter .arc.danger{stroke:#FF3B12;stroke-width:6}.meter .arc.warn{stroke:#e0a92e;stroke-width:5}
+.meter .nl{font-family:var(--f-mono);font-size:9px;fill:#bdb6ab}
+.meter .needle{transform-box:view-box;transform-origin:60px 60px;transition:transform 1.3s cubic-bezier(.34,1.56,.64,1)}
+.meter .needle .nd{fill:var(--red)}
+.meter .needle g{transform-box:view-box;transform-origin:60px 60px;animation:quiver 2.6s ease-in-out infinite}
+.meter .hub{fill:#F6F3EE;stroke:#1e1e1e;stroke-width:2}
+.meter .lamp{fill:#3a1a12;transition:fill .3s}
+.meter.low .lamp{fill:#FF3B12;animation:pulse .8s ease-in-out infinite}
+.meter .ro{font-family:var(--f-body);font-weight:800;font-size:18px;line-height:1;color:var(--white);font-variant-numeric:tabular-nums;margin-top:4px}
+.meter.low .ro{color:#FF3B12}
+.meter .mt{font-family:var(--f-mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;margin-top:2px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.meter.down svg{animation:shake .45s .35s}
+.meter.up .face{animation:glowup 1.2s .4s}.meter.down .face{animation:glowdown 1.2s .4s}
+@keyframes glowup{30%{stroke:var(--ok);stroke-width:4}}
+@keyframes glowdown{30%{stroke:var(--red);stroke-width:4}}
+@keyframes quiver{0%,100%{transform:rotate(-.7deg)}50%{transform:rotate(.7deg)}}
 @keyframes flashup{30%{background:var(--ok)}}
 @keyframes flashdown{30%{background:var(--red)}}
 @keyframes shake{25%{transform:translateX(-3px)}50%{transform:translateX(3px)}75%{transform:translateX(-2px)}}
@@ -269,6 +284,17 @@ function durText(min) {
   const h = Math.round(min / 60);
   return h < 48 ? `${h} ${L('óra', 'h')}` : `${Math.round(h / 24)} ${L('nap', 'days')}`;
 }
+// Options appear in a random order per game (stored in the run, so a reload keeps it); letters follow the shown order.
+function orderOf(run, id) {
+  run.perm = run.perm || {};
+  if (!run.perm[id]) {
+    const a = caseOf(run.cid).nodes[id].choices.map((_, i) => i);
+    for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+    run.perm[id] = a; save();
+  }
+  return run.perm[id];
+}
+const letterOf = (run, id, i) => String.fromCharCode(65 + ((run.perm && run.perm[id]) ? run.perm[id].indexOf(i) : i));
 const elapsedText = t => `T+${pad(Math.floor(t / 60))}:${pad(t % 60)}`;
 
 // ---------------------------------------------------------------- state
@@ -348,7 +374,7 @@ function homeHTML() {
    <h2 class="sr-only">${L('Esetek', 'Cases')}</h2>
    <div class="cases">${CASES.map(card).join('')}</div>
    <section class="panel cut how" aria-label="${L('Hogyan működik?', 'How does it work?')}">
-    <div><h3>${L('Három mérő', 'Three meters')}</h3><p>${L('Működés, Bizonyítékok és Bizalom. Minden döntés mozgatja őket. Ha bármelyik nullára esik, az eset kudarccal zárul.', 'Operations, Evidence and Trust. Every decision moves them. If any of them hits zero, the case ends in failure.')}</p></div>
+    <div><h3>${L('Három mérő', 'Three meters')}</h3><p>${L('Működés, Bizonyítékok és Bizalom, analóg műszereken. Minden döntés mozgatja őket; a piros sáv a veszélyzóna. Ha bármelyik nullára esik, az eset kudarccal zárul.', 'Operations, Evidence and Trust, on analog gauges. Every decision moves them; the red band is the danger zone. If any of them hits zero, the case ends in failure.')}</p></div>
     <div><h3>${L('Pontozás', 'Scoring')}</h3><p>${L('Döntésenként legfeljebb 100 pont, a befejezés értékelése (S, A, B, C, F) bónuszt ad, és a végén a mérők átlaga is beszámít.', 'Up to 100 points per decision, the ending grade (S, A, B, C, F) adds a bonus, and the average of the meters counts at the end.')}</p></div>
     <div><h3>${L('Tanulságok', 'Lessons')}</h3><p>${L('A végén visszajátszod a döntéseidet: mindegyiknél látod, mi lett volna a bevált gyakorlat, és miért. Játszd újra, és fedezd fel az összes befejezést.', 'At the end you replay your decisions: for each one you see what good practice would have been, and why. Play again and discover every ending.')}</p></div>
    </section>
@@ -357,13 +383,35 @@ function homeHTML() {
 }
 
 // ---------------------------------------------------------------- play
+const ang = v => -135 + v * 2.7;           // 0 → -135°, 100 → +135°
+function arcPath(r, a0, a1) {
+  const pt = a => { const t = (a - 90) * Math.PI / 180; return `${(60 + r * Math.cos(t)).toFixed(2)} ${(60 + r * Math.sin(t)).toFixed(2)}`; };
+  return `M${pt(a0)} A${r} ${r} 0 ${a1 - a0 > 180 ? 1 : 0} 1 ${pt(a1)}`;
+}
+// Static dial face, built once: scale arcs, ticks every 10, numbers every 50.
+const DIAL = (() => {
+  let t = '';
+  for (let v = 0; v <= 100; v += 5) {
+    const a = (ang(v) - 90) * Math.PI / 180, mj = v % 50 === 0, r0 = mj ? 37 : v % 10 === 0 ? 40 : 42;
+    t += `<line class="tk${mj ? ' mj' : ''}" x1="${(60 + r0 * Math.cos(a)).toFixed(2)}" y1="${(60 + r0 * Math.sin(a)).toFixed(2)}" x2="${(60 + 45 * Math.cos(a)).toFixed(2)}" y2="${(60 + 45 * Math.sin(a)).toFixed(2)}"/>`;
+    if (mj) t += `<text class="nl" x="${(60 + 29 * Math.cos(a)).toFixed(1)}" y="${(60 + 29 * Math.sin(a) + 3).toFixed(1)}" text-anchor="middle">${v}</text>`;
+  }
+  return `<circle class="bezel" cx="60" cy="60" r="56"/><circle class="face" cx="60" cy="60" r="53"/>
+   <path class="arc" d="${arcPath(48, ang(40), ang(100))}"/><path class="arc warn" d="${arcPath(48, ang(25), ang(40))}"/><path class="arc danger" d="${arcPath(48, ang(0), ang(25))}"/>${t}`;
+})();
 function meterHTML(k, v) {
-  return `<div class="meter${v <= 25 ? ' low' : ''}" data-k="${k}"><div class="mt"><span>${L(...METER_NAME[k])}</span><b class="mv">${v}</b></div><div class="mb" role="meter" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${v}" aria-label="${L(...METER_NAME[k])}"><i style="width:${v}%"></i></div></div>`;
+  return `<div class="meter${v <= 25 ? ' low' : ''}" data-k="${k}" role="meter" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${v}" aria-label="${L(...METER_NAME[k])}">
+   <svg viewBox="2 2 116 116" aria-hidden="true">${DIAL}
+    <circle class="lamp" cx="60" cy="38" r="3.2"/>
+    <g class="needle" style="transform:rotate(${ang(v)}deg)"><g><path class="nd" d="M57.6 62 L60 15 L62.4 62 Z"/><path d="M58.4 60 L60 72 L61.6 60 Z" fill="#9a938a"/></g></g>
+    <circle class="hub" cx="60" cy="60" r="5"/>
+</svg>
+   <b class="ro mv">${v}</b><div class="mt">${L(...METER_NAME[k])}</div></div>`;
 }
 function trailHTML(c, run, current) {
   const items = run.hist.map((h, i) => {
     const n = c.nodes[h.node];
-    return `<li style="--q:var(--q${quality(h.pts)})"><span class="tl">${pad(i + 1)} · ${String.fromCharCode(65 + h.i)} · ${h.pts} ${L('p', 'pts')}</span>${esc(T(n.title))}</li>`;
+    return `<li style="--q:var(--q${quality(h.pts)})"><span class="tl">${pad(i + 1)} · ${letterOf(run, h.node, h.i)} · ${h.pts} ${L('p', 'pts')}</span>${esc(T(n.title))}</li>`;
   });
   if (current) items.push(`<li class="cur"><span class="tl">${pad(run.hist.length + 1)} · ${L('most', 'now')}</span>${esc(T(current.title))}</li>`);
   return `<ol class="trail">${items.join('')}</ol>`;
@@ -401,6 +449,7 @@ function resultHTML(c, run) {
    </div>`;
 }
 function sceneHTML(c, run, node, revealed) {
+  const nodeId = run.show ? run.show.node : run.node;
   const cls = revealed ? '' : ' rv';
   const shown = run.show, picked = shown ? shown.i : null;
   const idx = shown ? run.hist.length : run.hist.length + 1;
@@ -410,7 +459,7 @@ function sceneHTML(c, run, node, revealed) {
     <div class="feed" id="feed">${node.feed.map(m => msgHTML(m, cls)).join('')}</div>
     <p class="sit${cls}">${esc(T(node.text))}</p>
     ${timed ? `<div class="timer${cls}" id="timer" role="timer" aria-label="${L('Hátralévő idő', 'Time left')}"><div class="tb"><i id="tbar"></i></div><span class="ts" id="tsec">${node.urgent} s</span></div>` : ''}
-    <div class="choices" role="group" aria-label="${L('Lehetőségek', 'Options')}">${node.choices.map((ch, i) => `<button class="choice${cls}${picked === i ? ' picked' : picked != null ? ' dim' : ''}" data-a="choose" data-i="${i}" ${shown ? 'disabled' : ''} aria-keyshortcuts="${String.fromCharCode(65 + i)}"><span class="key">${String.fromCharCode(65 + i)}</span><span>${esc(T(ch.text))}</span>${picked === i ? `<span class="stamp">${L('DÖNTÉS', 'DECIDED')}</span>` : ''}</button>`).join('')}</div>
+    <div class="choices" role="group" aria-label="${L('Lehetőségek', 'Options')}">${orderOf(run, nodeId).map((i, pos) => [node.choices[i], i, pos]).map(([ch, i, pos]) => `<button class="choice${cls}${picked === i ? ' picked' : picked != null ? ' dim' : ''}" data-a="choose" data-i="${i}" ${shown ? 'disabled' : ''} aria-keyshortcuts="${String.fromCharCode(65 + pos)}"><span class="key">${String.fromCharCode(65 + pos)}</span><span>${esc(T(ch.text))}</span>${picked === i ? `<span class="stamp">${L('DÖNTÉS', 'DECIDED')}</span>` : ''}</button>`).join('')}</div>
     ${shown ? resultHTML(c, run) : ''}
     ${revealed ? '' : `<button class="btn sm ghost skip" data-a="skip">${L('Gyorsítás', 'Skip')} »</button>`}
    </div></div></main>`;
@@ -440,8 +489,8 @@ function endHTML(animate) {
     const n = c.nodes[h.node], ch = n.choices[h.i], q = quality(h.pts), best = E.bestPts(n), bi = n.choices.findIndex(x => x.pts === best);
     return `<li style="--q:var(--q${q});animation-delay:${animate ? .9 + i * .12 : 0}s"><div class="lbl">${pad(i + 1)} · ${L(...PHASE[n.phase])} · ${elapsedText(h.t)}</div>
       <h3 style="margin-top:2px">${esc(T(n.title))}</h3>
-      <p class="you"><b>${L('A döntésed', 'Your decision')} (${String.fromCharCode(65 + h.i)}):</b> ${esc(T(ch.text))} <span class="q ${q}" style="padding:1px 6px;font-size:12px;font-weight:800;color:${q === 'ok' ? '#1a1a1a' : '#fff'}">${L(...QNAME[q])} · ${h.pts}</span>${h.timeout ? ` <span class="timeout">${L('(lejárt az idő)', '(time ran out)')}</span>` : ''}</p>
-      ${h.i !== bi ? `<p class="alt"><b>${L('Bevált gyakorlat', 'Good practice')} (${String.fromCharCode(65 + bi)}):</b> ${esc(T(n.choices[bi].text))}</p>` : ''}
+      <p class="you"><b>${L('A döntésed', 'Your decision')} (${letterOf(run, h.node, h.i)}):</b> ${esc(T(ch.text))} <span class="q ${q}" style="padding:1px 6px;font-size:12px;font-weight:800;color:${q === 'ok' ? '#1a1a1a' : '#fff'}">${L(...QNAME[q])} · ${h.pts}</span>${h.timeout ? ` <span class="timeout">${L('(lejárt az idő)', '(time ran out)')}</span>` : ''}</p>
+      ${h.i !== bi ? `<p class="alt"><b>${L('Bevált gyakorlat', 'Good practice')} (${letterOf(run, h.node, bi)}):</b> ${esc(T(n.choices[bi].text))}</p>` : ''}
       <p class="lesson">${esc(T(n.lesson))}</p></li>`;
   }).join('');
   return `<main class="stack">
@@ -528,10 +577,10 @@ function animateResult() {
     if (gen !== GEN || !document.getElementById('trail')) return;
     for (const k of E.METERS) {
       const el = document.querySelector(`.meter[data-k="${k}"]`); if (!el) continue;
-      el.querySelector('i').style.width = run.m[k] + '%';
-      el.querySelector('[role=meter]').setAttribute('aria-valuenow', run.m[k]);
+      el.querySelector('.needle').style.transform = `rotate(${ang(run.m[k])}deg)`;
+      el.setAttribute('aria-valuenow', run.m[k]);
       el.classList.toggle('low', run.m[k] <= 25);
-      if (h.d[k]) { el.classList.add(h.d[k] > 0 ? 'up' : 'down'); countTo(el.querySelector('.mv'), before.m[k], run.m[k]); }
+      if (h.d[k]) { el.classList.add(h.d[k] > 0 ? 'up' : 'down'); countTo(el.querySelector('.mv'), before.m[k], run.m[k], 1300); }
     }
     countTo(document.getElementById('sc'), before.pts, run.pts);
     const ck = clockOf(c, run.t), hm = document.getElementById('hm');
@@ -562,7 +611,7 @@ function pick(i, timedOut = false) {
   const scene = document.getElementById('scene');
   if (scene) {
     finishRevealSilently(scene);
-    scene.querySelectorAll('.choice').forEach((b, j) => { b.disabled = true; b.classList.add(j === i ? 'picked' : 'dim'); });
+    scene.querySelectorAll('.choice').forEach(b => { b.disabled = true; b.classList.add(+b.dataset.i === i ? 'picked' : 'dim'); });
     const t = scene.querySelector('.timer'); if (t) t.remove();
   }
   DATA.run = E.choose(c, run, i, timedOut);
@@ -604,8 +653,8 @@ app.addEventListener('click', ev => {
 document.addEventListener('keydown', ev => {
   if (VIEW !== 'play' || !DATA.run || DATA.run.show || DATA.run.end || ev.ctrlKey || ev.metaKey || ev.altKey) return;
   const k = ev.key.toUpperCase(), i = 'ABC'.indexOf(k) >= 0 ? 'ABC'.indexOf(k) : '123'.indexOf(k);
-  const node = caseOf(DATA.run.cid).nodes[DATA.run.node];
-  if (i >= 0 && i < node.choices.length && !document.querySelector('.choice.rv:not(.in)')) { ev.preventDefault(); pick(i); }
+  const order = orderOf(DATA.run, DATA.run.node);
+  if (i >= 0 && i < order.length && !document.querySelector('.choice.rv:not(.in)')) { ev.preventDefault(); pick(order[i]); }
 });
 // A saved game from an older or changed case file is dropped rather than crashing.
 try { if (DATA.run) { const c = caseOf(DATA.run.cid); if (!c || (DATA.run.node && !c.nodes[DATA.run.node])) throw 0; } } catch (e) { DATA.run = null; VIEW = 'home'; save(); }
