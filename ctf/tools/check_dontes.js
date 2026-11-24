@@ -36,5 +36,17 @@ for (const c of IR_CASES) {
   Object.keys(c.nodes).filter(id => c.nodes[id].end).forEach(id => need(x.ends.includes(id), `${c.id}.${id}: elérhetetlen befejezés`));
   console.log(`${c.id}: ${x.paths} útvonal, ${E.endingIds(c, x.ends).length} befejezés, legtöbb ${x.max} pont`);
 }
+// The best option must not be recognisable by its length: it may be the longest or the shortest
+// in at most half of the decision points (per language).
+for (const lang of ['hu', 'en']) {
+  let multi = 0, longest = 0, shortest = 0;
+  for (const c of IR_CASES) for (const n of Object.values(c.nodes)) {
+    if (!n.choices || n.choices.length < 2) continue;
+    const len = n.choices.map(ch => ch.text[lang].length), best = E.bestPts(n), bi = n.choices.findIndex(ch => ch.pts === best);
+    multi++; if (len[bi] === Math.max(...len)) longest++; if (len[bi] === Math.min(...len)) shortest++;
+  }
+  console.log(`${lang}: a legjobb válasz ${longest}/${multi} helyen a leghosszabb, ${shortest}/${multi} helyen a legrövidebb`);
+  need(longest * 2 <= multi && shortest * 2 <= multi, `${lang}: a válaszok hossza elárulja a legjobbat (leghosszabb ${longest}, legrövidebb ${shortest} / ${multi})`);
+}
 if (errors.length) { console.error(errors.join('\n')); process.exit(1); }
 console.log('OK');
