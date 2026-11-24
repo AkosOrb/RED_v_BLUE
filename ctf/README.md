@@ -36,6 +36,20 @@ ctf/
   pl. `blue-easy-L1-kfl` … `blue-easy-L7-kfl`); ha nincs teljes lánc, rétegenként sorsol.
 - Nyílt válasz soha nem kerül a repóba. A megoldókulcs az oktatónál van.
 
+## Döntési incidenskezelés (`ctf/dontes/`)
+
+Fiók nélkül játszható, elágazó történetű mód: naplóelemzés helyett esetleírásokat kapsz, és döntéseket
+hozol. Minden döntés más következménnyel jár (három mérő: Működés, Bizonyítékok, Bizalom), és a történet
+onnan folytatódik. Esetenként több befejezés (S–F értékelés), a végén a döntések visszajátszása a bevált
+gyakorlattal. Időnyomás kapcsolható, animációk (a `prefers-reduced-motion` beállítást követi), HU/EN, sötét mód.
+
+- `dontes/scenarios.js` – az esetek gráfként (döntési pontok, feltételes elágazások, befejezések), a fájl elején leírt formátumban.
+- `dontes/engine.js` – tiszta játékmotor (pontozás, elágazás, az összes útvonal bejárása).
+- `node ctf/tools/check_dontes.js` – ellenőrzi a gráfot (hivatkozások, HU/EN szövegek, elérhetőség); a GitHub Action is futtatja.
+- `python3 ctf/tools/build_dontes_standalone.py <kimenet.html>` – önálló, egyfájlos változat.
+
+Az eredmények csak a böngészőben tárolódnak (`localStorage`), a ranglistába nem kerülnek.
+
 ## Zászlóellenőrzés
 
 A böngésző ellenőriz: `sha256("<feladat-id>:<zászló-id>:" + norm(válasz))`, ahol
