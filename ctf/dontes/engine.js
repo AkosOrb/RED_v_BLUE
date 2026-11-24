@@ -35,38 +35,49 @@
       const b = c.nodes[id].go[bi];
       for (const f of b.set || []) if (!r.flags.includes(f)) r.flags.push(f);
       if (b.d) applyD(r, b.d, delta);
-      r.pts += b.pts || 0; r.t += b.dt || 0;
-      if (b.kind) turns.push({ at: id, b: bi, kind: b.kind, to: b.to, pts: b.pts || 0 });
+      const p = (b.pts || 0) > 0 && r.redo ? 0 : (b.pts || 0);   // no bonus while redoing work after a step back
+      r.pts += p; r.t += b.dt || 0;
+      if (b.kind) turns.push({ at: id, b: bi, kind: b.kind, to: b.to, pts: p });
       id = b.to;
     }
     if (!c.nodes[id]) throw new Error('missing node ' + id);
     return { id, turns };
   }
+  // Choices shown at a node: a choice with hideIf disappears once that flag is set (a step-back option
+  // can be taken only once, otherwise the player could loop forever).
+  const visible = (c, run, id) => c.nodes[id].choices.map((_, i) => i).filter(i => !c.nodes[id].choices[i].hideIf || !run.flags.includes(c.nodes[id].choices[i].hideIf));
   const resolve = (c, run, id) => route(c, JSON.parse(JSON.stringify(run)), id, {}).id;
   // Apply choice i at the current node; returns a new run (the old one is not changed).
-  function choose(c, run, i, timedOut) {
+  function choose(c, run, i, timedOut, lite) {
     const n = c.nodes[run.node], ch = n.choices[i];
     // shallow copy is enough: history entries are never changed after they are pushed
-    const r = { ...run, m: { ...run.m }, flags: run.flags.slice(), hist: run.hist.slice() };
+    const r = { ...run, m: { ...run.m }, flags: run.flags.slice(), hist: lite ? [] : run.hist.slice(), steps: (run.steps || 0) + 1 };
     const delta = {};
     applyD(r, ch.d, delta);
     for (const f of ch.set || []) if (!r.flags.includes(f)) r.flags.push(f);
     r.t += ch.dt || 0;
-    // a decision repeated after a step back earns no points again: redoing work is not progress
-    const rep = run.hist.some(x => x.node === run.node);
+    // After a step back, every decision up to and including the one you stepped back from earns no
+    // points (run.redo holds that node): redoing work is not progress, even on a branch skipped before.
+    // (a node can only be visited again after a step back, so redo alone tells a repeat; this keeps the
+    // explore() memo key exact)
+    const rep = !!run.redo;
+    if (run.redo === run.node) r.redo = null;
     r.pts += rep ? 0 : ch.pts;
     const h = { node: run.node, i, pts: ch.pts, gain: rep ? 0 : ch.pts, rep, d: delta, t: r.t, timeout: !!timedOut, turns: [], rp: 0 };
+    // an answer can itself be a turn: step back to an earlier stage or jump ahead over some
+    if (ch.kind) h.turns.push({ at: run.node, ci: i, kind: ch.kind, to: ch.to, pts: 0 });
     r.hist.push(h);
     r.show = { node: run.node, i, timeout: !!timedOut };
     const failed = () => METERS.find(k => r.m[k] <= 0);
     let zero = failed();
     if (!zero) {
       const before = r.pts, x = route(c, r, ch.to, delta);
-      h.turns = x.turns; h.rp = r.pts - before; h.t = r.t;
+      h.turns = h.turns.concat(x.turns); h.rp = r.pts - before; h.t = r.t;
+      if (h.turns.some(t => t.kind === 'back')) r.redo = run.node;
       zero = failed();
       if (!zero) {
         if (c.nodes[x.id].end) { r.end = x.id; r.node = null; } else r.node = x.id;
-        if (!r.end && r.hist.length >= MAX_STEPS) throw new Error('run too long in ' + c.id);
+        if (!r.end && r.steps >= MAX_STEPS) throw new Error('run too long in ' + c.id);
         return r;
       }
     }
@@ -82,33 +93,38 @@
   // Walk every possible path (memoised on node + flags + meters, so long cases stay fast):
   // maximum score, number of paths, reachable endings, visited nodes, and one best run.
   function explore(c, fail) {
-    const memo = new Map();
-    const key = r => `${r.node}|${[...r.flags].sort().join(',')}|${METERS.map(k => r.m[k]).join(',')}`;
-    // returns { best: best future gain (choice/turn points + bonus + meters), paths, ends:Set, seen:Set, pick }
+    // every memoised state is reachable from the start, so reachable endings, nodes and turn kinds can be
+    // collected globally; the memo keeps only what depends on the state (keeps memory small)
+    const memo = new Map(), ends = new Set(), seen = new Set(), kinds = new Set();
+    // only flags that some condition or hideIf reads can change what happens next; the rest stay out of the key
+    const used = new Set(Object.values(c.nodes).flatMap(n => [...(n.go || []).flatMap(b => [...(b.any || []), ...(b.all || []), ...(b.none || [])]),
+      ...(n.choices || []).map(ch => ch.hideIf).filter(Boolean)]));
+    const key = r => `${r.node}|${r.redo || ''}|${r.flags.filter(f => used.has(f)).sort().join(',')}|${METERS.map(k => r.m[k]).join(',')}`;
+    // returns { best: best future gain (choice/turn points + bonus + meters), paths, pick }
     const walk = r => {
-      const k = key(r); if (memo.has(k)) return memo.get(k);
-      const out = { best: -Infinity, paths: 0, ends: new Set(), seen: new Set([r.node]), kinds: new Set(), pick: 0 };
-      c.nodes[r.node].choices.forEach((_, i) => {
-        const nx = choose(c, r, i), gain = nx.pts - r.pts;
-        nx.hist[nx.hist.length - 1].turns.forEach(t => out.kinds.add(t.kind));
-        let fut, sub;
-        if (nx.end) { const s = finalScore(c, nx, fail); fut = gain + s.bonus + s.meters; sub = { paths: 1, ends: new Set([nx.end]), seen: new Set(), kinds: new Set() }; }
-        else { sub = walk(nx); fut = gain + sub.best; }
-        out.paths += sub.paths; sub.ends.forEach(e => out.ends.add(e)); sub.seen.forEach(s => out.seen.add(s)); sub.kinds.forEach(k => out.kinds.add(k));
+      const k = key(r), got = memo.get(k); if (got) return got;
+      seen.add(r.node);
+      const out = { best: -Infinity, paths: 0, pick: 0 };
+      for (const i of visible(c, r, r.node)) {
+        const nx = choose(c, r, i, false, true), gain = nx.pts - r.pts;
+        for (const t of nx.hist[nx.hist.length - 1].turns) kinds.add(t.kind);
+        let fut;
+        if (nx.end) { const s = finalScore(c, nx, fail); fut = gain + s.bonus + s.meters; out.paths++; ends.add(nx.end); }
+        else { const sub = walk(nx); fut = gain + sub.best; out.paths += sub.paths; }
         if (fut > out.best) { out.best = fut; out.pick = i; }
-      });
+      }
       memo.set(k, out); return out;
     };
     const r0 = newRun(c), res = walk(r0);
     let bestRun = r0;
     while (!bestRun.end) bestRun = choose(c, bestRun, walk(bestRun).pick);
-    return { max: finalScore(c, bestRun, fail).total, paths: res.paths, ends: [...res.ends], seen: [...res.seen], kinds: [...res.kinds], bestRun };
+    return { max: finalScore(c, bestRun, fail).total, paths: res.paths, ends: [...ends], seen: [...seen], kinds: [...kinds], states: memo.size, bestRun };
   }
   // The line of best answers (the checker guarantees it gives the maximum score). Cheap enough for the browser,
   // where the full explore() of a long case would take seconds.
   function bestLine(c) {
     let r = newRun(c);
-    while (!r.end) r = choose(c, r, c.nodes[r.node].choices.findIndex(ch => ch.pts === bestPts(c.nodes[r.node])));
+    while (!r.end) { const n = c.nodes[r.node], v = visible(c, r, r.node); r = choose(c, r, v.reduce((a, i) => n.choices[i].pts > n.choices[a].pts ? i : a, v[0])); }
     return r;
   }
   // What the page needs without exploring every path: maximum score and reachable endings (c.fails is
@@ -120,5 +136,5 @@
     return own.concat(reach.filter(id => id.startsWith('fail:')).sort());
   }
 
-  root.IR_ENGINE = { METERS, BONUS, MAX_STEPS, newRun, choose, resolve, match, ending, finalScore, explore, bestLine, reach, endingIds, bestPts };
+  root.IR_ENGINE = { METERS, BONUS, MAX_STEPS, newRun, choose, resolve, match, visible, ending, finalScore, explore, bestLine, reach, endingIds, bestPts };
 })(typeof window !== 'undefined' ? window : globalThis);
