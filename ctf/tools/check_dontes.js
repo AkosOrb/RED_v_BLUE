@@ -4,9 +4,10 @@
 // minden döntési pont és befejezés elérhető, és kiírja az elérhető legtöbb pontot.
 // Játéktervezési szabályok (Ákos, 2026-11-24): minden választásnak ára és haszna is van (legalább egy mérő
 // nő és legalább egy csökken), döntési pontonként pontosan egy legjobb (100 pontos) válasz van, a legjobb
-// útvonal legalább 8 döntésből áll, és minden esetben van visszalépés és előreugrás is. A legjobb pontszámot
-// mindig a legjobb válaszok sorozata adja, és ebben nincs visszalépés. Ugró válaszlehetőség (kind) is kell
-// mindkét irányba; a visszalépő válasz csak egyszer választható (hideIf).
+// útvonal legalább 8 döntésből áll, és a legjobb pontszámot mindig a legjobb válaszok sorozata adja.
+// Az idő csak előre halad (Ákos, 2026-11-24): nincs visszalépés és előreugrás; helyette a döntések
+// következményei később ütnek vissza (echo: plusz kihívás), és ha halmozódnak, új idővonal indul (cascade).
+// Esetenként legalább 3 késleltetett következmény és egy halmozódó kell, a legjobb úton egyik sem fordul elő.
 // Futtatás a repó gyökeréből: node ctf/tools/check_dontes.js
 const path = require('path');
 globalThis.window = globalThis;
@@ -26,21 +27,22 @@ for (const c of IR_CASES) {
     if (n.go) {
       n.go.forEach((b, bi) => {
         need(c.nodes[b.to], `${at}: ismeretlen cél ${b.to}`);
-        if (b.kind) need(['back', 'jump'].includes(b.kind) && both(b.note), `${at}.${bi}: a fordulathoz (back/jump) magyarázat kell`);
-        if (b.kind === 'back') need((b.set || []).some(f => (b.none || []).includes(f)), `${at}.${bi}: a visszalépést egyszeri jelző védje (set + none)`);
-        if (b.kind === 'back') need((b.pts || 0) < 0, `${at}.${bi}: a visszalépésnek pontlevonással kell járnia`);
-      }); need(!n.go[n.go.length - 1].any && !n.go[n.go.length - 1].none && n.go[n.go.length - 1].min == null, `${at}: az utolsó ágnak feltétel nélkülinek kell lennie`); continue; }
+        if (b.kind) need(['echo', 'cascade'].includes(b.kind) && both(b.note), `${at}.${bi}: a fordulathoz (echo/cascade) magyarázat kell`);
+        if (b.kind) need((b.pts || 0) <= -100 && (b.set || []).length && c.nodes[b.to] && c.nodes[b.to].choices, `${at}.${bi}: a késleltetett következmény pontlevonással jár, jelzőt állít, és plusz döntéshez vezet`);
+        if (b.kind === 'echo') need((b.any || []).length, `${at}.${bi}: a késleltetett következménynek korábbi döntés jelzőjéhez (any) kell kötődnie`);
+        if (b.kind === 'cascade') need(b.atLeast && b.atLeast.n >= 2, `${at}.${bi}: a halmozódó következmény legalább 2 korábbira épül (atLeast)`);
+      }); const lb = n.go[n.go.length - 1];
+      need(!lb.any && !lb.all && !lb.none && !lb.atLeast && lb.min == null && !lb.kind, `${at}: az utolsó ágnak feltétel nélkülinek kell lennie`); continue; }
     need(PHASES.includes(n.phase), `${at}: ismeretlen szakasz ${n.phase}`);
     need(both(n.title) && both(n.text) && both(n.lesson), `${at}: hiányzó szöveg`);
     need(n.feed.every(m => KINDS.includes(m.k) && both(m.from) && both(m.text)), `${at}: hibás üzenet`);
     need(n.choices.length >= 3 && n.choices.length <= 4, `${at}: 3–4 választás kell`);
     need(n.choices.filter(ch => ch.pts === 100).length === 1, `${at}: pontosan egy 100 pontos (legjobb) válasz kell`);
-    if (n.urgent) need(n.choices[n.timeout] && !n.choices[n.timeout].hideIf, `${at}: hiányzó vagy rejthető timeout-választás`);
+    if (n.urgent) need(n.choices[n.timeout], `${at}: hiányzó timeout-választás`);
     n.choices.forEach((ch, i) => {
       need(both(ch.text) && both(ch.fb), `${at}.${i}: hiányzó szöveg`);
       need(c.nodes[ch.to], `${at}.${i}: ismeretlen cél ${ch.to}`);
-      if (ch.kind) need(['back', 'jump'].includes(ch.kind) && ch.pts < 100, `${at}.${i}: az ugró válasz (back/jump) nem lehet a legjobb`);
-      if (ch.kind === 'back') need(ch.hideIf && (ch.set || []).includes(ch.hideIf), `${at}.${i}: a visszalépő válasz egyszer választható (hideIf + set)`);
+      need(!ch.kind && !ch.hideIf, `${at}.${i}: a választás nem ugorhat az időben (nincs kind/hideIf)`);
       need(ch.pts >= 20 && ch.pts <= 100, `${at}.${i}: a pont 20–100 között legyen (nincs egyértelműen rossz válasz)`);
       const vals = E.METERS.map(k => (ch.d && ch.d[k]) || 0);
       need(vals.some(v => v > 0) && vals.some(v => v < 0), `${at}.${i}: minden választásnak ára és haszna is legyen (egy mérő nő, egy csökken)`);
@@ -56,11 +58,11 @@ for (const c of IR_CASES) {
   const gs = E.finalScore(c, g, IR_FAIL), turns = g.hist.flatMap(h => h.turns.map(t => t.kind));
   need(gs.total === x.max, `${c.id}: a legjobb válaszok sorozata ${gs.total} pont, de ${x.max} is elérhető`);
   need(g.hist.length >= 8, `${c.id}: a legjobb útvonal csak ${g.hist.length} döntés (legalább 8 kell)`);
-  need(!turns.includes('back'), `${c.id}: a legjobb útvonalon nem lehet visszalépés`);
+  need(!turns.length, `${c.id}: a legjobb útvonalon nem üthet vissza semmi`);
   need(gs.grade === 'S', `${c.id}: a legjobb útvonal nem S befejezéshez vezet (${g.end})`);
-  need(x.kinds.includes('back') && x.kinds.includes('jump'), `${c.id}: kell elérhető visszalépés és előreugrás is`);
-  const ck = new Set(Object.values(c.nodes).flatMap(n => (n.choices || []).map(ch => ch.kind)).filter(Boolean));
-  need(ck.has('back') && ck.has('jump'), `${c.id}: kell visszalépő és előreugró válaszlehetőség is`);
+  need(x.kinds.includes('echo') && x.kinds.includes('cascade'), `${c.id}: kell elérhető késleltetett és halmozódó következmény is`);
+  const echoes = Object.values(c.nodes).filter(n => n.go && n.go.some(b => b.kind === 'echo')).length;
+  need(echoes >= 3, `${c.id}: legalább 3 késleltetett következmény kell (most ${echoes})`);
   const fails = x.ends.filter(e => e.startsWith('fail:')).map(e => e.slice(5)).sort();
   need(JSON.stringify(fails) === JSON.stringify([...(c.fails || [])].sort()), `${c.id}: a fails mező legyen ${JSON.stringify(fails)}`);
   need(E.reach(c, IR_FAIL).max === x.max, `${c.id}: a reach() maximuma eltér`);
