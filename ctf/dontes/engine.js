@@ -6,12 +6,13 @@
   const clamp = v => Math.max(0, Math.min(100, v));
 
   function newRun(c) {
-    return { v: 2, cid: c.id, node: c.first, m: { ...c.meters }, flags: [], hist: [], t: 0, pts: 0, end: null, show: null };
+    return { v: 3, cid: c.id, node: c.first, m: { ...c.meters }, flags: [], hist: [], t: 0, pts: 0, end: null, show: null };
   }
   function match(b, run) {
     if (b.any && !b.any.some(f => run.flags.includes(f))) return false;
     if (b.all && !b.all.every(f => run.flags.includes(f))) return false;
     if (b.none && b.none.some(f => run.flags.includes(f))) return false;
+    if (b.atLeast && b.atLeast.of.filter(f => run.flags.includes(f)).length < b.atLeast.n) return false;
     if (b.min != null && METERS.some(k => run.m[k] < b.min)) return false;
     return true;
   }
@@ -24,8 +25,9 @@
     }
   }
   // Follow branch nodes until a decision or an ending. A branch may itself be a turn of the story:
-  // kind 'back' sends the player back to an earlier stage, kind 'jump' skips ahead; it can also change
-  // the meters (d), the score (pts), the clock (dt) and set flags. Returns the taken turns.
+  // kind 'echo' = an earlier decision's delayed consequence surfaces now (usually leading to an extra
+  // challenge), kind 'cascade' = several such consequences have piled up. It can also change the meters (d),
+  // the score (pts), the clock (dt) and set flags. Time only ever moves forward. Returns the taken turns.
   function route(c, r, id, delta) {
     const turns = [];
     for (let guard = 0; c.nodes[id] && c.nodes[id].go; guard++) {
@@ -35,7 +37,7 @@
       const b = c.nodes[id].go[bi];
       for (const f of b.set || []) if (!r.flags.includes(f)) r.flags.push(f);
       if (b.d) applyD(r, b.d, delta);
-      const p = (b.pts || 0) > 0 && r.redo ? 0 : (b.pts || 0);   // no bonus while redoing work after a step back
+      const p = b.pts || 0;
       r.pts += p; r.t += b.dt || 0;
       if (b.kind) turns.push({ at: id, b: bi, kind: b.kind, to: b.to, pts: p });
       id = b.to;
@@ -43,8 +45,7 @@
     if (!c.nodes[id]) throw new Error('missing node ' + id);
     return { id, turns };
   }
-  // Choices shown at a node: a choice with hideIf disappears once that flag is set (a step-back option
-  // can be taken only once, otherwise the player could loop forever).
+  // Choices shown at a node: a choice with hideIf disappears once that flag is set.
   const visible = (c, run, id) => c.nodes[id].choices.map((_, i) => i).filter(i => !c.nodes[id].choices[i].hideIf || !run.flags.includes(c.nodes[id].choices[i].hideIf));
   const resolve = (c, run, id) => route(c, JSON.parse(JSON.stringify(run)), id, {}).id;
   // Apply choice i at the current node; returns a new run (the old one is not changed).
@@ -56,24 +57,15 @@
     applyD(r, ch.d, delta);
     for (const f of ch.set || []) if (!r.flags.includes(f)) r.flags.push(f);
     r.t += ch.dt || 0;
-    // After a step back, every decision up to and including the one you stepped back from earns no
-    // points (run.redo holds that node): redoing work is not progress, even on a branch skipped before.
-    // (a node can only be visited again after a step back, so redo alone tells a repeat; this keeps the
-    // explore() memo key exact)
-    const rep = !!run.redo;
-    if (run.redo === run.node) r.redo = null;
-    r.pts += rep ? 0 : ch.pts;
-    const h = { node: run.node, i, pts: ch.pts, gain: rep ? 0 : ch.pts, rep, d: delta, t: r.t, timeout: !!timedOut, turns: [], rp: 0 };
-    // an answer can itself be a turn: step back to an earlier stage or jump ahead over some
-    if (ch.kind) h.turns.push({ at: run.node, ci: i, kind: ch.kind, to: ch.to, pts: 0 });
+    r.pts += ch.pts;
+    const h = { node: run.node, i, pts: ch.pts, gain: ch.pts, d: delta, t: r.t, timeout: !!timedOut, turns: [], rp: 0 };
     r.hist.push(h);
     r.show = { node: run.node, i, timeout: !!timedOut };
     const failed = () => METERS.find(k => r.m[k] <= 0);
     let zero = failed();
     if (!zero) {
       const before = r.pts, x = route(c, r, ch.to, delta);
-      h.turns = h.turns.concat(x.turns); h.rp = r.pts - before; h.t = r.t;
-      if (h.turns.some(t => t.kind === 'back')) r.redo = run.node;
+      h.turns = x.turns; h.rp = r.pts - before; h.t = r.t;
       zero = failed();
       if (!zero) {
         if (c.nodes[x.id].end) { r.end = x.id; r.node = null; } else r.node = x.id;
@@ -97,9 +89,9 @@
     // collected globally; the memo keeps only what depends on the state (keeps memory small)
     const memo = new Map(), ends = new Set(), seen = new Set(), kinds = new Set();
     // only flags that some condition or hideIf reads can change what happens next; the rest stay out of the key
-    const used = new Set(Object.values(c.nodes).flatMap(n => [...(n.go || []).flatMap(b => [...(b.any || []), ...(b.all || []), ...(b.none || [])]),
+    const used = new Set(Object.values(c.nodes).flatMap(n => [...(n.go || []).flatMap(b => [...(b.any || []), ...(b.all || []), ...(b.none || []), ...((b.atLeast || {}).of || [])]),
       ...(n.choices || []).map(ch => ch.hideIf).filter(Boolean)]));
-    const key = r => `${r.node}|${r.redo || ''}|${r.flags.filter(f => used.has(f)).sort().join(',')}|${METERS.map(k => r.m[k]).join(',')}`;
+    const key = r => `${r.node}|${r.flags.filter(f => used.has(f)).sort().join(',')}|${METERS.map(k => r.m[k]).join(',')}`;
     // returns { best: best future gain (choice/turn points + bonus + meters), paths, pick }
     const walk = r => {
       const k = key(r), got = memo.get(k); if (got) return got;
